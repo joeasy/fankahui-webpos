@@ -1,0 +1,39 @@
+.block-center.mt-xl.wd-xl(ng-controller="LoginFormController as login")
+  // START panel
+  .panel.panel-dark.panel-flat
+    .panel-heading.text-center
+      a(href="#")
+        img.block-center.img-rounded(src='app/img/logo.png', alt='Image')
+    .panel-body
+      p.text-center.pv 登录到WebPOS
+      form.form-validate(role='form', ng-submit="login.login()", name='login.loginForm', novalidate='').mb-lg
+        .form-group.has-feedback
+          input#exampleInputEmail1.form-control(type='text', name="account_username" placeholder='输入手机号码', autocomplete="off", ng-model="login.account.username", required='')
+          span.fa.fa-lg.fa-mobile-phone.form-control-feedback.text-muted
+          span.text-danger(ng-show="login.loginForm.account_username.$dirty && login.loginForm.account_username.$error.required") 用户名不能为空
+        .form-group.has-feedback
+          input#exampleInputPassword1.form-control(type='password', name="account_password" placeholder='输入密码', ng-model="login.account.password", required='')
+          span.fa.fa-lock.form-control-feedback.text-muted
+          span.text-danger(ng-show="login.loginForm.account_password.$dirty && login.loginForm.account_password.$error.required") 密码不能为空
+        .clearfix
+          .checkbox.c-checkbox.pull-left.mt0
+            label
+              input(type='checkbox', value='', name="account_remember", ng-model="login.account.remember")
+              span.fa.fa-check
+              |  记住我
+          .pull-right
+            a.text-muted(ui-sref="page.recover") 忘记密码?
+        
+        button.btn.btn-block.btn-primary.mt-lg(type='submit') 登录
+      
+      .alert.alert-danger.text-center(ng-show='login.authMsg') {{login.authMsg}}
+      p.pt-lg.text-center 还没有账号？
+      a(ui-sref="page.register").btn.btn-block.btn-default 马上注册
+  // END panel
+  .p-lg.text-center
+    span &copy; 
+    span(ng-bind="app.year") 
+    span  - 
+    span(ng-bind="app.name")
+    br
+    span(ng-bind="app.description")
