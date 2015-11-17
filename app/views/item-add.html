@@ -34,49 +34,31 @@
                <fieldset>
                   <legend>商品信息</legend>
                   <!-- START row -->
-                  <fieldset>
+                  <div class="col-sm-6 col-xs-12">
                      <div class="form-group">
-                        <label class="col-sm-2 control-label">类型</label>
-                        <div class="col-sm-6">
-                           <div class="radio c-radio c-radio-nofont">
-                              <label>
-                                 <input type="radio" name="proudct_type" id="entity" ng-model="entity.type" value="entity" required="" />
-                                 <span></span>商品
-                                 <small class="text-muted">(适用服装鞋帽等实物商品零售批发行业)</small>
-                              </label>
-                           </div>
-                           <div class="radio c-radio c-radio-nofont">
-                              <label>
-                                 <input type="radio" name="product_type" id="service" ng-model="entity.type" value="service" />
-                                 <span></span>服务
-                                 <small class="text-muted">(适用参与、美发等服务性行业)</small>
-                              </label>
-                           </div>
+                        <label>类型</label>
+                        <div class="radio c-radio c-radio-nofont">
+                           <label>
+                              <input type="radio" name="product_type" data-parsley-group="step1" ng-model="entity.type" value="entity" required="" />
+                              <span></span>实物商品
+                              <small class="text-muted">(适用服装鞋帽等实物商品零售批发行业)</small>
+                           </label>
                         </div>
-                        <div class="col-sm-4"><code>必填</code>
+                        <div class="radio c-radio c-radio-nofont">
+                           <label>
+                              <input type="radio" name="product_type" data-parsley-group="step1" ng-model="entity.type" value="service" />
+                              <span></span>服务项目
+                              <small class="text-muted">(适用参与、美发等服务性行业)</small>
+                           </label>
                         </div>
                      </div>
-                  </fieldset>
-                  <fieldset>
+                  </div>
+                  <div class="col-sm-6 col-xs-12">
                      <div class="form-group">
-                        <label class="col-sm-2 control-label">条码</label>
-                        <div class="col-sm-6">
-                           <input type="text" name="barcode" data-parsley-group="step1" required="required" placeholder="请输入商品条码、编码" class="form-control" />
-                        </div>
-                        <div class="col-sm-4"><code>必填</code>
-                        </div>
+                        <label>名称</label>
+                        <input type="text" name="name" data-parsley-group="step1" required="required" placeholder="请输入商品名称" class="form-control" />
                      </div>
-                  </fieldset>
-                  <fieldset>
-                     <div class="form-group">
-                        <label class="col-sm-2 control-label">名称</label>
-                        <div class="col-sm-6">
-                           <input type="text" name="name" data-parsley-group="step1" required="required" placeholder="请输入商品名称" class="form-control" />
-                        </div>
-                        <div class="col-sm-4"><code>必填</code>
-                        </div>
-                     </div>
-                  </fieldset>
+                  </div>
                   <!-- END row -->
                </fieldset>
                <ul class="pager">
@@ -87,32 +69,49 @@
             <!-- END Wizard Step inputs -->
             <!-- START Wizard Step inputs -->
             <div id="step2" ng-show="wizard.active(2)">
-               <fieldset>
-                  <legend>Personal</legend>
-                  <!-- START row -->
-                  <div class="row">
-                     <div class="col-md-6">
-                        <div class="form-group">
-                           <label>First Name</label>
-                           <input type="text" name="first-name" data-parsley-group="step2" placeholder="John" required="required" class="form-control" />
-                        </div>
+               <div class="row mb-lg">
+                  <div class="col-xs-3">
+                     <strong>图片</strong>
+                  </div>
+                  <div class="col-xs-9">
+                     <strong>规格详情</strong>
+                  </div>
+               </div>
+               <div class="row mb-lg pb-lg bb">
+                  <div class="col-xs-6 col-sm-3">
+                     <a href="#" title="Product 1">
+                        <img src="app/img/bg7.jpg" alt="Product 1" class="img-responsive" />
+                     </a>
+                  </div>
+                  <div class="col-xs-6 col-sm-9">
+                     <div class="form-group">
+                        <input type="text" name="model" data-parsley-group="step2" required="required" placeholder="例如：颜色、尺寸、容量" class="form-control" />
                      </div>
-                     <div class="col-md-6">
-                        <div class="form-group">
-                           <label>Last Name</label>
-                           <input type="text" name="last-name" data-parsley-group="step2" placeholder="Snow" required="required" class="form-control" />
-                        </div>
+                     <p>
+                        <strong>条码</strong>
+                     </p>
+                     <div class="form-group">
+                        <input type="text" name="barcode" data-parsley-group="step2" required="required" placeholder="请输入商品条码、编码" class="form-control" />
+                     </div>
+                     <p>
+                        <strong>库存</strong>
+                     </p>
+                     <div class="form-group">
+                        <input type="number" name="stock" data-parsley-group="step2" placeholder="请输入初始库存的数量" class="form-control" />
+                     </div>
+                     <div class="text-right">
+                        <button type="button" class="btn btn-sm btn-danger">
+                           <em class="fa fa-times-circle fa-fw"></em>删除</button>
                      </div>
                   </div>
-                  <!-- END row -->
-               </fieldset>
+               </div>
                <ul class="pager">
                   <li class="previous">
                      <a href="#" ng-click="wizard.go(1)">
-                        <span>&larr; Previous</span>
+                        <span>&larr; 上一步</span>
                      </a>
                   </li>
-                  <li class="next"><a href="#" ng-click="wizard.go(3)">Next <span>&rarr;</span></a>
+                  <li class="next"><a href="#" ng-click="wizard.go(3)">下一步 <span>&rarr;</span></a>
                   </li>
                </ul>
             </div>

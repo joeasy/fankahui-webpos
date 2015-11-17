@@ -30,38 +30,25 @@ h3
           fieldset
             legend 商品信息
             // START row 
-            fieldset
+            .col-sm-6.col-xs-12
               .form-group
-                label.col-sm-2.control-label 类型
-                .col-sm-6
-                  .radio.c-radio.c-radio-nofont
-                    label
-                      input(type='radio', name="proudct_type", id="entity" ng-model='entity.type', value='entity' required="")
-                      span
-                      |  商品 
-                      small.text-muted (适用服装鞋帽等实物商品零售批发行业)
-                  .radio.c-radio.c-radio-nofont
-                    label
-                      input(type='radio', name="product_type", id="service" ng-model='entity.type', value='service')
-                      span
-                      |  服务
-                      small.text-muted (适用参与、美发等服务性行业)
-                .col-sm-4
-                  code 必填
-            fieldset
+                label 类型
+                .radio.c-radio.c-radio-nofont
+                  label
+                    input(type='radio', name="product_type", data-parsley-group="step1", ng-model="entity.type", value="entity", required="")
+                    span
+                    |  实物商品 
+                    small.text-muted (适用服装鞋帽等实物商品零售批发行业)
+                .radio.c-radio.c-radio-nofont
+                  label
+                    input(type='radio', name="product_type", data-parsley-group="step1", ng-model="entity.type", value="service")
+                    span
+                    |  服务项目
+                    small.text-muted (适用参与、美发等服务性行业)
+            .col-sm-6.col-xs-12
               .form-group
-                label.col-sm-2.control-label 条码
-                .col-sm-6
-                  input.form-control(type='text', name='barcode', data-parsley-group="step1", required="required", placeholder="请输入商品条码、编码")
-                .col-sm-4
-                  code 必填
-            fieldset
-              .form-group
-                label.col-sm-2.control-label 名称
-                .col-sm-6
-                  input.form-control(type='text', name='name', data-parsley-group="step1", required, placeholder="请输入商品名称")
-                .col-sm-4
-                  code 必填
+                label 名称
+                input.form-control(type='text', name='name', data-parsley-group="step1", required, placeholder="请输入商品名称")
             // END row 
           ul.pager
             li.next
@@ -71,26 +58,35 @@ h3
         // END Wizard Step inputs 
         // START Wizard Step inputs 
         div#step2(ng-show="wizard.active(2)")
-          fieldset
-            legend Personal
-            // START row 
-            .row
-              .col-md-6
-                .form-group
-                  label First Name
-                  input.form-control(type='text', name='first-name', data-parsley-group="step2", placeholder='John', required)
-              .col-md-6
-                .form-group
-                  label Last Name
-                  input.form-control(type='text', name='last-name', data-parsley-group="step2", placeholder='Snow', required)
-            // END row 
+          .row.mb-lg
+            .col-xs-3
+              strong 图片
+            .col-xs-9
+              strong 规格详情
+          .row.mb-lg.pb-lg.bb
+            .col-xs-6.col-sm-3
+              a(href='#', title='Product 1')
+                img.img-responsive(src='app/img/bg7.jpg', alt='Product 1')
+            .col-xs-6.col-sm-9
+              .form-group
+                input.form-control(type='text', name='model' data-parsley-group="step2", required, placeholder="例如：颜色、尺寸、容量")
+              p: strong 条码
+              .form-group
+                input.form-control(type='text', name='barcode', data-parsley-group="step2", required, placeholder="请输入商品条码、编码")
+              p: strong 库存
+              .form-group
+                input.form-control(type='number', name='stock', data-parsley-group="step2", placeholder="请输入初始库存的数量")
+              .text-right
+                button.btn.btn-sm.btn-danger(type="button")
+                  em.fa.fa-times-circle.fa-fw
+                  | 删除
           ul.pager
             li.previous
               a(href='#', ng-click="wizard.go(1)")
-                span &larr; Previous
+                span &larr; 上一步
             li.next
               a(href='#', ng-click="wizard.go(3)")
-                | Next 
+                | 下一步 
                 span &rarr;
         // END Wizard Step inputs 
         // START Wizard Step inputs 
