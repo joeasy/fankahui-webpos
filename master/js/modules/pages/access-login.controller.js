@@ -10,8 +10,8 @@
         .module('app.pages')
         .controller('LoginFormController', LoginFormController);
 
-    LoginFormController.$inject = ['$state', 'User', '$rootScope', 'Sku'];
-    function LoginFormController($state, User, $rootScope, Sku) {
+    LoginFormController.$inject = ['$state', 'User', '$rootScope'];
+    function LoginFormController($state, User, $rootScope) {
         var vm = this;
 
         activate();

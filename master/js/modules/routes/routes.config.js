@@ -37,6 +37,17 @@
               templateUrl: helper.basepath('dashboard.html'),
               resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons')
           })
+          .state('app.item', {
+              url: '/item',
+              title: 'Item',
+              templateUrl: helper.basepath('item.html')
+          })
+          .state('app.item-add', {
+              url: '/item-add',
+              title: 'Item Add',
+              templateUrl: helper.basepath('item-add.html'),
+              resolve: helper.resolveFor('parsley')
+          })
           .state('app.widgets', {
               url: '/widgets',
               title: 'Widgets',

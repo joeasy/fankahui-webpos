@@ -12,25 +12,76 @@
     "translate": "sidebar.nav.DASHBOARD"
   },
   {
+    "text": "Register",
+    "sref": "app.register",
+    "icon": "fa fa-calculator",
+    "translate": "sidebar.nav.REGISTER"
+  },
+  {
+    "text": "Member",
+    "sref": "app.member",
+    "icon": "icon-users",
+    "label": "label label-info", 
+    "translate": "sidebar.nav.MEMBER"
+  },
+  {
+    "text": "Mass",
+    "sref": "app.mass",
+    "icon": "fa fa-wechat",
+    "translate": "sidebar.nav.MASS"
+  },
+  {
+    "text": "Operate",
+    "heading": "true",
+    "translate": "sidebar.heading.OPERATE"
+  },
+  {
+    "text": "Deal",
+    "sref": "app.deal",
+    "icon": "fa fa-list",
+    "translate": "sidebar.nav.DEAL"
+  },
+  {
+    "text": "Expense",
+    "sref": "app.expense",
+    "icon": "fa fa-bars",
+    "translate": "sidebar.nav.EXPENSE"
+  },
+  {
+    "text": "Item",
+    "sref": "app.item",
+    "icon": "fa fa-barcode",
+    "translate": "sidebar.nav.ITEM"
+  },
+  {
+    "text": "More",
+    "heading": "true",
+    "translate": "sidebar.heading.MORE"
+  },
+  {
+    "text": "MyShop",
+    "sref": "app.myshop",
+    "icon": "fa fa-home",
+    "translate": "sidebar.nav.MYSHOP"
+  },
+  {
+    "text": "Setting",
+    "sref": "app.setting",
+    "icon": "fa fa-gears",
+    "translate": "sidebar.nav.SETTING"
+  },
+  {
+    "text": "Components",
+    "heading": "true",
+    "translate": "sidebar.heading.COMPONENTS"
+  },
+  {
     "text": "Widgets",
     "sref": "app.widgets",
     "icon": "icon-grid",
     "alert": "30",
     "label": "label label-success",
     "translate": "sidebar.nav.WIDGETS"
-  },
-  {
-    "text": "Layouts",
-    "sref": "#",
-    "icon": "icon-layers",
-    "submenu": [
-      {"text": "Horizontal Nav", "sref": "app-h.dashboard_v2"}
-    ]
-  },
-  {
-    "text": "Components",
-    "heading": "true",
-    "translate": "sidebar.heading.COMPONENTS"
   },
   {
     "text": "Elements",

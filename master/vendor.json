@@ -8,6 +8,8 @@
   "bower_components/datatables/media/js/jquery.dataTables.js",
   "bower_components/datatables/media/images/**/*",
   "bower_components/angular-datatables/dist/angular-datatables.js",
+  "bower_components/parsleyjs/src/i18n/zh_cn.js",
+  "bower_components/parsleyjs/src/i18n/zh_cn.extra.js",
   "bower_components/parsleyjs/dist/parsley.min.js",
   "bower_components/bootstrap-filestyle/src/bootstrap-filestyle.js",
   "bower_components/ngWig/dist/ng-wig.min.js",

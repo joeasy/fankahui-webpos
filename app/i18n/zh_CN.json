@@ -37,12 +37,20 @@
     "WELCOME": "欢迎",
     "heading": {
       "HEADER": "主菜单",
+      "OPERATE": "经营管理",
       "COMPONENTS": "Components",
       "MORE": "更多"
     },
     "nav": {
       "DASHBOARD": "首页",
-      "WIDGETS": "Widgets",
+      "REGISTER": "收银记账",
+      "MEMBER": "会员管理",
+      "MASS": "微信群发",
+      "DEAL": "销售流水",
+      "EXPENSE": "费用支出",
+      "ITEM": "商品管理",
+      "MYSHOP": "我的门店",
+      "SETTING": "系统设置",
       "WIDGETS": "Widgets",
       "DOCUMENTATION": "Documentation",
       "element": {

@@ -29,7 +29,7 @@
             return $q.reject(rejection);
           }
         };
-      });
+      });     
     }
 
 })();

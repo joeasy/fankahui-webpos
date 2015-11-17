@@ -1,0 +1,132 @@
+h3 
+  | 新增商品
+  a(type='button' ui-sref='app.item()').btn.btn-warning.pull-right.mr-sm
+    em.fa.fa-arrow-left.fa-fw.mr-sm
+    | 取消
+// START panel
+.panel.panel-default(ng-controller="ItemAddController")
+  .panel-heading  新增一种商品
+  .panel-body
+    form(action='/', method='POST', form-wizard="", validate-steps="true", validate-form="", steps="4")
+      .form-wizard.wizard-horizontal
+        // START wizard steps indicator
+        ol.row
+          li.col-md-3(ng-class="{'active':wizard.active(1)}", ng-click="wizard.go(1)")
+            h4 商品信息
+            small.text-muted 商品的基本信息
+          li.col-md-3(ng-class="{'active':wizard.active(2)}", ng-click="wizard.go(2)")
+            h4 规格
+            small.text-muted 商品的规格信息 
+          li.col-md-3(ng-class="{'active':wizard.active(3)}", ng-click="wizard.go(3)")
+            h4 库存
+            small.text-muted 填入初始库存 
+          li.col-md-3(ng-class="{'active':wizard.active(4)}", ng-click="wizard.go(4)")
+            h4 完成!
+            small.text-muted 已经完成商品的添加
+        // END wizard steps indicator
+
+        // START Wizard Step inputs 
+        div#step1(ng-show="wizard.active(1)")
+          fieldset
+            legend 商品信息
+            // START row 
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 类型
+                .col-sm-6
+                  .radio.c-radio.c-radio-nofont
+                    label
+                      input(type='radio', name="proudct_type", id="entity" ng-model='entity.type', value='entity' required="")
+                      span
+                      |  商品 
+                      small.text-muted (适用服装鞋帽等实物商品零售批发行业)
+                  .radio.c-radio.c-radio-nofont
+                    label
+                      input(type='radio', name="product_type", id="service" ng-model='entity.type', value='service')
+                      span
+                      |  服务
+                      small.text-muted (适用参与、美发等服务性行业)
+                .col-sm-4
+                  code 必填
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 条码
+                .col-sm-6
+                  input.form-control(type='text', name='barcode', data-parsley-group="step1", required="required", placeholder="请输入商品条码、编码")
+                .col-sm-4
+                  code 必填
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 名称
+                .col-sm-6
+                  input.form-control(type='text', name='name', data-parsley-group="step1", required, placeholder="请输入商品名称")
+                .col-sm-4
+                  code 必填
+            // END row 
+          ul.pager
+            li.next
+              a(href='#', ng-click="wizard.go(2)")
+                | 下一步 
+                span &rarr;
+        // END Wizard Step inputs 
+        // START Wizard Step inputs 
+        div#step2(ng-show="wizard.active(2)")
+          fieldset
+            legend Personal
+            // START row 
+            .row
+              .col-md-6
+                .form-group
+                  label First Name
+                  input.form-control(type='text', name='first-name', data-parsley-group="step2", placeholder='John', required)
+              .col-md-6
+                .form-group
+                  label Last Name
+                  input.form-control(type='text', name='last-name', data-parsley-group="step2", placeholder='Snow', required)
+            // END row 
+          ul.pager
+            li.previous
+              a(href='#', ng-click="wizard.go(1)")
+                span &larr; Previous
+            li.next
+              a(href='#', ng-click="wizard.go(3)")
+                | Next 
+                span &rarr;
+        // END Wizard Step inputs 
+        // START Wizard Step inputs 
+        div#step3(ng-show="wizard.active(3)")
+          fieldset
+            legend Contact
+            // START row 
+            .row
+              .col-md-6
+                .form-group
+                  label Email
+                  input.form-control(type='text', name='email', data-parsley-group="step3", placeholder='john@snow.com', required)
+              .col-md-6
+                .form-group
+                  label Phone
+                  input.form-control(type='text', name='phone', data-parsley-group="step3", placeholder='11-2345-6789', required)
+            // END row 
+          ul.pager
+            li.previous
+              a(href='#', ng-click="wizard.go(2)")
+                span &larr; Previous
+            li.next
+              a(href='#', ng-click="wizard.go(4)")
+                | Next 
+                span &rarr;
+        // END Wizard Step inputs 
+        // START Wizard Step inputs 
+        div#step4(ng-show="wizard.active(4)")
+          .jumbotron
+            h1 Done!
+            p In vulputate mattis ipsum vitae vehicula. Praesent at arcu non arcu convallis pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            p
+              button.btn.btn-info.btn-lg(type='button') You can Proceed Now
+          ul.pager
+            li.previous
+              a(href='#', ng-click="wizard.go(3)")
+                span &larr; Previous
+        // END Wizard Step inputs 
+// END panel 

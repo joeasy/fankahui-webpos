@@ -1,0 +1,174 @@
+<h3>
+   新增商品
+   <a type="button" ui-sref="app.item()" class="btn btn-warning pull-right mr-sm">
+      <em class="fa fa-arrow-left fa-fw mr-sm"></em>取消</a>
+</h3>
+<!-- START panel-->
+<div ng-controller="ItemAddController" class="panel panel-default">
+   <div class="panel-heading">新增一种商品</div>
+   <div class="panel-body">
+      <form action="/" method="POST" form-wizard="" validate-steps="true" validate-form="" steps="4">
+         <div class="form-wizard wizard-horizontal">
+            <!-- START wizard steps indicator-->
+            <ol class="row">
+               <li ng-class="{'active':wizard.active(1)}" ng-click="wizard.go(1)" class="col-md-3">
+                  <h4>商品信息</h4>
+                  <small class="text-muted">商品的基本信息</small>
+               </li>
+               <li ng-class="{'active':wizard.active(2)}" ng-click="wizard.go(2)" class="col-md-3">
+                  <h4>规格</h4>
+                  <small class="text-muted">商品的规格信息</small>
+               </li>
+               <li ng-class="{'active':wizard.active(3)}" ng-click="wizard.go(3)" class="col-md-3">
+                  <h4>库存</h4>
+                  <small class="text-muted">填入初始库存</small>
+               </li>
+               <li ng-class="{'active':wizard.active(4)}" ng-click="wizard.go(4)" class="col-md-3">
+                  <h4>完成!</h4>
+                  <small class="text-muted">已经完成商品的添加</small>
+               </li>
+            </ol>
+            <!-- END wizard steps indicator-->
+            <!-- START Wizard Step inputs -->
+            <div id="step1" ng-show="wizard.active(1)">
+               <fieldset>
+                  <legend>商品信息</legend>
+                  <!-- START row -->
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">类型</label>
+                        <div class="col-sm-6">
+                           <div class="radio c-radio c-radio-nofont">
+                              <label>
+                                 <input type="radio" name="proudct_type" id="entity" ng-model="entity.type" value="entity" required="" />
+                                 <span></span>商品
+                                 <small class="text-muted">(适用服装鞋帽等实物商品零售批发行业)</small>
+                              </label>
+                           </div>
+                           <div class="radio c-radio c-radio-nofont">
+                              <label>
+                                 <input type="radio" name="product_type" id="service" ng-model="entity.type" value="service" />
+                                 <span></span>服务
+                                 <small class="text-muted">(适用参与、美发等服务性行业)</small>
+                              </label>
+                           </div>
+                        </div>
+                        <div class="col-sm-4"><code>必填</code>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">条码</label>
+                        <div class="col-sm-6">
+                           <input type="text" name="barcode" data-parsley-group="step1" required="required" placeholder="请输入商品条码、编码" class="form-control" />
+                        </div>
+                        <div class="col-sm-4"><code>必填</code>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-6">
+                           <input type="text" name="name" data-parsley-group="step1" required="required" placeholder="请输入商品名称" class="form-control" />
+                        </div>
+                        <div class="col-sm-4"><code>必填</code>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <!-- END row -->
+               </fieldset>
+               <ul class="pager">
+                  <li class="next"><a href="#" ng-click="wizard.go(2)">下一步 <span>&rarr;</span></a>
+                  </li>
+               </ul>
+            </div>
+            <!-- END Wizard Step inputs -->
+            <!-- START Wizard Step inputs -->
+            <div id="step2" ng-show="wizard.active(2)">
+               <fieldset>
+                  <legend>Personal</legend>
+                  <!-- START row -->
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>First Name</label>
+                           <input type="text" name="first-name" data-parsley-group="step2" placeholder="John" required="required" class="form-control" />
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Last Name</label>
+                           <input type="text" name="last-name" data-parsley-group="step2" placeholder="Snow" required="required" class="form-control" />
+                        </div>
+                     </div>
+                  </div>
+                  <!-- END row -->
+               </fieldset>
+               <ul class="pager">
+                  <li class="previous">
+                     <a href="#" ng-click="wizard.go(1)">
+                        <span>&larr; Previous</span>
+                     </a>
+                  </li>
+                  <li class="next"><a href="#" ng-click="wizard.go(3)">Next <span>&rarr;</span></a>
+                  </li>
+               </ul>
+            </div>
+            <!-- END Wizard Step inputs -->
+            <!-- START Wizard Step inputs -->
+            <div id="step3" ng-show="wizard.active(3)">
+               <fieldset>
+                  <legend>Contact</legend>
+                  <!-- START row -->
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Email</label>
+                           <input type="text" name="email" data-parsley-group="step3" placeholder="john@snow.com" required="required" class="form-control" />
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Phone</label>
+                           <input type="text" name="phone" data-parsley-group="step3" placeholder="11-2345-6789" required="required" class="form-control" />
+                        </div>
+                     </div>
+                  </div>
+                  <!-- END row -->
+               </fieldset>
+               <ul class="pager">
+                  <li class="previous">
+                     <a href="#" ng-click="wizard.go(2)">
+                        <span>&larr; Previous</span>
+                     </a>
+                  </li>
+                  <li class="next"><a href="#" ng-click="wizard.go(4)">Next <span>&rarr;</span></a>
+                  </li>
+               </ul>
+            </div>
+            <!-- END Wizard Step inputs -->
+            <!-- START Wizard Step inputs -->
+            <div id="step4" ng-show="wizard.active(4)">
+               <div class="jumbotron">
+                  <h1>Done!</h1>
+                  <p>In vulputate mattis ipsum vitae vehicula. Praesent at arcu non arcu convallis pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  <p>
+                     <button type="button" class="btn btn-info btn-lg">You can Proceed Now</button>
+                  </p>
+               </div>
+               <ul class="pager">
+                  <li class="previous">
+                     <a href="#" ng-click="wizard.go(3)">
+                        <span>&larr; Previous</span>
+                     </a>
+                  </li>
+               </ul>
+            </div>
+            <!-- END Wizard Step inputs -->
+         </div>
+      </form>
+   </div>
+</div>
+<!-- END panel -->
