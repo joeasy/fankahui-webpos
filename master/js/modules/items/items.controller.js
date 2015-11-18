@@ -41,13 +41,25 @@
       })   
     }
     
-    ItemAddController.$inject = ['$scope', 'Item'];
+    ItemAddController.$inject = ['$scope', 'Sku'];
     function ItemAddController($scope, Item) {
       activate();
       
       window.ParsleyValidator.setLocale('zh_cn');
+      
       function activate() {
-        $scope.entity = {};
+        $scope.entity = {
+          type: "entity",
+          name: "iPhone6S Plus",
+          skus: [{barcode:"123", price: 5288, model: "16G"}]
+        };
+      }
+      
+      $scope.save = function () {
+        
+      }
+      
+      $scope.saveAndMore = function () {
       }
     }    
 })();

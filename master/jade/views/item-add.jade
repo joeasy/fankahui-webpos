@@ -18,11 +18,8 @@ h3
             h4 规格
             small.text-muted 商品的规格信息 
           li.col-md-3(ng-class="{'active':wizard.active(3)}", ng-click="wizard.go(3)")
-            h4 库存
-            small.text-muted 填入初始库存 
-          li.col-md-3(ng-class="{'active':wizard.active(4)}", ng-click="wizard.go(4)")
-            h4 完成!
-            small.text-muted 已经完成商品的添加
+            h4 完成！
+            small.text-muted 确认完成登记的商品
         // END wizard steps indicator
 
         // START Wizard Step inputs 
@@ -32,23 +29,23 @@ h3
             // START row 
             .col-sm-6.col-xs-12
               .form-group
-                label 类型
+                label 类型 *
                 .radio.c-radio.c-radio-nofont
                   label
-                    input(type='radio', name="product_type", data-parsley-group="step1", ng-model="entity.type", value="entity", required="")
+                    input(type='radio', data-parsley-group="step1", ng-model="entity.type", value="entity", required="")
                     span
                     |  实物商品 
                     small.text-muted (适用服装鞋帽等实物商品零售批发行业)
                 .radio.c-radio.c-radio-nofont
                   label
-                    input(type='radio', name="product_type", data-parsley-group="step1", ng-model="entity.type", value="service")
+                    input(type='radio', data-parsley-group="step1", ng-model="entity.type", value="service")
                     span
                     |  服务项目
                     small.text-muted (适用参与、美发等服务性行业)
             .col-sm-6.col-xs-12
               .form-group
-                label 名称
-                input.form-control(type='text', name='name', data-parsley-group="step1", required, placeholder="请输入商品名称")
+                label 名称 *
+                input.form-control(type='text', ng-model='entity.name', data-parsley-group="step1", required, placeholder="请输入商品名称")
             // END row 
           ul.pager
             li.next
@@ -63,27 +60,48 @@ h3
               strong 图片
             .col-xs-9
               strong 规格详情
-          .row.mb-lg.pb-lg.bb
+          .row.mb-lg.pb-lg.bb(ng-repeat="sku in entity.skus")
             .col-xs-6.col-sm-3
               a(href='#', title='Product 1')
                 img.img-responsive(src='app/img/bg7.jpg', alt='Product 1')
             .col-xs-6.col-sm-9
-              .form-group
-                input.form-control(type='text', name='model' data-parsley-group="step2", required, placeholder="例如：颜色、尺寸、容量")
-              p: strong 条码
-              .form-group
-                input.form-control(type='text', name='barcode', data-parsley-group="step2", required, placeholder="请输入商品条码、编码")
-              p: strong 库存
-              .form-group
-                input.form-control(type='number', name='stock', data-parsley-group="step2", placeholder="请输入初始库存的数量")
-              .text-right
-                button.btn.btn-sm.btn-danger(type="button")
-                  em.fa.fa-times-circle.fa-fw
-                  | 删除
+              .col-sm-6.col-xs-12
+                p: strong 条码 *
+                .form-group
+                  input.form-control(type='text', ng-model='sku.barcode', data-parsley-group="step2", required, placeholder="请输入商品条码、编码")
+              .col-sm-6.col-xs-12
+                p: strong 型号 
+                .form-group
+                  input.form-control(type='text', ng-model='sku.model', required, placeholder="例如：颜色、尺寸、容量")
+              .col-sm-6.col-xs-12
+                p: strong 售价 *
+                .form-group
+                  input.form-control(type='number', ng-model='sku.price', data-parsley-group="step2", required, placeholder="¥0.00")
+              .col-sm-6.col-xs-12
+                p: strong 折扣
+                .form-group
+                  input.form-control(type='number', ng-model='sku.discount', placeholder="输入1～100，例如85表示85折")              
+              .col-sm-6.col-xs-12
+                p: strong 库存
+                .form-group
+                  input.form-control(type='number', ng-model='sku.stock', placeholder="请输入初始库存的数量")
+              .col-sm-6.col-xs-12
+                p: strong 备注
+                .form-group
+                  input.form-control(type='text', ng-model='sku.memo')
+              .col-xs-12
+                .text-right
+                  button.btn.btn-sm.btn-danger(type="button", ng-click="entity.skus.splice($index,1)")
+                    em.fa.fa-times-circle.fa-fw
+                    | 删除
           ul.pager
             li.previous
               a(href='#', ng-click="wizard.go(1)")
                 span &larr; 上一步
+            li.middle
+              button.btn.btn-success(type="button" ng-click="entity.skus.push({});")
+                em.fa.fa-plus-circle.fa-fw
+                | 新增型号
             li.next
               a(href='#', ng-click="wizard.go(3)")
                 | 下一步 
@@ -91,38 +109,36 @@ h3
         // END Wizard Step inputs 
         // START Wizard Step inputs 
         div#step3(ng-show="wizard.active(3)")
-          fieldset
-            legend Contact
-            // START row 
-            .row
-              .col-md-6
-                .form-group
-                  label Email
-                  input.form-control(type='text', name='email', data-parsley-group="step3", placeholder='john@snow.com', required)
-              .col-md-6
-                .form-group
-                  label Phone
-                  input.form-control(type='text', name='phone', data-parsley-group="step3", placeholder='11-2345-6789', required)
-            // END row 
+          .jumbotron
+            legend.fa-2x {{entity.name}} - {{entity.type | item_type}}
+            .table-responsive
+              table.table.table-bordered.table-striped
+                thead
+                  tr
+                    th 条码
+                    th 型号
+                    th 售价
+                    th 折扣
+                    th 库存
+                    th 备注
+                tbody
+                  tr(ng-repeat="sku in entity.skus")
+                    td {{sku.barcode}} 
+                    td {{sku.model}} 
+                    td {{sku.price|currency}}
+                    td {{sku.discount || "全价"}}
+                    td {{sku.stock || 0}}
+                    td {{sku.memo}}
           ul.pager
             li.previous
               a(href='#', ng-click="wizard.go(2)")
-                span &larr; Previous
-            li.next
-              a(href='#', ng-click="wizard.go(4)")
-                | Next 
-                span &rarr;
-        // END Wizard Step inputs 
-        // START Wizard Step inputs 
-        div#step4(ng-show="wizard.active(4)")
-          .jumbotron
-            h1 Done!
-            p In vulputate mattis ipsum vitae vehicula. Praesent at arcu non arcu convallis pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-            p
-              button.btn.btn-info.btn-lg(type='button') You can Proceed Now
-          ul.pager
-            li.previous
-              a(href='#', ng-click="wizard.go(3)")
-                span &larr; Previous
+                span &larr; 上一步
+            .pull-right
+              a.btn-info.btn-lg(ng-click="save()")
+                em.fa.fa-save.fa-fw
+                | 保存 
+              a.btn-primary.btn-lg(ng-click="wizard.go(1);saveAndMore()")
+                em.fa.fa-retweet.fa-fw
+                | 保存并新建
         // END Wizard Step inputs 
 // END panel 
