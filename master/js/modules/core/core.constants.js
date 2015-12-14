@@ -14,6 +14,8 @@
           'tablet':                 768,
           'mobile':                 480
         })
+        .constant('urlBase', "http://0.0.0.0:3000/api")
+        // .constant('urlBase', "http://121.40.108.30:3000/api")
       ;
 
 })();

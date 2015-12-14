@@ -74,7 +74,7 @@ h3
                 .form-group
                   input.form-control(type='text', ng-model='sku.model', required, placeholder="例如：颜色、尺寸、容量")
               .col-sm-6.col-xs-12
-                p: strong 售价 *
+                p: strong 售价(单位：分) * 
                 .form-group
                   input.form-control(type='number', ng-model='sku.price', data-parsley-group="step2", required, placeholder="¥0.00")
               .col-sm-6.col-xs-12
@@ -84,7 +84,7 @@ h3
               .col-sm-6.col-xs-12
                 p: strong 库存
                 .form-group
-                  input.form-control(type='number', ng-model='sku.stock', placeholder="请输入初始库存的数量")
+                  input.form-control(type='number', ng-model='sku.stockQty', placeholder="请输入初始库存的数量")
               .col-sm-6.col-xs-12
                 p: strong 备注
                 .form-group
@@ -110,7 +110,7 @@ h3
         // START Wizard Step inputs 
         div#step3(ng-show="wizard.active(3)")
           .jumbotron
-            legend.fa-2x {{entity.name}} - {{entity.type | item_type}}
+            legend.fa-2x {{entity.type | item_type}} - {{entity.name}} 
             .table-responsive
               table.table.table-bordered.table-striped
                 thead
@@ -125,7 +125,7 @@ h3
                   tr(ng-repeat="sku in entity.skus")
                     td {{sku.barcode}} 
                     td {{sku.model}} 
-                    td {{sku.price|currency}}
+                    td {{sku.price/100|currency}}
                     td {{sku.discount || "全价"}}
                     td {{sku.stock || 0}}
                     td {{sku.memo}}

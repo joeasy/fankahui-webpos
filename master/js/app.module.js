@@ -41,7 +41,8 @@
             'app.extras',
             'app.mailbox',
             'app.utils',
-            'app.items'
+            'app.items',
+            'app.myshop'
         ]);
 })();
 

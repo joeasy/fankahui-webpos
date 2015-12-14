@@ -4,14 +4,15 @@ h3
     em.fa.fa-plus.fa-fw.mr-sm
     | 新增商品
 
-
+toaster-container(toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}")
+  
 form.panel
   tabset(justified="true")
     tab
       tab-heading 
         | 商品库存
-      .table-responsive
-        table.table.table-bordered.table-striped(ng-table='tableParams')
+      .table-responsive(ng-controller="ItemsController as ctrl")
+        table.table.table-bordered.table-striped(ng-table='ctrl.tableParams')
           thead
             tr
               th(check-all)
@@ -26,33 +27,45 @@ form.panel
               th 操作
           tbody
             tr.text-center(ng-repeat='entity in $data')
-              td.checkbox.c-checkbox
-                label
-                  input(type='checkbox')
-                  span.fa.fa-check
-              td(data-title="'头像'") 
-                img.img-thumbnail(ng-src="{{entity.headimgurl||'app/img/dummy.png'}}", alt="", width="44", height="44")
-              td(data-title="'性别'") {{entity.sex}}
-              td(data-title="'省份'") {{entity.province}} 
-              td(data-title="'城市'") {{entity.city}}
-              td(data-title="'关注时间'") {{entity.subscribe_time}}
+              td
+                .checkbox.c-checkbox
+                  label
+                    input(type='checkbox')
+                    span.fa.fa-check
+              td.text-left {{entity.item.name}} <br> 
+                .text-muted {{entity.item.type | item_type}}
+              td {{entity.model || "-"}}
+              td.text-info {{entity.price/100 | currency}}
+              td {{entity.shopstocks[0].qty || 0}}
+              td 
+                .btn-group(dropdown='dropdown')
+                  a.btn.btn-default(href='', ng-click="ctrl.stock(entity)") 进货
+                  button.btn.dropdown-toggle(type='button', class="btn-default", dropdown-toggle="")
+                    span.caret
+                    span.sr-only= type
+                  ul.dropdown-menu(role='menu')
+                    li
+                      a(href='#') 进货
+                    li
+                      a(href='#') 出库
+                    li
+                      a(href='#') 出入库记录
+                    li.divider
+                    li
+                      a(href='#') 删除
 
     tab
       tab-heading
         | 出入库记录
-      div
-        fieldset: .form-group
-          label.col-md-2.control-label Title
-          .col-md-10
-            input.form-control(type='text', placeholder="Brief description..")
-        fieldset: .form-group
-          label.col-md-2.control-label Description 
-          .col-md-10
-            textarea.form-control(rows='5', placeholder='Max 255 characters...')
-        fieldset: .form-group 
-          label.col-md-2.control-label Keywords
-          .col-md-10
-            textarea.form-control(rows='5', placeholder='Max 1000 characters...')
+      .table-responsive(ng-controller="StocksController as stocks")
+        table.table.table-bordered.table-striped(ng-table='stocks.tableParams')
+          tbody
+            tr.text-center(ng-repeat='entity in $data')
+              td.text-left(data-title="'商品'") {{entity.sku.item.name}}
+              td(data-title="'规格'") {{entity.sku.model || "-"}}
+              td(data-title="'类型'") {{entity.type | stock_type}}
+              td(data-title="'数量'") {{entity.qty || 0}}
+              td(data-title="'时间'").text-right {{entity.created*1000 | date}}
     tab
       tab-heading
         | 库存盘点
@@ -143,3 +156,31 @@ form.panel
               button.btn.btn-sm.btn-danger(type="button")
                 em.fa.fa-times-circle.fa-fw
                 | Remove
+                
+  <!-- Templates -->
+  
+  script(type="text/ng-template", id="stockDialogId")
+    .modal-header 
+      h3 进货
+    .modal-body
+      fieldset: .form-group
+        label.col-md-3.control-label 商品名称  
+        .col-md-9  
+          | {{ngDialogData.sku.item.name || "未知商品" }}  
+      fieldset: .form-group
+        label.col-md-3.control-label 现有库存  
+        .col-md-9
+          | {{ngDialogData.sku.shopstocks[0].qty || "0"}}      
+      fieldset: .form-group
+        label.col-md-3.control-label 进货数量
+        .col-md-9  
+          input.form-control(type='number', placeholder="输入进货数量", ng-model="stockQty")
+      fieldset: .form-group
+        label.col-md-3.control-label 备注
+        .col-md-9  
+          textarea.form-control(row="3")
+
+    .modal-footer
+      button.pull-right.btn.btn-default.mr(type='button', ng-click='closeThisDialog()') 取消      
+      button.pull-right.btn.btn-primary.mr(type='button', ng-click='confirm()') 确定
+    

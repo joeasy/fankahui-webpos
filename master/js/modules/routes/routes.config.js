@@ -40,13 +40,20 @@
           .state('app.item', {
               url: '/item',
               title: 'Item',
-              templateUrl: helper.basepath('item.html')
+              templateUrl: helper.basepath('item.html'),
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog')
           })
           .state('app.item-add', {
               url: '/item-add',
               title: 'Item Add',
               templateUrl: helper.basepath('item-add.html'),
               resolve: helper.resolveFor('parsley')
+          })
+          .state('app.myshop', {
+              url: '/myshop',
+              title: 'MyShop',
+              templateUrl: helper.basepath('myshop.html'),
+              resolve: helper.resolveFor('xeditable')
           })
           .state('app.widgets', {
               url: '/widgets',

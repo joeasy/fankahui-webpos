@@ -3,13 +3,14 @@
    <a type="button" ui-sref="app.item-add()" class="btn btn-warning pull-right mr-sm">
       <em class="fa fa-plus fa-fw mr-sm"></em>新增商品</a>
 </h3>
+<toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container>
 <form class="panel">
    <tabset justified="true">
       <tab>
          <tab-heading>
             商品库存</tab-heading>
-         <div class="table-responsive">
-            <table ng-table="tableParams" class="table table-bordered table-striped">
+         <div ng-controller="ItemsController as ctrl" class="table-responsive">
+            <table ng-table="ctrl.tableParams" class="table table-bordered table-striped">
                <thead>
                   <tr>
                      <th check-all="check-all">
@@ -29,19 +30,40 @@
                </thead>
                <tbody>
                   <tr ng-repeat="entity in $data" class="text-center">
-                     <td class="checkbox c-checkbox">
-                        <label>
-                           <input type="checkbox" />
-                           <span class="fa fa-check"></span>
-                        </label>
+                     <td>
+                        <div class="checkbox c-checkbox">
+                           <label>
+                              <input type="checkbox" />
+                              <span class="fa fa-check"></span>
+                           </label>
+                        </div>
                      </td>
-                     <td data-title="'头像'">
-                        <img ng-src="{{entity.headimgurl||'app/img/dummy.png'}}" alt="" width="44" height="44" class="img-thumbnail" />
+                     <td class="text-left">{{entity.item.name}}
+                        <br>
+                        <div class="text-muted">{{entity.item.type | item_type}}</div>
                      </td>
-                     <td data-title="'性别'">{{entity.sex}}</td>
-                     <td data-title="'省份'">{{entity.province}}</td>
-                     <td data-title="'城市'">{{entity.city}}</td>
-                     <td data-title="'关注时间'">{{entity.subscribe_time}}</td>
+                     <td>{{entity.model || "-"}}</td>
+                     <td class="text-info">{{entity.price/100 | currency}}</td>
+                     <td>{{entity.shopstocks[0].qty || 0}}</td>
+                     <td>
+                        <div dropdown="dropdown" class="btn-group"><a href="" ng-click="ctrl.stock(entity)" class="btn btn-default">进货</a>
+                           <button type="button" dropdown-toggle="" class="btn dropdown-toggle btn-default">
+                              <span class="caret"></span>
+                              <span class="sr-only"></span>
+                           </button>
+                           <ul role="menu" class="dropdown-menu">
+                              <li><a href="#">进货</a>
+                              </li>
+                              <li><a href="#">出库</a>
+                              </li>
+                              <li><a href="#">出入库记录</a>
+                              </li>
+                              <li class="divider"></li>
+                              <li><a href="#">删除</a>
+                              </li>
+                           </ul>
+                        </div>
+                     </td>
                   </tr>
                </tbody>
             </table>
@@ -49,31 +71,18 @@
       </tab>
       <tab>
          <tab-heading>出入库记录</tab-heading>
-         <div>
-            <fieldset>
-               <div class="form-group">
-                  <label class="col-md-2 control-label">Title</label>
-                  <div class="col-md-10">
-                     <input type="text" placeholder="Brief description.." class="form-control" />
-                  </div>
-               </div>
-            </fieldset>
-            <fieldset>
-               <div class="form-group">
-                  <label class="col-md-2 control-label">Description</label>
-                  <div class="col-md-10">
-                     <textarea rows="5" placeholder="Max 255 characters..." class="form-control"></textarea>
-                  </div>
-               </div>
-            </fieldset>
-            <fieldset>
-               <div class="form-group">
-                  <label class="col-md-2 control-label">Keywords</label>
-                  <div class="col-md-10">
-                     <textarea rows="5" placeholder="Max 1000 characters..." class="form-control"></textarea>
-                  </div>
-               </div>
-            </fieldset>
+         <div ng-controller="StocksController as stocks" class="table-responsive">
+            <table ng-table="stocks.tableParams" class="table table-bordered table-striped">
+               <tbody>
+                  <tr ng-repeat="entity in $data" class="text-center">
+                     <td data-title="'商品'" class="text-left">{{entity.sku.item.name}}</td>
+                     <td data-title="'规格'">{{entity.sku.model || "-"}}</td>
+                     <td data-title="'类型'">{{entity.type | stock_type}}</td>
+                     <td data-title="'数量'">{{entity.qty || 0}}</td>
+                     <td data-title="'时间'" class="text-right">{{entity.created*1000 | date}}</td>
+                  </tr>
+               </tbody>
+            </table>
          </div>
       </tab>
       <tab>
@@ -198,4 +207,9 @@
          </div>
       </tab>
    </tabset>
+   <!-- Templates -->
+   <script type="text/ng-template" id="stockDialogId">
+      <div class="modal-header"> <h3>进货</h3></div><div class="modal-body"><fieldset><div class="form-group"><label class="col-md-3 control-label">商品名称  </label><div class="col-md-9"> 
+      {{ngDialogData.sku.item.name || "未知商品" }}  </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">现有库存  </label><div class="col-md-9">{{ngDialogData.sku.shopstocks[0].qty || "0"}}      </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">进货数量</label><div class="col-md-9"> <input type="number" placeholder="输入进货数量" ng-model="stockQty" class="form-control"/></div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">备注</label><div class="col-md-9"> <textarea row="3" class="form-control"></textarea></div></div></fieldset></div><div class="modal-footer"><button type="button" ng-click="closeThisDialog()" class="pull-right btn btn-default mr">取消      </button><button type="button" ng-click="confirm()" class="pull-right btn btn-primary mr">确定</button></div>
+   </script>
 </form>

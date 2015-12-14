@@ -34,7 +34,7 @@
               
               User
                 .login(vm.account, function (accessToken) {
-                  $rootScope.user = accessToken.user;
+                  $rootScope.$broadcast('User.logined');
                   $state.go('app.dashboard');
                 }, function (error) {
                   vm.authMsg = error.data.error.message;

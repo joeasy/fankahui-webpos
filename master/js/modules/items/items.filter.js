@@ -10,16 +10,37 @@
 
     angular
         .module('app.items')
-        .filter('item_type', itemTypeFilter);
+        .filter('item_type', itemTypeFilter)
+        .filter('stock_type', stockTypeFilter)
+        .filter('currency_cny', currencyCNYFilter)
+    ;
 
     function itemTypeFilter() {
         var type = {
-          entity: "实体商品",
+          entity: "实物商品",
           service: "服务项目"
         }
         return function(key) {
           return type[key];
         }
+    }
+    
+    function currencyCNYFilter() {
+      return function (val) {
+        return "¥ "+val/100;
+      }
+    }
+    
+    function stockTypeFilter() {
+      var type = {
+        stock: "进货入库",
+        sale: "销售出库",
+        cancel: "核销出库"
+      }
+      return function (key) {
+        key = key || 'stock';
+        return type[key];
+      }
     }
 
 })();

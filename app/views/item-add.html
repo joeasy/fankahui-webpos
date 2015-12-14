@@ -98,7 +98,7 @@
                      </div>
                      <div class="col-sm-6 col-xs-12">
                         <p>
-                           <strong>售价 *</strong>
+                           <strong>售价(单位：分) *</strong>
                         </p>
                         <div class="form-group">
                            <input type="number" ng-model="sku.price" data-parsley-group="step2" required="required" placeholder="¥0.00" class="form-control" />
@@ -117,7 +117,7 @@
                            <strong>库存</strong>
                         </p>
                         <div class="form-group">
-                           <input type="number" ng-model="sku.stock" placeholder="请输入初始库存的数量" class="form-control" />
+                           <input type="number" ng-model="sku.stockQty" placeholder="请输入初始库存的数量" class="form-control" />
                         </div>
                      </div>
                      <div class="col-sm-6 col-xs-12">
@@ -154,7 +154,7 @@
             <!-- START Wizard Step inputs -->
             <div id="step3" ng-show="wizard.active(3)">
                <div class="jumbotron">
-                  <legend class="fa-2x">{{entity.name}} - {{entity.type | item_type}}</legend>
+                  <legend class="fa-2x">{{entity.type | item_type}} - {{entity.name}}</legend>
                   <div class="table-responsive">
                      <table class="table table-bordered table-striped">
                         <thead>
@@ -171,7 +171,7 @@
                            <tr ng-repeat="sku in entity.skus">
                               <td>{{sku.barcode}}</td>
                               <td>{{sku.model}}</td>
-                              <td>{{sku.price|currency}}</td>
+                              <td>{{sku.price/100|currency}}</td>
                               <td>{{sku.discount || "全价"}}</td>
                               <td>{{sku.stock || 0}}</td>
                               <td>{{sku.memo}}</td>

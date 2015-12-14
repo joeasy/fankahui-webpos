@@ -3,7 +3,9 @@
 
     angular
         .module('app.core')
-        .run(appRun);
+        .run(appRun)
+        .run(currentUserRun)
+    ;
 
     appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
     
@@ -64,5 +66,23 @@
 
     }
 
+    currentUserRun.$inject = ['$rootScope', 'User'];
+    
+    function currentUserRun($rootScope, User) {
+      
+      userDidLogined();
+      
+      function userDidLogined() {
+        if(User.isAuthenticated()) {
+          User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
+          .$promise.then(function (user) {
+            $rootScope.user = user;
+          });
+        }
+      }
+      
+      $rootScope.$on('User.logined', userDidLogined);
+      
+    }
 })();
 

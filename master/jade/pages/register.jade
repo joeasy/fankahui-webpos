@@ -23,6 +23,11 @@
           input.form-control(type='password', name="account_password_confirm", ng-model="reg.account_password_confirm", ui-validate="'$value==reg.account.password'" ui-validate-watch="'password'")
           span.fa.fa-lock.form-control-feedback.text-muted
           span.text-danger(ng-show="reg.registerForm.account_password_confirm.$dirty && reg.registerForm.account_password_confirm.$error.validator") 两次密码不一致
+        .form-group.has-feedback
+          label.text-muted 我的店名
+          input.form-control(type='text', name="account_merchantname" placeholder='输入公司或商户的名字', autocomplete="off", ng-model="reg.account.merchantname", required='')
+          span.fa.fa-lg.fa-home.form-control-feedback.text-muted
+          span.text-danger(ng-show="reg.registerForm.account_merchantname.$dirty && reg.registerForm.account_merchantname.$error.required") 店名不能为空
         .clearfix
           .checkbox.c-checkbox.pull-left.mt0
             label

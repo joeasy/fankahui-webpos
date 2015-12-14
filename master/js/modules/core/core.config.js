@@ -3,7 +3,9 @@
 
     angular
         .module('app.core')
-        .config(coreConfig);
+        .config(coreConfig)
+        .config(loopbackConfig)
+    ;
 
     coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$httpProvider'];
     function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide, $httpProvider){
@@ -30,6 +32,11 @@
           }
         };
       });     
+    }
+    
+    loopbackConfig.$inject = ['LoopBackResourceProvider', 'urlBase'];
+    function loopbackConfig(LoopBackResourceProvider, urlBase) {
+      LoopBackResourceProvider.setUrlBase(urlBase);
     }
 
 })();

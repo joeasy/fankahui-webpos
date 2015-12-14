@@ -28,6 +28,12 @@
                <span class="fa fa-lock form-control-feedback text-muted"></span>
                <span ng-show="reg.registerForm.account_password_confirm.$dirty &amp;&amp; reg.registerForm.account_password_confirm.$error.validator" class="text-danger">两次密码不一致</span>
             </div>
+            <div class="form-group has-feedback">
+               <label class="text-muted">我的店名</label>
+               <input type="text" name="account_merchantname" placeholder="输入公司或商户的名字" autocomplete="off" ng-model="reg.account.merchantname" required="" class="form-control" />
+               <span class="fa fa-lg fa-home form-control-feedback text-muted"></span>
+               <span ng-show="reg.registerForm.account_merchantname.$dirty &amp;&amp; reg.registerForm.account_merchantname.$error.required" class="text-danger">店名不能为空</span>
+            </div>
             <div class="clearfix">
                <div class="checkbox c-checkbox pull-left mt0">
                   <label>

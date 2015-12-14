@@ -1,0 +1,101 @@
+h3 
+  | 我的门店
+  a(type='button', ui-sref='app.shops()').btn.btn-default.pull-right.mr-sm
+    em.fa.fa-search.fa-fw.mr-sm
+    | 全部门店
+
+.row(ng-controller='MyShopController as form')
+  .col-md-6
+    .panel.panel-default
+      .panel-heading 
+        em.fa.fa-lg 门店详情
+        a.btn.btn-primary.pull-right(ng-click="form.saveShop()") 
+          em.fa.fa-save.mr-sm 
+          | 保存
+      .panel-body
+        .form-horizontal
+          .form-group.m0
+            label.col-sm-4.control-label 门店ID:
+            .col-sm-8
+              p.form-control-static {{form.shop.id}}
+          .form-group.m0
+            label.col-sm-4.control-label 门店名: 
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-text='form.shop.branch_name') {{ form.shop.branch_name || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 电话: 
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-tel='form.shop.telephone', e-pattern='\\d{3}\-\\d{4}\-\\d{4}', e-title='xxx-xxxx-xxxx') {{ form.shop.telephone || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 省份: 
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-select='shop.province', e-ng-options='p as p.name for p in form.provinces', onbeforesave="form.update('shop','province', $data)") {{ form.shop.province || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 城市: 
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-select='shop.city', e-ng-options='c as c.name for c in shop.province.districtList', onbeforesave="form.update('shop','city', $data)") {{ form.shop.city || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 区县: 
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-select='form.shop.district', e-ng-options='d.name as d.name for d in shop.city.districtList') {{ form.shop.district || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 地址: 
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-text='form.shop.address') {{ form.shop.address || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 创建于:
+            .col-sm-8
+              p.form-control-static {{form.shop.created}}
+  .col-md-6
+    .panel.panel-default
+      .panel-heading 
+        em.fa.fa-lg 商户详情
+        a.btn.btn-primary.pull-right(ng-click="form.saveMerchant()") 
+          em.fa.fa-save.mr-sm 
+          | 保存
+      .panel-body
+        .form-horizontal
+          .form-group.m0
+            label.col-sm-4.control-label 商户ID:
+            .col-sm-8
+              p.form-control-static {{form.merchant.id}}
+          .form-group.m0
+            label.col-sm-4.control-label 商户名
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-text='form.merchant.name') {{ form.merchant.name || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 电话: 
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-tel='form.shop.merchant.telephone', e-pattern='\\d{3}\-\\d{4}\-\\d{4}', e-title='xxx-xxxx-xxxx') {{ form.merchant.telephone || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 省份: 
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-select='merchant.province', e-ng-options='p as p.name for p in form.provinces', onbeforesave="form.update('merchant','province', $data)") {{ form.merchant.province || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 城市: 
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-select='merchant.city', e-ng-options='c as c.name for c in merchant.province.districtList', onbeforesave="form.update('merchant','city', $data)") {{ form.merchant.city || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 区县: 
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-select='form.merchant.district', e-ng-options='d.name as d.name for d in merchant.city.districtList') {{ form.merchant.district || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 地址: 
+            .col-sm-8
+              p.form-control-static
+                a(href='#', editable-text='form.merchant.address') {{ form.merchant.address || &apos;空&apos; }}
+          .form-group.m0
+            label.col-sm-4.control-label 创建于:
+            .col-sm-8
+              p.form-control-static {{form.merchant.created}}  

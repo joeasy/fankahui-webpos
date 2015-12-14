@@ -40,7 +40,7 @@
                   User
                     .login({username: vm.account.username, password: vm.account.password})
                     .$promise.then(function (accessToken) {
-                      $rootScope.user = accessToken.user;
+                      $rootScope.$broadcast('User.logined');
                       $state.go('app.dashboard');
                     });
                 }, function (error) {
