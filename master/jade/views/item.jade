@@ -11,8 +11,8 @@ form.panel
     tab
       tab-heading 
         | 商品库存
-      .table-responsive(ng-controller="ItemsController as ctrl")
-        table.table.table-bordered.table-striped(ng-table='ctrl.tableParams')
+      .table-responsive(ng-controller="ItemsController as items")
+        table.table.table-bordered.table-striped(ng-table='items.tableParams')
           thead
             tr
               th(check-all)
@@ -36,10 +36,10 @@ form.panel
                 .text-muted {{entity.item.type | item_type}}
               td {{entity.model || "-"}}
               td.text-info {{entity.price/100 | currency}}
-              td {{entity.shopstocks[0].qty || 0}}
+              td {{entity.inventories[0].balance || 0}}
               td 
                 .btn-group(dropdown='dropdown')
-                  a.btn.btn-default(href='', ng-click="ctrl.stock(entity)") 进货
+                  a.btn.btn-default(href='', ng-click="items.stock(entity)") 进货
                   button.btn.dropdown-toggle(type='button', class="btn-default", dropdown-toggle="")
                     span.caret
                     span.sr-only= type
@@ -63,105 +63,40 @@ form.panel
             tr.text-center(ng-repeat='entity in $data')
               td.text-left(data-title="'商品'") {{entity.sku.item.name}}
               td(data-title="'规格'") {{entity.sku.model || "-"}}
-              td(data-title="'类型'") {{entity.type | stock_type}}
-              td(data-title="'数量'") {{entity.qty || 0}}
-              td(data-title="'时间'").text-right {{entity.created*1000 | date}}
+              td(data-title="'原始数量'") {{entity.originBalance || 0}}
+              td(data-title="'变动数量'", ng-class="entity.qty < 0?'text-success':'text-danger'") {{entity.qty || 0}}
+              td(data-title="'结余数量'") {{entity.originBalance+entity.qty}}
+              td(data-title="'经手人'") {{entity.operator.name || entity.operator.username}}
+              td(data-title="'时间'") {{entity.created | date:'yyyy-MM-dd HH:mm:ss Z'}}
+              td(data-title="'说明'") {{entity.type | stock_type}}
     tab
       tab-heading
         | 库存盘点
-      div
-        .row.mb-lg
-          .col-xs-3
-            strong Preview
-          .col-xs-9
-            strong Details
-        .row.mb-lg.pb-lg.bb
-          .col-xs-6.col-sm-3
-            a(href='#', title='Product 1')
-              img.img-responsive(src='app/img/bg7.jpg', alt='Product 1')
-          .col-xs-6.col-sm-9
-            fieldset: .form-group
-              input.form-control(type='text', placeholder="Brief description..")
-            p: strong Picture type
-            .radio.c-radio.c-radio-nofont
-              label
-                input(type='radio', name='prod1-pic', value='option1', checked='')
-                span
-                | Primary
-            .radio.c-radio.c-radio-nofont
-              label
-                input(type='radio', name='prod1-pic', value='option2')
-                span
-                | Thumbnail
-            .radio.c-radio.c-radio-nofont
-              label
-                input(type='radio', name='prod1-pic', value='option3')
-                span
-                | Gallery
-            .text-right
-              button.btn.btn-sm.btn-danger(type="button")
-                em.fa.fa-times-circle.fa-fw
-                | Remove
-        .row.mb-lg.pb-lg.bb
-          .col-xs-6.col-sm-3
-            a(href='#', title='Product 2')
-              img.img-responsive(src='app/img/bg8.jpg', alt='Product 1')
-          .col-xs-6.col-sm-9
-            fieldset: .form-group
-              input.form-control(type='text', placeholder="Brief description..")
-            p: strong Picture type
-            .radio.c-radio.c-radio-nofont
-              label
-                input(type='radio', name='prod2-pic', value='option1', checked='')
-                span
-                | Primary
-            .radio.c-radio.c-radio-nofont
-              label
-                input(type='radio', name='prod2-pic', value='option2')
-                span
-                | Thumbnail
-            .radio.c-radio.c-radio-nofont
-              label
-                input(type='radio', name='prod2-pic', value='option3')
-                span
-                | Gallery
-            .text-right
-              button.btn.btn-sm.btn-danger(type="button")
-                em.fa.fa-times-circle.fa-fw
-                | Remove
-        .row.mb-lg.pb-lg
-          .col-xs-6.col-sm-3
-            a(href='#', title='Product 3')
-              img.img-responsive(src='app/img/bg10.jpg', alt='Product 1')
-          .col-xs-6.col-sm-9
-            fieldset: .form-group
-              input.form-control(type='text', placeholder="Brief description..")
-            p: strong Picture type
-            .radio.c-radio.c-radio-nofont
-              label
-                input(type='radio', name='prod3-pic', value='option1', checked='')
-                span
-                | Primary
-            .radio.c-radio.c-radio-nofont
-              label
-                input(type='radio', name='prod3-pic', value='option2')
-                span
-                | Thumbnail
-            .radio.c-radio.c-radio-nofont
-              label
-                input(type='radio', name='prod3-pic', value='option3')
-                span
-                | Gallery
-            .text-right
-              button.btn.btn-sm.btn-danger(type="button")
-                em.fa.fa-times-circle.fa-fw
-                | Remove
+      .table-responsive(ng-controller="InventoriesController as inventories")
+        table.table.table-bordered.table-striped(ng-table='inventories.tableParams')
+          tbody
+            tr.text-center(ng-repeat='entity in $data')
+              td.text-left(data-title="'商品'") {{entity.item.name}}
+              td(data-title="'规格'") {{entity.model || "-"}}
+              td(data-title="'账面结存'") {{entity.inventories[0].balance || 0}}
+              td(data-title="'上次盘点时间'") {{entity.created | date:'yyyy-MM-dd HH:mm:ss Z'}}
+              td(data-title="'操作'")
+                .btn-group(dropdown='dropdown')
+                  a.btn.btn-default(href='', ng-click="inventories.confirm(entity)") 确认数量
+                  button.btn.dropdown-toggle(type='button', class="btn-default", dropdown-toggle="")
+                    span.caret
+                    span.sr-only= type
+                  ul.dropdown-menu(role='menu')
+                    li
+                      a(href='', ng-click="inventories.confirm(entity)") 确认数量
+                    li
+                      a(href='', ng-click="inventories.fix(entity)") 修正数量
                 
   <!-- Templates -->
   
   script(type="text/ng-template", id="stockDialogId")
     .modal-header 
-      h3 进货
+      h3 {{ngDialogData.type | stock_type}}
     .modal-body
       fieldset: .form-group
         label.col-md-3.control-label 商品名称  
@@ -170,9 +105,9 @@ form.panel
       fieldset: .form-group
         label.col-md-3.control-label 现有库存  
         .col-md-9
-          | {{ngDialogData.sku.shopstocks[0].qty || "0"}}      
+          | {{ngDialogData.sku.inventories[0].balance || "0"}}      
       fieldset: .form-group
-        label.col-md-3.control-label 进货数量
+        label.col-md-3.control-label 数量
         .col-md-9  
           input.form-control(type='number', placeholder="输入进货数量", ng-model="stockQty")
       fieldset: .form-group

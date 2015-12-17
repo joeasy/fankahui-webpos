@@ -9,8 +9,8 @@
       <tab>
          <tab-heading>
             商品库存</tab-heading>
-         <div ng-controller="ItemsController as ctrl" class="table-responsive">
-            <table ng-table="ctrl.tableParams" class="table table-bordered table-striped">
+         <div ng-controller="ItemsController as items" class="table-responsive">
+            <table ng-table="items.tableParams" class="table table-bordered table-striped">
                <thead>
                   <tr>
                      <th check-all="check-all">
@@ -44,9 +44,9 @@
                      </td>
                      <td>{{entity.model || "-"}}</td>
                      <td class="text-info">{{entity.price/100 | currency}}</td>
-                     <td>{{entity.shopstocks[0].qty || 0}}</td>
+                     <td>{{entity.inventories[0].balance || 0}}</td>
                      <td>
-                        <div dropdown="dropdown" class="btn-group"><a href="" ng-click="ctrl.stock(entity)" class="btn btn-default">进货</a>
+                        <div dropdown="dropdown" class="btn-group"><a href="" ng-click="items.stock(entity)" class="btn btn-default">进货</a>
                            <button type="button" dropdown-toggle="" class="btn dropdown-toggle btn-default">
                               <span class="caret"></span>
                               <span class="sr-only"></span>
@@ -77,9 +77,12 @@
                   <tr ng-repeat="entity in $data" class="text-center">
                      <td data-title="'商品'" class="text-left">{{entity.sku.item.name}}</td>
                      <td data-title="'规格'">{{entity.sku.model || "-"}}</td>
-                     <td data-title="'类型'">{{entity.type | stock_type}}</td>
-                     <td data-title="'数量'">{{entity.qty || 0}}</td>
-                     <td data-title="'时间'" class="text-right">{{entity.created*1000 | date}}</td>
+                     <td data-title="'原始数量'">{{entity.originBalance || 0}}</td>
+                     <td data-title="'变动数量'" ng-class="entity.qty &lt; 0?'text-success':'text-danger'">{{entity.qty || 0}}</td>
+                     <td data-title="'结余数量'">{{entity.originBalance+entity.qty}}</td>
+                     <td data-title="'经手人'">{{entity.operator.name || entity.operator.username}}</td>
+                     <td data-title="'时间'">{{entity.created | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+                     <td data-title="'说明'">{{entity.type | stock_type}}</td>
                   </tr>
                </tbody>
             </table>
@@ -87,129 +90,37 @@
       </tab>
       <tab>
          <tab-heading>库存盘点</tab-heading>
-         <div>
-            <div class="row mb-lg">
-               <div class="col-xs-3">
-                  <strong>Preview</strong>
-               </div>
-               <div class="col-xs-9">
-                  <strong>Details</strong>
-               </div>
-            </div>
-            <div class="row mb-lg pb-lg bb">
-               <div class="col-xs-6 col-sm-3">
-                  <a href="#" title="Product 1">
-                     <img src="app/img/bg7.jpg" alt="Product 1" class="img-responsive" />
-                  </a>
-               </div>
-               <div class="col-xs-6 col-sm-9">
-                  <fieldset>
-                     <div class="form-group">
-                        <input type="text" placeholder="Brief description.." class="form-control" />
-                     </div>
-                  </fieldset>
-                  <p>
-                     <strong>Picture type</strong>
-                  </p>
-                  <div class="radio c-radio c-radio-nofont">
-                     <label>
-                        <input type="radio" name="prod1-pic" value="option1" checked="" />
-                        <span></span>Primary</label>
-                  </div>
-                  <div class="radio c-radio c-radio-nofont">
-                     <label>
-                        <input type="radio" name="prod1-pic" value="option2" />
-                        <span></span>Thumbnail</label>
-                  </div>
-                  <div class="radio c-radio c-radio-nofont">
-                     <label>
-                        <input type="radio" name="prod1-pic" value="option3" />
-                        <span></span>Gallery</label>
-                  </div>
-                  <div class="text-right">
-                     <button type="button" class="btn btn-sm btn-danger">
-                        <em class="fa fa-times-circle fa-fw"></em>Remove</button>
-                  </div>
-               </div>
-            </div>
-            <div class="row mb-lg pb-lg bb">
-               <div class="col-xs-6 col-sm-3">
-                  <a href="#" title="Product 2">
-                     <img src="app/img/bg8.jpg" alt="Product 1" class="img-responsive" />
-                  </a>
-               </div>
-               <div class="col-xs-6 col-sm-9">
-                  <fieldset>
-                     <div class="form-group">
-                        <input type="text" placeholder="Brief description.." class="form-control" />
-                     </div>
-                  </fieldset>
-                  <p>
-                     <strong>Picture type</strong>
-                  </p>
-                  <div class="radio c-radio c-radio-nofont">
-                     <label>
-                        <input type="radio" name="prod2-pic" value="option1" checked="" />
-                        <span></span>Primary</label>
-                  </div>
-                  <div class="radio c-radio c-radio-nofont">
-                     <label>
-                        <input type="radio" name="prod2-pic" value="option2" />
-                        <span></span>Thumbnail</label>
-                  </div>
-                  <div class="radio c-radio c-radio-nofont">
-                     <label>
-                        <input type="radio" name="prod2-pic" value="option3" />
-                        <span></span>Gallery</label>
-                  </div>
-                  <div class="text-right">
-                     <button type="button" class="btn btn-sm btn-danger">
-                        <em class="fa fa-times-circle fa-fw"></em>Remove</button>
-                  </div>
-               </div>
-            </div>
-            <div class="row mb-lg pb-lg">
-               <div class="col-xs-6 col-sm-3">
-                  <a href="#" title="Product 3">
-                     <img src="app/img/bg10.jpg" alt="Product 1" class="img-responsive" />
-                  </a>
-               </div>
-               <div class="col-xs-6 col-sm-9">
-                  <fieldset>
-                     <div class="form-group">
-                        <input type="text" placeholder="Brief description.." class="form-control" />
-                     </div>
-                  </fieldset>
-                  <p>
-                     <strong>Picture type</strong>
-                  </p>
-                  <div class="radio c-radio c-radio-nofont">
-                     <label>
-                        <input type="radio" name="prod3-pic" value="option1" checked="" />
-                        <span></span>Primary</label>
-                  </div>
-                  <div class="radio c-radio c-radio-nofont">
-                     <label>
-                        <input type="radio" name="prod3-pic" value="option2" />
-                        <span></span>Thumbnail</label>
-                  </div>
-                  <div class="radio c-radio c-radio-nofont">
-                     <label>
-                        <input type="radio" name="prod3-pic" value="option3" />
-                        <span></span>Gallery</label>
-                  </div>
-                  <div class="text-right">
-                     <button type="button" class="btn btn-sm btn-danger">
-                        <em class="fa fa-times-circle fa-fw"></em>Remove</button>
-                  </div>
-               </div>
-            </div>
+         <div ng-controller="InventoriesController as inventories" class="table-responsive">
+            <table ng-table="inventories.tableParams" class="table table-bordered table-striped">
+               <tbody>
+                  <tr ng-repeat="entity in $data" class="text-center">
+                     <td data-title="'商品'" class="text-left">{{entity.item.name}}</td>
+                     <td data-title="'规格'">{{entity.model || "-"}}</td>
+                     <td data-title="'账面结存'">{{entity.inventories[0].balance || 0}}</td>
+                     <td data-title="'上次盘点时间'">{{entity.created | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+                     <td data-title="'操作'">
+                        <div dropdown="dropdown" class="btn-group"><a href="" ng-click="inventories.confirm(entity)" class="btn btn-default">确认数量</a>
+                           <button type="button" dropdown-toggle="" class="btn dropdown-toggle btn-default">
+                              <span class="caret"></span>
+                              <span class="sr-only"></span>
+                           </button>
+                           <ul role="menu" class="dropdown-menu">
+                              <li><a href="" ng-click="inventories.confirm(entity)">确认数量</a>
+                              </li>
+                              <li><a href="" ng-click="inventories.fix(entity)">修正数量</a>
+                              </li>
+                           </ul>
+                        </div>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
          </div>
       </tab>
    </tabset>
    <!-- Templates -->
    <script type="text/ng-template" id="stockDialogId">
-      <div class="modal-header"> <h3>进货</h3></div><div class="modal-body"><fieldset><div class="form-group"><label class="col-md-3 control-label">商品名称  </label><div class="col-md-9"> 
-      {{ngDialogData.sku.item.name || "未知商品" }}  </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">现有库存  </label><div class="col-md-9">{{ngDialogData.sku.shopstocks[0].qty || "0"}}      </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">进货数量</label><div class="col-md-9"> <input type="number" placeholder="输入进货数量" ng-model="stockQty" class="form-control"/></div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">备注</label><div class="col-md-9"> <textarea row="3" class="form-control"></textarea></div></div></fieldset></div><div class="modal-footer"><button type="button" ng-click="closeThisDialog()" class="pull-right btn btn-default mr">取消      </button><button type="button" ng-click="confirm()" class="pull-right btn btn-primary mr">确定</button></div>
+      <div class="modal-header"> <h3>{{ngDialogData.type | stock_type}}</h3></div><div class="modal-body"><fieldset><div class="form-group"><label class="col-md-3 control-label">商品名称  </label><div class="col-md-9"> 
+      {{ngDialogData.sku.item.name || "未知商品" }}  </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">现有库存  </label><div class="col-md-9">{{ngDialogData.sku.inventories[0].balance || "0"}}      </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">数量</label><div class="col-md-9"> <input type="number" placeholder="输入进货数量" ng-model="stockQty" class="form-control"/></div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">备注</label><div class="col-md-9"> <textarea row="3" class="form-control"></textarea></div></div></fieldset></div><div class="modal-footer"><button type="button" ng-click="closeThisDialog()" class="pull-right btn btn-default mr">取消      </button><button type="button" ng-click="confirm()" class="pull-right btn btn-primary mr">确定</button></div>
    </script>
 </form>

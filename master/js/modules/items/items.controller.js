@@ -6,6 +6,7 @@
       .controller('ItemsController', ItemsController)
       .controller('StockDialogController', StockDialogController)
       .controller('StocksController', StocksController)
+      .controller('InventoriesController', InventoriesController)
       .controller('ItemAddController', ItemAddController);
         
     ItemsController.$inject = ['$scope', 'ngTableParams', 'Sku', 'ngDialog', 'toaster'];
@@ -21,7 +22,7 @@
           filter: vm.filter.text
         }, {
           getData: function($defer, params) {
-            var opt = {where:{}, include:['shopstocks']}
+            var opt = {where:{}, include:['inventories']}
             opt.limit = params.count()
             opt.skip = (params.page()-1)*opt.limit
             if(vm.filter.text != '') {
@@ -41,9 +42,8 @@
         ngDialog.open({ 
           template: 'stockDialogId', 
           controller: 'StockDialogController', 
-          data: {sku: sku} 
+          data: {sku: sku, type: 'stock'} 
         });
-        // $scope.tableParams.reload();
       }
       
     }
@@ -74,8 +74,8 @@
       }
     }
     
-    StockDialogController.$inject = ['$scope', 'ngDialog', 'Stock', 'toaster'];
-    function StockDialogController($scope, ngDialog, Stock, toaster) {
+    StockDialogController.$inject = ['$scope', 'ngDialog', 'Stock', 'toaster', '$filter'];
+    function StockDialogController($scope, ngDialog, Stock, toaster, $filter) {
 
         activate();
 
@@ -86,11 +86,13 @@
         }
         
         $scope.confirm = function () {
-          var sku = $scope.ngDialogData.sku
-          Stock.create({skuId: sku.id, qty: $scope.stockQty, type: 'stock'});
-          sku.shopstocks[0].qty += $scope.stockQty;
+          var sku = $scope.ngDialogData.sku;
+          var type = $scope.ngDialogData.type;
+          Stock.create({skuId: sku.id, qty: $scope.stockQty, type: type});
+          sku.inventories[0].qty += $scope.stockQty;
           ngDialog.close();
-          toaster.pop('success', '进货成功', '成功入库'+sku.item.name+":"+$scope.stockQty+"件");
+          toaster.pop('success', '成功',
+           "完成"+$filter('stock_type')(type)+sku.item.name+":"+$scope.stockQty+"件");
         }
     }
     
@@ -107,12 +109,10 @@
           filter: vm.filter.text
         }, {
           getData: function($defer, params) {
-            var opt = {where:{}, include:['sku']}
+            var opt = {where:{}, include:['sku', 'operator']}
             opt.limit = params.count()
             opt.skip = (params.page()-1)*opt.limit
             if(vm.filter.text != '') {
-              // var qs = {regex: vm.filter.text};
-              // opt.where.or = [{nickname:qs}, {remark:qs}];
               opt.skip = 0;
             }
             Stock.count({where: opt.where}, function (result) {
@@ -120,6 +120,49 @@
               Stock.find({filter:opt}, $defer.resolve)
             })
           }
+        });
+      }
+      
+    }
+
+    InventoriesController.$inject = ['$scope', 'Sku', 'ngTableParams', 'ngDialog', 'toaster'];
+    function InventoriesController($scope, Sku, ngTableParams, ngDialog, toaster) {
+      var vm = this;
+      
+      active();
+      
+      function active() {
+        vm.filter = {text: ''}
+        vm.tableParams = new ngTableParams({
+          count: 10,
+          filter: vm.filter.text
+        }, {
+          getData: function($defer, params) {
+            var opt = {where:{"item.type":'entity'}, include:['inventories']}
+            opt.limit = params.count()
+            opt.skip = (params.page()-1)*opt.limit
+            if(vm.filter.text != '') {
+              var qs = {regex: vm.filter.text};
+              opt.where.or = [{nickname:qs}, {remark:qs}];
+              opt.skip = 0;
+            }
+            Sku.count({where: opt.where}, function (result) {
+              vm.tableParams.total(result.count)
+              Sku.find({filter:opt}, $defer.resolve)
+            })
+          }
+        });
+      }
+      
+      vm.confirm = function (sku) {
+        
+      }
+      
+      vm.fix = function (sku) {
+        ngDialog.open({ 
+          template: 'stockDialogId', 
+          controller: 'StockDialogController', 
+          data: {sku: sku, type:"inventory"} 
         });
       }
     }
