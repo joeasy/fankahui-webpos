@@ -41,7 +41,7 @@
               url: '/item',
               title: 'Item',
               templateUrl: helper.basepath('item.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert')
           })
           .state('app.item-add', {
               url: '/item-add',

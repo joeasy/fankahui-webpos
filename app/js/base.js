@@ -60124,6 +60124,18 @@ module.factory(
           method: "PUT"
         },
 
+        // INTERNAL. Use User.merchant() instead.
+        "prototype$__get__merchant": {
+          url: urlBase + "/users/:id/merchant",
+          method: "GET"
+        },
+
+        // INTERNAL. Use User.shop() instead.
+        "prototype$__get__shop": {
+          url: urlBase + "/users/:id/shop",
+          method: "GET"
+        },
+
         /**
          * @ngdoc method
          * @name lbServices.User#prototype$__get__accessTokens
@@ -60850,6 +60862,12 @@ module.factory(
           method: "POST"
         },
 
+        // INTERNAL. Use Stock.operator() instead.
+        "::get::stock::operator": {
+          url: urlBase + "/stocks/:id/operator",
+          method: "GET"
+        },
+
         /**
          * @ngdoc method
          * @name lbServices.User#getCurrent
@@ -61071,6 +61089,78 @@ module.factory(
     */
     R.modelName = "User";
 
+
+        /**
+         * @ngdoc method
+         * @name lbServices.User#merchant
+         * @methodOf lbServices.User
+         *
+         * @description
+         *
+         * Fetches belongsTo relation merchant.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `refresh` – `{boolean=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Merchant` object.)
+         * </em>
+         */
+        R.merchant = function() {
+          var TargetResource = $injector.get("Merchant");
+          var action = TargetResource["::get::user::merchant"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.User#shop
+         * @methodOf lbServices.User
+         *
+         * @description
+         *
+         * Fetches belongsTo relation shop.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `refresh` – `{boolean=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Shop` object.)
+         * </em>
+         */
+        R.shop = function() {
+          var TargetResource = $injector.get("Shop");
+          var action = TargetResource["::get::user::shop"];
+          return action.apply(R, arguments);
+        };
 
     return R;
   }]);
@@ -61694,6 +61784,258 @@ module.factory(
 
         /**
          * @ngdoc method
+         * @name lbServices.Sku#prototype$__findById__inventories
+         * @methodOf lbServices.Sku
+         *
+         * @description
+         *
+         * Find a related item by id for inventories.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for inventories
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Sku` object.)
+         * </em>
+         */
+        "prototype$__findById__inventories": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/skus/:id/inventories/:fk",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Sku#prototype$__destroyById__inventories
+         * @methodOf lbServices.Sku
+         *
+         * @description
+         *
+         * Delete a related item by id for inventories.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for inventories
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "prototype$__destroyById__inventories": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/skus/:id/inventories/:fk",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Sku#prototype$__updateById__inventories
+         * @methodOf lbServices.Sku
+         *
+         * @description
+         *
+         * Update a related item by id for inventories.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for inventories
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Sku` object.)
+         * </em>
+         */
+        "prototype$__updateById__inventories": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/skus/:id/inventories/:fk",
+          method: "PUT"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Sku#prototype$__get__inventories
+         * @methodOf lbServices.Sku
+         *
+         * @description
+         *
+         * Queries inventories of sku.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `filter` – `{object=}` - 
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Sku` object.)
+         * </em>
+         */
+        "prototype$__get__inventories": {
+          isArray: true,
+          url: urlBase + "/skus/:id/inventories",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Sku#prototype$__create__inventories
+         * @methodOf lbServices.Sku
+         *
+         * @description
+         *
+         * Creates a new instance in inventories of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Sku` object.)
+         * </em>
+         */
+        "prototype$__create__inventories": {
+          url: urlBase + "/skus/:id/inventories",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Sku#prototype$__delete__inventories
+         * @methodOf lbServices.Sku
+         *
+         * @description
+         *
+         * Deletes all inventories of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "prototype$__delete__inventories": {
+          url: urlBase + "/skus/:id/inventories",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Sku#prototype$__count__inventories
+         * @methodOf lbServices.Sku
+         *
+         * @description
+         *
+         * Counts inventories of sku.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        "prototype$__count__inventories": {
+          url: urlBase + "/skus/:id/inventories/count",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
          * @name lbServices.Sku#create
          * @methodOf lbServices.Sku
          *
@@ -62112,6 +62454,12 @@ module.factory(
         "createChangeStream": {
           url: urlBase + "/skus/change-stream",
           method: "POST"
+        },
+
+        // INTERNAL. Use Stock.sku() instead.
+        "::get::stock::sku": {
+          url: urlBase + "/stocks/:id/sku",
+          method: "GET"
         },
       }
     );
@@ -62705,6 +63053,24 @@ module.factory(
           url: urlBase + "/merchants/change-stream",
           method: "POST"
         },
+
+        // INTERNAL. Use User.merchant() instead.
+        "::get::user::merchant": {
+          url: urlBase + "/users/:id/merchant",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Shop.merchant() instead.
+        "::get::shop::merchant": {
+          url: urlBase + "/shops/:id/merchant",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Stock.merchant() instead.
+        "::get::stock::merchant": {
+          url: urlBase + "/stocks/:id/merchant",
+          method: "GET"
+        },
       }
     );
 
@@ -62875,6 +63241,12 @@ module.factory(
       urlBase + "/shops/:id",
       { 'id': '@id' },
       {
+
+        // INTERNAL. Use Shop.merchant() instead.
+        "prototype$__get__merchant": {
+          url: urlBase + "/shops/:id/merchant",
+          method: "GET"
+        },
 
         /**
          * @ngdoc method
@@ -63297,6 +63669,18 @@ module.factory(
           url: urlBase + "/shops/change-stream",
           method: "POST"
         },
+
+        // INTERNAL. Use User.shop() instead.
+        "::get::user::shop": {
+          url: urlBase + "/users/:id/shop",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Stock.shop() instead.
+        "::get::stock::shop": {
+          url: urlBase + "/stocks/:id/shop",
+          method: "GET"
+        },
       }
     );
 
@@ -63440,6 +63824,42 @@ module.factory(
     R.modelName = "Shop";
 
 
+        /**
+         * @ngdoc method
+         * @name lbServices.Shop#merchant
+         * @methodOf lbServices.Shop
+         *
+         * @description
+         *
+         * Fetches belongsTo relation merchant.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `refresh` – `{boolean=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Merchant` object.)
+         * </em>
+         */
+        R.merchant = function() {
+          var TargetResource = $injector.get("Merchant");
+          var action = TargetResource["::get::shop::merchant"];
+          return action.apply(R, arguments);
+        };
+
     return R;
   }]);
 
@@ -63467,6 +63887,30 @@ module.factory(
       urlBase + "/stocks/:id",
       { 'id': '@id' },
       {
+
+        // INTERNAL. Use Stock.sku() instead.
+        "prototype$__get__sku": {
+          url: urlBase + "/stocks/:id/sku",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Stock.shop() instead.
+        "prototype$__get__shop": {
+          url: urlBase + "/stocks/:id/shop",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Stock.merchant() instead.
+        "prototype$__get__merchant": {
+          url: urlBase + "/stocks/:id/merchant",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Stock.operator() instead.
+        "prototype$__get__operator": {
+          url: urlBase + "/stocks/:id/operator",
+          method: "GET"
+        },
 
         /**
          * @ngdoc method
@@ -64031,6 +64475,150 @@ module.factory(
     */
     R.modelName = "Stock";
 
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Stock#sku
+         * @methodOf lbServices.Stock
+         *
+         * @description
+         *
+         * Fetches belongsTo relation sku.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `refresh` – `{boolean=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Sku` object.)
+         * </em>
+         */
+        R.sku = function() {
+          var TargetResource = $injector.get("Sku");
+          var action = TargetResource["::get::stock::sku"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Stock#shop
+         * @methodOf lbServices.Stock
+         *
+         * @description
+         *
+         * Fetches belongsTo relation shop.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `refresh` – `{boolean=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Shop` object.)
+         * </em>
+         */
+        R.shop = function() {
+          var TargetResource = $injector.get("Shop");
+          var action = TargetResource["::get::stock::shop"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Stock#merchant
+         * @methodOf lbServices.Stock
+         *
+         * @description
+         *
+         * Fetches belongsTo relation merchant.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `refresh` – `{boolean=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Merchant` object.)
+         * </em>
+         */
+        R.merchant = function() {
+          var TargetResource = $injector.get("Merchant");
+          var action = TargetResource["::get::stock::merchant"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Stock#operator
+         * @methodOf lbServices.Stock
+         *
+         * @description
+         *
+         * Fetches belongsTo relation operator.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `refresh` – `{boolean=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `User` object.)
+         * </em>
+         */
+        R.operator = function() {
+          var TargetResource = $injector.get("User");
+          var action = TargetResource["::get::stock::operator"];
+          return action.apply(R, arguments);
+        };
 
     return R;
   }]);

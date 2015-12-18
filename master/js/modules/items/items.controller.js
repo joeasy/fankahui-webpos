@@ -6,43 +6,66 @@
       .controller('ItemsController', ItemsController)
       .controller('StockDialogController', StockDialogController)
       .controller('StocksController', StocksController)
-      .controller('InventoriesController', InventoriesController)
       .controller('ItemAddController', ItemAddController);
-        
-    ItemsController.$inject = ['$scope', 'ngTableParams', 'Sku', 'ngDialog', 'toaster'];
-    function ItemsController($scope, ngTableParams, Sku, ngDialog, toaster) {
+    
+    ItemsController.$inject = ['$scope', 'ngTableParams', 'Sku', 'ngDialog', 'SweetAlert', 'ngTableLBService'];
+    function ItemsController($scope, ngTableParams, Sku, ngDialog, SweetAlert, ngTableLBService) {
       var vm = this;
       
       activate();
       
       function activate() {
-        vm.filter = {text: ''}
-        vm.tableParams = new ngTableParams({
-          count: 10,
-          filter: vm.filter.text
-        }, {
+        vm.keyword = "";
+        vm.tableParams = new ngTableParams({count: 10}, {
           getData: function($defer, params) {
-            var opt = {where:{}, include:['inventories']}
-            opt.limit = params.count()
-            opt.skip = (params.page()-1)*opt.limit
-            if(vm.filter.text != '') {
-              var qs = {regex: vm.filter.text};
-              opt.where.or = [{nickname:qs}, {remark:qs}];
-              opt.skip = 0;
+            var filter = {where:{status:{ne:'deleted'}}, include:['inventories']}
+            if(vm.keyword != '') {
+              var qs = {regex: keyword};
+              filter.where.or = [{"item.name":qs}, {model:qs}];
+              params.page(1);
             }
-            Sku.count({where: opt.where}, function (result) {
-              vm.tableParams.total(result.count)
-              Sku.find({filter:opt}, $defer.resolve)
-            })
+            ngTableLBService.getData($defer, params, Sku, filter);
           }
         });
       }
             
-      vm.stock = function (sku) {
+      vm.stock = function (sku, type) {
         ngDialog.open({ 
           template: 'stockDialogId', 
           controller: 'StockDialogController', 
-          data: {sku: sku, type: 'stock'} 
+          data: {sku: sku, type: type} 
+        });
+      }
+      
+      vm.delete = function (sku) {
+        SweetAlert.swal({   
+          title: '确定删除商品'+sku.item.name,   
+          text: '删除商品后将无法恢复，你确定要删除商品？',   
+          type: 'warning',   
+          showCancelButton: true,   
+          confirmButtonColor: '#DD6B55',   
+          confirmButtonText: '是的，删除！',
+          cancelButtonText: '不，取消！',   
+          closeOnConfirm: false
+        },  function(isConfirm){  
+          if(isConfirm) {
+            sku.status = 'deleted';
+            sku.$save(function () {
+              SweetAlert.swal('已删除!','你的商品'+sku.item.name+'已经删除。', 'success');
+            }, function (err) {
+              SweetAlert.swal('失败!', '删除商品时发生错误，你的商品没有被删除。', 'error');
+            });
+          }
+        });
+      }
+      
+      vm.confirm = function (sku) {
+        var inventory = sku.inventories[0];
+        inventory.inventoryAt = new Date();
+        Sku.prototype$__updateById__inventories({
+          id:sku.id, fk: inventory.id
+        }, {
+          inventoryAt: inventory.inventoryAt
         });
       }
       
@@ -88,11 +111,12 @@
         $scope.confirm = function () {
           var sku = $scope.ngDialogData.sku;
           var type = $scope.ngDialogData.type;
-          Stock.create({skuId: sku.id, qty: $scope.stockQty, type: type});
+          var memo = $scope.ngDialogData.memo;
+          Stock.create({skuId: sku.id, qty: $scope.stockQty, type: type, memo: memo});
           sku.inventories[0].qty += $scope.stockQty;
           ngDialog.close();
           toaster.pop('success', '成功',
-           "完成"+$filter('stock_type')(type)+sku.item.name+":"+$scope.stockQty+"件");
+           "完成"+$filter('stock_type')(type)+sku.item.name+": "+$scope.stockQty+"件");
         }
     }
     
@@ -123,48 +147,6 @@
         });
       }
       
-    }
-
-    InventoriesController.$inject = ['$scope', 'Sku', 'ngTableParams', 'ngDialog', 'toaster'];
-    function InventoriesController($scope, Sku, ngTableParams, ngDialog, toaster) {
-      var vm = this;
-      
-      active();
-      
-      function active() {
-        vm.filter = {text: ''}
-        vm.tableParams = new ngTableParams({
-          count: 10,
-          filter: vm.filter.text
-        }, {
-          getData: function($defer, params) {
-            var opt = {where:{"item.type":'entity'}, include:['inventories']}
-            opt.limit = params.count()
-            opt.skip = (params.page()-1)*opt.limit
-            if(vm.filter.text != '') {
-              var qs = {regex: vm.filter.text};
-              opt.where.or = [{nickname:qs}, {remark:qs}];
-              opt.skip = 0;
-            }
-            Sku.count({where: opt.where}, function (result) {
-              vm.tableParams.total(result.count)
-              Sku.find({filter:opt}, $defer.resolve)
-            })
-          }
-        });
-      }
-      
-      vm.confirm = function (sku) {
-        
-      }
-      
-      vm.fix = function (sku) {
-        ngDialog.open({ 
-          template: 'stockDialogId', 
-          controller: 'StockDialogController', 
-          data: {sku: sku, type:"inventory"} 
-        });
-      }
     }
 
 })();

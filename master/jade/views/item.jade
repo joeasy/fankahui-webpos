@@ -39,20 +39,18 @@ form.panel
               td {{entity.inventories[0].balance || 0}}
               td 
                 .btn-group(dropdown='dropdown')
-                  a.btn.btn-default(href='', ng-click="items.stock(entity)") 进货
+                  a.btn.btn-default(href='', ng-click="items.stock(entity, 'stock')") 进货
                   button.btn.dropdown-toggle(type='button', class="btn-default", dropdown-toggle="")
                     span.caret
                     span.sr-only= type
                   ul.dropdown-menu(role='menu')
                     li
-                      a(href='#') 进货
+                      a(href='', ng-click="items.stock(entity, 'stock')") 进货
                     li
-                      a(href='#') 出库
-                    li
-                      a(href='#') 出入库记录
+                      a(href='', ng-click="items.stock(entity, 'cancel')") 出库
                     li.divider
                     li
-                      a(href='#') 删除
+                      a(href='', ng-click="items.delete(entity)") 删除
 
     tab
       tab-heading
@@ -67,30 +65,30 @@ form.panel
               td(data-title="'变动数量'", ng-class="entity.qty < 0?'text-success':'text-danger'") {{entity.qty || 0}}
               td(data-title="'结余数量'") {{entity.originBalance+entity.qty}}
               td(data-title="'经手人'") {{entity.operator.name || entity.operator.username}}
-              td(data-title="'时间'") {{entity.created | date:'yyyy-MM-dd HH:mm:ss Z'}}
+              td(data-title="'时间'") {{entity.created | date:'yyyy-MM-dd HH:mm:ss'}}
               td(data-title="'说明'") {{entity.type | stock_type}}
     tab
       tab-heading
         | 库存盘点
-      .table-responsive(ng-controller="InventoriesController as inventories")
-        table.table.table-bordered.table-striped(ng-table='inventories.tableParams')
+      .table-responsive(ng-controller="ItemsController as items")
+        table.table.table-bordered.table-striped(ng-table='items.tableParams')
           tbody
             tr.text-center(ng-repeat='entity in $data')
               td.text-left(data-title="'商品'") {{entity.item.name}}
               td(data-title="'规格'") {{entity.model || "-"}}
               td(data-title="'账面结存'") {{entity.inventories[0].balance || 0}}
-              td(data-title="'上次盘点时间'") {{entity.created | date:'yyyy-MM-dd HH:mm:ss Z'}}
+              td(data-title="'上次盘点时间'") {{entity.inventories[0].inventoryAt | date:'yyyy-MM-dd HH:mm:ss'}}
               td(data-title="'操作'")
                 .btn-group(dropdown='dropdown')
-                  a.btn.btn-default(href='', ng-click="inventories.confirm(entity)") 确认数量
+                  a.btn.btn-default(href='', ng-click="items.confirm(entity)") 确认数量
                   button.btn.dropdown-toggle(type='button', class="btn-default", dropdown-toggle="")
                     span.caret
                     span.sr-only= type
                   ul.dropdown-menu(role='menu')
                     li
-                      a(href='', ng-click="inventories.confirm(entity)") 确认数量
+                      a(href='', ng-click="items.confirm(entity)") 确认数量
                     li
-                      a(href='', ng-click="inventories.fix(entity)") 修正数量
+                      a(href='', ng-click="items.stock(entity, 'inventory')") 修正数量
                 
   <!-- Templates -->
   
@@ -113,7 +111,7 @@ form.panel
       fieldset: .form-group
         label.col-md-3.control-label 备注
         .col-md-9  
-          textarea.form-control(row="3")
+          textarea.form-control(row="3", ng-model="ngDialogData.memo")
 
     .modal-footer
       button.pull-right.btn.btn-default.mr(type='button', ng-click='closeThisDialog()') 取消      

@@ -36,7 +36,8 @@
         stock: "进货入库",
         sale: "销售出库",
         cancel: "核销出库",
-        inventory: "盘点修正"
+        inventory: "盘点修正",
+        transfer: "库存调货"
       }
       return function (key) {
         key = key || 'stock';
