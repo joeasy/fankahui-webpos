@@ -37,6 +37,12 @@
               templateUrl: helper.basepath('dashboard.html'),
               resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons')
           })
+          .state('app.sell', {
+              url: '/sell',
+              title: 'sell',
+              templateUrl: helper.basepath('sell.html'),
+              resolve: helper.resolveFor('ngTable', 'moment', 'ngDialog', 'oitozero.ngSweetAlert')
+          })
           .state('app.item', {
               url: '/item',
               title: 'Item',

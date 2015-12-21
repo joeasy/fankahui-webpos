@@ -42,7 +42,8 @@
             'app.mailbox',
             'app.utils',
             'app.items',
-            'app.myshop'
+            'app.myshop',
+            'app.sales'
         ]);
 })();
 

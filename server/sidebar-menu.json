@@ -12,10 +12,10 @@
     "translate": "sidebar.nav.DASHBOARD"
   },
   {
-    "text": "Register",
-    "sref": "app.register",
+    "text": "Sell",
+    "sref": "app.sell",
     "icon": "fa fa-calculator",
-    "translate": "sidebar.nav.REGISTER"
+    "translate": "sidebar.nav.SELL"
   },
   {
     "text": "Member",

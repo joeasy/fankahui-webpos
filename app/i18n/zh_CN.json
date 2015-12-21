@@ -43,7 +43,7 @@
     },
     "nav": {
       "DASHBOARD": "首页",
-      "REGISTER": "收银记账",
+      "SELL": "收银记账",
       "MEMBER": "会员管理",
       "MASS": "微信群发",
       "DEAL": "销售流水",

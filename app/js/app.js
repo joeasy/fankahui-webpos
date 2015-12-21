@@ -42,7 +42,8 @@
             'app.mailbox',
             'app.utils',
             'app.items',
-            'app.myshop'
+            'app.myshop',
+            'app.sales'
         ]);
 })();
 
@@ -138,13 +139,13 @@
     'use strict';
 
     angular
-        .module('app.locale', []);
+        .module('app.loadingbar', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.loadingbar', []);
+        .module('app.locale', []);
 })();
 (function() {
     'use strict';
@@ -156,13 +157,13 @@
     'use strict';
 
     angular
-        .module('app.myshop', []);
+        .module('app.maps', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.maps', []);
+        .module('app.myshop', []);
 })();
 (function() {
     'use strict';
@@ -174,13 +175,13 @@
     'use strict';
 
     angular
-        .module('app.pages', []);
+        .module('app.notify', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.notify', []);
+        .module('app.pages', []);
 })();
 (function() {
     'use strict';
@@ -208,6 +209,12 @@
     'use strict';
 
     angular
+        .module('app.sales', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.settings', []);
 })();
 (function() {
@@ -220,13 +227,13 @@
     'use strict';
 
     angular
-        .module('app.translate', []);
+        .module('app.tables', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.tables', []);
+        .module('app.translate', []);
 })();
 (function() {
     'use strict';
@@ -5956,6 +5963,50 @@
     'use strict';
 
     angular
+        .module('app.loadingbar')
+        .config(loadingbarConfig)
+        ;
+    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
+    function loadingbarConfig(cfpLoadingBarProvider){
+      cfpLoadingBarProvider.includeBar = true;
+      cfpLoadingBarProvider.includeSpinner = false;
+      cfpLoadingBarProvider.latencyThreshold = 500;
+      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .run(loadingbarRun)
+        ;
+    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
+    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
+
+      // Loading bar transition
+      // ----------------------------------- 
+      var thBar;
+      $rootScope.$on('$stateChangeStart', function() {
+          if($('.wrapper > section').length) // check if bar container exists
+            thBar = $timeout(function() {
+              cfpLoadingBar.start();
+            }, 0); // sets a latency Threshold
+      });
+      $rootScope.$on('$stateChangeSuccess', function(event) {
+          event.targetScope.$watch('$viewContentLoaded', function () {
+            $timeout.cancel(thBar);
+            cfpLoadingBar.complete();
+          });
+      });
+
+    }
+
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.locale')
         .config(localeConfig)
         ;
@@ -6006,50 +6057,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .config(loadingbarConfig)
-        ;
-    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
-    function loadingbarConfig(cfpLoadingBarProvider){
-      cfpLoadingBarProvider.includeBar = true;
-      cfpLoadingBarProvider.includeSpinner = false;
-      cfpLoadingBarProvider.latencyThreshold = 500;
-      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .run(loadingbarRun)
-        ;
-    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
-    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
-
-      // Loading bar transition
-      // ----------------------------------- 
-      var thBar;
-      $rootScope.$on('$stateChangeStart', function() {
-          if($('.wrapper > section').length) // check if bar container exists
-            thBar = $timeout(function() {
-              cfpLoadingBar.start();
-            }, 0); // sets a latency Threshold
-      });
-      $rootScope.$on('$stateChangeSuccess', function(event) {
-          event.targetScope.$watch('$viewContentLoaded', function () {
-            $timeout.cancel(thBar);
-            cfpLoadingBar.complete();
-          });
-      });
-
-    }
-
-})();
 /**=========================================================
  * Module: demo-pagination.js
  * Provides a simple demo for pagination
@@ -6188,143 +6195,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-      .module('app.myshop', [])
-      .controller('MyShopController', MyShopController)
-      .controller('ShopsController', ShopsController)
-      .controller('ShopAddController', ShopAddController);
-        
-    MyShopController.$inject = ['$scope', 'editableOptions', 'editableThemes', 'Shop', 'Merchant'];
-    function MyShopController($scope, editableOptions, editableThemes, Shop, Merchant) {
-      var vm = this;
-
-      AMap.service('AMap.DistrictSearch', function () {
-        var districtSearch = new AMap.DistrictSearch({
-          level : 'country',
-          subdistrict : 3    
-        });
-    
-        districtSearch.search('中国', function (status, result) {
-          vm.provinces = result.districtList[0].districtList;
-          // $scope.$apply();
-        });
-      });
-      
-      activate();
-      
-      function activate() {
-        
-        editableOptions.theme = 'bs3';
-        
-        editableThemes.bs3.inputClass = 'input-sm';
-        editableThemes.bs3.buttonsClass = 'btn-sm';
-        editableThemes.bs3.submitTpl = '<button type="submit" class="btn btn-success"><span class="fa fa-check"></span></button>';
-        editableThemes.bs3.cancelTpl = '<button type="button" class="btn btn-default" ng-click="$form.$cancel()">'+
-                                         '<span class="fa fa-times text-muted"></span>'+
-                                       '</button>';
-        
-        vm.shop = $scope.user.shop;
-        vm.merchant = $scope.user.merchant;
-      }
-      
-      vm.update = function (obj, key, data) {
-        vm[obj][key] = data.name;
-      }
-      
-      vm.saveShop = function () {
-        Shop.upsert(vm.shop);
-      }
-      
-      vm.saveMerchant = function () {
-        Merchant.upsert(vm.merchant);
-      }
-    }
-    
-    ShopsController.$inject = ['$scope', 'ngTable', 'moment', 'Shop'];
-    function ShopsController($scope, ngTable, moment, Shop) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
-        
-      }
-      
-      $scope.filter = {text: ''}
-      $scope.tableParams = new ngTableParams({
-        count: 10,
-        filter: $scope.filter.text
-      }, {
-        getData: function($defer, params) {
-          var opt = {order: 'subscribe_time DESC'}
-          opt.limit = params.count()
-          opt.skip = (params.page()-1)*opt.limit
-          opt.where = {}
-          if($scope.filter.text != '') {
-            console.log($scope.filter.text);
-            // var qs = {like: '%'+$scope.filter.text+'%'};
-            var qs = {regex: $scope.filter.text};
-            opt.where.or = [{nickname:qs}, {remark:qs}];
-            opt.skip = 0;
-          }
-          Sku.count({where: opt.where}, function (result) {
-            $scope.tableParams.total(result.count)
-            Sku.find({filter:opt}, $defer.resolve)
-          })
-        }
-      })   
-    }
-    
-    ShopAddController.$inject = ['$scope', 'Shop'];
-    function ShopAddController($scope, Shop) {
-      activate();
-      
-      window.ParsleyValidator.setLocale('zh_cn');
-      
-      function activate() {
-        $scope.entity = {
-          type: "entity",
-          name: "iPhone6S Plus",
-          skus: [{barcode:"123", price: 5288, model: "16G"}]
-        };
-      }
-      
-      $scope.save = function () {
-        
-      }
-      
-      $scope.saveAndMore = function () {
-      }
-    }    
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.myshop')
-        .filter('item_type2', itemTypeFilter2);
-
-    function itemTypeFilter2() {
-        var type = {
-          entity: "实体商品",
-          service: "服务项目"
-        }
-        return function(key) {
-          return type[key];
-        }
-    }
-
-})();
 /**=========================================================
  * Module: modals.js
  * Provides a simple way to implement bootstrap modals from templates
@@ -6661,6 +6531,143 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+      .module('app.myshop', [])
+      .controller('MyShopController', MyShopController)
+      .controller('ShopsController', ShopsController)
+      .controller('ShopAddController', ShopAddController);
+        
+    MyShopController.$inject = ['$scope', 'editableOptions', 'editableThemes', 'Shop', 'Merchant'];
+    function MyShopController($scope, editableOptions, editableThemes, Shop, Merchant) {
+      var vm = this;
+
+      AMap.service('AMap.DistrictSearch', function () {
+        var districtSearch = new AMap.DistrictSearch({
+          level : 'country',
+          subdistrict : 3    
+        });
+    
+        districtSearch.search('中国', function (status, result) {
+          vm.provinces = result.districtList[0].districtList;
+          // $scope.$apply();
+        });
+      });
+      
+      activate();
+      
+      function activate() {
+        
+        editableOptions.theme = 'bs3';
+        
+        editableThemes.bs3.inputClass = 'input-sm';
+        editableThemes.bs3.buttonsClass = 'btn-sm';
+        editableThemes.bs3.submitTpl = '<button type="submit" class="btn btn-success"><span class="fa fa-check"></span></button>';
+        editableThemes.bs3.cancelTpl = '<button type="button" class="btn btn-default" ng-click="$form.$cancel()">'+
+                                         '<span class="fa fa-times text-muted"></span>'+
+                                       '</button>';
+        
+        vm.shop = $scope.user.shop;
+        vm.merchant = $scope.user.merchant;
+      }
+      
+      vm.update = function (obj, key, data) {
+        vm[obj][key] = data.name;
+      }
+      
+      vm.saveShop = function () {
+        Shop.upsert(vm.shop);
+      }
+      
+      vm.saveMerchant = function () {
+        Merchant.upsert(vm.merchant);
+      }
+    }
+    
+    ShopsController.$inject = ['$scope', 'ngTable', 'moment', 'Shop'];
+    function ShopsController($scope, ngTable, moment, Shop) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        
+      }
+      
+      $scope.filter = {text: ''}
+      $scope.tableParams = new ngTableParams({
+        count: 10,
+        filter: $scope.filter.text
+      }, {
+        getData: function($defer, params) {
+          var opt = {order: 'subscribe_time DESC'}
+          opt.limit = params.count()
+          opt.skip = (params.page()-1)*opt.limit
+          opt.where = {}
+          if($scope.filter.text != '') {
+            console.log($scope.filter.text);
+            // var qs = {like: '%'+$scope.filter.text+'%'};
+            var qs = {regex: $scope.filter.text};
+            opt.where.or = [{nickname:qs}, {remark:qs}];
+            opt.skip = 0;
+          }
+          Sku.count({where: opt.where}, function (result) {
+            $scope.tableParams.total(result.count)
+            Sku.find({filter:opt}, $defer.resolve)
+          })
+        }
+      })   
+    }
+    
+    ShopAddController.$inject = ['$scope', 'Shop'];
+    function ShopAddController($scope, Shop) {
+      activate();
+      
+      window.ParsleyValidator.setLocale('zh_cn');
+      
+      function activate() {
+        $scope.entity = {
+          type: "entity",
+          name: "iPhone6S Plus",
+          skus: [{barcode:"123", price: 5288, model: "16G"}]
+        };
+      }
+      
+      $scope.save = function () {
+        
+      }
+      
+      $scope.saveAndMore = function () {
+      }
+    }    
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.myshop')
+        .filter('item_type2', itemTypeFilter2);
+
+    function itemTypeFilter2() {
+        var type = {
+          entity: "实体商品",
+          service: "服务项目"
+        }
+        return function(key) {
+          return type[key];
+        }
+    }
+
+})();
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key
@@ -6767,123 +6774,6 @@
             .val('') // Empty input
             ;
         }        
-    }
-})();
-
-/**=========================================================
- * Module: access-login.js
- * Demo for login api
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.pages')
-        .controller('LoginFormController', LoginFormController);
-
-    LoginFormController.$inject = ['$state', 'User', '$rootScope'];
-    function LoginFormController($state, User, $rootScope) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // bind here all data from the form
-          vm.account = {
-            realm: 'merchant',
-            remember: true
-          };
-          // place the message if something goes wrong
-          vm.authMsg = '';
-
-          vm.login = function() {
-            vm.authMsg = '';
-
-            if(vm.loginForm.$valid) {
-              
-              User
-                .login(vm.account, function (accessToken) {
-                  $rootScope.$broadcast('User.logined');
-                  $state.go('app.dashboard');
-                }, function (error) {
-                  vm.authMsg = error.data.error.message;
-                });
-
-            }
-            else {
-              // set as dirty if the user click directly to login so we show the validation messages
-              /*jshint -W106*/
-              vm.loginForm.account_username.$dirty = true;
-              vm.loginForm.account_password.$dirty = true;
-            }
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: access-register.js
- * Demo for register account api
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.pages')
-        .controller('RegisterFormController', RegisterFormController);
-
-    RegisterFormController.$inject = ['$rootScope', '$state', 'User'];
-    function RegisterFormController($rootScope, $state, User) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // bind here all data from the form
-          vm.account = {
-            realm: 'merchant'
-          };
-          vm.agreed = true;
-          // place the message if something goes wrong
-          vm.authMsg = '';
-            
-          vm.register = function() {
-            vm.authMsg = '';
-
-            if(vm.registerForm.$valid) {
-              
-              vm.account.email = vm.account.username+"@fankahui.com";
-              vm.account.phone = vm.account.username;
-              
-              User
-                .create(vm.account, function (account) {
-                  User
-                    .login({username: vm.account.username, password: vm.account.password})
-                    .$promise.then(function (accessToken) {
-                      $rootScope.$broadcast('User.logined');
-                      $state.go('app.dashboard');
-                    });
-                }, function (error) {
-                  vm.authMsg = error.data.error.message;
-                });
-
-            }
-            else {
-              // set as dirty if the user click directly to login so we show the validation messages
-              /*jshint -W106*/
-              vm.registerForm.account_username.$dirty = true;
-              vm.registerForm.account_password.$dirty = true;
-              vm.registerForm.account_agreed.$dirty = true;
-              
-            }
-          };
-        }
     }
 })();
 
@@ -7118,6 +7008,123 @@
     
     return notify;
 }(jQuery));
+
+/**=========================================================
+ * Module: access-login.js
+ * Demo for login api
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.pages')
+        .controller('LoginFormController', LoginFormController);
+
+    LoginFormController.$inject = ['$state', 'User', '$rootScope'];
+    function LoginFormController($state, User, $rootScope) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          // bind here all data from the form
+          vm.account = {
+            realm: 'merchant',
+            remember: true
+          };
+          // place the message if something goes wrong
+          vm.authMsg = '';
+
+          vm.login = function() {
+            vm.authMsg = '';
+
+            if(vm.loginForm.$valid) {
+              
+              User
+                .login(vm.account, function (accessToken) {
+                  $rootScope.$broadcast('User.logined');
+                  $state.go('app.dashboard');
+                }, function (error) {
+                  vm.authMsg = error.data.error.message;
+                });
+
+            }
+            else {
+              // set as dirty if the user click directly to login so we show the validation messages
+              /*jshint -W106*/
+              vm.loginForm.account_username.$dirty = true;
+              vm.loginForm.account_password.$dirty = true;
+            }
+          };
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: access-register.js
+ * Demo for register account api
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.pages')
+        .controller('RegisterFormController', RegisterFormController);
+
+    RegisterFormController.$inject = ['$rootScope', '$state', 'User'];
+    function RegisterFormController($rootScope, $state, User) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          // bind here all data from the form
+          vm.account = {
+            realm: 'merchant'
+          };
+          vm.agreed = true;
+          // place the message if something goes wrong
+          vm.authMsg = '';
+            
+          vm.register = function() {
+            vm.authMsg = '';
+
+            if(vm.registerForm.$valid) {
+              
+              vm.account.email = vm.account.username+"@fankahui.com";
+              vm.account.phone = vm.account.username;
+              
+              User
+                .create(vm.account, function (account) {
+                  User
+                    .login({username: vm.account.username, password: vm.account.password})
+                    .$promise.then(function (accessToken) {
+                      $rootScope.$broadcast('User.logined');
+                      $state.go('app.dashboard');
+                    });
+                }, function (error) {
+                  vm.authMsg = error.data.error.message;
+                });
+
+            }
+            else {
+              // set as dirty if the user click directly to login so we show the validation messages
+              /*jshint -W106*/
+              vm.registerForm.account_username.$dirty = true;
+              vm.registerForm.account_password.$dirty = true;
+              vm.registerForm.account_agreed.$dirty = true;
+              
+            }
+          };
+        }
+    }
+})();
 
 /**=========================================================
  * Collapse panels * [panel-collapse]
@@ -7782,6 +7789,12 @@
               templateUrl: helper.basepath('dashboard.html'),
               resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons')
           })
+          .state('app.sell', {
+              url: '/sell',
+              title: 'sell',
+              templateUrl: helper.basepath('sell.html'),
+              resolve: helper.resolveFor('ngTable', 'moment', 'ngDialog', 'oitozero.ngSweetAlert')
+          })
           .state('app.item', {
               url: '/item',
               title: 'Item',
@@ -8345,6 +8358,59 @@
     'use strict';
 
     angular
+      .module('app.sales', [])
+      .controller('SellController', SellController);
+      
+    SellController.$inject = ['$scope', 'Deal', 'ngDialog', 'SweetAlert', 'Sku'];
+    function SellController($scope, Deal, ngDialog, SweetAlert, Sku) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        vm.entities = [];
+        vm.selectedSku = undefined;
+      }
+      
+      vm.register = function () {
+        if(!vm.selectedSku) return;
+        var entity = undefined;
+        angular.forEach(vm.entities, function (e) {
+          if(e.sku.barcode === vm.selectedSku.barcode){
+            e.qty++;
+            entity = e;
+          }
+        });
+        if(!entity) {
+          entity = {
+            sku: vm.selectedSku,
+            qty: 1
+          };
+          vm.entities.push(entity);
+        }
+        vm.selectedSku = undefined;
+      }
+      
+      vm.fetchSkus = function (val) {
+        return Sku.find({filter:{where:{barcode:{regex: val}}}, limit: 10})
+        .$promise.then(function (skus) {
+          return skus;
+        });
+      }
+      
+      vm.countTotal = function () {
+        var total = 0;
+        angular.forEach(vm.entities, function (entity) {
+          total += entity.qty*entity.sku.price;
+        });
+        return total;
+      }
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.settings')
         .run(settingsRun);
 
@@ -8751,71 +8817,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .config(translateConfig)
-        ;
-    translateConfig.$inject = ['$translateProvider'];
-    function translateConfig($translateProvider){
-
-      $translateProvider.useStaticFilesLoader({
-          prefix : 'app/i18n/',
-          suffix : '.json'
-      });
-
-      $translateProvider.preferredLanguage('zh_CN');
-      $translateProvider.useLocalStorage();
-      $translateProvider.usePostCompiling(true);
-      $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .run(translateRun)
-        ;
-    translateRun.$inject = ['$rootScope', '$translate'];
-    
-    function translateRun($rootScope, $translate){
-
-      // Internationalization
-      // ----------------------
-
-      $rootScope.language = {
-        // Handles language dropdown
-        listIsOpen: false,
-        // list of available languages
-        available: {
-          'zh_CN':    '中文简体',
-          'en':       'English',
-          'es_AR':    'Español'
-        },
-        // display always the current ui language
-        init: function () {
-          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
-          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
-          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
-        },
-        set: function (localeId) {
-          // Set the new idiom
-          $translate.use(localeId);
-          // save a reference for the current language
-          $rootScope.language.selected = $rootScope.language.available[localeId];
-          // finally toggle dropdown
-          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
-        }
-      };
-
-      $rootScope.language.init();
-
-    }
-})();
 /**=========================================================
  * Module: angular-grid.js
  * Example for Angular Grid
@@ -9696,6 +9697,71 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .config(translateConfig)
+        ;
+    translateConfig.$inject = ['$translateProvider'];
+    function translateConfig($translateProvider){
+
+      $translateProvider.useStaticFilesLoader({
+          prefix : 'app/i18n/',
+          suffix : '.json'
+      });
+
+      $translateProvider.preferredLanguage('zh_CN');
+      $translateProvider.useLocalStorage();
+      $translateProvider.usePostCompiling(true);
+      $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .run(translateRun)
+        ;
+    translateRun.$inject = ['$rootScope', '$translate'];
+    
+    function translateRun($rootScope, $translate){
+
+      // Internationalization
+      // ----------------------
+
+      $rootScope.language = {
+        // Handles language dropdown
+        listIsOpen: false,
+        // list of available languages
+        available: {
+          'zh_CN':    '中文简体',
+          'en':       'English',
+          'es_AR':    'Español'
+        },
+        // display always the current ui language
+        init: function () {
+          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
+          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
+          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
+        },
+        set: function (localeId) {
+          // Set the new idiom
+          $translate.use(localeId);
+          // save a reference for the current language
+          $rootScope.language.selected = $rootScope.language.available[localeId];
+          // finally toggle dropdown
+          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
+        }
+      };
+
+      $rootScope.language.init();
+
+    }
+})();
 /**=========================================================
  * Module: animate-enabled.js
  * Enable or disables ngAnimate for element with directive

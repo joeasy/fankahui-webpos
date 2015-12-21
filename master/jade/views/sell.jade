@@ -1,0 +1,101 @@
+h3 
+  button(type='button').btn.btn-primary.pull-right
+    em.fa.fa-plus-circle.fa-fw.mr-sm
+    | 新开单
+  | 收银记账
+
+.panel(ng-controller='SellController as sell')
+  .panel-body
+    .col-md-4.pull-right
+      .input-group
+        span.input-group-addon
+          em.fa.fa-lg.fa-barcode
+        input.form-control(type="text", placeholder="请输入商品条码", ng-model="sell.selectedSku" ui-keypress="{13:'sell.register()'}", typeahead="sku as sku.item.name for sku in sell.fetchSkus($viewValue)")
+        span.input-group-btn
+          a.btn.btn-default(type="button") 登记
+    h3.mt0 采购清单
+    hr
+
+    .row.mb-lg
+      .col-lg-4.col-xs-6.br.pv
+        .row
+          .col-md-2.text-center.visible-md.visible-lg
+            em.fa.fa-plane.fa-4x.text-muted
+          .col-md-10
+            h4 Bill Mitchelle
+            address
+            | Nowhere 1024
+            br
+            | Happy St., 50487
+            br
+            | Neverland
+      .col-lg-4.col-xs-6.br.pv
+        .row
+          .col-md-2.text-center.visible-md.visible-lg
+            em.fa.fa-truck.fa-4x.text-muted
+          .col-md-10
+            h4 Lloyd Gonzales
+            address
+            | Basilisa 2145
+            br
+            | Mate, Cliff., 20145
+            br
+            | Moon
+      .clearfix.hidden-md.hidden-lg
+        hr
+      .col-lg-4.col-xs-12.pv
+        .clearfix
+          p.pull-left INVOICE NO.
+          p.pull-right.mr 00004879
+        .clearfix
+          p.pull-left Date
+          p.pull-right.mr 25/08/2014
+        .clearfix
+          p.pull-left Due Date
+          p.pull-right.mr 30/08/2014
+
+    .table-responsive.table-bordered.mb-lg
+      table.table
+        thead
+          tr
+            th 序号 #
+            th 商品描述
+            th 数量
+            th 单价（元）
+            th.text-right 小计(元)
+            th.text-right 操作
+        tbody
+          tr(ng-repeat="entity in sell.entities")
+            td {{$index+1}}
+            td {{entity.sku.item.name}}
+            td {{entity.qty}}
+            td {{entity.sku.price/100}}
+            td.text-right {{entity.qty*entity.sku.price/100 | currency: '¥'}}
+            td.text-right
+              a.btn.btn-primary
+                em.fa.fa-plus.fa-fw
+                //- | 增加  
+              a.btn.btn-success
+                em.fa.fa-minus.fa-fw
+                //- | 减少
+              a.btn.btn-danger(type="button")
+                em.fa.fa-trash.fa-fw
+                //- | 删除
+
+    .row
+      .col-sm-offset-8.col-sm-4.pv
+        .clearfix
+          p.pull-left Subtotal
+          p.pull-right.mr $ 10300
+        .clearfix
+          p.pull-left Tax (21%)
+          p.pull-right.mr $ 2700
+        .clearfix
+          p.pull-left.h3 总计
+          p.pull-right.mr.h3 {{sell.countTotal()/100 | currency: '¥'}}
+
+    hr.hidden-print
+    .clearfix
+      button(type="button").btn.btn-info.pull-left.mr Edit
+      button(type="button", onclick="window.print();").btn.btn-default.pull-left Print
+      button(type="button").btn.btn-success.pull-right Send Invoice
