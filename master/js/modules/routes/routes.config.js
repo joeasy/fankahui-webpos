@@ -41,7 +41,8 @@
               url: '/sell',
               title: 'sell',
               templateUrl: helper.basepath('sell.html'),
-              resolve: helper.resolveFor('ngTable', 'moment', 'ngDialog', 'oitozero.ngSweetAlert')
+              controller: 'SellController as sell',
+              resolve: helper.resolveFor('ngTable', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'loaders.css', 'spinkit')
           })
           .state('app.item', {
               url: '/item',
