@@ -44,6 +44,12 @@
               controller: 'SellController as sell',
               resolve: helper.resolveFor('ngTable', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'loaders.css', 'spinkit')
           })
+          .state('app.deal', {
+              url: '/deal',
+              title: 'Deal',
+              templateUrl: helper.basepath('deal.html'),
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert')
+          })
           .state('app.item', {
               url: '/item',
               title: 'Item',

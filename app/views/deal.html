@@ -1,0 +1,19 @@
+<h3>
+   商品管理</h3>
+<div ng-controller="DealsController as deals" class="container-fluid">
+   <div class="panel panel-default">
+      <div class="panel-heading"></div>
+      <table ng-table="deals.tableParams" class="table">
+         <tbody>
+            <tr ng-repeat="deal in $data" class="text-center">
+               <td data-title="'流水号'">{{deal.serialNumber}}</td>
+               <td data-title="'销售金额'">{{deal.totalAmount/100 | currency: '¥'}}</td>
+               <td data-title="'数量'">{{deal.totalQty}}</td>
+               <td data-title="'支付方式'">{{deal.payment.type | payment_type}}</td>
+               <td data-title="'顾客'">{{deal.member|| "走入顾客"}}</td>
+               <td data-title="'记账日期'">{{deal.created | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+</div>

@@ -1,5 +1,5 @@
 h3 
-  button(ng-click='sell.openDeal()').btn.btn-warning.pull-right
+  button(ng-click='dealService.openDeal()').btn.btn-warning.pull-right
     em.fa.fa-plus-circle.fa-fw.mr-sm
     | 新开单
   | 收银记账
@@ -10,9 +10,9 @@ h3
       .input-group
         span.input-group-addon
           em.fa.fa-lg.fa-barcode
-        input.form-control(type="text", placeholder="请输入商品条码", ng-model="sell.selectedSku" ui-keypress="{13:'sell.register()'}", typeahead="sku as sku.item.name for sku in sell.fetchSkus($viewValue)")
+        input.form-control(type="text", placeholder="请输入商品条码", ng-model="dealService.selectedSku" ui-keypress="{13:'dealService.register()'}", typeahead="sku as sku.item.name for sku in dealService.querySkus($viewValue)")
         span.input-group-btn
-          a.btn.btn-primary(ng-click="sell.register()") 登记
+          a.btn.btn-primary(ng-click="dealService.register()") 登记
     h3.mt0 采购清单
     hr
 
@@ -22,9 +22,9 @@ h3
           .col-md-2.text-center.visible-md.visible-lg
             em.fa.fa-user.fa-4x.text-muted
           .col-md-10
-            h4 {{sell.deal.member && sell.deal.member.name || '走入客户'}}
+            h4 {{dealService.deal.member && dealService.deal.member.name || '走入客户'}}
             address
-            | {{sell.deal.member && sell.deal.member.level || '无等级'}}
+            | {{dealService.deal.member && dealService.deal.member.level || '无等级'}}
       .col-lg-4.col-xs-6.br.pv
         .row
           .col-md-2.text-center.visible-md.visible-lg
@@ -32,22 +32,22 @@ h3
           .col-md-10
             .clearfix.ml
               p.pull-left.mt0.h4 应付金额
-              p.pull-right.mt0.h4 {{sell.countTotal()/100 | currency: '¥'}} 元
+              p.pull-right.mt0.h4 {{dealService.countTotal()/100 | currency: '¥'}} 元
             .clearfix.ml
               p.pull-left.h4 商品总计
-              p.pull-right.h4 {{sell.deal.totalQty}} 件
+              p.pull-right.h4 {{dealService.deal.totalQty}} 件
       .clearfix.hidden-md.hidden-lg
         hr
       .col-lg-4.col-xs-12.pv
         //- .clearfix
         //-   p.pull-left 流水号
-        //-   p.pull-right.mr {{sell.deal.serialNumber}}
+        //-   p.pull-right.mr {{dealService.deal.serialNumber}}
         .clearfix
           p.pull-left 日期
-          p.pull-right.mr {{sell.deal.created | date:'yyyy-MM-dd'}}   
+          p.pull-right.mr {{dealService.deal.created | date:'yyyy-MM-dd'}}   
         .clearfix
           p.pull-left 时间
-          p.pull-right.mr {{sell.deal.created | date:'HH:mm:ss'}}
+          p.pull-right.mr {{dealService.deal.created | date:'HH:mm:ss'}}
         
       
 
@@ -63,7 +63,7 @@ h3
             th.text-right 小计(元)
             th.text-right 操作
         tbody
-          tr(ng-repeat="entity in sell.deal.entities")
+          tr(ng-repeat="entity in dealService.deal.entities")
             td {{$index+1}}
             td {{entity.sku.item.name}}
             td {{entity.sku.model}}
@@ -73,25 +73,25 @@ h3
             td.text-right
               a.btn.btn-primary(type="button", ng-click="entity.qty=entity.qty+1")
                 em.fa.fa-plus.fa-fw
-              a.btn.btn-success(ng-click="sell.substractOne(entity, $index)")
+              a.btn.btn-success(ng-click="dealService.substractOne(entity, $index)")
                 em.fa.fa-minus.fa-fw
-              a.btn.btn-danger(type="button", ng-click="sell.deal.entities.splice($index, 1)")
+              a.btn.btn-danger(type="button", ng-click="dealService.deal.entities.splice($index, 1)")
                 em.fa.fa-trash.fa-fw
 
     //- .row
     //-   .col-sm-offset-8.col-sm-4.pv
     //-     .clearfix
     //-       p.pull-left.h3 件数
-    //-       p.pull-right.mr.h3 {{sell.deal.totalQty}}
+    //-       p.pull-right.mr.h3 {{dealService.deal.totalQty}}
     //-     .clearfix
     //-       p.pull-left.h3 总计
-    //-       p.pull-right.mr.h3 {{sell.countTotal()/100 | currency: '¥'}}
+    //-       p.pull-right.mr.h3 {{dealService.countTotal()/100 | currency: '¥'}}
 
     hr.hidden-print
     .clearfix
       //- button(type="button").btn.btn-info.pull-left.mr Edit
       //- button(type="button", onclick="window.print();").btn.btn-default.pull-left Print
-      button(type="button", ng-click="sell.deal.totalQty<=0 || sell.checkout()", ng-class="{'disabled': sell.deal.totalQty<=0 }").btn.btn-lg.btn-success.pull-right.fa-lg 
+      button(type="button", ng-click="dealService.deal.totalQty<=0 || dealService.checkout()", ng-class="{'disabled': dealService.deal.totalQty<=0 }").btn.btn-lg.btn-success.pull-right.fa-lg 
         em.fa.fa-shopping-cart.fa-fw.mr-sm
         |结账
       
@@ -105,19 +105,19 @@ h3
       fieldset: .form-group
         label.col-md-3.control-label 商品情况  
         .col-md-9
-          | 共计{{ngDialogData.totalQty}}件商品      
+          | 共计{{dealService.deal.totalQty}}件商品      
       fieldset: .form-group
         label.col-md-3.control-label 应收金额  
         .col-md-9.fa-2x  
-          | {{ngDialogData.totalAmount/100 | currency: '¥' }}  
+          | {{dealService.deal.totalAmount/100 | currency: '¥' }}  
       fieldset: .form-group
         label.col-md-3.control-label 实收金额
         .col-md-9  
-          input.form-control(type='number', ng-model="ngDialogData.payment.amount", currency)  
+          input.form-control(type='number', ng-model="dealService.deal.payment.amount", currency)  
       fieldset: .form-group
         label.col-md-3.control-label 支付方式
         .col-md-9  
-          select.form-control(ng-model="ngDialogData.payment.type")
+          select.form-control(ng-model="dealService.deal.payment.type")
             option(value="cash") 现金支付
             option(value="bankcard") 刷卡支付
             option(value="wxpay") 微信支付
@@ -125,7 +125,7 @@ h3
       fieldset: .form-group
         label.col-md-3.control-label 备注
         .col-md-9  
-          textarea.form-control(row="3", ng-model="ngDialogData.memo")
+          textarea.form-control(row="2", ng-model="dealService.deal.memo")
 
     .modal-footer
       a.pull-right.btn.btn-default.mr(type='button', ng-click='closeThisDialog()') 取消      
