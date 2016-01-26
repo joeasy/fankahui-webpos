@@ -43,7 +43,8 @@
             'app.utils',
             'app.items',
             'app.myshop',
-            'app.sales'
+            'app.sales',
+            'app.members'
         ]);
 })();
 

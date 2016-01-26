@@ -1,0 +1,19 @@
+h3 
+  | 会员管理
+  
+.container-fluid(ng-controller="MembersController as members")
+  .panel.panel-default
+    .panel-heading
+      //- button.pull-right.btn.btn-purple.btn-sm(ng-click='members.tableParams.reload()') Reload
+      //- .panel-title Ajax
+    table.table(ng-table='members.tableParams')
+      tbody
+        tr.text-center(ng-repeat='member in $data')
+          td(data-title="'序号'") {{$index+1}}
+          td(data-title="'头像'") 
+            img.img-thumbnail(ng-src="{{member.wxuser.headimgurl || 'app/img/user/02.jpg'}}", alt="", width="44", height="44")
+          td(data-title="'用户名称'") {{member.name}}
+          td(data-title="'微信昵称'") {{member.wxuser.nickname}}
+          td(data-title="'性别'") {{member.wxuser.sex | wx_sex}}
+          td(data-title="'地区'") {{member.wxuser.province+member.wxuser.city}}
+          td(data-title="'登记日期'") {{member.created | date:'yyyy-MM-dd HH:mm:ss'}}

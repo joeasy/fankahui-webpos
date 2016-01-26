@@ -9,17 +9,18 @@
     'use strict';
 
     angular
-        .module('app.sales')
-        .filter('payment_type', paymentTypeFilter)
+        .module('app.members')
+        .filter('wx_sex', wxsexFilter)
     ;
 
-    function paymentTypeFilter() {
-        var type = {
-          cash: "现金支付",
-          bankcard: "刷卡支付",
-          wxpay: "微信支付",
-          alipay: "支付宝"
-        }
+    function wxsexFilter() {
+        // var type = {
+        //   cash: "现金支付",
+        //   bankcard: "刷卡支付",
+        //   wxpay: "微信支付",
+        //   alipay: "支付宝"
+        // }
+        var type = ['保密', '男', '女'];
         return function(key) {
           return type[key];
         }

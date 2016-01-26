@@ -1,0 +1,22 @@
+<h3>
+   会员管理</h3>
+<div ng-controller="MembersController as members" class="container-fluid">
+   <div class="panel panel-default">
+      <div class="panel-heading"></div>
+      <table ng-table="members.tableParams" class="table">
+         <tbody>
+            <tr ng-repeat="member in $data" class="text-center">
+               <td data-title="'序号'">{{$index+1}}</td>
+               <td data-title="'头像'">
+                  <img ng-src="{{member.wxuser.headimgurl || 'app/img/user/02.jpg'}}" alt="" width="44" height="44" class="img-thumbnail" />
+               </td>
+               <td data-title="'用户名称'">{{member.name}}</td>
+               <td data-title="'微信昵称'">{{member.wxuser.nickname}}</td>
+               <td data-title="'性别'">{{member.wxuser.sex | wx_sex}}</td>
+               <td data-title="'地区'">{{member.wxuser.province+member.wxuser.city}}</td>
+               <td data-title="'登记日期'">{{member.created | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+</div>
