@@ -48,6 +48,7 @@
               url: '/member',
               title: 'Member',
               templateUrl: helper.basepath('Member.html'),
+              controller: 'MembersController as members',
               resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert')
           })
           .state('app.deal', {

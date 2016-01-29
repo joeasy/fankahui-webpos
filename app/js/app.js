@@ -104,13 +104,13 @@
     'use strict';
 
     angular
-        .module('app.extras', []);
+        .module('app.flatdoc', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.flatdoc', []);
+        .module('app.extras', []);
 })();
 (function() {
     'use strict';
@@ -2516,7 +2516,7 @@
           'mobile':                 480
         })
         .constant('urlBase', "http://0.0.0.0:3000/api")
-        // .constant('urlBase', "http://121.40.108.30:3000/api")
+        // .constant('urlBase', "http://104.236.144.106:3000/api")
       ;
 
 })();
@@ -3904,6 +3904,55 @@
 })();
 
 /**=========================================================
+ * Module: flatdoc.js
+ * Creates the flatdoc markup and initializes the plugin
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.flatdoc')
+        .directive('flatdoc', flatdoc);
+
+    function flatdoc () {
+
+        var directive = {
+            template: '<div role="flatdoc"><div role="flatdoc-menu"></div><div role="flatdoc-content"></div></div>',
+            link: link,
+            restrict: 'EA'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+          Flatdoc.run({
+            fetcher: Flatdoc.file(attrs.src)
+          });
+          
+          var $root = $('html, body');
+          $(document).on('flatdoc:ready', function() {
+            var docMenu = $('[role="flatdoc-menu"]');
+            docMenu.find('a').on('click', function(e) {
+              e.preventDefault(); e.stopPropagation();
+              
+              var $this = $(this);
+              
+              docMenu.find('a.active').removeClass('active');
+              $this.addClass('active');
+
+              $root.animate({
+                    scrollTop: $(this.getAttribute('href')).offset().top - ($('.topnavbar').height() + 10)
+                }, 800);
+            });
+
+          });
+        }
+    }
+
+
+})();
+
+/**=========================================================
  * Module: article.js
  =========================================================*/
 (function() {
@@ -4514,55 +4563,6 @@
           ];
         }
     }
-})();
-
-/**=========================================================
- * Module: flatdoc.js
- * Creates the flatdoc markup and initializes the plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.flatdoc')
-        .directive('flatdoc', flatdoc);
-
-    function flatdoc () {
-
-        var directive = {
-            template: '<div role="flatdoc"><div role="flatdoc-menu"></div><div role="flatdoc-content"></div></div>',
-            link: link,
-            restrict: 'EA'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          Flatdoc.run({
-            fetcher: Flatdoc.file(attrs.src)
-          });
-          
-          var $root = $('html, body');
-          $(document).on('flatdoc:ready', function() {
-            var docMenu = $('[role="flatdoc-menu"]');
-            docMenu.find('a').on('click', function(e) {
-              e.preventDefault(); e.stopPropagation();
-              
-              var $this = $(this);
-              
-              docMenu.find('a.active').removeClass('active');
-              $this.addClass('active');
-
-              $root.animate({
-                    scrollTop: $(this.getAttribute('href')).offset().top - ($('.topnavbar').height() + 10)
-                }, 800);
-            });
-
-          });
-        }
-    }
-
-
 })();
 
 (function() {
@@ -6542,57 +6542,18 @@
     'use strict';
 
     angular
-      .module('app.sales')
-      .controller('SellController', SellController)
-      .controller('checkoutDialogController', checkoutDialogController)
-      .controller('DealsController', DealsController)
+      .module('app.members')
+      .controller('MembersController', MembersController)
     ;
       
-    SellController.$inject = ['$scope', 'dealService'];
-    function SellController($scope, dealService) {
+    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService'];
+    function MembersController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, qrcodeService) {
       var vm = this;
       
       activate();
       
       function activate() {
-        $scope.dealService = dealService;
-        dealService.openDeal();
-      }
-            
-    }
-    
-    checkoutDialogController.$inject = ['$scope', 'ngDialog', 'dealService', 'toaster'];
-    function checkoutDialogController($scope, ngDialog, dealService, toaster) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $scope.dealService = dealService;
-        }
-        
-        $scope.confirm = function () {
-          dealService.pay().then(function (deal) {
-            $scope.submiting = false;
-            ngDialog.close();
-            dealService.openDeal();
-            toaster.pop('success', '成功', "完成交易");
-          }, function (err) {
-            $scope.submiting = false;
-            toaster.pop('error', '失败', "交易未完成，请重试！")
-          });
-          $scope.submiting = true;
-        }
-    }
-    
-    DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];
-    function DealsController($scope, Deal, ngTableParams, ngTableLBService) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
+        $scope.qrcodeService = qrcodeService;
         vm.keyword = "";
         vm.tableParams = new ngTableParams({count: 10}, {
           getData: function($defer, params) {
@@ -6602,7 +6563,7 @@
               filter.where.or = [{"entities.sku.item.name":qs}];
               params.page(1);
             }
-            ngTableLBService.getData($defer, params, Deal, filter);
+            ngTableLBService.getData($defer, params, Member, filter);
           }
         });
       }
@@ -6637,6 +6598,31 @@
     }
 
 })();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.members')
+        .service('qrcodeService', qrcodeService);
+
+    qrcodeService.$inject = ['ngDialog'];
+    function qrcodeService(ngDialog) {
+      var self = this;
+      
+      this.showQRCode = showQRCode;
+      
+      function showQRCode(title, text, qrcode) {
+        var imageurl = 'app/img/qrcode-for-gh.jpg'
+        ngDialog.open({
+          template: "<img src="+imageurl+" class='img-responsive'>",
+          plain: true,
+          className: 'ngdialog-theme-default'
+        });    
+      }
+    }
+
+})();
+
 (function() {
     'use strict';
 
@@ -7906,6 +7892,7 @@
               url: '/member',
               title: 'Member',
               templateUrl: helper.basepath('Member.html'),
+              controller: 'MembersController as members',
               resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert')
           })
           .state('app.deal', {
@@ -8568,11 +8555,51 @@
 
     angular
       .module('app.sales')
-      .controller('MembersController', MembersController)
+      .controller('SellController', SellController)
+      .controller('checkoutDialogController', checkoutDialogController)
+      .controller('DealsController', DealsController)
     ;
       
-    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService'];
-    function MembersController($scope, Member, ngTableParams, ngTableLBService) {
+    SellController.$inject = ['$scope', 'dealService'];
+    function SellController($scope, dealService) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        $scope.dealService = dealService;
+        dealService.openDeal();
+      }
+            
+    }
+    
+    checkoutDialogController.$inject = ['$scope', 'ngDialog', 'dealService', 'toaster'];
+    function checkoutDialogController($scope, ngDialog, dealService, toaster) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $scope.dealService = dealService;
+        }
+        
+        $scope.confirm = function () {
+          dealService.pay().then(function (deal) {
+            $scope.submiting = false;
+            ngDialog.close();
+            dealService.openDeal();
+            toaster.pop('success', '成功', "完成交易");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "交易未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+    }
+    
+    DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];
+    function DealsController($scope, Deal, ngTableParams, ngTableLBService) {
       var vm = this;
       
       activate();
@@ -8587,7 +8614,7 @@
               filter.where.or = [{"entities.sku.item.name":qs}];
               params.page(1);
             }
-            ngTableLBService.getData($defer, params, Member, filter);
+            ngTableLBService.getData($defer, params, Deal, filter);
           }
         });
       }
