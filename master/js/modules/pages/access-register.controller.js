@@ -10,8 +10,8 @@
         .module('app.pages')
         .controller('RegisterFormController', RegisterFormController);
 
-    RegisterFormController.$inject = ['$rootScope', '$state', 'User'];
-    function RegisterFormController($rootScope, $state, User) {
+    RegisterFormController.$inject = ['$rootScope', '$state', 'User', '$filter'];
+    function RegisterFormController($rootScope, $state, User, $filter) {
         var vm = this;
 
         activate();
@@ -21,7 +21,8 @@
         function activate() {
           // bind here all data from the form
           vm.account = {
-            realm: 'merchant'
+            realm: 'merchant',
+            role: 'owner'
           };
           vm.agreed = true;
           // place the message if something goes wrong
@@ -44,7 +45,7 @@
                       $state.go('app.dashboard');
                     });
                 }, function (error) {
-                  vm.authMsg = error.data.error.message;
+                  vm.authMsg = $filter('register_error')(error.data.error.message);
                 });
 
             }
