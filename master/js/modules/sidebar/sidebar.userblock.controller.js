@@ -13,7 +13,7 @@
         ////////////////
 
         function activate() {
-          $rootScope.user = {
+          $rootScope.user = $rootScope.user || {
             name:     'John',
             job:      'ng-developer',
             picture:  'app/img/user/02.jpg'

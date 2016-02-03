@@ -11,8 +11,8 @@
       
       this.showQRCode = showQRCode;
       
-      function showQRCode(title, text, qrcode) {
-        var imageurl = 'app/img/qrcode-for-gh.jpg'
+      function showQRCode(imageurl) {
+        imageurl = imageurl || 'app/img/qrcode-for-gh.jpg';
         ngDialog.open({
           template: "<img src="+imageurl+" class='img-responsive'>",
           plain: true,

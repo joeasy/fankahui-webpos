@@ -66,9 +66,9 @@
 
     }
 
-    currentUserRun.$inject = ['$rootScope', 'User'];
+    currentUserRun.$inject = ['$rootScope', 'User', '$filter'];
     
-    function currentUserRun($rootScope, User) {
+    function currentUserRun($rootScope, User, $filter) {
       
       userDidLogined();
       
@@ -76,6 +76,9 @@
         if(User.isAuthenticated()) {
           User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
           .$promise.then(function (user) {
+            user.job = $filter('role')(user.role);
+            user.name = user.name || user.username;
+            user.picture = 'app/img/user/02.jpg';
             $rootScope.user = user;
           });
         }
