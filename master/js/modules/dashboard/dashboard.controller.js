@@ -5,8 +5,8 @@
         .module('app.dashboard')
         .controller('DashboardController', DashboardController);
 
-    DashboardController.$inject = ['$scope', 'ChartData', '$timeout'];
-    function DashboardController($scope, ChartData, $timeout) {
+    DashboardController.$inject = ['$scope', 'ChartData', '$timeout', 'Checkin'];
+    function DashboardController($scope, ChartData, $timeout, Checkin) {
         var vm = this;
 
         activate();
@@ -14,6 +14,17 @@
         ////////////////
 
         function activate() {
+
+          // CHECKIN
+          // ----------------------------------- 
+          Checkin.find({filter:{
+            where: {merchantId: $scope.user.shop.merchantId},
+            include: ['member'],
+            limit: 5, 
+            order: 'CreateTime DESC'
+          }}).$promise.then(function (results) {
+            vm.checkins = results;
+          });
 
           // SPLINE
           // ----------------------------------- 

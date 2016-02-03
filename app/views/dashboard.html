@@ -1,18 +1,5 @@
 <h3>
-   <!-- START Language list-->
-   <div class="pull-right">
-      <div dropdown="" is-open="language.listIsOpen" class="btn-group">
-         <button type="button" dropdown-toggle="" class="btn btn-default">{{language.selected}}
-            <span class="caret"></span>
-         </button>
-         <ul role="menu" class="dropdown-menu dropdown-menu-right animated fadeInUpShort">
-            <li ng-repeat="(localeId, langName) in language.available"><a ng-click="language.set(localeId, $event)" href="#">{{langName}}</a>
-            </li>
-         </ul>
-      </div>
-   </div>
-   <!-- END Language list    -->
-   Dashboard
+   首页
    <small>{{ 'dashboard.WELCOME' | translate:{ appName: app.name } }} !</small>
 </h3>
 <!-- START widgets box-->
@@ -85,85 +72,7 @@
 <!-- END widgets box-->
 <div class="row">
    <!-- START dashboard main content-->
-   <div class="col-lg-9">
-      <!-- START chart-->
-      <div class="row">
-         <div class="col-lg-12">
-            <!-- START widget-->
-            <div id="panelChart9" ng-controller="DashboardController as dash" class="panel panel-default">
-               <div class="panel-heading">
-                  <paneltool tool-collapse="tool-collapse" tool-refresh="traditional"></paneltool>
-                  <div class="panel-title">Inbound visitor statistics</div>
-               </div>
-               <div collapse="panelChart9" class="panel-wrapper">
-                  <div class="panel-body">
-                     <flot dataset="dash.splineData" options="dash.splineOptions" height="250px"></flot>
-                  </div>
-               </div>
-            </div>
-            <!-- END widget-->
-         </div>
-      </div>
-      <!-- END chart-->
-      <div class="row">
-         <div class="col-lg-12">
-            <div class="panel widget">
-               <div class="row row-table">
-                  <div class="col-md-2 col-sm-3 col-xs-6 text-center bg-info pv-xl">
-                     <em class="wi wi-day-sunny fa-4x"></em>
-                  </div>
-                  <div class="col-md-2 col-sm-3 col-xs-6 pv br">
-                     <div class="h1 m0 text-bold">32&deg;</div>
-                     <div class="text-uppercase">Clear</div>
-                  </div>
-                  <div class="col-md-2 col-sm-3 hidden-xs pv text-center br">
-                     <div class="text-info text-sm">10 AM</div>
-                     <div class="text-muted text-md">
-                        <em class="wi wi-day-cloudy"></em>
-                     </div>
-                     <div class="text-info">
-                        <em class="wi wi-sprinkles"></em>
-                        <span class="text-muted">20%</span>
-                     </div>
-                     <div class="text-muted">27&deg;</div>
-                  </div>
-                  <div class="col-md-2 col-sm-3 hidden-xs pv text-center br">
-                     <div class="text-info text-sm">11 AM</div>
-                     <div class="text-muted text-md">
-                        <em class="wi wi-day-cloudy"></em>
-                     </div>
-                     <div class="text-info">
-                        <em class="wi wi-sprinkles"></em>
-                        <span class="text-muted">30%</span>
-                     </div>
-                     <div class="text-muted">28&deg;</div>
-                  </div>
-                  <div class="col-md-2 hidden-sm hidden-xs pv text-center br">
-                     <div class="text-info text-sm">12 PM</div>
-                     <div class="text-muted text-md">
-                        <em class="wi wi-day-cloudy"></em>
-                     </div>
-                     <div class="text-info">
-                        <em class="wi wi-sprinkles"></em>
-                        <span class="text-muted">20%</span>
-                     </div>
-                     <div class="text-muted">30&deg;</div>
-                  </div>
-                  <div class="col-md-2 hidden-sm hidden-xs pv text-center">
-                     <div class="text-info text-sm">1 PM</div>
-                     <div class="text-muted text-md">
-                        <em class="wi wi-day-sunny-overcast"></em>
-                     </div>
-                     <div class="text-info">
-                        <em class="wi wi-sprinkles"></em>
-                        <span class="text-muted">0%</span>
-                     </div>
-                     <div class="text-muted">30&deg;</div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
+   <div ng-controller="DashboardController as dash" class="col-lg-9">
       <div class="row">
          <div class="col-lg-4">
             <!-- START widget-->
@@ -188,90 +97,22 @@
                <div class="panel-heading">
                   <div class="pull-right label label-danger">5</div>
                   <div class="pull-right label label-success">12</div>
-                  <div class="panel-title">Team messages</div>
+                  <div class="panel-title">到店用户</div>
                </div>
                <!-- START list group-->
                <scrollable height="180" class="list-group">
                   <!-- START list group item-->
-                  <a href="#" class="list-group-item">
+                  <a ng-repeat="checkin in dash.checkins" href="#" class="list-group-item">
                      <div class="media-box">
                         <div class="pull-left">
-                           <img src="app/img/user/02.jpg" alt="Image" class="media-box-object img-circle thumb32" />
+                           <img ng-src="{{checkin.member.wxuser.headimgurl}}" alt="Image" class="media-box-object img-circle thumb32" />
                         </div>
                         <div class="media-box-body clearfix">
-                           <small class="pull-right">2h</small>
+                           <small class="pull-right">{{checkin.CreateTime }}</small>
                            <strong class="media-box-heading text-primary">
-                              <span class="circle circle-success circle-lg text-left"></span>Catherine Ellis</strong>
+                              <span class="circle circle-success circle-lg text-left"></span>{{checkin.member.name}}</strong>
                            <p class="mb-sm">
                               <small>Cras sit amet nibh libero, in gravida nulla. Nulla...</small>
-                           </p>
-                        </div>
-                     </div>
-                  </a>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <a href="#" class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <img src="app/img/user/03.jpg" alt="Image" class="media-box-object img-circle thumb32" />
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="pull-right">3h</small>
-                           <strong class="media-box-heading text-primary">
-                              <span class="circle circle-success circle-lg text-left"></span>Jessica Silva</strong>
-                           <p class="mb-sm">
-                              <small>Cras sit amet nibh libero, in gravida nulla. Nulla facilisi.</small>
-                           </p>
-                        </div>
-                     </div>
-                  </a>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <a href="#" class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <img src="app/img/user/09.jpg" alt="Image" class="media-box-object img-circle thumb32" />
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="pull-right">4h</small>
-                           <strong class="media-box-heading text-primary">
-                              <span class="circle circle-danger circle-lg text-left"></span>Jessie Wells</strong>
-                           <p class="mb-sm">
-                              <small>Cras sit amet nibh libero, in gravida nulla. Nulla...</small>
-                           </p>
-                        </div>
-                     </div>
-                  </a>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <a href="#" class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <img src="app/img/user/12.jpg" alt="Image" class="media-box-object img-circle thumb32" />
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="pull-right">1d</small>
-                           <strong class="media-box-heading text-primary">
-                              <span class="circle circle-danger circle-lg text-left"></span>Rosa Burke</strong>
-                           <p class="mb-sm">
-                              <small>Cras sit amet nibh libero, in gravida nulla. Nulla...</small>
-                           </p>
-                        </div>
-                     </div>
-                  </a>
-                  <!-- END list group item-->
-                  <!-- START list group item-->
-                  <a href="#" class="list-group-item">
-                     <div class="media-box">
-                        <div class="pull-left">
-                           <img src="app/img/user/10.jpg" alt="Image" class="media-box-object img-circle thumb32" />
-                        </div>
-                        <div class="media-box-body clearfix">
-                           <small class="pull-right">2d</small>
-                           <strong class="media-box-heading text-primary">
-                              <span class="circle circle-danger circle-lg text-left"></span>Michelle Lane</strong>
-                           <p class="mb-sm">
-                              <small>Mauris eleifend, libero nec cursus lacinia...</small>
                            </p>
                         </div>
                      </div>
@@ -279,20 +120,28 @@
                   <!-- END list group item-->
                </scrollable>
                <!-- END list group-->
-               <!-- START panel footer-->
-               <div class="panel-footer clearfix">
-                  <div class="input-group">
-                     <input type="text" placeholder="Search message .." class="form-control input-sm" />
-                     <span class="input-group-btn">
-                        <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i>
-                        </button>
-                     </span>
-                  </div>
-               </div>
-               <!-- END panel-footer-->
             </div>
          </div>
       </div>
+      <!-- START chart-->
+      <div class="row">
+         <div class="col-lg-12">
+            <!-- START widget-->
+            <div id="panelChart9" class="panel panel-default">
+               <div class="panel-heading">
+                  <paneltool tool-collapse="tool-collapse" tool-refresh="traditional"></paneltool>
+                  <div class="panel-title">Inbound visitor statistics</div>
+               </div>
+               <div collapse="panelChart9" class="panel-wrapper">
+                  <div class="panel-body">
+                     <flot dataset="dash.splineData" options="dash.splineOptions" height="250px"></flot>
+                  </div>
+               </div>
+            </div>
+            <!-- END widget-->
+         </div>
+      </div>
+      <!-- END chart-->
    </div>
    <!-- END dashboard main content-->
    <!-- START dashboard sidebar-->
