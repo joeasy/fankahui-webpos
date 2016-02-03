@@ -78,7 +78,7 @@
           .$promise.then(function (user) {
             user.job = $filter('role')(user.role);
             user.name = user.name || user.username;
-            user.picture = 'app/img/user/02.jpg';
+            user.picture = 'app/img/dummy.png';
             $rootScope.user = user;
           });
         }
