@@ -68,8 +68,8 @@ h3
       .col-lg-8
         .panel.panel-default
           .panel-heading
-            .pull-right.label.label-danger 5
-            .pull-right.label.label-success 12
+            //- .pull-right.label.label-danger 5
+            .pull-right.label.label-success {{dash.checkins.length}}
             .panel-title 到店用户
           
           // START list group
@@ -78,9 +78,9 @@ h3
             a.list-group-item(ng-repeat="checkin in dash.checkins",href='#')
               .media-box
                 .pull-left
-                  img.media-box-object.img-circle.thumb32(ng-src="{{checkin.member.wxuser.headimgurl}}", alt="Image")
+                  img.media-box-object.img-circle.thumb32(src="{{checkin.member.wxuser.headimgurl}}", alt="Image")
                 .media-box-body.clearfix
-                  small.pull-right {{checkin.CreateTime }}
+                  small.pull-right {{checkin.created | moment_from_now }}
                   strong.media-box-heading.text-primary 
                     span.circle.circle-success.circle-lg.text-left
                     | {{checkin.member.name}}

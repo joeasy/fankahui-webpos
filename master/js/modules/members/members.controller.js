@@ -17,7 +17,7 @@
         vm.keyword = "";
         vm.tableParams = new ngTableParams({count: 10}, {
           getData: function($defer, params) {
-            var filter = {where:{status:{ne:'deleted'}}, include:[]}
+            var filter = {where:{status:{ne:'deleted'}}, include:['wxuser']}
             if(vm.keyword != '') {
               var qs = {regex: keyword};
               filter.where.or = [{"entities.sku.item.name":qs}];

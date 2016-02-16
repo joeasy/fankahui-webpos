@@ -35,7 +35,7 @@
               url: '/dashboard',
               title: 'Dashboard',
               templateUrl: helper.basepath('dashboard.html'),
-              resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons')
+              resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons', 'moment')
           })
           .state('app.sell', {
               url: '/sell',

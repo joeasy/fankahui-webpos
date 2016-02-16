@@ -32,6 +32,7 @@
           $rootScope.$locale = $locale;
           
           $rootScope.changeLocale = tmhDynamicLocale.set;
+
         }
     }
 })();

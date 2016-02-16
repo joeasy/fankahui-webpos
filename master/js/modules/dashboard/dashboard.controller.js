@@ -9,22 +9,25 @@
     function DashboardController($scope, ChartData, $timeout, Checkin) {
         var vm = this;
 
+        // Set Moment locale
+        moment.locale('zh-cn');
+
         activate();
 
         ////////////////
 
         function activate() {
+          
+          if(!$scope.user) return;
 
           // CHECKIN
           // ----------------------------------- 
-          Checkin.find({filter:{
-            where: {merchantId: $scope.user.shop.merchantId},
-            include: ['member'],
-            limit: 5, 
-            order: 'CreateTime DESC'
-          }}).$promise.then(function (results) {
-            vm.checkins = results;
-          });
+          vm.checkins = Checkin.find({filter:{
+            // where: {merchantId: $scope.user.merchantId},
+            include: [{member: 'wxuser'}],
+            limit: 10, 
+            order: 'created DESC'
+          }});
 
           // SPLINE
           // ----------------------------------- 
@@ -116,5 +119,8 @@
           });
 
         }
+        
+        $scope.$on('User.logined', activate);
+        
     }
 })();

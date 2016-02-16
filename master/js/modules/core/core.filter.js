@@ -11,8 +11,6 @@
     angular
         .module('app.core')
         .filter('role', roleFilter)
-        .filter('moment_unix', momentUnixFilter)
-        .filter('moment_unix_from_now', momentUnixFromNowFilter)
     ;
 
     function roleFilter() {
@@ -26,12 +24,4 @@
         }
     }
     
-    function momentUnixFilter(input, format) {
-      return moment.unix(input).format(format || 'YYYY-MM-DD HH:mm:ss');
-    }
-    
-    function momentUnixFromNowFilter(input) {
-      return moment.unix(input).fromNow();
-    }
-
 })();
