@@ -84,7 +84,7 @@ h3
                   strong.media-box-heading.text-primary 
                     span.circle.circle-success.circle-lg.text-left
                     | {{checkin.member.name}}
-                  p.mb-sm: small Cras sit amet nibh libero, in gravida nulla. Nulla...
+                  p.mb-sm: small 积分：{{checkin.member.bonus || 0}} | 储值余额：{{checkin.member.balance || 0}}
             // END list group item
           // END list group
 
