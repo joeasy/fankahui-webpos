@@ -8,8 +8,8 @@
       .controller('DealsController', DealsController)
     ;
       
-    SellController.$inject = ['$scope', 'dealService'];
-    function SellController($scope, dealService) {
+    SellController.$inject = ['$scope', 'dealService', 'Checkin'];
+    function SellController($scope, dealService, Checkin) {
       var vm = this;
             
       activate();
@@ -19,6 +19,16 @@
         if(!dealService.deal) {
           dealService.openDeal();
         }
+        
+        // CHECKIN
+        // ----------------------------------- 
+        vm.checkins = Checkin.find({filter:{
+          where: {merchantId: $scope.user.shopId},
+          include: [{member: 'wxuser'}],
+          limit: 10, 
+          order: 'created DESC'
+        }});
+        
       }
             
     }

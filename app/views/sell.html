@@ -18,9 +18,9 @@
       <div class="row mb-lg">
          <div class="col-lg-4 col-xs-6 br pv">
             <div class="row">
-               <div class="col-md-2 text-center visible-md visible-lg">
+               <a popover-placement="right" popover="{{sell.checkins}}" popover-title="到店会员" class="col-md-2 text-center visible-md visible-lg">
                   <em class="fa fa-user fa-4x text-muted"></em>
-               </div>
+               </a>
                <div class="col-md-10">
                   <h4>{{dealService.deal.member && dealService.deal.member.name || '走入客户'}}</h4>
                   <address></address>{{dealService.deal.member && dealService.deal.member.level || '普通会员'}}</div>
