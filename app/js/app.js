@@ -53,19 +53,7 @@
     'use strict';
 
     angular
-        .module('app.bootstrapui', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.charts', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors', []);
 })();
 (function() {
     'use strict';
@@ -92,7 +80,13 @@
     'use strict';
 
     angular
-        .module('app.elements', []);
+        .module('app.colors', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui', []);
 })();
 (function() {
     'use strict';
@@ -110,6 +104,12 @@
     'use strict';
 
     angular
+        .module('app.elements', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.flatdoc', []);
 })();
 (function() {
@@ -122,13 +122,13 @@
     'use strict';
 
     angular
-        .module('app.icons', []);
+        .module('app.items', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.items', []);
+        .module('app.icons', []);
 })();
 (function() {
     'use strict';
@@ -140,13 +140,13 @@
     'use strict';
 
     angular
-        .module('app.locale', []);
+        .module('app.loadingbar', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.loadingbar', []);
+        .module('app.locale', []);
 })();
 (function() {
     'use strict';
@@ -194,12 +194,6 @@
     'use strict';
 
     angular
-        .module('app.panels', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.preloader', []);
 })();
 
@@ -208,7 +202,7 @@
     'use strict';
 
     angular
-        .module('app.sales', []);
+        .module('app.panels', []);
 })();
 (function() {
     'use strict';
@@ -217,6 +211,12 @@
         .module('app.routes', [
             'app.lazyload'
         ]);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sales', []);
 })();
 (function() {
     'use strict';
@@ -249,566 +249,6 @@
         .module('app.utils', [
           'app.colors'
         ]);
-})();
-
-/**=========================================================
- * Module: demo-alerts.js
- * Provides a simple demo for pagination
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('AlertDemoCtrl', AlertDemoCtrl);
-
-    function AlertDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.alerts = [
-            { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
-            { type: 'warning', msg: 'Well done! You successfully read this important alert message.' }
-          ];
-
-          vm.addAlert = function() {
-            vm.alerts.push({msg: 'Another alert!'});
-          };
-
-          vm.closeAlert = function(index) {
-            vm.alerts.splice(index, 1);
-          };
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .config(bootstrapuiConfig);
-
-    bootstrapuiConfig.$inject = ['$tooltipProvider'];
-    function bootstrapuiConfig($tooltipProvider){
-      $tooltipProvider.options({appendToBody: true});
-    }
-})();
-/**=========================================================
- * Module: demo-buttons.js
- * Provides a simple demo for buttons actions
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('ButtonsCtrl', ButtonsCtrl);
-
-    function ButtonsCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.singleModel = 1;
-
-          vm.radioModel = 'Middle';
-
-          vm.checkModel = {
-            left: false,
-            middle: true,
-            right: false
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-carousel.js
- * Provides a simple demo for bootstrap ui carousel
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('CarouselDemoCtrl', CarouselDemoCtrl);
-
-    function CarouselDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.myInterval = 5000;
-          
-          var slides = vm.slides = [];
-          vm.addSlide = function() {
-            var newWidth = 800 + slides.length;
-            slides.push({
-              image: '//placekitten.com/' + newWidth + '/300',
-              text: ['More','Extra','Lots of','Surplus'][slides.length % 2] + ' ' +
-                ['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 2]
-            });
-          };
-          
-          for (var i=0; i<2; i++) {
-            vm.addSlide();
-          }
-
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-datepicker.js
- * Provides a simple demo for bootstrap datepicker
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('DatepickerDemoCtrl', DatepickerDemoCtrl);
-
-    function DatepickerDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.today = function() {
-            vm.dt = new Date();
-          };
-          vm.today();
-
-          vm.clear = function () {
-            vm.dt = null;
-          };
-
-          // Disable weekend selection
-          vm.disabled = function(date, mode) {
-            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-          };
-
-          vm.toggleMin = function() {
-            vm.minDate = vm.minDate ? null : new Date();
-          };
-          vm.toggleMin();
-
-          vm.open = function($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            vm.opened = true;
-          };
-
-          vm.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-          };
-
-          vm.initDate = new Date('2019-10-20');
-          vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-          vm.format = vm.formats[0];
-        }
-    }
-})();
-
-
-/**=========================================================
- * Module: modals.js
- * Provides a simple way to implement bootstrap modals from templates
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('ModalController', ModalController);
-
-    ModalController.$inject = ['$modal'];
-    function ModalController($modal) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.open = function (size) {
-
-            var modalInstance = $modal.open({
-              templateUrl: '/myModalContent.html',
-              controller: ModalInstanceCtrl,
-              size: size
-            });
-
-            var state = $('#modal-state');
-            modalInstance.result.then(function () {
-              state.text('Modal dismissed with OK status');
-            }, function () {
-              state.text('Modal dismissed with Cancel status');
-            });
-          };
-
-          // Please note that $modalInstance represents a modal window (instance) dependency.
-          // It is not the same as the $modal service used above.
-
-          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance'];
-          function ModalInstanceCtrl($scope, $modalInstance) {
-
-            $scope.ok = function () {
-              $modalInstance.close('closed');
-            };
-
-            $scope.cancel = function () {
-              $modalInstance.dismiss('cancel');
-            };
-          }
-        }
-    }
-
-})();
-
-/**=========================================================
- * Module: demo-pagination.js
- * Provides a simple demo for pagination
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('PaginationDemoCtrl', PaginationDemoCtrl);
-
-    function PaginationDemoCtrl() {
-        var vm = this;
-
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.totalItems = 64;
-          vm.currentPage = 4;
-
-          vm.setPage = function (pageNo) {
-            vm.currentPage = pageNo;
-          };
-
-          vm.pageChanged = function() {
-            console.log('Page changed to: ' + vm.currentPage);
-          };
-
-          vm.maxSize = 5;
-          vm.bigTotalItems = 175;
-          vm.bigCurrentPage = 1;
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-popover.js
- * Provides a simple demo for popovers
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('PopoverDemoCtrl', PopoverDemoCtrl);
-
-    function PopoverDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.dynamicPopover = 'Hello, World!';
-          vm.dynamicPopoverTitle = 'Title';
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-progress.js
- * Provides a simple demo to animate progress bar
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('ProgressDemoCtrl', ProgressDemoCtrl);
-
-    function ProgressDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.max = 200;
-
-          vm.random = function() {
-            var value = Math.floor((Math.random() * 100) + 1);
-            var type;
-
-            if (value < 25) {
-              type = 'success';
-            } else if (value < 50) {
-              type = 'info';
-            } else if (value < 75) {
-              type = 'warning';
-            } else {
-              type = 'danger';
-            }
-
-            vm.showWarning = (type === 'danger' || type === 'warning');
-
-            vm.dynamic = value;
-            vm.type = type;
-          };
-          vm.random();
-
-          vm.randomStacked = function() {
-            vm.stacked = [];
-            var types = ['success', 'info', 'warning', 'danger'];
-
-            for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
-                var index = Math.floor((Math.random() * 4));
-                vm.stacked.push({
-                  value: Math.floor((Math.random() * 30) + 1),
-                  type: types[index]
-                });
-            }
-          };
-          vm.randomStacked();
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-rating.js
- * Provides a demo for ratings UI
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('RatingDemoCtrl', RatingDemoCtrl);
-
-    function RatingDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.rate = 7;
-          vm.max = 10;
-          vm.isReadonly = false;
-
-          vm.hoveringOver = function(value) {
-            vm.overStar = value;
-            vm.percent = 100 * (value / vm.max);
-          };
-
-          vm.ratingStates = [
-            {stateOn: 'fa fa-check', stateOff: 'fa fa-check-circle'},
-            {stateOn: 'fa fa-star', stateOff: 'fa fa-star-o'},
-            {stateOn: 'fa fa-heart', stateOff: 'fa fa-ban'},
-            {stateOn: 'fa fa-heart'},
-            {stateOff: 'fa fa-power-off'}
-          ];
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-timepicker.js
- * Provides a simple demo for bootstrap ui timepicker
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TimepickerDemoCtrl', TimepickerDemoCtrl);
-
-    function TimepickerDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.mytime = new Date();
-
-          vm.hstep = 1;
-          vm.mstep = 15;
-
-          vm.options = {
-            hstep: [1, 2, 3],
-            mstep: [1, 5, 10, 15, 25, 30]
-          };
-
-          vm.ismeridian = true;
-          vm.toggleMode = function() {
-            vm.ismeridian = ! vm.ismeridian;
-          };
-
-          vm.update = function() {
-            var d = new Date();
-            d.setHours( 14 );
-            d.setMinutes( 0 );
-            vm.mytime = d;
-          };
-
-          vm.changed = function () {
-            console.log('Time changed to: ' + vm.mytime);
-          };
-
-          vm.clear = function() {
-            vm.mytime = null;
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-tooltip.js
- * Provides a simple demo for tooltip
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TooltipDemoCtrl', TooltipDemoCtrl);
-
-    function TooltipDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.dynamicTooltip = 'Hello, World!';
-          vm.dynamicTooltipText = 'dynamic';
-          vm.htmlTooltip = 'I\'ve been made <b>bold</b>!';
-
-          vm.autoplace = function (context, source) {
-            //return (predictTooltipTop(source) < 0) ?  "bottom": "top";
-            var pos = 'top';
-            if(predictTooltipTop(source) < 0)
-              pos = 'bottom';
-            if(predictTooltipLeft(source) < 0)
-              pos = 'right';
-            return pos;
-          };
-
-            // Predicts tooltip top position 
-            // based on the trigger element
-            function predictTooltipTop(el) {
-              var top = el.offsetTop;
-              var height = 40; // asumes ~40px tooltip height
-
-              while(el.offsetParent) {
-                el = el.offsetParent;
-                top += el.offsetTop;
-              }
-              return (top - height) - (window.pageYOffset);
-            }
-
-            // Predicts tooltip top position 
-            // based on the trigger element
-            function predictTooltipLeft(el) {
-              var left = el.offsetLeft;
-              var width = el.offsetWidth;
-
-              while(el.offsetParent) {
-                el = el.offsetParent;
-                left += el.offsetLeft;
-              }
-              return (left - width) - (window.pageXOffset);
-            }
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-typeahead.js
- * Provides a simple demo for typeahead
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TypeaheadCtrl', TypeaheadCtrl);
-
-    TypeaheadCtrl.$inject = ['$http'];
-    function TypeaheadCtrl($http) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.selected = undefined;
-          vm.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
-
-          // Any function returning a promise object can be used to load values asynchronously
-          vm.getLocation = function(val) {
-            return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
-              params: {
-                address: val,
-                sensor: false
-              }
-            }).then(function(res){
-              var addresses = [];
-              angular.forEach(res.data.results, function(item){
-                /*jshint -W106*/
-                addresses.push(item.formatted_address);
-              });
-              return addresses;
-            });
-          };
-
-          vm.statesWithFlags = [{'name':'Alabama','flag':'5/5c/Flag_of_Alabama.svg/45px-Flag_of_Alabama.svg.png'},{'name':'Alaska','flag':'e/e6/Flag_of_Alaska.svg/43px-Flag_of_Alaska.svg.png'},{'name':'Arizona','flag':'9/9d/Flag_of_Arizona.svg/45px-Flag_of_Arizona.svg.png'},{'name':'Arkansas','flag':'9/9d/Flag_of_Arkansas.svg/45px-Flag_of_Arkansas.svg.png'},{'name':'California','flag':'0/01/Flag_of_California.svg/45px-Flag_of_California.svg.png'},{'name':'Colorado','flag':'4/46/Flag_of_Colorado.svg/45px-Flag_of_Colorado.svg.png'},{'name':'Connecticut','flag':'9/96/Flag_of_Connecticut.svg/39px-Flag_of_Connecticut.svg.png'},{'name':'Delaware','flag':'c/c6/Flag_of_Delaware.svg/45px-Flag_of_Delaware.svg.png'},{'name':'Florida','flag':'f/f7/Flag_of_Florida.svg/45px-Flag_of_Florida.svg.png'},{'name':'Georgia','flag':'5/54/Flag_of_Georgia_%28U.S._state%29.svg/46px-Flag_of_Georgia_%28U.S._state%29.svg.png'},{'name':'Hawaii','flag':'e/ef/Flag_of_Hawaii.svg/46px-Flag_of_Hawaii.svg.png'},{'name':'Idaho','flag':'a/a4/Flag_of_Idaho.svg/38px-Flag_of_Idaho.svg.png'},{'name':'Illinois','flag':'0/01/Flag_of_Illinois.svg/46px-Flag_of_Illinois.svg.png'},{'name':'Indiana','flag':'a/ac/Flag_of_Indiana.svg/45px-Flag_of_Indiana.svg.png'},{'name':'Iowa','flag':'a/aa/Flag_of_Iowa.svg/44px-Flag_of_Iowa.svg.png'},{'name':'Kansas','flag':'d/da/Flag_of_Kansas.svg/46px-Flag_of_Kansas.svg.png'},{'name':'Kentucky','flag':'8/8d/Flag_of_Kentucky.svg/46px-Flag_of_Kentucky.svg.png'},{'name':'Louisiana','flag':'e/e0/Flag_of_Louisiana.svg/46px-Flag_of_Louisiana.svg.png'},{'name':'Maine','flag':'3/35/Flag_of_Maine.svg/45px-Flag_of_Maine.svg.png'},{'name':'Maryland','flag':'a/a0/Flag_of_Maryland.svg/45px-Flag_of_Maryland.svg.png'},{'name':'Massachusetts','flag':'f/f2/Flag_of_Massachusetts.svg/46px-Flag_of_Massachusetts.svg.png'},{'name':'Michigan','flag':'b/b5/Flag_of_Michigan.svg/45px-Flag_of_Michigan.svg.png'},{'name':'Minnesota','flag':'b/b9/Flag_of_Minnesota.svg/46px-Flag_of_Minnesota.svg.png'},{'name':'Mississippi','flag':'4/42/Flag_of_Mississippi.svg/45px-Flag_of_Mississippi.svg.png'},{'name':'Missouri','flag':'5/5a/Flag_of_Missouri.svg/46px-Flag_of_Missouri.svg.png'},{'name':'Montana','flag':'c/cb/Flag_of_Montana.svg/45px-Flag_of_Montana.svg.png'},{'name':'Nebraska','flag':'4/4d/Flag_of_Nebraska.svg/46px-Flag_of_Nebraska.svg.png'},{'name':'Nevada','flag':'f/f1/Flag_of_Nevada.svg/45px-Flag_of_Nevada.svg.png'},{'name':'New Hampshire','flag':'2/28/Flag_of_New_Hampshire.svg/45px-Flag_of_New_Hampshire.svg.png'},{'name':'New Jersey','flag':'9/92/Flag_of_New_Jersey.svg/45px-Flag_of_New_Jersey.svg.png'},{'name':'New Mexico','flag':'c/c3/Flag_of_New_Mexico.svg/45px-Flag_of_New_Mexico.svg.png'},{'name':'New York','flag':'1/1a/Flag_of_New_York.svg/46px-Flag_of_New_York.svg.png'},{'name':'North Carolina','flag':'b/bb/Flag_of_North_Carolina.svg/45px-Flag_of_North_Carolina.svg.png'},{'name':'North Dakota','flag':'e/ee/Flag_of_North_Dakota.svg/38px-Flag_of_North_Dakota.svg.png'},{'name':'Ohio','flag':'4/4c/Flag_of_Ohio.svg/46px-Flag_of_Ohio.svg.png'},{'name':'Oklahoma','flag':'6/6e/Flag_of_Oklahoma.svg/45px-Flag_of_Oklahoma.svg.png'},{'name':'Oregon','flag':'b/b9/Flag_of_Oregon.svg/46px-Flag_of_Oregon.svg.png'},{'name':'Pennsylvania','flag':'f/f7/Flag_of_Pennsylvania.svg/45px-Flag_of_Pennsylvania.svg.png'},{'name':'Rhode Island','flag':'f/f3/Flag_of_Rhode_Island.svg/32px-Flag_of_Rhode_Island.svg.png'},{'name':'South Carolina','flag':'6/69/Flag_of_South_Carolina.svg/45px-Flag_of_South_Carolina.svg.png'},{'name':'South Dakota','flag':'1/1a/Flag_of_South_Dakota.svg/46px-Flag_of_South_Dakota.svg.png'},{'name':'Tennessee','flag':'9/9e/Flag_of_Tennessee.svg/46px-Flag_of_Tennessee.svg.png'},{'name':'Texas','flag':'f/f7/Flag_of_Texas.svg/45px-Flag_of_Texas.svg.png'},{'name':'Utah','flag':'f/f6/Flag_of_Utah.svg/45px-Flag_of_Utah.svg.png'},{'name':'Vermont','flag':'4/49/Flag_of_Vermont.svg/46px-Flag_of_Vermont.svg.png'},{'name':'Virginia','flag':'4/47/Flag_of_Virginia.svg/44px-Flag_of_Virginia.svg.png'},{'name':'Washington','flag':'5/54/Flag_of_Washington.svg/46px-Flag_of_Washington.svg.png'},{'name':'West Virginia','flag':'2/22/Flag_of_West_Virginia.svg/46px-Flag_of_West_Virginia.svg.png'},{'name':'Wisconsin','flag':'2/22/Flag_of_Wisconsin.svg/45px-Flag_of_Wisconsin.svg.png'},{'name':'Wyoming','flag':'b/bc/Flag_of_Wyoming.svg/43px-Flag_of_Wyoming.svg.png'}];
-
-        }
-    }
 })();
 
 /**=========================================================
@@ -2411,56 +1851,6 @@
     'use strict';
 
     angular
-        .module('app.colors')
-        .constant('APP_COLORS', {
-          'primary':                '#5d9cec',
-          'success':                '#27c24c',
-          'info':                   '#23b7e5',
-          'warning':                '#ff902b',
-          'danger':                 '#f05050',
-          'inverse':                '#131e26',
-          'green':                  '#37bc9b',
-          'pink':                   '#f532e5',
-          'purple':                 '#7266ba',
-          'dark':                   '#3a3f51',
-          'yellow':                 '#fad732',
-          'gray-darker':            '#232735',
-          'gray-dark':              '#3a3f51',
-          'gray':                   '#dde6e9',
-          'gray-light':             '#e4eaec',
-          'gray-lighter':           '#edf1f2'
-        })
-        ;
-})();
-/**=========================================================
- * Module: colors.js
- * Services to retrieve global colors
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .service('Colors', Colors);
-
-    Colors.$inject = ['APP_COLORS'];
-    function Colors(APP_COLORS) {
-        this.byName = byName;
-
-        ////////////////
-
-        function byName(name) {
-          return (APP_COLORS[name] || '#fff');
-        }
-    }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
         .module('app.core')
         .config(coreConfig)
         .config(loopbackConfig)
@@ -2515,8 +1905,8 @@
           'tablet':                 768,
           'mobile':                 480
         })
-        .constant('urlBase', "http://0.0.0.0:3000/api")
-        // .constant('urlBase', "http://104.236.144.106:3000/api")
+        // .constant('urlBase', "http://0.0.0.0:3000/api")
+        .constant('urlBase', "http://api.fankahui.com:3000/api")
       ;
 
 })();
@@ -2639,15 +2029,68 @@
 })();
 
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .constant('APP_COLORS', {
+          'primary':                '#5d9cec',
+          'success':                '#27c24c',
+          'info':                   '#23b7e5',
+          'warning':                '#ff902b',
+          'danger':                 '#f05050',
+          'inverse':                '#131e26',
+          'green':                  '#37bc9b',
+          'pink':                   '#f532e5',
+          'purple':                 '#7266ba',
+          'dark':                   '#3a3f51',
+          'yellow':                 '#fad732',
+          'gray-darker':            '#232735',
+          'gray-dark':              '#3a3f51',
+          'gray':                   '#dde6e9',
+          'gray-light':             '#e4eaec',
+          'gray-lighter':           '#edf1f2'
+        })
+        ;
+})();
+/**=========================================================
+ * Module: colors.js
+ * Services to retrieve global colors
+ =========================================================*/
 
 (function() {
     'use strict';
 
     angular
-        .module('app.elements')
-        .controller('AngularCarouselController', AngularCarouselController);
+        .module('app.colors')
+        .service('Colors', Colors);
 
-    function AngularCarouselController() {
+    Colors.$inject = ['APP_COLORS'];
+    function Colors(APP_COLORS) {
+        this.byName = byName;
+
+        ////////////////
+
+        function byName(name) {
+          return (APP_COLORS[name] || '#fff');
+        }
+    }
+
+})();
+
+/**=========================================================
+ * Module: demo-alerts.js
+ * Provides a simple demo for pagination
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('AlertDemoCtrl', AlertDemoCtrl);
+
+    function AlertDemoCtrl() {
         var vm = this;
 
         activate();
@@ -2655,836 +2098,513 @@
         ////////////////
 
         function activate() {
-          vm.colors = ['#fc0003', '#f70008', '#f2000d', '#ed0012', '#e80017', '#e3001c', '#de0021', '#d90026', '#d4002b', '#cf0030', '#c90036', '#c4003b', '#bf0040', '#ba0045', '#b5004a', '#b0004f', '#ab0054', '#a60059', '#a1005e', '#9c0063', '#960069', '#91006e', '#8c0073', '#870078', '#82007d', '#7d0082', '#780087', '#73008c', '#6e0091', '#690096', '#63009c', '#5e00a1', '#5900a6', '#5400ab', '#4f00b0', '#4a00b5', '#4500ba', '#4000bf', '#3b00c4', '#3600c9', '#3000cf', '#2b00d4', '#2600d9', '#2100de', '#1c00e3', '#1700e8', '#1200ed', '#0d00f2', '#0800f7', '#0300fc'];
-
-          function getSlide(target, style) {
-              var i = target.length;
-              return {
-                  id: (i + 1),
-                  label: 'slide #' + (i + 1),
-                  img: 'http://lorempixel.com/1200/500/' + style + '/' + ((i + 1) % 10) ,
-                  color: vm.colors[ (i*10) % vm.colors.length],
-                  odd: (i % 2 === 0)
-              };
-          }
-
-          function addSlide(target, style) {
-              target.push(getSlide(target, style));
-          }
-
-          vm.carouselIndex = 3;
-          vm.carouselIndex2 = 0;
-          vm.carouselIndex2 = 1;
-          vm.carouselIndex3 = 5;
-          vm.carouselIndex4 = 5;
-
-          function addSlides(target, style, qty) {
-              for (var i=0; i < qty; i++) {
-                  addSlide(target, style);
-              }
-          }
-
-          // 1st ngRepeat demo
-          vm.slides = [];
-          addSlides(vm.slides, 'sports', 50);
-
-          // 2nd ngRepeat demo
-          vm.slides2 = [];
-          addSlides(vm.slides2, 'sports', 10);
-
-          // 3rd ngRepeat demo
-          vm.slides3 = [];
-          addSlides(vm.slides3, 'people', 50);
-
-          // 4th ngRepeat demo
-          vm.slides4 = [];
-          addSlides(vm.slides4, 'city', 50);
-
-
-          // 5th ngRepeat demo
-          vm.slides6 = [];
-          vm.carouselIndex6 = 0;
-          addSlides(vm.slides6, 'sports', 10);
-          vm.addSlide = function(at) {
-              if(at==='head') {
-                  vm.slides6.unshift(getSlide(vm.slides6, 'people'));
-              } else {
-                  vm.slides6.push(getSlide(vm.slides6, 'people'));
-              }
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-dialog.js
- * Demo for multiple ngDialog Usage
- * - ngDialogProvider for default values not supported 
- *   using lazy loader. Include plugin in base.js instead.
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('DialogIntroCtrl', DialogIntroCtrl)
-        .controller('DialogMainCtrl', DialogMainCtrl)
-        .controller('InsideCtrl', InsideCtrl)
-        .controller('SecondModalCtrl', SecondModalCtrl);
-
-    DialogIntroCtrl.$inject = ['$scope', 'ngDialog', 'tpl'];
-    // Called from the route state. 'tpl' is resolved before
-    function DialogIntroCtrl($scope, ngDialog, tpl) {
-        
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // share with other controllers
-          $scope.tpl = tpl;
-          // open dialog window
-          ngDialog.open({
-            template: tpl.path,
-            // plain: true,
-            className: 'ngdialog-theme-default'
-          });
-        }
-    }
-
-    DialogMainCtrl.$inject = ['$scope', '$rootScope', 'ngDialog'];
-    // Loads from view
-    function DialogMainCtrl($scope, $rootScope, ngDialog) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $rootScope.jsonData = '{"foo": "bar"}';
-          $rootScope.theme = 'ngdialog-theme-default';
-
-          $scope.directivePreCloseCallback = function (value) {
-            if(confirm('Close it? MainCtrl.Directive. (Value = ' + value + ')')) {
-              return true;
-            }
-            return false;
-          };
-
-          $scope.preCloseCallbackOnScope = function (value) {
-            if(confirm('Close it? MainCtrl.OnScope (Value = ' + value + ')')) {
-              return true;
-            }
-            return false;
-          };
-
-          $scope.open = function () {
-            ngDialog.open({ template: 'firstDialogId', controller: 'InsideCtrl', data: {foo: 'some data'} });
-          };
-
-          $scope.openDefault = function () {
-            ngDialog.open({
-              template: 'firstDialogId',
-              controller: 'InsideCtrl',
-              className: 'ngdialog-theme-default'
-            });
-          };
-
-          $scope.openDefaultWithPreCloseCallbackInlined = function () {
-            ngDialog.open({
-              template: 'firstDialogId',
-              controller: 'InsideCtrl',
-              className: 'ngdialog-theme-default',
-              preCloseCallback: function(value) {
-                if (confirm('Close it?  (Value = ' + value + ')')) {
-                  return true;
-                }
-                return false;
-              }
-            });
-          };
-
-          $scope.openConfirm = function () {
-            ngDialog.openConfirm({
-              template: 'modalDialogId',
-              className: 'ngdialog-theme-default'
-            }).then(function (value) {
-              console.log('Modal promise resolved. Value: ', value);
-            }, function (reason) {
-              console.log('Modal promise rejected. Reason: ', reason);
-            });
-          };
-
-          $scope.openConfirmWithPreCloseCallbackOnScope = function () {
-            ngDialog.openConfirm({
-              template: 'modalDialogId',
-              className: 'ngdialog-theme-default',
-              preCloseCallback: 'preCloseCallbackOnScope',
-              scope: $scope
-            }).then(function (value) {
-              console.log('Modal promise resolved. Value: ', value);
-            }, function (reason) {
-              console.log('Modal promise rejected. Reason: ', reason);
-            });
-          };
-
-          $scope.openConfirmWithPreCloseCallbackInlinedWithNestedConfirm = function () {
-            ngDialog.openConfirm({
-              template: 'dialogWithNestedConfirmDialogId',
-              className: 'ngdialog-theme-default',
-              preCloseCallback: function(/*value*/) {
-
-                var nestedConfirmDialog = ngDialog.openConfirm({
-                  template:
-                      '<p>Are you sure you want to close the parent dialog?</p>' +
-                      '<div>' +
-                        '<button type="button" class="btn btn-default" ng-click="closeThisDialog(0)">No' +
-                        '<button type="button" class="btn btn-primary" ng-click="confirm(1)">Yes' +
-                      '</button></div>',
-                  plain: true,
-                  className: 'ngdialog-theme-default'
-                });
-
-                return nestedConfirmDialog;
-              },
-              scope: $scope
-            })
-            .then(function(value){
-              console.log('resolved:' + value);
-              // Perform the save here
-            }, function(value){
-              console.log('rejected:' + value);
-
-            });
-          };
-
-          $scope.openInlineController = function () {
-            $rootScope.theme = 'ngdialog-theme-default';
-
-            ngDialog.open({
-              template: 'withInlineController',
-              controller: ['$scope', '$timeout', function ($scope, $timeout) {
-                var counter = 0;
-                var timeout;
-                function count() {
-                  $scope.exampleExternalData = 'Counter ' + (counter++);
-                  timeout = $timeout(count, 450);
-                }
-                count();
-                $scope.$on('$destroy', function () {
-                  $timeout.cancel(timeout);
-                });
-              }],
-              className: 'ngdialog-theme-default'
-            });
-          };
-
-          $scope.openTemplate = function () {
-            $scope.value = true;
-
-            ngDialog.open({
-              template: $scope.tpl.path,
-              className: 'ngdialog-theme-default',
-              scope: $scope
-            });
-          };
-
-          $scope.openTemplateNoCache = function () {
-            $scope.value = true;
-
-            ngDialog.open({
-              template: $scope.tpl.path,
-              className: 'ngdialog-theme-default',
-              scope: $scope,
-              cache: false
-            });
-          };
-
-          $scope.openTimed = function () {
-            var dialog = ngDialog.open({
-              template: '<p>Just passing through!</p>',
-              plain: true,
-              closeByDocument: false,
-              closeByEscape: false
-            });
-            setTimeout(function () {
-              dialog.close();
-            }, 2000);
-          };
-
-          $scope.openNotify = function () {
-            var dialog = ngDialog.open({
-              template:
-                '<p>You can do whatever you want when I close, however that happens.</p>' +
-                '<div><button type="button" class="btn btn-primary" ng-click="closeThisDialog(1)">Close Me</button></div>',
-              plain: true
-            });
-            dialog.closePromise.then(function (data) {
-              console.log('ngDialog closed' + (data.value === 1 ? ' using the button' : '') + ' and notified by promise: ' + data.id);
-            });
-          };
-
-          $scope.openWithoutOverlay = function () {
-            ngDialog.open({
-              template: '<h2>Notice that there is no overlay!</h2>',
-              className: 'ngdialog-theme-default',
-              plain: true,
-              overlay: false
-            });
-          };
-
-          $rootScope.$on('ngDialog.opened', function (e, $dialog) {
-            console.log('ngDialog opened: ' + $dialog.attr('id'));
-          });
-
-          $rootScope.$on('ngDialog.closed', function (e, $dialog) {
-            console.log('ngDialog closed: ' + $dialog.attr('id'));
-          });
-
-          $rootScope.$on('ngDialog.closing', function (e, $dialog) {
-            console.log('ngDialog closing: ' + $dialog.attr('id'));
-          });
-        }
-    
-    } // DialogMainCtrl
-
-
-    InsideCtrl.$inject = ['$scope', 'ngDialog'];
-    function InsideCtrl($scope, ngDialog) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $scope.dialogModel = {
-            message : 'message from passed scope'
-          };
-          $scope.openSecond = function () {
-            ngDialog.open({
-              template: '<p class="lead m0"><a href="" ng-click="closeSecond()">Close all by click here!</a></h3>',
-              plain: true,
-              closeByEscape: false,
-              controller: 'SecondModalCtrl'
-            });
-          };
-        }
-    }
-
-    SecondModalCtrl.$inject = ['$scope', 'ngDialog'];
-    function SecondModalCtrl($scope, ngDialog) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $scope.closeSecond = function () {
-            ngDialog.close();
-          };
-        }
-
-    }
-
-
-})();
-
-
-
-
-/**=========================================================
- * Module: calendar-ui.js
- * This script handle the calendar demo with draggable 
- * events and events creations
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('InfiniteScrollController', InfiniteScrollController)
-        .factory('datasource', datasource);
-
-    function InfiniteScrollController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.images = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-          vm.loadMore = function() {
-            var last = vm.images[vm.images.length - 1];
-            for(var i = 1; i <= 10; i++) {
-              vm.images.push(last + i);
-            }
-          };
-        }
-    }
-    
-    datasource.$inject = ['$log', '$timeout'];
-    function datasource(console, $timeout) {
-
-        var get = function(index, count, success) {
-            return $timeout(function() {
-                var i, result, _i, _ref;
-                result = [];
-                for (i = _i = index, _ref = index + count - 1; index <= _ref ? _i <= _ref : _i >= _ref; i = index <= _ref ? ++_i : --_i) {
-                    result.push('item #' + i);
-                }
-                return success(result);
-            }, 100);
-        };
-        return {
-            get: get
-        };
-    }
-
-})();
-
-/**=========================================================
- * Module: masonry-deck.js
- * Demo for Angular Deck
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('MasonryDeckController', MasonryDeckController)
-        .directive('imageloaded', imageloaded); // required by demo
-
-    MasonryDeckController.$inejct = ['RouteHelpers'];
-    function MasonryDeckController(RouteHelpers) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.basepath = RouteHelpers.basepath;
-
-          vm.photos = [
-              {id: 'photo-1', name: 'Awesome photo', src: 'http://lorempixel.com/400/300/abstract'},
-              {id: 'photo-2', name: 'Great photo', src: 'http://lorempixel.com/450/400/city'},
-              {id: 'photo-3', name: 'Strange photo', src: 'http://lorempixel.com/400/300/people'},
-              {id: 'photo-4', name: 'A photo?', src: 'http://lorempixel.com/400/300/transport'},
-              {id: 'photo-5', name: 'What a photo', src: 'http://lorempixel.com/450/300/fashion'},
-              {id: 'photo-6', name: 'Silly photo', src: 'http://lorempixel.com/400/300/technics'},
-              {id: 'photo-7', name: 'Weird photo', src: 'http://lorempixel.com/410/350/sports'},
-              {id: 'photo-8', name: 'Modern photo', src: 'http://lorempixel.com/400/300/nightlife'},
-              {id: 'photo-9', name: 'Classical photo', src: 'http://lorempixel.com/400/300/nature'},
-              {id: 'photo-10', name: 'Dynamic photo', src: 'http://lorempixel.com/420/300/abstract'},
-              {id: 'photo-11', name: 'Neat photo', src: 'http://lorempixel.com/400/300/sports'},
-              {id: 'photo-12', name: 'Bumpy photo', src: 'http://lorempixel.com/400/300/nightlife'},
-              {id: 'photo-13', name: 'Brilliant photo', src: 'http://lorempixel.com/400/380/nature'},
-              {id: 'photo-14', name: 'Excellent photo', src: 'http://lorempixel.com/480/300/technics'},
-              {id: 'photo-15', name: 'Gorgeous photo', src: 'http://lorempixel.com/400/300/sports'},
-              {id: 'photo-16', name: 'Lovely photo', src: 'http://lorempixel.com/400/300/nightlife'},
-              {id: 'photo-17', name: 'A "wow" photo', src: 'http://lorempixel.com/400/300/nature'},
-              {id: 'photo-18', name: 'Bodacious photo', src: 'http://lorempixel.com/400/300/abstract'}
+          vm.alerts = [
+            { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
+            { type: 'warning', msg: 'Well done! You successfully read this important alert message.' }
           ];
+
+          vm.addAlert = function() {
+            vm.alerts.push({msg: 'Another alert!'});
+          };
+
+          vm.closeAlert = function(index) {
+            vm.alerts.splice(index, 1);
+          };
         }
     }
-    MasonryDeckController.$inject = ["RouteHelpers"];
-
-    // Add class to img element when source is loaded
-    function imageloaded () {
-        // Copyright(c) 2013 André König <akoenig@posteo.de>
-        // MIT Licensed
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          var cssClass = attrs.loadedclass;
-
-          element.bind('load', function () {
-              angular.element(element).addClass(cssClass);
-          });
-        }
-    }
-
 })();
 
+(function() {
+    'use strict';
 
+    angular
+        .module('app.bootstrapui')
+        .config(bootstrapuiConfig);
 
+    bootstrapuiConfig.$inject = ['$tooltipProvider'];
+    function bootstrapuiConfig($tooltipProvider){
+      $tooltipProvider.options({appendToBody: true});
+    }
+})();
 /**=========================================================
- * Module: access-login.js
- * Demo for login api
+ * Module: demo-buttons.js
+ * Provides a simple demo for buttons actions
  =========================================================*/
 
 (function() {
     'use strict';
 
     angular
-        .module('app.elements')
-        .controller('AbnTestController', AbnTestController);
+        .module('app.bootstrapui')
+        .controller('ButtonsCtrl', ButtonsCtrl);
 
-    AbnTestController.$inject = ['$timeout', '$resource'];
-    function AbnTestController($timeout, $resource) {
+    function ButtonsCtrl() {
         var vm = this;
 
         activate();
 
         ////////////////
 
-        /*jshint -W106*/
         function activate() {
-          vm.my_tree_handler = function(branch) {
+          vm.singleModel = 1;
 
-            vm.output = 'You selected: ' + branch.label;
+          vm.radioModel = 'Middle';
 
-            if (branch.data && branch.data.description) {
-              vm.output += '(' + branch.data.description + ')';
-              return vm.output;
-            }
+          vm.checkModel = {
+            left: false,
+            middle: true,
+            right: false
           };
+        }
+    }
+})();
 
-          // onSelect event handlers
-          var apple_selected = function(branch) {
-            vm.output = 'APPLE! : ' + branch.label;
-            return vm.output;
-          };
+/**=========================================================
+ * Module: demo-carousel.js
+ * Provides a simple demo for bootstrap ui carousel
+ =========================================================*/
+(function() {
+    'use strict';
 
-          var treedata_avm = [
-            {
-              label: 'Animal',
-              children: [
-                {
-                  label: 'Dog',
-                  data: {
-                    description: 'man\'s best friend'
-                  }
-                }, {
-                  label: 'Cat',
-                  data: {
-                    description: 'Felis catus'
-                  }
-                }, {
-                  label: 'Hippopotamus',
-                  data: {
-                    description: 'hungry, hungry'
-                  }
-                }, {
-                  label: 'Chicken',
-                  children: ['White Leghorn', 'Rhode Island Red', 'Jersey Giant']
-                }
-              ]
-            }, {
-              label: 'Vegetable',
-              data: {
-                definition: 'A plant or part of a plant used as food, typically as accompaniment to meat or fish, such as a cabbage, potato, carrot, or bean.',
-                data_can_contain_anything: true
-              },
-              onSelect: function(branch) {
-                vm.output = 'Vegetable: ' + branch.data.definition;
-                return vm.output;
-              },
-              children: [
-                {
-                  label: 'Oranges'
-                }, {
-                  label: 'Apples',
-                  children: [
-                    {
-                      label: 'Granny Smith',
-                      onSelect: apple_selected
-                    }, {
-                      label: 'Red Delicous',
-                      onSelect: apple_selected
-                    }, {
-                      label: 'Fuji',
-                      onSelect: apple_selected
-                    }
-                  ]
-                }
-              ]
-            }, {
-              label: 'Mineral',
-              children: [
-                {
-                  label: 'Rock',
-                  children: ['Igneous', 'Sedimentary', 'Metamorphic']
-                }, {
-                  label: 'Metal',
-                  children: ['Aluminum', 'Steel', 'Copper']
-                }, {
-                  label: 'Plastic',
-                  children: [
-                    {
-                      label: 'Thermoplastic',
-                      children: ['polyethylene', 'polypropylene', 'polystyrene', ' polyvinyl chloride']
-                    }, {
-                      label: 'Thermosetting Polymer',
-                      children: ['polyester', 'polyurethane', 'vulcanized rubber', 'bakelite', 'urea-formaldehyde']
-                    }
-                  ]
-                }
-              ]
-            }
-          ];
+    angular
+        .module('app.bootstrapui')
+        .controller('CarouselDemoCtrl', CarouselDemoCtrl);
+
+    function CarouselDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.myInterval = 5000;
           
-          var treedata_geography = [
-            {
-              label: 'North America',
-              children: [
-                {
-                  label: 'Canada',
-                  children: ['Toronto', 'Vancouver']
-                }, {
-                  label: 'USA',
-                  children: ['New York', 'Los Angeles']
-                }, {
-                  label: 'Mexico',
-                  children: ['Mexico City', 'Guadalajara']
-                }
-              ]
-            }, {
-              label: 'South America',
-              children: [
-                {
-                  label: 'Venezuela',
-                  children: ['Caracas', 'Maracaibo']
-                }, {
-                  label: 'Brazil',
-                  children: ['Sao Paulo', 'Rio de Janeiro']
-                }, {
-                  label: 'Argentina',
-                  children: ['Buenos Aires', 'Cordoba']
-                }
-              ]
-            }
-          ];
+          var slides = vm.slides = [];
+          vm.addSlide = function() {
+            var newWidth = 800 + slides.length;
+            slides.push({
+              image: '//placekitten.com/' + newWidth + '/300',
+              text: ['More','Extra','Lots of','Surplus'][slides.length % 2] + ' ' +
+                ['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 2]
+            });
+          };
+          
+          for (var i=0; i<2; i++) {
+            vm.addSlide();
+          }
 
-          vm.my_data = treedata_avm;
-          vm.try_changing_the_tree_data = function() {
-            if (vm.my_data === treedata_avm) {
-              vm.my_data = treedata_geography;
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-datepicker.js
+ * Provides a simple demo for bootstrap datepicker
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('DatepickerDemoCtrl', DatepickerDemoCtrl);
+
+    function DatepickerDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.today = function() {
+            vm.dt = new Date();
+          };
+          vm.today();
+
+          vm.clear = function () {
+            vm.dt = null;
+          };
+
+          // Disable weekend selection
+          vm.disabled = function(date, mode) {
+            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+          };
+
+          vm.toggleMin = function() {
+            vm.minDate = vm.minDate ? null : new Date();
+          };
+          vm.toggleMin();
+
+          vm.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            vm.opened = true;
+          };
+
+          vm.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+          };
+
+          vm.initDate = new Date('2019-10-20');
+          vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+          vm.format = vm.formats[0];
+        }
+    }
+})();
+
+
+/**=========================================================
+ * Module: modals.js
+ * Provides a simple way to implement bootstrap modals from templates
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('ModalController', ModalController);
+
+    ModalController.$inject = ['$modal'];
+    function ModalController($modal) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+          vm.open = function (size) {
+
+            var modalInstance = $modal.open({
+              templateUrl: '/myModalContent.html',
+              controller: ModalInstanceCtrl,
+              size: size
+            });
+
+            var state = $('#modal-state');
+            modalInstance.result.then(function () {
+              state.text('Modal dismissed with OK status');
+            }, function () {
+              state.text('Modal dismissed with Cancel status');
+            });
+          };
+
+          // Please note that $modalInstance represents a modal window (instance) dependency.
+          // It is not the same as the $modal service used above.
+
+          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance'];
+          function ModalInstanceCtrl($scope, $modalInstance) {
+
+            $scope.ok = function () {
+              $modalInstance.close('closed');
+            };
+
+            $scope.cancel = function () {
+              $modalInstance.dismiss('cancel');
+            };
+          }
+        }
+    }
+
+})();
+
+/**=========================================================
+ * Module: demo-pagination.js
+ * Provides a simple demo for pagination
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('PaginationDemoCtrl', PaginationDemoCtrl);
+
+    function PaginationDemoCtrl() {
+        var vm = this;
+
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.totalItems = 64;
+          vm.currentPage = 4;
+
+          vm.setPage = function (pageNo) {
+            vm.currentPage = pageNo;
+          };
+
+          vm.pageChanged = function() {
+            console.log('Page changed to: ' + vm.currentPage);
+          };
+
+          vm.maxSize = 5;
+          vm.bigTotalItems = 175;
+          vm.bigCurrentPage = 1;
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-popover.js
+ * Provides a simple demo for popovers
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('PopoverDemoCtrl', PopoverDemoCtrl);
+
+    function PopoverDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.dynamicPopover = 'Hello, World!';
+          vm.dynamicPopoverTitle = 'Title';
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-progress.js
+ * Provides a simple demo to animate progress bar
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('ProgressDemoCtrl', ProgressDemoCtrl);
+
+    function ProgressDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.max = 200;
+
+          vm.random = function() {
+            var value = Math.floor((Math.random() * 100) + 1);
+            var type;
+
+            if (value < 25) {
+              type = 'success';
+            } else if (value < 50) {
+              type = 'info';
+            } else if (value < 75) {
+              type = 'warning';
             } else {
-              vm.my_data = treedata_avm;
+              type = 'danger';
             }
-            return vm.my_data;
-          };
-          
-          var tree;
-          // This is our API control variable
-          vm.my_tree = tree = {};
-          vm.try_async_load = function() {
-            
-            vm.my_data = [];
-            vm.doing_async = true;
-            
-            // Request tree data via $resource
-            var remoteTree = $resource('server/treedata.json');
-            
-            return remoteTree.get(function(res){
-              
-              vm.my_data = res.data;
 
-              vm.doing_async = false;
-            
-              return tree.expand_all();
-            
-            // we must return a promise so the plugin 
-            // can watch when it's resolved
-            }).$promise;
+            vm.showWarning = (type === 'danger' || type === 'warning');
+
+            vm.dynamic = value;
+            vm.type = type;
           };
-          
-          // Adds a new branch to the tree
-          vm.try_adding_a_branch = function() {
-            var b;
-            b = tree.get_selected_branch();
-            return tree.add_branch(b, {
-              label: 'New Branch',
-              data: {
-                something: 42,
-                'else': 43
+          vm.random();
+
+          vm.randomStacked = function() {
+            vm.stacked = [];
+            var types = ['success', 'info', 'warning', 'danger'];
+
+            for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+                var index = Math.floor((Math.random() * 4));
+                vm.stacked.push({
+                  value: Math.floor((Math.random() * 30) + 1),
+                  type: types[index]
+                });
+            }
+          };
+          vm.randomStacked();
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-rating.js
+ * Provides a demo for ratings UI
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('RatingDemoCtrl', RatingDemoCtrl);
+
+    function RatingDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.rate = 7;
+          vm.max = 10;
+          vm.isReadonly = false;
+
+          vm.hoveringOver = function(value) {
+            vm.overStar = value;
+            vm.percent = 100 * (value / vm.max);
+          };
+
+          vm.ratingStates = [
+            {stateOn: 'fa fa-check', stateOff: 'fa fa-check-circle'},
+            {stateOn: 'fa fa-star', stateOff: 'fa fa-star-o'},
+            {stateOn: 'fa fa-heart', stateOff: 'fa fa-ban'},
+            {stateOn: 'fa fa-heart'},
+            {stateOff: 'fa fa-power-off'}
+          ];
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-timepicker.js
+ * Provides a simple demo for bootstrap ui timepicker
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('TimepickerDemoCtrl', TimepickerDemoCtrl);
+
+    function TimepickerDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.mytime = new Date();
+
+          vm.hstep = 1;
+          vm.mstep = 15;
+
+          vm.options = {
+            hstep: [1, 2, 3],
+            mstep: [1, 5, 10, 15, 25, 30]
+          };
+
+          vm.ismeridian = true;
+          vm.toggleMode = function() {
+            vm.ismeridian = ! vm.ismeridian;
+          };
+
+          vm.update = function() {
+            var d = new Date();
+            d.setHours( 14 );
+            d.setMinutes( 0 );
+            vm.mytime = d;
+          };
+
+          vm.changed = function () {
+            console.log('Time changed to: ' + vm.mytime);
+          };
+
+          vm.clear = function() {
+            vm.mytime = null;
+          };
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-tooltip.js
+ * Provides a simple demo for tooltip
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('TooltipDemoCtrl', TooltipDemoCtrl);
+
+    function TooltipDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.dynamicTooltip = 'Hello, World!';
+          vm.dynamicTooltipText = 'dynamic';
+          vm.htmlTooltip = 'I\'ve been made <b>bold</b>!';
+
+          vm.autoplace = function (context, source) {
+            //return (predictTooltipTop(source) < 0) ?  "bottom": "top";
+            var pos = 'top';
+            if(predictTooltipTop(source) < 0)
+              pos = 'bottom';
+            if(predictTooltipLeft(source) < 0)
+              pos = 'right';
+            return pos;
+          };
+
+            // Predicts tooltip top position 
+            // based on the trigger element
+            function predictTooltipTop(el) {
+              var top = el.offsetTop;
+              var height = 40; // asumes ~40px tooltip height
+
+              while(el.offsetParent) {
+                el = el.offsetParent;
+                top += el.offsetTop;
               }
-            });
-          };
-
-        }
-    }
-})();
-
-
-/**=========================================================
- * Module: nestable.js
- * Nestable controller
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('NestableController', NestableController);
-
-    function NestableController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.items =  [
-            {
-              item: {text: 'a'},
-              children: []
-            },
-            {
-              item: {text: 'b'},
-              children: [
-                {
-                  item: {text: 'c'},
-                  children: []
-                },
-                {
-                  item: {text: 'd'},
-                  children: []
-                }
-              ]
-            },
-            {
-              item: {text: 'e'},
-              children: []
-            },
-            {
-              item: {text: 'f'},
-              children: []
+              return (top - height) - (window.pageYOffset);
             }
-          ];
 
-          vm.items2 =  [
-            {
-              item: {text: '1'},
-              children: []
-            },
-            {
-              item: {text: '2'},
-              children: [
-                {
-                  item: {text: '3'},
-                  children: []
-                },
-                {
-                  item: {text: '4'},
-                  children: []
-                }
-              ]
-            },
-            {
-              item: {text: '5'},
-              children: []
-            },
-            {
-              item: {text: '6'},
-              children: []
+            // Predicts tooltip top position 
+            // based on the trigger element
+            function predictTooltipLeft(el) {
+              var left = el.offsetLeft;
+              var width = el.offsetWidth;
+
+              while(el.offsetParent) {
+                el = el.offsetParent;
+                left += el.offsetLeft;
+              }
+              return (left - width) - (window.pageXOffset);
             }
-          ];
-
         }
     }
 })();
 
 /**=========================================================
- * Module: scroll.js
- * Make a content box scrollable
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .directive('scrollable', scrollable);
-
-    function scrollable () {
-        var directive = {
-            link: link,
-            restrict: 'EA'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          var defaultHeight = 250;
-          element.slimScroll({
-              height: (attrs.height || defaultHeight)
-          });
-        }
-    }
-
-})();
-
-/**=========================================================
- * Module: sortable.js
- * Sortable controller
+ * Module: demo-typeahead.js
+ * Provides a simple demo for typeahead
  =========================================================*/
 (function() {
     'use strict';
 
     angular
-        .module('app.elements')
-        .controller('SortableController', SortableController);
+        .module('app.bootstrapui')
+        .controller('TypeaheadCtrl', TypeaheadCtrl);
 
-    SortableController.$inject = ['$scope'];
-    function SortableController($scope) {
-        // doesn't support controllerAs syntax https://github.com/voidberg/html5sortable/issues/86
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // Single List
-          $scope.data1 = [
-            { id: 1, name: 'Donald Hoffman' },
-            { id: 2, name: 'Wallace Barrett' },
-            { id: 3, name: 'Marsha Hicks' },
-            { id: 4, name: 'Roland Brown' }
-          ];
-
-          $scope.add = function () {
-            $scope.data1.push({id: $scope.data1.length + 1, name: 'Earl Knight'});
-          };
-
-          $scope.sortableCallback = function (sourceModel, destModel, start, end) {
-            console.log(start + ' -> ' + end);
-          };
-          
-          $scope.sortableOptions = {
-              placeholder: '<div class="box-placeholder p0 m0"><div></div></div>',
-              forcePlaceholderSize: true
-          };
-        }
-    }
-
-})();
-
-/**=========================================================
- * Module: sweetalert.js
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('SweetAlertController', SweetAlertController);
-
-    SweetAlertController.$inject = ['SweetAlert'];
-    function SweetAlertController(SweetAlert) {
+    TypeaheadCtrl.$inject = ['$http'];
+    function TypeaheadCtrl($http) {
         var vm = this;
 
         activate();
@@ -3492,125 +2612,29 @@
         ////////////////
 
         function activate() {
-          vm.demo1 = function() {
-            SweetAlert.swal('Here\'s a message');
-          };
 
-          vm.demo2 = function() {
-            SweetAlert.swal('Here\'s a message!', 'It\'s pretty, isn\'t it?');
-          };
+          vm.selected = undefined;
+          vm.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
 
-          vm.demo3 = function() {
-            SweetAlert.swal('Good job!', 'You clicked the button!', 'success');
-          };
-
-          vm.demo4 = function() {
-            SweetAlert.swal({   
-              title: 'Are you sure?',   
-              text: 'Your will not be able to recover this imaginary file!',   
-              type: 'warning',   
-              showCancelButton: true,   
-              confirmButtonColor: '#DD6B55',   
-              confirmButtonText: 'Yes, delete it!',
-              closeOnConfirm: false
-            },  function(){  
-              SweetAlert.swal('Booyah!');
+          // Any function returning a promise object can be used to load values asynchronously
+          vm.getLocation = function(val) {
+            return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
+              params: {
+                address: val,
+                sensor: false
+              }
+            }).then(function(res){
+              var addresses = [];
+              angular.forEach(res.data.results, function(item){
+                /*jshint -W106*/
+                addresses.push(item.formatted_address);
+              });
+              return addresses;
             });
           };
 
-          vm.demo5 = function() {
-            SweetAlert.swal({   
-              title: 'Are you sure?',   
-              text: 'Your will not be able to recover this imaginary file!',   
-              type: 'warning',   
-              showCancelButton: true,   
-              confirmButtonColor: '#DD6B55',   
-              confirmButtonText: 'Yes, delete it!',   
-              cancelButtonText: 'No, cancel plx!',   
-              closeOnConfirm: false,   
-              closeOnCancel: false 
-            }, function(isConfirm){  
-              if (isConfirm) {     
-                SweetAlert.swal('Deleted!', 'Your imaginary file has been deleted.', 'success');   
-              } else {     
-                SweetAlert.swal('Cancelled', 'Your imaginary file is safe :)', 'error');   
-              } 
-            });
-          };
+          vm.statesWithFlags = [{'name':'Alabama','flag':'5/5c/Flag_of_Alabama.svg/45px-Flag_of_Alabama.svg.png'},{'name':'Alaska','flag':'e/e6/Flag_of_Alaska.svg/43px-Flag_of_Alaska.svg.png'},{'name':'Arizona','flag':'9/9d/Flag_of_Arizona.svg/45px-Flag_of_Arizona.svg.png'},{'name':'Arkansas','flag':'9/9d/Flag_of_Arkansas.svg/45px-Flag_of_Arkansas.svg.png'},{'name':'California','flag':'0/01/Flag_of_California.svg/45px-Flag_of_California.svg.png'},{'name':'Colorado','flag':'4/46/Flag_of_Colorado.svg/45px-Flag_of_Colorado.svg.png'},{'name':'Connecticut','flag':'9/96/Flag_of_Connecticut.svg/39px-Flag_of_Connecticut.svg.png'},{'name':'Delaware','flag':'c/c6/Flag_of_Delaware.svg/45px-Flag_of_Delaware.svg.png'},{'name':'Florida','flag':'f/f7/Flag_of_Florida.svg/45px-Flag_of_Florida.svg.png'},{'name':'Georgia','flag':'5/54/Flag_of_Georgia_%28U.S._state%29.svg/46px-Flag_of_Georgia_%28U.S._state%29.svg.png'},{'name':'Hawaii','flag':'e/ef/Flag_of_Hawaii.svg/46px-Flag_of_Hawaii.svg.png'},{'name':'Idaho','flag':'a/a4/Flag_of_Idaho.svg/38px-Flag_of_Idaho.svg.png'},{'name':'Illinois','flag':'0/01/Flag_of_Illinois.svg/46px-Flag_of_Illinois.svg.png'},{'name':'Indiana','flag':'a/ac/Flag_of_Indiana.svg/45px-Flag_of_Indiana.svg.png'},{'name':'Iowa','flag':'a/aa/Flag_of_Iowa.svg/44px-Flag_of_Iowa.svg.png'},{'name':'Kansas','flag':'d/da/Flag_of_Kansas.svg/46px-Flag_of_Kansas.svg.png'},{'name':'Kentucky','flag':'8/8d/Flag_of_Kentucky.svg/46px-Flag_of_Kentucky.svg.png'},{'name':'Louisiana','flag':'e/e0/Flag_of_Louisiana.svg/46px-Flag_of_Louisiana.svg.png'},{'name':'Maine','flag':'3/35/Flag_of_Maine.svg/45px-Flag_of_Maine.svg.png'},{'name':'Maryland','flag':'a/a0/Flag_of_Maryland.svg/45px-Flag_of_Maryland.svg.png'},{'name':'Massachusetts','flag':'f/f2/Flag_of_Massachusetts.svg/46px-Flag_of_Massachusetts.svg.png'},{'name':'Michigan','flag':'b/b5/Flag_of_Michigan.svg/45px-Flag_of_Michigan.svg.png'},{'name':'Minnesota','flag':'b/b9/Flag_of_Minnesota.svg/46px-Flag_of_Minnesota.svg.png'},{'name':'Mississippi','flag':'4/42/Flag_of_Mississippi.svg/45px-Flag_of_Mississippi.svg.png'},{'name':'Missouri','flag':'5/5a/Flag_of_Missouri.svg/46px-Flag_of_Missouri.svg.png'},{'name':'Montana','flag':'c/cb/Flag_of_Montana.svg/45px-Flag_of_Montana.svg.png'},{'name':'Nebraska','flag':'4/4d/Flag_of_Nebraska.svg/46px-Flag_of_Nebraska.svg.png'},{'name':'Nevada','flag':'f/f1/Flag_of_Nevada.svg/45px-Flag_of_Nevada.svg.png'},{'name':'New Hampshire','flag':'2/28/Flag_of_New_Hampshire.svg/45px-Flag_of_New_Hampshire.svg.png'},{'name':'New Jersey','flag':'9/92/Flag_of_New_Jersey.svg/45px-Flag_of_New_Jersey.svg.png'},{'name':'New Mexico','flag':'c/c3/Flag_of_New_Mexico.svg/45px-Flag_of_New_Mexico.svg.png'},{'name':'New York','flag':'1/1a/Flag_of_New_York.svg/46px-Flag_of_New_York.svg.png'},{'name':'North Carolina','flag':'b/bb/Flag_of_North_Carolina.svg/45px-Flag_of_North_Carolina.svg.png'},{'name':'North Dakota','flag':'e/ee/Flag_of_North_Dakota.svg/38px-Flag_of_North_Dakota.svg.png'},{'name':'Ohio','flag':'4/4c/Flag_of_Ohio.svg/46px-Flag_of_Ohio.svg.png'},{'name':'Oklahoma','flag':'6/6e/Flag_of_Oklahoma.svg/45px-Flag_of_Oklahoma.svg.png'},{'name':'Oregon','flag':'b/b9/Flag_of_Oregon.svg/46px-Flag_of_Oregon.svg.png'},{'name':'Pennsylvania','flag':'f/f7/Flag_of_Pennsylvania.svg/45px-Flag_of_Pennsylvania.svg.png'},{'name':'Rhode Island','flag':'f/f3/Flag_of_Rhode_Island.svg/32px-Flag_of_Rhode_Island.svg.png'},{'name':'South Carolina','flag':'6/69/Flag_of_South_Carolina.svg/45px-Flag_of_South_Carolina.svg.png'},{'name':'South Dakota','flag':'1/1a/Flag_of_South_Dakota.svg/46px-Flag_of_South_Dakota.svg.png'},{'name':'Tennessee','flag':'9/9e/Flag_of_Tennessee.svg/46px-Flag_of_Tennessee.svg.png'},{'name':'Texas','flag':'f/f7/Flag_of_Texas.svg/45px-Flag_of_Texas.svg.png'},{'name':'Utah','flag':'f/f6/Flag_of_Utah.svg/45px-Flag_of_Utah.svg.png'},{'name':'Vermont','flag':'4/49/Flag_of_Vermont.svg/46px-Flag_of_Vermont.svg.png'},{'name':'Virginia','flag':'4/47/Flag_of_Virginia.svg/44px-Flag_of_Virginia.svg.png'},{'name':'Washington','flag':'5/54/Flag_of_Washington.svg/46px-Flag_of_Washington.svg.png'},{'name':'West Virginia','flag':'2/22/Flag_of_West_Virginia.svg/46px-Flag_of_West_Virginia.svg.png'},{'name':'Wisconsin','flag':'2/22/Flag_of_Wisconsin.svg/45px-Flag_of_Wisconsin.svg.png'},{'name':'Wyoming','flag':'b/bc/Flag_of_Wyoming.svg/43px-Flag_of_Wyoming.svg.png'}];
 
-          vm.demo6 = function() {
-            SweetAlert.swal({   
-              title: 'Sweet!',   
-              text: 'Here\'s a custom image.',   
-              imageUrl: 'http://oitozero.com/img/avatar.jpg' 
-            });
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-toaster.js
- * Demos for toaster notifications
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('ToasterDemoCtrl', ToasterDemoCtrl);
-
-    ToasterDemoCtrl.$inject = ['toaster'];
-    function ToasterDemoCtrl(toaster) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.toaster = {
-              type:  'success',
-              title: 'Title',
-              text:  'Message'
-          };
-
-          vm.pop = function() {
-            toaster.pop(vm.toaster.type, vm.toaster.title, vm.toaster.text);
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: tour.js
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('TourCtrl', TourCtrl);
-
-    TourCtrl.$inject = ['$scope'];
-    function TourCtrl($scope) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // BootstrapTour is not compatible with z-index based layout
-          // so adding position:static for this case makes the browser
-          // to ignore the property
-          var section = angular.element('.wrapper > section');
-          section.css({'position': 'static'});
-          // finally restore on destroy and reuse the value declared in stylesheet
-          $scope.$on('$destroy', function(){
-            section.css({'position': ''});
-          });
         }
     }
 })();
@@ -4593,6 +3617,982 @@
                 weight: 5
               }
           ];
+        }
+    }
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements')
+        .controller('AngularCarouselController', AngularCarouselController);
+
+    function AngularCarouselController() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.colors = ['#fc0003', '#f70008', '#f2000d', '#ed0012', '#e80017', '#e3001c', '#de0021', '#d90026', '#d4002b', '#cf0030', '#c90036', '#c4003b', '#bf0040', '#ba0045', '#b5004a', '#b0004f', '#ab0054', '#a60059', '#a1005e', '#9c0063', '#960069', '#91006e', '#8c0073', '#870078', '#82007d', '#7d0082', '#780087', '#73008c', '#6e0091', '#690096', '#63009c', '#5e00a1', '#5900a6', '#5400ab', '#4f00b0', '#4a00b5', '#4500ba', '#4000bf', '#3b00c4', '#3600c9', '#3000cf', '#2b00d4', '#2600d9', '#2100de', '#1c00e3', '#1700e8', '#1200ed', '#0d00f2', '#0800f7', '#0300fc'];
+
+          function getSlide(target, style) {
+              var i = target.length;
+              return {
+                  id: (i + 1),
+                  label: 'slide #' + (i + 1),
+                  img: 'http://lorempixel.com/1200/500/' + style + '/' + ((i + 1) % 10) ,
+                  color: vm.colors[ (i*10) % vm.colors.length],
+                  odd: (i % 2 === 0)
+              };
+          }
+
+          function addSlide(target, style) {
+              target.push(getSlide(target, style));
+          }
+
+          vm.carouselIndex = 3;
+          vm.carouselIndex2 = 0;
+          vm.carouselIndex2 = 1;
+          vm.carouselIndex3 = 5;
+          vm.carouselIndex4 = 5;
+
+          function addSlides(target, style, qty) {
+              for (var i=0; i < qty; i++) {
+                  addSlide(target, style);
+              }
+          }
+
+          // 1st ngRepeat demo
+          vm.slides = [];
+          addSlides(vm.slides, 'sports', 50);
+
+          // 2nd ngRepeat demo
+          vm.slides2 = [];
+          addSlides(vm.slides2, 'sports', 10);
+
+          // 3rd ngRepeat demo
+          vm.slides3 = [];
+          addSlides(vm.slides3, 'people', 50);
+
+          // 4th ngRepeat demo
+          vm.slides4 = [];
+          addSlides(vm.slides4, 'city', 50);
+
+
+          // 5th ngRepeat demo
+          vm.slides6 = [];
+          vm.carouselIndex6 = 0;
+          addSlides(vm.slides6, 'sports', 10);
+          vm.addSlide = function(at) {
+              if(at==='head') {
+                  vm.slides6.unshift(getSlide(vm.slides6, 'people'));
+              } else {
+                  vm.slides6.push(getSlide(vm.slides6, 'people'));
+              }
+          };
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-dialog.js
+ * Demo for multiple ngDialog Usage
+ * - ngDialogProvider for default values not supported 
+ *   using lazy loader. Include plugin in base.js instead.
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements')
+        .controller('DialogIntroCtrl', DialogIntroCtrl)
+        .controller('DialogMainCtrl', DialogMainCtrl)
+        .controller('InsideCtrl', InsideCtrl)
+        .controller('SecondModalCtrl', SecondModalCtrl);
+
+    DialogIntroCtrl.$inject = ['$scope', 'ngDialog', 'tpl'];
+    // Called from the route state. 'tpl' is resolved before
+    function DialogIntroCtrl($scope, ngDialog, tpl) {
+        
+        activate();
+
+        ////////////////
+
+        function activate() {
+          // share with other controllers
+          $scope.tpl = tpl;
+          // open dialog window
+          ngDialog.open({
+            template: tpl.path,
+            // plain: true,
+            className: 'ngdialog-theme-default'
+          });
+        }
+    }
+
+    DialogMainCtrl.$inject = ['$scope', '$rootScope', 'ngDialog'];
+    // Loads from view
+    function DialogMainCtrl($scope, $rootScope, ngDialog) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $rootScope.jsonData = '{"foo": "bar"}';
+          $rootScope.theme = 'ngdialog-theme-default';
+
+          $scope.directivePreCloseCallback = function (value) {
+            if(confirm('Close it? MainCtrl.Directive. (Value = ' + value + ')')) {
+              return true;
+            }
+            return false;
+          };
+
+          $scope.preCloseCallbackOnScope = function (value) {
+            if(confirm('Close it? MainCtrl.OnScope (Value = ' + value + ')')) {
+              return true;
+            }
+            return false;
+          };
+
+          $scope.open = function () {
+            ngDialog.open({ template: 'firstDialogId', controller: 'InsideCtrl', data: {foo: 'some data'} });
+          };
+
+          $scope.openDefault = function () {
+            ngDialog.open({
+              template: 'firstDialogId',
+              controller: 'InsideCtrl',
+              className: 'ngdialog-theme-default'
+            });
+          };
+
+          $scope.openDefaultWithPreCloseCallbackInlined = function () {
+            ngDialog.open({
+              template: 'firstDialogId',
+              controller: 'InsideCtrl',
+              className: 'ngdialog-theme-default',
+              preCloseCallback: function(value) {
+                if (confirm('Close it?  (Value = ' + value + ')')) {
+                  return true;
+                }
+                return false;
+              }
+            });
+          };
+
+          $scope.openConfirm = function () {
+            ngDialog.openConfirm({
+              template: 'modalDialogId',
+              className: 'ngdialog-theme-default'
+            }).then(function (value) {
+              console.log('Modal promise resolved. Value: ', value);
+            }, function (reason) {
+              console.log('Modal promise rejected. Reason: ', reason);
+            });
+          };
+
+          $scope.openConfirmWithPreCloseCallbackOnScope = function () {
+            ngDialog.openConfirm({
+              template: 'modalDialogId',
+              className: 'ngdialog-theme-default',
+              preCloseCallback: 'preCloseCallbackOnScope',
+              scope: $scope
+            }).then(function (value) {
+              console.log('Modal promise resolved. Value: ', value);
+            }, function (reason) {
+              console.log('Modal promise rejected. Reason: ', reason);
+            });
+          };
+
+          $scope.openConfirmWithPreCloseCallbackInlinedWithNestedConfirm = function () {
+            ngDialog.openConfirm({
+              template: 'dialogWithNestedConfirmDialogId',
+              className: 'ngdialog-theme-default',
+              preCloseCallback: function(/*value*/) {
+
+                var nestedConfirmDialog = ngDialog.openConfirm({
+                  template:
+                      '<p>Are you sure you want to close the parent dialog?</p>' +
+                      '<div>' +
+                        '<button type="button" class="btn btn-default" ng-click="closeThisDialog(0)">No' +
+                        '<button type="button" class="btn btn-primary" ng-click="confirm(1)">Yes' +
+                      '</button></div>',
+                  plain: true,
+                  className: 'ngdialog-theme-default'
+                });
+
+                return nestedConfirmDialog;
+              },
+              scope: $scope
+            })
+            .then(function(value){
+              console.log('resolved:' + value);
+              // Perform the save here
+            }, function(value){
+              console.log('rejected:' + value);
+
+            });
+          };
+
+          $scope.openInlineController = function () {
+            $rootScope.theme = 'ngdialog-theme-default';
+
+            ngDialog.open({
+              template: 'withInlineController',
+              controller: ['$scope', '$timeout', function ($scope, $timeout) {
+                var counter = 0;
+                var timeout;
+                function count() {
+                  $scope.exampleExternalData = 'Counter ' + (counter++);
+                  timeout = $timeout(count, 450);
+                }
+                count();
+                $scope.$on('$destroy', function () {
+                  $timeout.cancel(timeout);
+                });
+              }],
+              className: 'ngdialog-theme-default'
+            });
+          };
+
+          $scope.openTemplate = function () {
+            $scope.value = true;
+
+            ngDialog.open({
+              template: $scope.tpl.path,
+              className: 'ngdialog-theme-default',
+              scope: $scope
+            });
+          };
+
+          $scope.openTemplateNoCache = function () {
+            $scope.value = true;
+
+            ngDialog.open({
+              template: $scope.tpl.path,
+              className: 'ngdialog-theme-default',
+              scope: $scope,
+              cache: false
+            });
+          };
+
+          $scope.openTimed = function () {
+            var dialog = ngDialog.open({
+              template: '<p>Just passing through!</p>',
+              plain: true,
+              closeByDocument: false,
+              closeByEscape: false
+            });
+            setTimeout(function () {
+              dialog.close();
+            }, 2000);
+          };
+
+          $scope.openNotify = function () {
+            var dialog = ngDialog.open({
+              template:
+                '<p>You can do whatever you want when I close, however that happens.</p>' +
+                '<div><button type="button" class="btn btn-primary" ng-click="closeThisDialog(1)">Close Me</button></div>',
+              plain: true
+            });
+            dialog.closePromise.then(function (data) {
+              console.log('ngDialog closed' + (data.value === 1 ? ' using the button' : '') + ' and notified by promise: ' + data.id);
+            });
+          };
+
+          $scope.openWithoutOverlay = function () {
+            ngDialog.open({
+              template: '<h2>Notice that there is no overlay!</h2>',
+              className: 'ngdialog-theme-default',
+              plain: true,
+              overlay: false
+            });
+          };
+
+          $rootScope.$on('ngDialog.opened', function (e, $dialog) {
+            console.log('ngDialog opened: ' + $dialog.attr('id'));
+          });
+
+          $rootScope.$on('ngDialog.closed', function (e, $dialog) {
+            console.log('ngDialog closed: ' + $dialog.attr('id'));
+          });
+
+          $rootScope.$on('ngDialog.closing', function (e, $dialog) {
+            console.log('ngDialog closing: ' + $dialog.attr('id'));
+          });
+        }
+    
+    } // DialogMainCtrl
+
+
+    InsideCtrl.$inject = ['$scope', 'ngDialog'];
+    function InsideCtrl($scope, ngDialog) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $scope.dialogModel = {
+            message : 'message from passed scope'
+          };
+          $scope.openSecond = function () {
+            ngDialog.open({
+              template: '<p class="lead m0"><a href="" ng-click="closeSecond()">Close all by click here!</a></h3>',
+              plain: true,
+              closeByEscape: false,
+              controller: 'SecondModalCtrl'
+            });
+          };
+        }
+    }
+
+    SecondModalCtrl.$inject = ['$scope', 'ngDialog'];
+    function SecondModalCtrl($scope, ngDialog) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $scope.closeSecond = function () {
+            ngDialog.close();
+          };
+        }
+
+    }
+
+
+})();
+
+
+
+
+/**=========================================================
+ * Module: calendar-ui.js
+ * This script handle the calendar demo with draggable 
+ * events and events creations
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements')
+        .controller('InfiniteScrollController', InfiniteScrollController)
+        .factory('datasource', datasource);
+
+    function InfiniteScrollController() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.images = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+          vm.loadMore = function() {
+            var last = vm.images[vm.images.length - 1];
+            for(var i = 1; i <= 10; i++) {
+              vm.images.push(last + i);
+            }
+          };
+        }
+    }
+    
+    datasource.$inject = ['$log', '$timeout'];
+    function datasource(console, $timeout) {
+
+        var get = function(index, count, success) {
+            return $timeout(function() {
+                var i, result, _i, _ref;
+                result = [];
+                for (i = _i = index, _ref = index + count - 1; index <= _ref ? _i <= _ref : _i >= _ref; i = index <= _ref ? ++_i : --_i) {
+                    result.push('item #' + i);
+                }
+                return success(result);
+            }, 100);
+        };
+        return {
+            get: get
+        };
+    }
+
+})();
+
+/**=========================================================
+ * Module: masonry-deck.js
+ * Demo for Angular Deck
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements')
+        .controller('MasonryDeckController', MasonryDeckController)
+        .directive('imageloaded', imageloaded); // required by demo
+
+    MasonryDeckController.$inejct = ['RouteHelpers'];
+    function MasonryDeckController(RouteHelpers) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+          vm.basepath = RouteHelpers.basepath;
+
+          vm.photos = [
+              {id: 'photo-1', name: 'Awesome photo', src: 'http://lorempixel.com/400/300/abstract'},
+              {id: 'photo-2', name: 'Great photo', src: 'http://lorempixel.com/450/400/city'},
+              {id: 'photo-3', name: 'Strange photo', src: 'http://lorempixel.com/400/300/people'},
+              {id: 'photo-4', name: 'A photo?', src: 'http://lorempixel.com/400/300/transport'},
+              {id: 'photo-5', name: 'What a photo', src: 'http://lorempixel.com/450/300/fashion'},
+              {id: 'photo-6', name: 'Silly photo', src: 'http://lorempixel.com/400/300/technics'},
+              {id: 'photo-7', name: 'Weird photo', src: 'http://lorempixel.com/410/350/sports'},
+              {id: 'photo-8', name: 'Modern photo', src: 'http://lorempixel.com/400/300/nightlife'},
+              {id: 'photo-9', name: 'Classical photo', src: 'http://lorempixel.com/400/300/nature'},
+              {id: 'photo-10', name: 'Dynamic photo', src: 'http://lorempixel.com/420/300/abstract'},
+              {id: 'photo-11', name: 'Neat photo', src: 'http://lorempixel.com/400/300/sports'},
+              {id: 'photo-12', name: 'Bumpy photo', src: 'http://lorempixel.com/400/300/nightlife'},
+              {id: 'photo-13', name: 'Brilliant photo', src: 'http://lorempixel.com/400/380/nature'},
+              {id: 'photo-14', name: 'Excellent photo', src: 'http://lorempixel.com/480/300/technics'},
+              {id: 'photo-15', name: 'Gorgeous photo', src: 'http://lorempixel.com/400/300/sports'},
+              {id: 'photo-16', name: 'Lovely photo', src: 'http://lorempixel.com/400/300/nightlife'},
+              {id: 'photo-17', name: 'A "wow" photo', src: 'http://lorempixel.com/400/300/nature'},
+              {id: 'photo-18', name: 'Bodacious photo', src: 'http://lorempixel.com/400/300/abstract'}
+          ];
+        }
+    }
+    MasonryDeckController.$inject = ["RouteHelpers"];
+
+    // Add class to img element when source is loaded
+    function imageloaded () {
+        // Copyright(c) 2013 André König <akoenig@posteo.de>
+        // MIT Licensed
+        var directive = {
+            link: link,
+            restrict: 'A'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+          var cssClass = attrs.loadedclass;
+
+          element.bind('load', function () {
+              angular.element(element).addClass(cssClass);
+          });
+        }
+    }
+
+})();
+
+
+
+/**=========================================================
+ * Module: access-login.js
+ * Demo for login api
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements')
+        .controller('AbnTestController', AbnTestController);
+
+    AbnTestController.$inject = ['$timeout', '$resource'];
+    function AbnTestController($timeout, $resource) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        /*jshint -W106*/
+        function activate() {
+          vm.my_tree_handler = function(branch) {
+
+            vm.output = 'You selected: ' + branch.label;
+
+            if (branch.data && branch.data.description) {
+              vm.output += '(' + branch.data.description + ')';
+              return vm.output;
+            }
+          };
+
+          // onSelect event handlers
+          var apple_selected = function(branch) {
+            vm.output = 'APPLE! : ' + branch.label;
+            return vm.output;
+          };
+
+          var treedata_avm = [
+            {
+              label: 'Animal',
+              children: [
+                {
+                  label: 'Dog',
+                  data: {
+                    description: 'man\'s best friend'
+                  }
+                }, {
+                  label: 'Cat',
+                  data: {
+                    description: 'Felis catus'
+                  }
+                }, {
+                  label: 'Hippopotamus',
+                  data: {
+                    description: 'hungry, hungry'
+                  }
+                }, {
+                  label: 'Chicken',
+                  children: ['White Leghorn', 'Rhode Island Red', 'Jersey Giant']
+                }
+              ]
+            }, {
+              label: 'Vegetable',
+              data: {
+                definition: 'A plant or part of a plant used as food, typically as accompaniment to meat or fish, such as a cabbage, potato, carrot, or bean.',
+                data_can_contain_anything: true
+              },
+              onSelect: function(branch) {
+                vm.output = 'Vegetable: ' + branch.data.definition;
+                return vm.output;
+              },
+              children: [
+                {
+                  label: 'Oranges'
+                }, {
+                  label: 'Apples',
+                  children: [
+                    {
+                      label: 'Granny Smith',
+                      onSelect: apple_selected
+                    }, {
+                      label: 'Red Delicous',
+                      onSelect: apple_selected
+                    }, {
+                      label: 'Fuji',
+                      onSelect: apple_selected
+                    }
+                  ]
+                }
+              ]
+            }, {
+              label: 'Mineral',
+              children: [
+                {
+                  label: 'Rock',
+                  children: ['Igneous', 'Sedimentary', 'Metamorphic']
+                }, {
+                  label: 'Metal',
+                  children: ['Aluminum', 'Steel', 'Copper']
+                }, {
+                  label: 'Plastic',
+                  children: [
+                    {
+                      label: 'Thermoplastic',
+                      children: ['polyethylene', 'polypropylene', 'polystyrene', ' polyvinyl chloride']
+                    }, {
+                      label: 'Thermosetting Polymer',
+                      children: ['polyester', 'polyurethane', 'vulcanized rubber', 'bakelite', 'urea-formaldehyde']
+                    }
+                  ]
+                }
+              ]
+            }
+          ];
+          
+          var treedata_geography = [
+            {
+              label: 'North America',
+              children: [
+                {
+                  label: 'Canada',
+                  children: ['Toronto', 'Vancouver']
+                }, {
+                  label: 'USA',
+                  children: ['New York', 'Los Angeles']
+                }, {
+                  label: 'Mexico',
+                  children: ['Mexico City', 'Guadalajara']
+                }
+              ]
+            }, {
+              label: 'South America',
+              children: [
+                {
+                  label: 'Venezuela',
+                  children: ['Caracas', 'Maracaibo']
+                }, {
+                  label: 'Brazil',
+                  children: ['Sao Paulo', 'Rio de Janeiro']
+                }, {
+                  label: 'Argentina',
+                  children: ['Buenos Aires', 'Cordoba']
+                }
+              ]
+            }
+          ];
+
+          vm.my_data = treedata_avm;
+          vm.try_changing_the_tree_data = function() {
+            if (vm.my_data === treedata_avm) {
+              vm.my_data = treedata_geography;
+            } else {
+              vm.my_data = treedata_avm;
+            }
+            return vm.my_data;
+          };
+          
+          var tree;
+          // This is our API control variable
+          vm.my_tree = tree = {};
+          vm.try_async_load = function() {
+            
+            vm.my_data = [];
+            vm.doing_async = true;
+            
+            // Request tree data via $resource
+            var remoteTree = $resource('server/treedata.json');
+            
+            return remoteTree.get(function(res){
+              
+              vm.my_data = res.data;
+
+              vm.doing_async = false;
+            
+              return tree.expand_all();
+            
+            // we must return a promise so the plugin 
+            // can watch when it's resolved
+            }).$promise;
+          };
+          
+          // Adds a new branch to the tree
+          vm.try_adding_a_branch = function() {
+            var b;
+            b = tree.get_selected_branch();
+            return tree.add_branch(b, {
+              label: 'New Branch',
+              data: {
+                something: 42,
+                'else': 43
+              }
+            });
+          };
+
+        }
+    }
+})();
+
+
+/**=========================================================
+ * Module: nestable.js
+ * Nestable controller
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements')
+        .controller('NestableController', NestableController);
+
+    function NestableController() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.items =  [
+            {
+              item: {text: 'a'},
+              children: []
+            },
+            {
+              item: {text: 'b'},
+              children: [
+                {
+                  item: {text: 'c'},
+                  children: []
+                },
+                {
+                  item: {text: 'd'},
+                  children: []
+                }
+              ]
+            },
+            {
+              item: {text: 'e'},
+              children: []
+            },
+            {
+              item: {text: 'f'},
+              children: []
+            }
+          ];
+
+          vm.items2 =  [
+            {
+              item: {text: '1'},
+              children: []
+            },
+            {
+              item: {text: '2'},
+              children: [
+                {
+                  item: {text: '3'},
+                  children: []
+                },
+                {
+                  item: {text: '4'},
+                  children: []
+                }
+              ]
+            },
+            {
+              item: {text: '5'},
+              children: []
+            },
+            {
+              item: {text: '6'},
+              children: []
+            }
+          ];
+
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: scroll.js
+ * Make a content box scrollable
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements')
+        .directive('scrollable', scrollable);
+
+    function scrollable () {
+        var directive = {
+            link: link,
+            restrict: 'EA'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+          var defaultHeight = 250;
+          element.slimScroll({
+              height: (attrs.height || defaultHeight)
+          });
+        }
+    }
+
+})();
+
+/**=========================================================
+ * Module: sortable.js
+ * Sortable controller
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements')
+        .controller('SortableController', SortableController);
+
+    SortableController.$inject = ['$scope'];
+    function SortableController($scope) {
+        // doesn't support controllerAs syntax https://github.com/voidberg/html5sortable/issues/86
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          // Single List
+          $scope.data1 = [
+            { id: 1, name: 'Donald Hoffman' },
+            { id: 2, name: 'Wallace Barrett' },
+            { id: 3, name: 'Marsha Hicks' },
+            { id: 4, name: 'Roland Brown' }
+          ];
+
+          $scope.add = function () {
+            $scope.data1.push({id: $scope.data1.length + 1, name: 'Earl Knight'});
+          };
+
+          $scope.sortableCallback = function (sourceModel, destModel, start, end) {
+            console.log(start + ' -> ' + end);
+          };
+          
+          $scope.sortableOptions = {
+              placeholder: '<div class="box-placeholder p0 m0"><div></div></div>',
+              forcePlaceholderSize: true
+          };
+        }
+    }
+
+})();
+
+/**=========================================================
+ * Module: sweetalert.js
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements')
+        .controller('SweetAlertController', SweetAlertController);
+
+    SweetAlertController.$inject = ['SweetAlert'];
+    function SweetAlertController(SweetAlert) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.demo1 = function() {
+            SweetAlert.swal('Here\'s a message');
+          };
+
+          vm.demo2 = function() {
+            SweetAlert.swal('Here\'s a message!', 'It\'s pretty, isn\'t it?');
+          };
+
+          vm.demo3 = function() {
+            SweetAlert.swal('Good job!', 'You clicked the button!', 'success');
+          };
+
+          vm.demo4 = function() {
+            SweetAlert.swal({   
+              title: 'Are you sure?',   
+              text: 'Your will not be able to recover this imaginary file!',   
+              type: 'warning',   
+              showCancelButton: true,   
+              confirmButtonColor: '#DD6B55',   
+              confirmButtonText: 'Yes, delete it!',
+              closeOnConfirm: false
+            },  function(){  
+              SweetAlert.swal('Booyah!');
+            });
+          };
+
+          vm.demo5 = function() {
+            SweetAlert.swal({   
+              title: 'Are you sure?',   
+              text: 'Your will not be able to recover this imaginary file!',   
+              type: 'warning',   
+              showCancelButton: true,   
+              confirmButtonColor: '#DD6B55',   
+              confirmButtonText: 'Yes, delete it!',   
+              cancelButtonText: 'No, cancel plx!',   
+              closeOnConfirm: false,   
+              closeOnCancel: false 
+            }, function(isConfirm){  
+              if (isConfirm) {     
+                SweetAlert.swal('Deleted!', 'Your imaginary file has been deleted.', 'success');   
+              } else {     
+                SweetAlert.swal('Cancelled', 'Your imaginary file is safe :)', 'error');   
+              } 
+            });
+          };
+
+          vm.demo6 = function() {
+            SweetAlert.swal({   
+              title: 'Sweet!',   
+              text: 'Here\'s a custom image.',   
+              imageUrl: 'http://oitozero.com/img/avatar.jpg' 
+            });
+          };
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-toaster.js
+ * Demos for toaster notifications
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements')
+        .controller('ToasterDemoCtrl', ToasterDemoCtrl);
+
+    ToasterDemoCtrl.$inject = ['toaster'];
+    function ToasterDemoCtrl(toaster) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.toaster = {
+              type:  'success',
+              title: 'Title',
+              text:  'Message'
+          };
+
+          vm.pop = function() {
+            toaster.pop(vm.toaster.type, vm.toaster.title, vm.toaster.text);
+          };
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: tour.js
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements')
+        .controller('TourCtrl', TourCtrl);
+
+    TourCtrl.$inject = ['$scope'];
+    function TourCtrl($scope) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          // BootstrapTour is not compatible with z-index based layout
+          // so adding position:static for this case makes the browser
+          // to ignore the property
+          var section = angular.element('.wrapper > section');
+          section.css({'position': 'static'});
+          // finally restore on destroy and reuse the value declared in stylesheet
+          $scope.$on('$destroy', function(){
+            section.css({'position': ''});
+          });
         }
     }
 })();
@@ -5638,39 +5638,6 @@
 
 })();
 
-/**=========================================================
- * Module: skycons.js
- * Include any animated weather icon from Skycons
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.icons')
-        .directive('skycon', skycon);
-
-    function skycon () {
-
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          var skycons = new Skycons({'color': (attrs.color || 'white')});
-
-          element.html('<canvas width="' + attrs.width + '" height="' + attrs.height + '"></canvas>');
-
-          skycons.add(element.children()[0], attrs.skycon);
-
-          skycons.play();
-        }
-    }
-
-})();
-
 (function() {
     'use strict';
 
@@ -5871,6 +5838,39 @@
     }
 
 })();
+/**=========================================================
+ * Module: skycons.js
+ * Include any animated weather icon from Skycons
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.icons')
+        .directive('skycon', skycon);
+
+    function skycon () {
+
+        var directive = {
+            link: link,
+            restrict: 'A'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+          var skycons = new Skycons({'color': (attrs.color || 'white')});
+
+          element.html('<canvas width="' + attrs.width + '" height="' + attrs.height + '"></canvas>');
+
+          skycons.add(element.children()[0], attrs.skycon);
+
+          skycons.play();
+        }
+    }
+
+})();
+
 (function() {
     'use strict';
 
@@ -6051,6 +6051,50 @@
     'use strict';
 
     angular
+        .module('app.loadingbar')
+        .config(loadingbarConfig)
+        ;
+    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
+    function loadingbarConfig(cfpLoadingBarProvider){
+      cfpLoadingBarProvider.includeBar = true;
+      cfpLoadingBarProvider.includeSpinner = false;
+      cfpLoadingBarProvider.latencyThreshold = 500;
+      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .run(loadingbarRun)
+        ;
+    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
+    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
+
+      // Loading bar transition
+      // ----------------------------------- 
+      var thBar;
+      $rootScope.$on('$stateChangeStart', function() {
+          if($('.wrapper > section').length) // check if bar container exists
+            thBar = $timeout(function() {
+              cfpLoadingBar.start();
+            }, 0); // sets a latency Threshold
+      });
+      $rootScope.$on('$stateChangeSuccess', function(event) {
+          event.targetScope.$watch('$viewContentLoaded', function () {
+            $timeout.cancel(thBar);
+            cfpLoadingBar.complete();
+          });
+      });
+
+    }
+
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.locale')
         .config(localeConfig)
         ;
@@ -6102,50 +6146,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .config(loadingbarConfig)
-        ;
-    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
-    function loadingbarConfig(cfpLoadingBarProvider){
-      cfpLoadingBarProvider.includeBar = true;
-      cfpLoadingBarProvider.includeSpinner = false;
-      cfpLoadingBarProvider.latencyThreshold = 500;
-      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .run(loadingbarRun)
-        ;
-    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
-    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
-
-      // Loading bar transition
-      // ----------------------------------- 
-      var thBar;
-      $rootScope.$on('$stateChangeStart', function() {
-          if($('.wrapper > section').length) // check if bar container exists
-            thBar = $timeout(function() {
-              cfpLoadingBar.start();
-            }, 0); // sets a latency Threshold
-      });
-      $rootScope.$on('$stateChangeSuccess', function(event) {
-          event.targetScope.$watch('$viewContentLoaded', function () {
-            $timeout.cancel(thBar);
-            cfpLoadingBar.complete();
-          });
-      });
-
-    }
-
-})();
 /**=========================================================
  * Module: demo-pagination.js
  * Provides a simple demo for pagination
@@ -7330,6 +7330,99 @@
       }
     }
 })();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.preloader')
+        .directive('preloader', preloader);
+
+    preloader.$inject = ['$animate', '$timeout', '$q'];
+    function preloader ($animate, $timeout, $q) {
+
+        var directive = {
+            restrict: 'EAC',
+            template: 
+              '<div class="preloader-progress">' +
+                  '<div class="preloader-progress-bar" ' +
+                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
+              '</div>'
+            ,
+            link: link
+        };
+        return directive;
+
+        ///////
+
+        function link(scope, el) {
+
+          scope.loadCounter = 0;
+
+          var counter  = 0,
+              timeout;
+
+          // disables scrollbar
+          angular.element('body').css('overflow', 'hidden');
+          // ensure class is present for styling
+          el.addClass('preloader');
+
+          appReady().then(endCounter);
+
+          timeout = $timeout(startCounter);
+
+          ///////
+
+          function startCounter() {
+
+            var remaining = 100 - counter;
+            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
+
+            scope.loadCounter = parseInt(counter, 10);
+
+            timeout = $timeout(startCounter, 20);
+          }
+
+          function endCounter() {
+
+            $timeout.cancel(timeout);
+
+            scope.loadCounter = 100;
+
+            $timeout(function(){
+              // animate preloader hiding
+              $animate.addClass(el, 'preloader-hidden');
+              // retore scrollbar
+              angular.element('body').css('overflow', '');
+            }, 300);
+          }
+
+          function appReady() {
+            var deferred = $q.defer();
+            var viewsLoaded = 0;
+            // if this doesn't sync with the real app ready
+            // a custom event must be used instead
+            var off = scope.$on('$viewContentLoaded', function () {
+              viewsLoaded ++;
+              // we know there are at least two views to be loaded 
+              // before the app is ready (1-index.html 2-app*.html)
+              if ( viewsLoaded === 2) {
+                // with resolve this fires only once
+                $timeout(function(){
+                  deferred.resolve();
+                }, 3000);
+
+                off();
+              }
+
+            });
+
+            return deferred.promise;
+          }
+
+        } //link
+    }
+
+})();
 /**=========================================================
  * Collapse panels * [panel-collapse]
  =========================================================*/
@@ -7777,302 +7870,6 @@
 
 })();
  
-(function() {
-    'use strict';
-
-    angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
-
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
-
-        var directive = {
-            restrict: 'EAC',
-            template: 
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
-
-        ///////
-
-        function link(scope, el) {
-
-          scope.loadCounter = 0;
-
-          var counter  = 0,
-              timeout;
-
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
-
-          appReady().then(endCounter);
-
-          timeout = $timeout(startCounter);
-
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded 
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 3000);
-
-                off();
-              }
-
-            });
-
-            return deferred.promise;
-          }
-
-        } //link
-    }
-
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sales')
-        .service('dealService', dealService);
-
-    dealService.$inject = ['Deal', 'Sku', 'ngDialog'];
-    function dealService(Deal, Sku, ngDialog) {
-      var self = this;
-
-      this.openDeal = openDeal;
-      this.querySkus = querySkus;
-      this.register = register;
-      this.substractOne = substractOne;
-      this.countTotal = countTotal;
-      this.checkout = checkout; 
-      this.pay = pay;
-
-      function openDeal(member) {
-        self.deal = {
-          entities: [],
-          totalAmount: 0,
-          totalQty: 0,
-          member: member,
-          status: 'opened',
-          created: new Date()
-        }
-        self.selectedSku = undefined;
-      }
-      
-      function querySkus (val) {
-        return Sku.find({filter:{where:{barcode:{regex: val}}}, limit: 10})
-        .$promise.then(function (skus) {
-          return skus;
-        });
-      }
-            
-      function register () {
-        if(self.selectedSku && self.selectedSku instanceof Sku) {
-          var entity = undefined;
-          angular.forEach(self.deal.entities, function (e) {
-            if(e.sku.barcode === self.selectedSku.barcode){
-              e.qty++;
-              entity = e;
-            }
-          });
-          if(!entity) {
-            entity = {
-              sku: self.selectedSku,
-              qty: 1
-            };
-            self.deal.entities.push(entity);
-          }
-        }
-        self.selectedSku = undefined;
-      }
-      
-      function substractOne (entity, index) {
-        entity.qty--;
-        if(entity.qty === 0) {
-          self.deal.entities.splice(index, 1);
-        }
-      }
-            
-      function countTotal () {
-        self.deal.totalAmount = 0;
-        self.deal.totalQty = 0;
-        angular.forEach(self.deal.entities, function (entity) {
-          self.deal.totalQty += entity.qty;
-          self.deal.totalAmount += entity.qty*entity.sku.price;
-        });
-        return self.deal.totalAmount;
-      }
-      
-      function checkout () {
-        self.deal.payment = {
-          amount: self.deal.totalAmount,
-          type: 'cash'
-        }
-        ngDialog.open({ 
-          template: 'checkoutDialogId', 
-          controller: 'checkoutDialogController'
-        });
-      }
-      
-      function pay() {
-        self.deal.status = 'closed';
-        return Deal.create(self.deal).$promise
-      }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-      .module('app.sales')
-      .controller('SellController', SellController)
-      .controller('checkoutDialogController', checkoutDialogController)
-      .controller('DealsController', DealsController)
-    ;
-      
-    SellController.$inject = ['$scope', 'dealService', 'Checkin'];
-    function SellController($scope, dealService, Checkin) {
-      var vm = this;
-            
-      activate();
-      
-      function activate() {
-        $scope.dealService = dealService;
-        if(!dealService.deal) {
-          dealService.openDeal();
-        }
-        
-        // CHECKIN
-        // ----------------------------------- 
-        vm.checkins = Checkin.find({filter:{
-          where: {merchantId: $scope.user.shopId},
-          include: [{member: 'wxuser'}],
-          limit: 10, 
-          order: 'created DESC'
-        }});
-        
-      }
-            
-    }
-    
-    checkoutDialogController.$inject = ['$scope', 'ngDialog', 'dealService', 'toaster'];
-    function checkoutDialogController($scope, ngDialog, dealService, toaster) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $scope.dealService = dealService;
-        }
-        
-        $scope.confirm = function () {
-          dealService.pay().then(function (deal) {
-            $scope.submiting = false;
-            ngDialog.close();
-            dealService.openDeal();
-            toaster.pop('success', '成功', "完成交易");
-          }, function (err) {
-            $scope.submiting = false;
-            toaster.pop('error', '失败', "交易未完成，请重试！")
-          });
-          $scope.submiting = true;
-        }
-    }
-    
-    DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];
-    function DealsController($scope, Deal, ngTableParams, ngTableLBService) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
-        vm.keyword = "";
-        vm.tableParams = new ngTableParams({count: 10}, {
-          getData: function($defer, params) {
-            var filter = {where:{status:{ne:'deleted'}}, include:[]}
-            if(vm.keyword != '') {
-              var qs = {regex: keyword};
-              filter.where.or = [{"entities.sku.item.name":qs}];
-              params.page(1);
-            }
-            ngTableLBService.getData($defer, params, Deal, filter);
-          }
-        });
-      }
-    }
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sales')
-        .filter('payment_type', paymentTypeFilter)
-    ;
-
-    function paymentTypeFilter() {
-        var type = {
-          cash: "现金支付",
-          bankcard: "刷卡支付",
-          wxpay: "微信支付",
-          alipay: "支付宝"
-        }
-        return function(key) {
-          return type[key];
-        }
-    }
-
-})();
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -8775,6 +8572,209 @@
 })();
 
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sales')
+        .service('dealService', dealService);
+
+    dealService.$inject = ['Deal', 'Sku', 'ngDialog'];
+    function dealService(Deal, Sku, ngDialog) {
+      var self = this;
+
+      this.openDeal = openDeal;
+      this.querySkus = querySkus;
+      this.register = register;
+      this.substractOne = substractOne;
+      this.countTotal = countTotal;
+      this.checkout = checkout; 
+      this.pay = pay;
+
+      function openDeal(member) {
+        self.deal = {
+          entities: [],
+          totalAmount: 0,
+          totalQty: 0,
+          member: member,
+          status: 'opened',
+          created: new Date()
+        }
+        self.selectedSku = undefined;
+      }
+      
+      function querySkus (val) {
+        return Sku.find({filter:{where:{barcode:{regex: val}}}, limit: 10})
+        .$promise.then(function (skus) {
+          return skus;
+        });
+      }
+            
+      function register () {
+        if(self.selectedSku && self.selectedSku instanceof Sku) {
+          var entity = undefined;
+          angular.forEach(self.deal.entities, function (e) {
+            if(e.sku.barcode === self.selectedSku.barcode){
+              e.qty++;
+              entity = e;
+            }
+          });
+          if(!entity) {
+            entity = {
+              sku: self.selectedSku,
+              qty: 1
+            };
+            self.deal.entities.push(entity);
+          }
+        }
+        self.selectedSku = undefined;
+      }
+      
+      function substractOne (entity, index) {
+        entity.qty--;
+        if(entity.qty === 0) {
+          self.deal.entities.splice(index, 1);
+        }
+      }
+            
+      function countTotal () {
+        self.deal.totalAmount = 0;
+        self.deal.totalQty = 0;
+        angular.forEach(self.deal.entities, function (entity) {
+          self.deal.totalQty += entity.qty;
+          self.deal.totalAmount += entity.qty*entity.sku.price;
+        });
+        return self.deal.totalAmount;
+      }
+      
+      function checkout () {
+        self.deal.payment = {
+          amount: self.deal.totalAmount,
+          type: 'cash'
+        }
+        ngDialog.open({ 
+          template: 'checkoutDialogId', 
+          controller: 'checkoutDialogController'
+        });
+      }
+      
+      function pay() {
+        self.deal.status = 'closed';
+        return Deal.create(self.deal).$promise
+      }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+      .module('app.sales')
+      .controller('SellController', SellController)
+      .controller('checkoutDialogController', checkoutDialogController)
+      .controller('DealsController', DealsController)
+    ;
+      
+    SellController.$inject = ['$scope', 'dealService', 'Checkin'];
+    function SellController($scope, dealService, Checkin) {
+      var vm = this;
+            
+      activate();
+      
+      function activate() {
+        $scope.dealService = dealService;
+        if(!dealService.deal) {
+          dealService.openDeal();
+        }
+        
+        // CHECKIN
+        // ----------------------------------- 
+        vm.checkins = Checkin.find({filter:{
+          where: {merchantId: $scope.user.shopId},
+          include: [{member: 'wxuser'}],
+          limit: 10, 
+          order: 'created DESC'
+        }});
+        
+      }
+            
+    }
+    
+    checkoutDialogController.$inject = ['$scope', 'ngDialog', 'dealService', 'toaster'];
+    function checkoutDialogController($scope, ngDialog, dealService, toaster) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $scope.dealService = dealService;
+        }
+        
+        $scope.confirm = function () {
+          dealService.pay().then(function (deal) {
+            $scope.submiting = false;
+            ngDialog.close();
+            dealService.openDeal();
+            toaster.pop('success', '成功', "完成交易");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "交易未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+    }
+    
+    DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];
+    function DealsController($scope, Deal, ngTableParams, ngTableLBService) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        vm.keyword = "";
+        vm.tableParams = new ngTableParams({count: 10}, {
+          getData: function($defer, params) {
+            var filter = {where:{status:{ne:'deleted'}}, include:[]}
+            if(vm.keyword != '') {
+              var qs = {regex: keyword};
+              filter.where.or = [{"entities.sku.item.name":qs}];
+              params.page(1);
+            }
+            ngTableLBService.getData($defer, params, Deal, filter);
+          }
+        });
+      }
+    }
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sales')
+        .filter('payment_type', paymentTypeFilter)
+    ;
+
+    function paymentTypeFilter() {
+        var type = {
+          cash: "现金支付",
+          bankcard: "刷卡支付",
+          wxpay: "微信支付",
+          alipay: "支付宝"
+        }
+        return function(key) {
+          return type[key];
+        }
+    }
+
+})();
 (function() {
     'use strict';
 
