@@ -19,11 +19,16 @@
          <div class="col-lg-4 col-xs-6 br pv">
             <div class="row">
                <a popover-placement="right" popover="{{sell.checkins}}" popover-title="到店会员" class="col-md-2 text-center visible-md visible-lg">
-                  <em class="fa fa-user fa-4x text-muted"></em>
+                  <em ng-if="!dealService.deal.member.wxuser.headimgurl" class="fa fa-user fa-4x text-muted"></em>
+                  <img ng-if="dealService.deal.member.wxuser.headimgurl" src="{{dealService.deal.member.wxuser.headimgurl}}" class="thumb48 mt0" />
                </a>
                <div class="col-md-10">
-                  <h4>{{dealService.deal.member && dealService.deal.member.name || '走入客户'}}</h4>
-                  <address></address>{{dealService.deal.member && dealService.deal.member.level || '普通会员'}}</div>
+                  <div class="clearfix ml">
+                     <h4 class="mt0">{{dealService.deal.member && dealService.deal.member.name || '走入客户'}}</h4>
+                  </div>
+                  <div class="clearfix ml">
+                     <p class="h4"></p>{{dealService.deal.member && dealService.deal.member.level || '普通会员'}}</div>
+               </div>
             </div>
          </div>
          <div class="col-lg-4 col-xs-6 br pv">
@@ -47,14 +52,22 @@
             <hr/>
          </div>
          <div class="col-lg-4 col-xs-12 pv">
-            <div class="clearfix">
-               <p class="pull-left">日期</p>
-               <p class="pull-right mr">{{dealService.deal.created | date:'yyyy-MM-dd'}}</p>
+            <div class="row">
+               <div class="col-md-2 text-center visible-md visible-lg">
+                  <em class="fa icon-clock fa-4x text-muted"></em>
+               </div>
+               <div class="col-md-10">
+                  <div class="clearfix ml">
+                     <p class="pull-left mt0 h4">日期</p>
+                     <p class="pull-right mt0 mr h4">{{dealService.deal.created | date:'yyyy-MM-dd'}}</p>
+                  </div>
+                  <div class="clearfix ml">
+                     <p class="pull-left h4">时间</p>
+                     <p class="pull-right mr h4">{{dealService.deal.created | date:'HH:mm:ss'}}</p>
+                  </div>
+               </div>
             </div>
-            <div class="clearfix">
-               <p class="pull-left">时间</p>
-               <p class="pull-right mr">{{dealService.deal.created | date:'HH:mm:ss'}}</p>
-            </div>
+
          </div>
       </div>
       <div class="table-responsive table-bordered mb-lg">

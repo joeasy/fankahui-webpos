@@ -20,11 +20,14 @@ h3
       .col-lg-4.col-xs-6.br.pv
         .row
           a.col-md-2.text-center.visible-md.visible-lg(popover-placement='right', popover="{{sell.checkins}}", popover-title='到店会员')
-            em.fa.fa-user.fa-4x.text-muted
+            em.fa.fa-user.fa-4x.text-muted(ng-if="!dealService.deal.member.wxuser.headimgurl")
+            img.thumb48.mt0(ng-if="dealService.deal.member.wxuser.headimgurl", src="{{dealService.deal.member.wxuser.headimgurl}}")
           .col-md-10
-            h4 {{dealService.deal.member && dealService.deal.member.name || '走入客户'}}
-            address
-            | {{dealService.deal.member && dealService.deal.member.level || '普通会员'}}
+            .clearfix.ml
+              h4.mt0 {{dealService.deal.member && dealService.deal.member.name || '走入客户'}}
+            .clearfix.ml
+              p.h4
+              | {{dealService.deal.member && dealService.deal.member.level || '普通会员'}}
       .col-lg-4.col-xs-6.br.pv
         .row
           .col-md-2.text-center.visible-md.visible-lg
@@ -39,15 +42,19 @@ h3
       .clearfix.hidden-md.hidden-lg
         hr
       .col-lg-4.col-xs-12.pv
+        .row
+          .col-md-2.text-center.visible-md.visible-lg
+            em.fa.icon-clock.fa-4x.text-muted
+          .col-md-10
+            .clearfix.ml
+              p.pull-left.mt0.h4 日期
+              p.pull-right.mt0.mr.h4 {{dealService.deal.created | date:'yyyy-MM-dd'}}   
+            .clearfix.ml
+              p.pull-left.h4 时间
+              p.pull-right.mr.h4 {{dealService.deal.created | date:'HH:mm:ss'}}
         //- .clearfix
         //-   p.pull-left 流水号
         //-   p.pull-right.mr {{dealService.deal.serialNumber}}
-        .clearfix
-          p.pull-left 日期
-          p.pull-right.mr {{dealService.deal.created | date:'yyyy-MM-dd'}}   
-        .clearfix
-          p.pull-left 时间
-          p.pull-right.mr {{dealService.deal.created | date:'HH:mm:ss'}}
         
       
 
