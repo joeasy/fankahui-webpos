@@ -71,6 +71,12 @@
     'use strict';
 
     angular
+        .module('app.dashboard', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.core', [
             'ngRoute',
             'ngAnimate',
@@ -87,12 +93,6 @@
             'ui.utils',
             'lbServices'
         ]);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard', []);
 })();
 (function() {
     'use strict';
@@ -182,6 +182,12 @@
     'use strict';
 
     angular
+        .module('app.notify', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.pages', []);
 })();
 (function() {
@@ -210,19 +216,7 @@
     'use strict';
 
     angular
-        .module('app.sales', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.settings', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.notify', []);
 })();
 (function() {
     'use strict';
@@ -234,13 +228,19 @@
     'use strict';
 
     angular
-        .module('app.translate', []);
+        .module('app.tables', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.tables', []);
+        .module('app.sales', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate', []);
 })();
 (function() {
     'use strict';
@@ -2461,188 +2461,6 @@
     'use strict';
 
     angular
-        .module('app.core')
-        .config(coreConfig)
-        .config(loopbackConfig)
-    ;
-
-    coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$httpProvider'];
-    function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide, $httpProvider){
-      
-      var core = angular.module('app.core');
-      // registering components after bootstrap
-      core.controller = $controllerProvider.register;
-      core.directive  = $compileProvider.directive;
-      core.filter     = $filterProvider.register;
-      core.factory    = $provide.factory;
-      core.service    = $provide.service;
-      core.constant   = $provide.constant;
-      core.value      = $provide.value;
-
-      $httpProvider.interceptors.push(["$q", "$location", "LoopBackAuth", function($q, $location, LoopBackAuth) {
-        return {
-          responseError: function(rejection) {
-            if (rejection.status == 401) {
-              LoopBackAuth.clearUser();
-              LoopBackAuth.clearStorage();
-              $location.path('/page/login')
-            }
-            return $q.reject(rejection);
-          }
-        };
-      }]);     
-    }
-    
-    loopbackConfig.$inject = ['LoopBackResourceProvider', 'urlBase'];
-    function loopbackConfig(LoopBackResourceProvider, urlBase) {
-      LoopBackResourceProvider.setUrlBase(urlBase);
-    }
-
-})();
-/**=========================================================
- * Module: constants.js
- * Define constants to inject across the application
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .constant('APP_MEDIAQUERY', {
-          'desktopLG':             1200,
-          'desktop':                992,
-          'tablet':                 768,
-          'mobile':                 480
-        })
-        .constant('urlBase', "http://0.0.0.0:3000/api")
-        // .constant('urlBase', "http://104.236.144.106:3000/api")
-      ;
-
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .filter('role', roleFilter)
-    ;
-
-    function roleFilter() {
-        var role = {
-          owner: "业主",
-          shopManager: "店长",
-          cashier: "收银员"
-        };
-        return function(key) {
-          return role[key];
-        }
-    }
-    
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .run(appRun)
-        .run(currentUserRun)
-    ;
-
-    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
-    
-    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
-      
-      // Set reference to access them from any scope
-      $rootScope.$state = $state;
-      $rootScope.$stateParams = $stateParams;
-      $rootScope.$storage = $window.localStorage;
-
-      // Uncomment this to disable template cache
-      /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-          if (typeof(toState) !== 'undefined'){
-            $templateCache.remove(toState.templateUrl);
-          }
-      });*/
-
-      // Allows to use branding color with interpolation
-      // {{ colorByName('primary') }}
-      $rootScope.colorByName = Colors.byName;
-
-      // cancel click event easily
-      $rootScope.cancel = function($event) {
-        $event.stopPropagation();
-      };
-
-      // Hooks Example
-      // ----------------------------------- 
-
-      // Hook not found
-      $rootScope.$on('$stateNotFound',
-        function(event, unfoundState/*, fromState, fromParams*/) {
-            console.log(unfoundState.to); // "lazy.state"
-            console.log(unfoundState.toParams); // {a:1, b:2}
-            console.log(unfoundState.options); // {inherit:false} + default options
-        });
-      // Hook error
-      $rootScope.$on('$stateChangeError',
-        function(event, toState, toParams, fromState, fromParams, error){
-          console.log(error);
-        });
-      // Hook success
-      $rootScope.$on('$stateChangeSuccess',
-        function(/*event, toState, toParams, fromState, fromParams*/) {
-          // display new view from top
-          $window.scrollTo(0, 0);
-          // Save the route title
-          $rootScope.currTitle = $state.current.title;
-        });
-
-      // Load a title dynamically
-      $rootScope.currTitle = $state.current.title;
-      $rootScope.pageTitle = function() {
-        var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
-        document.title = title;
-        return title;
-      };      
-
-    }
-
-    currentUserRun.$inject = ['$rootScope', 'User', '$filter'];
-    
-    function currentUserRun($rootScope, User, $filter) {
-      
-      userDidLogined();
-      
-      function userDidLogined() {
-        if(User.isAuthenticated()) {
-          User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
-          .$promise.then(function (user) {
-            user.job = $filter('role')(user.role);
-            user.name = user.name || user.username;
-            user.picture = 'app/img/dummy.png';
-            $rootScope.user = user;
-          });
-        }
-      }
-      
-      $rootScope.$on('User.logined', userDidLogined);
-      
-    }
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
         .module('app.dashboard')
         .controller('DashboardController', DashboardController);
 
@@ -2664,7 +2482,7 @@
           // CHECKIN
           // ----------------------------------- 
           vm.checkins = Checkin.find({filter:{
-            // where: {merchantId: $scope.user.merchantId},
+            where: {merchantId: $scope.user.shopId},
             include: [{member: 'wxuser'}],
             limit: 10, 
             order: 'created DESC'
@@ -3008,6 +2826,188 @@
         }
     }
 })();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .config(coreConfig)
+        .config(loopbackConfig)
+    ;
+
+    coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$httpProvider'];
+    function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide, $httpProvider){
+      
+      var core = angular.module('app.core');
+      // registering components after bootstrap
+      core.controller = $controllerProvider.register;
+      core.directive  = $compileProvider.directive;
+      core.filter     = $filterProvider.register;
+      core.factory    = $provide.factory;
+      core.service    = $provide.service;
+      core.constant   = $provide.constant;
+      core.value      = $provide.value;
+
+      $httpProvider.interceptors.push(["$q", "$location", "LoopBackAuth", function($q, $location, LoopBackAuth) {
+        return {
+          responseError: function(rejection) {
+            if (rejection.status == 401) {
+              LoopBackAuth.clearUser();
+              LoopBackAuth.clearStorage();
+              $location.path('/page/login')
+            }
+            return $q.reject(rejection);
+          }
+        };
+      }]);     
+    }
+    
+    loopbackConfig.$inject = ['LoopBackResourceProvider', 'urlBase'];
+    function loopbackConfig(LoopBackResourceProvider, urlBase) {
+      LoopBackResourceProvider.setUrlBase(urlBase);
+    }
+
+})();
+/**=========================================================
+ * Module: constants.js
+ * Define constants to inject across the application
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .constant('APP_MEDIAQUERY', {
+          'desktopLG':             1200,
+          'desktop':                992,
+          'tablet':                 768,
+          'mobile':                 480
+        })
+        .constant('urlBase', "http://0.0.0.0:3000/api")
+        // .constant('urlBase', "http://104.236.144.106:3000/api")
+      ;
+
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .filter('role', roleFilter)
+    ;
+
+    function roleFilter() {
+        var role = {
+          owner: "业主",
+          shopManager: "店长",
+          cashier: "收银员"
+        };
+        return function(key) {
+          return role[key];
+        }
+    }
+    
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .run(appRun)
+        .run(currentUserRun)
+    ;
+
+    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
+    
+    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
+      
+      // Set reference to access them from any scope
+      $rootScope.$state = $state;
+      $rootScope.$stateParams = $stateParams;
+      $rootScope.$storage = $window.localStorage;
+
+      // Uncomment this to disable template cache
+      /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+          if (typeof(toState) !== 'undefined'){
+            $templateCache.remove(toState.templateUrl);
+          }
+      });*/
+
+      // Allows to use branding color with interpolation
+      // {{ colorByName('primary') }}
+      $rootScope.colorByName = Colors.byName;
+
+      // cancel click event easily
+      $rootScope.cancel = function($event) {
+        $event.stopPropagation();
+      };
+
+      // Hooks Example
+      // ----------------------------------- 
+
+      // Hook not found
+      $rootScope.$on('$stateNotFound',
+        function(event, unfoundState/*, fromState, fromParams*/) {
+            console.log(unfoundState.to); // "lazy.state"
+            console.log(unfoundState.toParams); // {a:1, b:2}
+            console.log(unfoundState.options); // {inherit:false} + default options
+        });
+      // Hook error
+      $rootScope.$on('$stateChangeError',
+        function(event, toState, toParams, fromState, fromParams, error){
+          console.log(error);
+        });
+      // Hook success
+      $rootScope.$on('$stateChangeSuccess',
+        function(/*event, toState, toParams, fromState, fromParams*/) {
+          // display new view from top
+          $window.scrollTo(0, 0);
+          // Save the route title
+          $rootScope.currTitle = $state.current.title;
+        });
+
+      // Load a title dynamically
+      $rootScope.currTitle = $state.current.title;
+      $rootScope.pageTitle = function() {
+        var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
+        document.title = title;
+        return title;
+      };      
+
+    }
+
+    currentUserRun.$inject = ['$rootScope', 'User', '$filter'];
+    
+    function currentUserRun($rootScope, User, $filter) {
+      
+      userDidLogined();
+      
+      function userDidLogined() {
+        if(User.isAuthenticated()) {
+          User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
+          .$promise.then(function (user) {
+            user.job = $filter('role')(user.role);
+            user.name = user.name || user.username;
+            user.picture = 'app/img/dummy.png';
+            $rootScope.user = user;
+          });
+        }
+      }
+      
+      $rootScope.$on('User.logined', userDidLogined);
+      
+    }
+})();
+
+
 
 (function() {
     'use strict';
@@ -6628,8 +6628,8 @@
       .controller('MembersController', MembersController)
     ;
       
-    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService'];
-    function MembersController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, qrcodeService) {
+    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService', 'dealService'];
+    function MembersController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, qrcodeService, dealService) {
       var vm = this;
       
       activate();
@@ -6648,6 +6648,11 @@
             ngTableLBService.getData($defer, params, Member, filter);
           }
         });
+      }
+      
+      vm.sell = function (member) {
+        dealService.openDeal(member);
+        $scope.$state.go('app.sell');
       }
     }
 })();
@@ -6950,6 +6955,238 @@
         }        
     }
 })();
+
+/**=========================================================
+ * Module: demo-notify.js
+ * Provides a simple demo for notify
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.notify')
+        .controller('NotifyDemoCtrl', NotifyDemoCtrl);
+
+    NotifyDemoCtrl.$inject = ['Notify', '$timeout'];
+    function NotifyDemoCtrl(Notify, $timeout) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.msgHtml = '<em class="fa fa-check"></em> Message with icon..';
+
+          vm.notifyMsg = 'Some messages here..';
+          vm.notifyOpts = {
+            status: 'danger',
+            pos: 'bottom-center'
+          };
+
+          // Service usage example
+          $timeout(function(){
+            
+            Notify.alert( 
+                'This is a custom message from notify..', 
+                {status: 'success'}
+            );
+          
+          }, 500);
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: notify.js
+ * Directive for notify plugin
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.notify')
+        .directive('notify', notify);
+
+    notify.$inject = ['$window', 'Notify'];
+    function notify ($window, Notify) {
+
+        var directive = {
+            link: link,
+            restrict: 'A',
+            scope: {
+              options: '=',
+              message: '='
+            }
+        };
+        return directive;
+
+        function link(scope, element) {
+
+          element.on('click', function (e) {
+            e.preventDefault();
+            Notify.alert(scope.message, scope.options);
+          });
+        }
+
+    }
+
+})();
+
+
+/**=========================================================
+ * Module: notify.js
+ * Create a notifications that fade out automatically.
+ * Based on Notify addon from UIKit (http://getuikit.com/docs/addons_notify.html)
+ =========================================================*/
+
+(function() {
+    'use strict';
+    angular
+        .module('app.notify')
+        .service('Notify', Notify);
+
+    Notify.$inject = ['$timeout'];
+    function Notify($timeout) {
+
+        this.alert = notifyAlert;
+
+        ////////////////
+
+        function notifyAlert(msg, opts) {
+            if ( msg ) {
+                $timeout(function(){
+                    $.notify(msg, opts || {});
+                });
+            }
+        }
+    }
+
+})();
+
+/**
+ * Notify Addon definition as jQuery plugin
+ * Adapted version to work with Bootstrap classes
+ * More information http://getuikit.com/docs/addons_notify.html
+ */
+(function($){
+    'use strict';
+    var containers = {},
+        messages   = {},
+        notify     =  function(options){
+            if ($.type(options) === 'string') {
+                options = { message: options };
+            }
+            if (arguments[1]) {
+                options = $.extend(options, $.type(arguments[1]) === 'string' ? {status:arguments[1]} : arguments[1]);
+            }
+            return (new Message(options)).show();
+        },
+        closeAll  = function(group, instantly){
+            var id;
+            if(group) {
+                for(id in messages) { if(group===messages[id].group) messages[id].close(instantly); }
+            } else {
+                for(id in messages) { messages[id].close(instantly); }
+            }
+        };
+    var Message = function(options){
+        // var $this = this;
+        this.options = $.extend({}, Message.defaults, options);
+        this.uuid    = 'ID'+(new Date().getTime())+'RAND'+(Math.ceil(Math.random() * 100000));
+        this.element = $([
+            // @geedmo: alert-dismissable enables bs close icon
+            '<div class="uk-notify-message alert-dismissable">',
+                '<a class="close">&times;</a>',
+                '<div>'+this.options.message+'</div>',
+            '</div>'
+        ].join('')).data('notifyMessage', this);
+        // status
+        if (this.options.status) {
+            this.element.addClass('alert alert-'+this.options.status);
+            this.currentstatus = this.options.status;
+        }
+        this.group = this.options.group;
+        messages[this.uuid] = this;
+        if(!containers[this.options.pos]) {
+            containers[this.options.pos] = $('<div class="uk-notify uk-notify-'+this.options.pos+'"></div>').appendTo('body').on('click', '.uk-notify-message', function(){
+                $(this).data('notifyMessage').close();
+            });
+        }
+    };
+    $.extend(Message.prototype, {
+        uuid: false,
+        element: false,
+        timout: false,
+        currentstatus: '',
+        group: false,
+        show: function() {
+            if (this.element.is(':visible')) return;
+            var $this = this;
+            containers[this.options.pos].show().prepend(this.element);
+            var marginbottom = parseInt(this.element.css('margin-bottom'), 10);
+            this.element.css({'opacity':0, 'margin-top': -1*this.element.outerHeight(), 'margin-bottom':0}).animate({'opacity':1, 'margin-top': 0, 'margin-bottom':marginbottom}, function(){
+                if ($this.options.timeout) {
+                    var closefn = function(){ $this.close(); };
+                    $this.timeout = setTimeout(closefn, $this.options.timeout);
+                    $this.element.hover(
+                        function() { clearTimeout($this.timeout); },
+                        function() { $this.timeout = setTimeout(closefn, $this.options.timeout);  }
+                    );
+                }
+            });
+            return this;
+        },
+        close: function(instantly) {
+            var $this    = this,
+                finalize = function(){
+                    $this.element.remove();
+                    if(!containers[$this.options.pos].children().length) {
+                        containers[$this.options.pos].hide();
+                    }
+                    delete messages[$this.uuid];
+                };
+            if(this.timeout) clearTimeout(this.timeout);
+            if(instantly) {
+                finalize();
+            } else {
+                this.element.animate({'opacity':0, 'margin-top': -1* this.element.outerHeight(), 'margin-bottom':0}, function(){
+                    finalize();
+                });
+            }
+        },
+        content: function(html){
+            var container = this.element.find('>div');
+            if(!html) {
+                return container.html();
+            }
+            container.html(html);
+            return this;
+        },
+        status: function(status) {
+            if(!status) {
+                return this.currentstatus;
+            }
+            this.element.removeClass('alert alert-'+this.currentstatus).addClass('alert alert-'+status);
+            this.currentstatus = status;
+            return this;
+        }
+    });
+    Message.defaults = {
+        message: '',
+        status: 'normal',
+        timeout: 5000,
+        group: null,
+        pos: 'top-center'
+    };
+    
+    $.notify          = notify;
+    $.notify.message  = Message;
+    $.notify.closeAll = closeAll;
+    
+    return notify;
+}(jQuery));
 
 /**=========================================================
  * Module: access-login.js
@@ -8339,194 +8576,6 @@
     'use strict';
 
     angular
-        .module('app.sales')
-        .service('dealService', dealService);
-
-    dealService.$inject = ['Deal', 'Sku', 'ngDialog'];
-    function dealService(Deal, Sku, ngDialog) {
-      var self = this;
-
-      this.openDeal = openDeal;
-      this.querySkus = querySkus;
-      this.register = register;
-      this.substractOne = substractOne;
-      this.countTotal = countTotal;
-      this.checkout = checkout; 
-      this.pay = pay;
-
-      function openDeal() {
-        self.deal = {
-          entities: [],
-          totalAmount: 0,
-          totalQty: 0,
-          created: new Date()
-        }
-        self.selectedSku = undefined;
-      }
-      
-      function querySkus (val) {
-        return Sku.find({filter:{where:{barcode:{regex: val}}}, limit: 10})
-        .$promise.then(function (skus) {
-          return skus;
-        });
-      }
-            
-      function register () {
-        if(self.selectedSku && self.selectedSku instanceof Sku) {
-          var entity = undefined;
-          angular.forEach(self.deal.entities, function (e) {
-            if(e.sku.barcode === self.selectedSku.barcode){
-              e.qty++;
-              entity = e;
-            }
-          });
-          if(!entity) {
-            entity = {
-              sku: self.selectedSku,
-              qty: 1
-            };
-            self.deal.entities.push(entity);
-          }
-        }
-        self.selectedSku = undefined;
-      }
-      
-      function substractOne (entity, index) {
-        entity.qty--;
-        if(entity.qty === 0) {
-          self.deal.entities.splice(index, 1);
-        }
-      }
-            
-      function countTotal () {
-        self.deal.totalAmount = 0;
-        self.deal.totalQty = 0;
-        angular.forEach(self.deal.entities, function (entity) {
-          self.deal.totalQty += entity.qty;
-          self.deal.totalAmount += entity.qty*entity.sku.price;
-        });
-        return self.deal.totalAmount;
-      }
-      
-      function checkout () {
-        self.deal.payment = {
-          amount: self.deal.totalAmount,
-          type: 'cash'
-        }
-        ngDialog.open({ 
-          template: 'checkoutDialogId', 
-          controller: 'checkoutDialogController'
-        });
-      }
-      
-      function pay() {
-        return Deal.create(self.deal).$promise
-      }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-      .module('app.sales')
-      .controller('SellController', SellController)
-      .controller('checkoutDialogController', checkoutDialogController)
-      .controller('DealsController', DealsController)
-    ;
-      
-    SellController.$inject = ['$scope', 'dealService'];
-    function SellController($scope, dealService) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
-        $scope.dealService = dealService;
-        dealService.openDeal();
-      }
-            
-    }
-    
-    checkoutDialogController.$inject = ['$scope', 'ngDialog', 'dealService', 'toaster'];
-    function checkoutDialogController($scope, ngDialog, dealService, toaster) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $scope.dealService = dealService;
-        }
-        
-        $scope.confirm = function () {
-          dealService.pay().then(function (deal) {
-            $scope.submiting = false;
-            ngDialog.close();
-            dealService.openDeal();
-            toaster.pop('success', '成功', "完成交易");
-          }, function (err) {
-            $scope.submiting = false;
-            toaster.pop('error', '失败', "交易未完成，请重试！")
-          });
-          $scope.submiting = true;
-        }
-    }
-    
-    DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];
-    function DealsController($scope, Deal, ngTableParams, ngTableLBService) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
-        vm.keyword = "";
-        vm.tableParams = new ngTableParams({count: 10}, {
-          getData: function($defer, params) {
-            var filter = {where:{status:{ne:'deleted'}}, include:[]}
-            if(vm.keyword != '') {
-              var qs = {regex: keyword};
-              filter.where.or = [{"entities.sku.item.name":qs}];
-              params.page(1);
-            }
-            ngTableLBService.getData($defer, params, Deal, filter);
-          }
-        });
-      }
-    }
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sales')
-        .filter('payment_type', paymentTypeFilter)
-    ;
-
-    function paymentTypeFilter() {
-        var type = {
-          cash: "现金支付",
-          bankcard: "刷卡支付",
-          wxpay: "微信支付",
-          alipay: "支付宝"
-        }
-        return function(key) {
-          return type[key];
-        }
-    }
-
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.settings')
         .run(settingsRun);
 
@@ -8579,238 +8628,6 @@
     }
 
 })();
-
-/**=========================================================
- * Module: demo-notify.js
- * Provides a simple demo for notify
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.notify')
-        .controller('NotifyDemoCtrl', NotifyDemoCtrl);
-
-    NotifyDemoCtrl.$inject = ['Notify', '$timeout'];
-    function NotifyDemoCtrl(Notify, $timeout) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.msgHtml = '<em class="fa fa-check"></em> Message with icon..';
-
-          vm.notifyMsg = 'Some messages here..';
-          vm.notifyOpts = {
-            status: 'danger',
-            pos: 'bottom-center'
-          };
-
-          // Service usage example
-          $timeout(function(){
-            
-            Notify.alert( 
-                'This is a custom message from notify..', 
-                {status: 'success'}
-            );
-          
-          }, 500);
-        }
-    }
-})();
-
-/**=========================================================
- * Module: notify.js
- * Directive for notify plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.notify')
-        .directive('notify', notify);
-
-    notify.$inject = ['$window', 'Notify'];
-    function notify ($window, Notify) {
-
-        var directive = {
-            link: link,
-            restrict: 'A',
-            scope: {
-              options: '=',
-              message: '='
-            }
-        };
-        return directive;
-
-        function link(scope, element) {
-
-          element.on('click', function (e) {
-            e.preventDefault();
-            Notify.alert(scope.message, scope.options);
-          });
-        }
-
-    }
-
-})();
-
-
-/**=========================================================
- * Module: notify.js
- * Create a notifications that fade out automatically.
- * Based on Notify addon from UIKit (http://getuikit.com/docs/addons_notify.html)
- =========================================================*/
-
-(function() {
-    'use strict';
-    angular
-        .module('app.notify')
-        .service('Notify', Notify);
-
-    Notify.$inject = ['$timeout'];
-    function Notify($timeout) {
-
-        this.alert = notifyAlert;
-
-        ////////////////
-
-        function notifyAlert(msg, opts) {
-            if ( msg ) {
-                $timeout(function(){
-                    $.notify(msg, opts || {});
-                });
-            }
-        }
-    }
-
-})();
-
-/**
- * Notify Addon definition as jQuery plugin
- * Adapted version to work with Bootstrap classes
- * More information http://getuikit.com/docs/addons_notify.html
- */
-(function($){
-    'use strict';
-    var containers = {},
-        messages   = {},
-        notify     =  function(options){
-            if ($.type(options) === 'string') {
-                options = { message: options };
-            }
-            if (arguments[1]) {
-                options = $.extend(options, $.type(arguments[1]) === 'string' ? {status:arguments[1]} : arguments[1]);
-            }
-            return (new Message(options)).show();
-        },
-        closeAll  = function(group, instantly){
-            var id;
-            if(group) {
-                for(id in messages) { if(group===messages[id].group) messages[id].close(instantly); }
-            } else {
-                for(id in messages) { messages[id].close(instantly); }
-            }
-        };
-    var Message = function(options){
-        // var $this = this;
-        this.options = $.extend({}, Message.defaults, options);
-        this.uuid    = 'ID'+(new Date().getTime())+'RAND'+(Math.ceil(Math.random() * 100000));
-        this.element = $([
-            // @geedmo: alert-dismissable enables bs close icon
-            '<div class="uk-notify-message alert-dismissable">',
-                '<a class="close">&times;</a>',
-                '<div>'+this.options.message+'</div>',
-            '</div>'
-        ].join('')).data('notifyMessage', this);
-        // status
-        if (this.options.status) {
-            this.element.addClass('alert alert-'+this.options.status);
-            this.currentstatus = this.options.status;
-        }
-        this.group = this.options.group;
-        messages[this.uuid] = this;
-        if(!containers[this.options.pos]) {
-            containers[this.options.pos] = $('<div class="uk-notify uk-notify-'+this.options.pos+'"></div>').appendTo('body').on('click', '.uk-notify-message', function(){
-                $(this).data('notifyMessage').close();
-            });
-        }
-    };
-    $.extend(Message.prototype, {
-        uuid: false,
-        element: false,
-        timout: false,
-        currentstatus: '',
-        group: false,
-        show: function() {
-            if (this.element.is(':visible')) return;
-            var $this = this;
-            containers[this.options.pos].show().prepend(this.element);
-            var marginbottom = parseInt(this.element.css('margin-bottom'), 10);
-            this.element.css({'opacity':0, 'margin-top': -1*this.element.outerHeight(), 'margin-bottom':0}).animate({'opacity':1, 'margin-top': 0, 'margin-bottom':marginbottom}, function(){
-                if ($this.options.timeout) {
-                    var closefn = function(){ $this.close(); };
-                    $this.timeout = setTimeout(closefn, $this.options.timeout);
-                    $this.element.hover(
-                        function() { clearTimeout($this.timeout); },
-                        function() { $this.timeout = setTimeout(closefn, $this.options.timeout);  }
-                    );
-                }
-            });
-            return this;
-        },
-        close: function(instantly) {
-            var $this    = this,
-                finalize = function(){
-                    $this.element.remove();
-                    if(!containers[$this.options.pos].children().length) {
-                        containers[$this.options.pos].hide();
-                    }
-                    delete messages[$this.uuid];
-                };
-            if(this.timeout) clearTimeout(this.timeout);
-            if(instantly) {
-                finalize();
-            } else {
-                this.element.animate({'opacity':0, 'margin-top': -1* this.element.outerHeight(), 'margin-bottom':0}, function(){
-                    finalize();
-                });
-            }
-        },
-        content: function(html){
-            var container = this.element.find('>div');
-            if(!html) {
-                return container.html();
-            }
-            container.html(html);
-            return this;
-        },
-        status: function(status) {
-            if(!status) {
-                return this.currentstatus;
-            }
-            this.element.removeClass('alert alert-'+this.currentstatus).addClass('alert alert-'+status);
-            this.currentstatus = status;
-            return this;
-        }
-    });
-    Message.defaults = {
-        message: '',
-        status: 'normal',
-        timeout: 5000,
-        group: null,
-        pos: 'top-center'
-    };
-    
-    $.notify          = notify;
-    $.notify.message  = Message;
-    $.notify.closeAll = closeAll;
-    
-    return notify;
-}(jQuery));
 
 /**=========================================================
  * Module: sidebar-menu.js
@@ -9165,71 +8982,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .config(translateConfig)
-        ;
-    translateConfig.$inject = ['$translateProvider'];
-    function translateConfig($translateProvider){
-
-      $translateProvider.useStaticFilesLoader({
-          prefix : 'app/i18n/',
-          suffix : '.json'
-      });
-
-      $translateProvider.preferredLanguage('zh_CN');
-      $translateProvider.useLocalStorage();
-      $translateProvider.usePostCompiling(true);
-      $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .run(translateRun)
-        ;
-    translateRun.$inject = ['$rootScope', '$translate'];
-    
-    function translateRun($rootScope, $translate){
-
-      // Internationalization
-      // ----------------------
-
-      $rootScope.language = {
-        // Handles language dropdown
-        listIsOpen: false,
-        // list of available languages
-        available: {
-          'zh_CN':    '中文简体',
-          'en':       'English',
-          'es_AR':    'Español'
-        },
-        // display always the current ui language
-        init: function () {
-          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
-          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
-          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
-        },
-        set: function (localeId) {
-          // Set the new idiom
-          $translate.use(localeId);
-          // save a reference for the current language
-          $rootScope.language.selected = $rootScope.language.available[localeId];
-          // finally toggle dropdown
-          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
-        }
-      };
-
-      $rootScope.language.init();
-
-    }
-})();
 /**=========================================================
  * Module: angular-grid.js
  * Example for Angular Grid
@@ -10110,6 +9862,264 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sales')
+        .service('dealService', dealService);
+
+    dealService.$inject = ['Deal', 'Sku', 'ngDialog'];
+    function dealService(Deal, Sku, ngDialog) {
+      var self = this;
+
+      this.openDeal = openDeal;
+      this.querySkus = querySkus;
+      this.register = register;
+      this.substractOne = substractOne;
+      this.countTotal = countTotal;
+      this.checkout = checkout; 
+      this.pay = pay;
+
+      function openDeal(member) {
+        self.deal = {
+          entities: [],
+          totalAmount: 0,
+          totalQty: 0,
+          member: member,
+          status: 'opened',
+          created: new Date()
+        }
+        self.selectedSku = undefined;
+      }
+      
+      function querySkus (val) {
+        return Sku.find({filter:{where:{barcode:{regex: val}}}, limit: 10})
+        .$promise.then(function (skus) {
+          return skus;
+        });
+      }
+            
+      function register () {
+        if(self.selectedSku && self.selectedSku instanceof Sku) {
+          var entity = undefined;
+          angular.forEach(self.deal.entities, function (e) {
+            if(e.sku.barcode === self.selectedSku.barcode){
+              e.qty++;
+              entity = e;
+            }
+          });
+          if(!entity) {
+            entity = {
+              sku: self.selectedSku,
+              qty: 1
+            };
+            self.deal.entities.push(entity);
+          }
+        }
+        self.selectedSku = undefined;
+      }
+      
+      function substractOne (entity, index) {
+        entity.qty--;
+        if(entity.qty === 0) {
+          self.deal.entities.splice(index, 1);
+        }
+      }
+            
+      function countTotal () {
+        self.deal.totalAmount = 0;
+        self.deal.totalQty = 0;
+        angular.forEach(self.deal.entities, function (entity) {
+          self.deal.totalQty += entity.qty;
+          self.deal.totalAmount += entity.qty*entity.sku.price;
+        });
+        return self.deal.totalAmount;
+      }
+      
+      function checkout () {
+        self.deal.payment = {
+          amount: self.deal.totalAmount,
+          type: 'cash'
+        }
+        ngDialog.open({ 
+          template: 'checkoutDialogId', 
+          controller: 'checkoutDialogController'
+        });
+      }
+      
+      function pay() {
+        self.deal.status = 'closed';
+        return Deal.create(self.deal).$promise
+      }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+      .module('app.sales')
+      .controller('SellController', SellController)
+      .controller('checkoutDialogController', checkoutDialogController)
+      .controller('DealsController', DealsController)
+    ;
+      
+    SellController.$inject = ['$scope', 'dealService'];
+    function SellController($scope, dealService) {
+      var vm = this;
+            
+      activate();
+      
+      function activate() {
+        $scope.dealService = dealService;
+        if(!dealService.deal) {
+          dealService.openDeal();
+        }
+      }
+            
+    }
+    
+    checkoutDialogController.$inject = ['$scope', 'ngDialog', 'dealService', 'toaster'];
+    function checkoutDialogController($scope, ngDialog, dealService, toaster) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $scope.dealService = dealService;
+        }
+        
+        $scope.confirm = function () {
+          dealService.pay().then(function (deal) {
+            $scope.submiting = false;
+            ngDialog.close();
+            dealService.openDeal();
+            toaster.pop('success', '成功', "完成交易");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "交易未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+    }
+    
+    DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];
+    function DealsController($scope, Deal, ngTableParams, ngTableLBService) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        vm.keyword = "";
+        vm.tableParams = new ngTableParams({count: 10}, {
+          getData: function($defer, params) {
+            var filter = {where:{status:{ne:'deleted'}}, include:[]}
+            if(vm.keyword != '') {
+              var qs = {regex: keyword};
+              filter.where.or = [{"entities.sku.item.name":qs}];
+              params.page(1);
+            }
+            ngTableLBService.getData($defer, params, Deal, filter);
+          }
+        });
+      }
+    }
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sales')
+        .filter('payment_type', paymentTypeFilter)
+    ;
+
+    function paymentTypeFilter() {
+        var type = {
+          cash: "现金支付",
+          bankcard: "刷卡支付",
+          wxpay: "微信支付",
+          alipay: "支付宝"
+        }
+        return function(key) {
+          return type[key];
+        }
+    }
+
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .config(translateConfig)
+        ;
+    translateConfig.$inject = ['$translateProvider'];
+    function translateConfig($translateProvider){
+
+      $translateProvider.useStaticFilesLoader({
+          prefix : 'app/i18n/',
+          suffix : '.json'
+      });
+
+      $translateProvider.preferredLanguage('zh_CN');
+      $translateProvider.useLocalStorage();
+      $translateProvider.usePostCompiling(true);
+      $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .run(translateRun)
+        ;
+    translateRun.$inject = ['$rootScope', '$translate'];
+    
+    function translateRun($rootScope, $translate){
+
+      // Internationalization
+      // ----------------------
+
+      $rootScope.language = {
+        // Handles language dropdown
+        listIsOpen: false,
+        // list of available languages
+        available: {
+          'zh_CN':    '中文简体',
+          'en':       'English',
+          'es_AR':    'Español'
+        },
+        // display always the current ui language
+        init: function () {
+          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
+          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
+          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
+        },
+        set: function (localeId) {
+          // Set the new idiom
+          $translate.use(localeId);
+          // save a reference for the current language
+          $rootScope.language.selected = $rootScope.language.available[localeId];
+          // finally toggle dropdown
+          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
+        }
+      };
+
+      $rootScope.language.init();
+
+    }
+})();
 /**=========================================================
  * Module: animate-enabled.js
  * Enable or disables ngAnimate for element with directive

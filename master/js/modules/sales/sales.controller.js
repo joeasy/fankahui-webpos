@@ -11,12 +11,14 @@
     SellController.$inject = ['$scope', 'dealService'];
     function SellController($scope, dealService) {
       var vm = this;
-      
+            
       activate();
       
       function activate() {
         $scope.dealService = dealService;
-        dealService.openDeal();
+        if(!dealService.deal) {
+          dealService.openDeal();
+        }
       }
             
     }

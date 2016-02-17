@@ -17,11 +17,13 @@
       this.checkout = checkout; 
       this.pay = pay;
 
-      function openDeal() {
+      function openDeal(member) {
         self.deal = {
           entities: [],
           totalAmount: 0,
           totalQty: 0,
+          member: member,
+          status: 'opened',
           created: new Date()
         }
         self.selectedSku = undefined;
@@ -83,6 +85,7 @@
       }
       
       function pay() {
+        self.deal.status = 'closed';
         return Deal.create(self.deal).$promise
       }
     }

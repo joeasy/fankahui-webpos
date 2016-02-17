@@ -6,8 +6,8 @@
       .controller('MembersController', MembersController)
     ;
       
-    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService'];
-    function MembersController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, qrcodeService) {
+    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService', 'dealService'];
+    function MembersController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, qrcodeService, dealService) {
       var vm = this;
       
       activate();
@@ -26,6 +26,11 @@
             ngTableLBService.getData($defer, params, Member, filter);
           }
         });
+      }
+      
+      vm.sell = function (member) {
+        dealService.openDeal(member);
+        $scope.$state.go('app.sell');
       }
     }
 })();

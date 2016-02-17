@@ -23,7 +23,7 @@
           // CHECKIN
           // ----------------------------------- 
           vm.checkins = Checkin.find({filter:{
-            // where: {merchantId: $scope.user.merchantId},
+            where: {merchantId: $scope.user.shopId},
             include: [{member: 'wxuser'}],
             limit: 10, 
             order: 'created DESC'
