@@ -19,7 +19,22 @@ h3
     .row.mb-lg
       .col-lg-4.col-xs-6.br.pv
         .row
-          a.col-md-2.text-center.visible-md.visible-lg(popover-placement='right', popover="{{sell.checkins}}", popover-title='到店会员')
+          a.col-md-2.text-center.visible-md.visible-lg(popover-placement='right', popover-template="sell.templateUrl", popover-title='到店会员', popover-trigger='click')
+            script(type="text/ng-template", id="checkinsTemplate.html")
+              // START list group
+              scrollable.list-group(height="180")
+                // START list group item
+                a.list-group-item(ng-repeat="checkin in sell.checkins", href='', ng-click="dealService.openDeal(checkin.member)")
+                  .media-box
+                    .pull-left
+                      img.media-box-object.img-circle.thumb32(src="{{checkin.member.wxuser.headimgurl}}")
+                    .media-box-body.clearfix
+                      //- small.pull-right {{checkin.created | moment_from_now }}
+                      strong.media-box-heading.text-primary 
+                        {{checkin.member.name}}
+                      p.mb-sm: small {{checkin.created | moment_from_now }}
+                // END list group item
+              // END list group
             em.fa.fa-user.fa-4x.text-muted(ng-if="!dealService.deal.member.wxuser.headimgurl")
             img.thumb48.mt0(ng-if="dealService.deal.member.wxuser.headimgurl", src="{{dealService.deal.member.wxuser.headimgurl}}")
           .col-md-10

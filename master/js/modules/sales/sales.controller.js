@@ -29,6 +29,7 @@
           order: 'created DESC'
         }});
         
+        vm.templateUrl = 'checkinsTemplate.html';
       }
             
     }
