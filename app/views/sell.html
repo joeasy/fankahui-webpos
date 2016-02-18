@@ -20,8 +20,7 @@
             <div class="row">
                <a popover-placement="right" popover-template="sell.templateUrl" popover-title="到店会员" popover-trigger="click" class="col-md-2 text-center visible-md visible-lg">
                   <script type="text/ng-template" id="checkinsTemplate.html">
-                     <!-- START list group--><scrollable height="180" class="list-group"><!-- START list group item--><a ng-repeat="checkin in sell.checkins" href="" ng-click="dealService.openDeal(checkin.member)" class="list-group-item"><div class="media-box"><div class="pull-left"><img src="{{checkin.member.wxuser.headimgurl}}" class="media-box-object img-circle thumb32"/></div><div class="media-box-body clearfix"><strong class="media-box-heading text-primary"> 
-                     {{checkin.member.name}}</strong><p class="mb-sm"><small>{{checkin.created | moment_from_now }}</small></p></div></div></a><!-- END list group item--></scrollable><!-- END list group-->
+                     <!-- START list group--><scrollable height="180" class="list-group"><!-- START list group item--><a ng-repeat="checkin in sell.checkins" href="" ng-click="dealService.openDeal(checkin.member)" class="list-group-item"><div class="media-box"><div class="pull-left"><img src="{{checkin.member.wxuser.headimgurl}}" class="media-box-object img-circle thumb32"/></div><div class="media-box-body clearfix"><strong class="media-box-heading text-primary">{{checkin.member.name}}</strong><p class="mb-sm"><small>{{checkin.created | moment_from_now }}</small></p></div></div></a><!-- END list group item--></scrollable><!-- END list group-->
                   </script>
                   <em ng-if="!dealService.deal.member.wxuser.headimgurl" class="fa fa-user fa-4x text-muted"></em>
                   <img ng-if="dealService.deal.member.wxuser.headimgurl" src="{{dealService.deal.member.wxuser.headimgurl}}" class="thumb48 mt0" />

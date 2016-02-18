@@ -29,9 +29,7 @@ h3
                     .pull-left
                       img.media-box-object.img-circle.thumb32(src="{{checkin.member.wxuser.headimgurl}}")
                     .media-box-body.clearfix
-                      //- small.pull-right {{checkin.created | moment_from_now }}
-                      strong.media-box-heading.text-primary 
-                        {{checkin.member.name}}
+                      strong.media-box-heading.text-primary {{checkin.member.name}}
                       p.mb-sm: small {{checkin.created | moment_from_now }}
                 // END list group item
               // END list group
