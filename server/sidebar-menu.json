@@ -25,12 +25,6 @@
     "translate": "sidebar.nav.MEMBER"
   },
   {
-    "text": "Mass",
-    "sref": "app.mass",
-    "icon": "fa fa-wechat",
-    "translate": "sidebar.nav.MASS"
-  },
-  {
     "text": "Operate",
     "heading": "true",
     "translate": "sidebar.heading.OPERATE"
