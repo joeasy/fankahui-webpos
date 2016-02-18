@@ -98,19 +98,13 @@
     'use strict';
 
     angular
-        .module('app.extras', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.flatdoc', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.colors', []);
+        .module('app.extras', []);
 })();
 (function() {
     'use strict';
@@ -134,19 +128,25 @@
     'use strict';
 
     angular
+        .module('app.colors', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.lazyload', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.loadingbar', []);
+        .module('app.locale', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.locale', []);
+        .module('app.loadingbar', []);
 })();
 (function() {
     'use strict';
@@ -3935,6 +3935,55 @@
 })();
 
 /**=========================================================
+ * Module: flatdoc.js
+ * Creates the flatdoc markup and initializes the plugin
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.flatdoc')
+        .directive('flatdoc', flatdoc);
+
+    function flatdoc () {
+
+        var directive = {
+            template: '<div role="flatdoc"><div role="flatdoc-menu"></div><div role="flatdoc-content"></div></div>',
+            link: link,
+            restrict: 'EA'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+          Flatdoc.run({
+            fetcher: Flatdoc.file(attrs.src)
+          });
+          
+          var $root = $('html, body');
+          $(document).on('flatdoc:ready', function() {
+            var docMenu = $('[role="flatdoc-menu"]');
+            docMenu.find('a').on('click', function(e) {
+              e.preventDefault(); e.stopPropagation();
+              
+              var $this = $(this);
+              
+              docMenu.find('a.active').removeClass('active');
+              $this.addClass('active');
+
+              $root.animate({
+                    scrollTop: $(this.getAttribute('href')).offset().top - ($('.topnavbar').height() + 10)
+                }, 800);
+            });
+
+          });
+        }
+    }
+
+
+})();
+
+/**=========================================================
  * Module: article.js
  =========================================================*/
 (function() {
@@ -4545,105 +4594,6 @@
           ];
         }
     }
-})();
-
-/**=========================================================
- * Module: flatdoc.js
- * Creates the flatdoc markup and initializes the plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.flatdoc')
-        .directive('flatdoc', flatdoc);
-
-    function flatdoc () {
-
-        var directive = {
-            template: '<div role="flatdoc"><div role="flatdoc-menu"></div><div role="flatdoc-content"></div></div>',
-            link: link,
-            restrict: 'EA'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          Flatdoc.run({
-            fetcher: Flatdoc.file(attrs.src)
-          });
-          
-          var $root = $('html, body');
-          $(document).on('flatdoc:ready', function() {
-            var docMenu = $('[role="flatdoc-menu"]');
-            docMenu.find('a').on('click', function(e) {
-              e.preventDefault(); e.stopPropagation();
-              
-              var $this = $(this);
-              
-              docMenu.find('a.active').removeClass('active');
-              $this.addClass('active');
-
-              $root.animate({
-                    scrollTop: $(this.getAttribute('href')).offset().top - ($('.topnavbar').height() + 10)
-                }, 800);
-            });
-
-          });
-        }
-    }
-
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .constant('APP_COLORS', {
-          'primary':                '#5d9cec',
-          'success':                '#27c24c',
-          'info':                   '#23b7e5',
-          'warning':                '#ff902b',
-          'danger':                 '#f05050',
-          'inverse':                '#131e26',
-          'green':                  '#37bc9b',
-          'pink':                   '#f532e5',
-          'purple':                 '#7266ba',
-          'dark':                   '#3a3f51',
-          'yellow':                 '#fad732',
-          'gray-darker':            '#232735',
-          'gray-dark':              '#3a3f51',
-          'gray':                   '#dde6e9',
-          'gray-light':             '#e4eaec',
-          'gray-lighter':           '#edf1f2'
-        })
-        ;
-})();
-/**=========================================================
- * Module: colors.js
- * Services to retrieve global colors
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .service('Colors', Colors);
-
-    Colors.$inject = ['APP_COLORS'];
-    function Colors(APP_COLORS) {
-        this.byName = byName;
-
-        ////////////////
-
-        function byName(name) {
-          return (APP_COLORS[name] || '#fff');
-        }
-    }
-
 })();
 
 (function() {
@@ -5875,6 +5825,56 @@
     'use strict';
 
     angular
+        .module('app.colors')
+        .constant('APP_COLORS', {
+          'primary':                '#5d9cec',
+          'success':                '#27c24c',
+          'info':                   '#23b7e5',
+          'warning':                '#ff902b',
+          'danger':                 '#f05050',
+          'inverse':                '#131e26',
+          'green':                  '#37bc9b',
+          'pink':                   '#f532e5',
+          'purple':                 '#7266ba',
+          'dark':                   '#3a3f51',
+          'yellow':                 '#fad732',
+          'gray-darker':            '#232735',
+          'gray-dark':              '#3a3f51',
+          'gray':                   '#dde6e9',
+          'gray-light':             '#e4eaec',
+          'gray-lighter':           '#edf1f2'
+        })
+        ;
+})();
+/**=========================================================
+ * Module: colors.js
+ * Services to retrieve global colors
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .service('Colors', Colors);
+
+    Colors.$inject = ['APP_COLORS'];
+    function Colors(APP_COLORS) {
+        this.byName = byName;
+
+        ////////////////
+
+        function byName(name) {
+          return (APP_COLORS[name] || '#fff');
+        }
+    }
+
+})();
+
+(function() {
+    'use strict';
+
+    angular
         .module('app.lazyload')
         .config(lazyloadConfig);
 
@@ -6051,50 +6051,6 @@
     'use strict';
 
     angular
-        .module('app.loadingbar')
-        .config(loadingbarConfig)
-        ;
-    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
-    function loadingbarConfig(cfpLoadingBarProvider){
-      cfpLoadingBarProvider.includeBar = true;
-      cfpLoadingBarProvider.includeSpinner = false;
-      cfpLoadingBarProvider.latencyThreshold = 500;
-      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .run(loadingbarRun)
-        ;
-    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
-    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
-
-      // Loading bar transition
-      // ----------------------------------- 
-      var thBar;
-      $rootScope.$on('$stateChangeStart', function() {
-          if($('.wrapper > section').length) // check if bar container exists
-            thBar = $timeout(function() {
-              cfpLoadingBar.start();
-            }, 0); // sets a latency Threshold
-      });
-      $rootScope.$on('$stateChangeSuccess', function(event) {
-          event.targetScope.$watch('$viewContentLoaded', function () {
-            $timeout.cancel(thBar);
-            cfpLoadingBar.complete();
-          });
-      });
-
-    }
-
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.locale')
         .config(localeConfig)
         ;
@@ -6146,6 +6102,50 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .config(loadingbarConfig)
+        ;
+    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
+    function loadingbarConfig(cfpLoadingBarProvider){
+      cfpLoadingBarProvider.includeBar = true;
+      cfpLoadingBarProvider.includeSpinner = false;
+      cfpLoadingBarProvider.latencyThreshold = 500;
+      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .run(loadingbarRun)
+        ;
+    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
+    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
+
+      // Loading bar transition
+      // ----------------------------------- 
+      var thBar;
+      $rootScope.$on('$stateChangeStart', function() {
+          if($('.wrapper > section').length) // check if bar container exists
+            thBar = $timeout(function() {
+              cfpLoadingBar.start();
+            }, 0); // sets a latency Threshold
+      });
+      $rootScope.$on('$stateChangeSuccess', function(event) {
+          event.targetScope.$watch('$viewContentLoaded', function () {
+            $timeout.cancel(thBar);
+            cfpLoadingBar.complete();
+          });
+      });
+
+    }
+
+})();
 /**=========================================================
  * Module: demo-pagination.js
  * Provides a simple demo for pagination

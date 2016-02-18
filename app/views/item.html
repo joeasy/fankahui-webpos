@@ -22,7 +22,8 @@
                         </div>
                      </th>
                      <th>商品名称</th>
-                     <th>商品规格</th>
+                     <th>条码</th>
+                     <th>规格</th>
                      <th>单价</th>
                      <th>库存</th>
                      <th>操作</th>
@@ -42,6 +43,7 @@
                         <br>
                         <div class="text-muted">{{entity.item.type | item_type}}</div>
                      </td>
+                     <td>{{entity.barcode || "-"}}</td>
                      <td>{{entity.model || "-"}}</td>
                      <td class="text-info">{{entity.price/100 | currency}}</td>
                      <td>{{entity.inventories[0].balance || 0}}</td>
@@ -93,6 +95,7 @@
                <tbody ng-class="{'whirl standard': items.tableParams.settings().$loading}">
                   <tr ng-repeat="entity in $data" class="text-center">
                      <td data-title="'商品'" class="text-left">{{entity.item.name}}</td>
+                     <td data-title="'条码'">{{entity.barcode || "-"}}</td>
                      <td data-title="'规格'">{{entity.model || "-"}}</td>
                      <td data-title="'账面结存'">{{entity.inventories[0].balance || 0}}</td>
                      <td data-title="'上次盘点时间'">{{entity.inventories[0].inventoryAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
