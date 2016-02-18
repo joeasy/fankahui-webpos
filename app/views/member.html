@@ -7,7 +7,7 @@
    <div class="panel panel-default">
       <div class="panel-heading"></div>
       <table ng-table="members.tableParams" class="table">
-         <tbody>
+         <tbody ng-class="{'whirl standard': members.tableParams.settings().$loading}">
             <tr ng-repeat="member in $data" class="text-center">
                <td data-title="'序号'">{{$index+1}}</td>
                <td data-title="'头像'">

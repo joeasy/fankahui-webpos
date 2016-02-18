@@ -49,19 +49,19 @@
               title: 'Member',
               templateUrl: helper.basepath('member.html'),
               controller: 'MembersController as members',
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.deal', {
               url: '/deal',
               title: 'Deal',
               templateUrl: helper.basepath('deal.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.item', {
               url: '/item',
               title: 'Item',
               templateUrl: helper.basepath('item.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.item-add', {
               url: '/item-add',

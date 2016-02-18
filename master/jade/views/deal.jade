@@ -1,13 +1,13 @@
 h3 
-  | 商品管理
+  | 销售查询
   
 .container-fluid(ng-controller="DealsController as deals")
   .panel.panel-default
     .panel-heading
-      //- button.pull-right.btn.btn-purple.btn-sm(ng-click='deals.tableParams.reload()') Reload
+      button.pull-right.btn.btn-purple.btn-sm(ng-click='deals.tableParams.reload()') 刷新
       //- .panel-title Ajax
     table.table(ng-table='deals.tableParams')
-      tbody
+      tbody(ng-class="{'whirl standard': deals.tableParams.settings().$loading}")
         tr.text-center(ng-repeat='deal in $data')
           td(data-title="'流水号'") {{deal.serialNumber}}
           td(data-title="'销售金额'") {{deal.totalAmount/100 | currency: '¥'}}

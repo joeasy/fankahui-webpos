@@ -1,10 +1,12 @@
 <h3>
-   商品管理</h3>
+   销售查询</h3>
 <div ng-controller="DealsController as deals" class="container-fluid">
    <div class="panel panel-default">
-      <div class="panel-heading"></div>
+      <div class="panel-heading">
+         <button ng-click="deals.tableParams.reload()" class="pull-right btn btn-purple btn-sm">刷新</button>
+      </div>
       <table ng-table="deals.tableParams" class="table">
-         <tbody>
+         <tbody ng-class="{'whirl standard': deals.tableParams.settings().$loading}">
             <tr ng-repeat="deal in $data" class="text-center">
                <td data-title="'流水号'">{{deal.serialNumber}}</td>
                <td data-title="'销售金额'">{{deal.totalAmount/100 | currency: '¥'}}</td>

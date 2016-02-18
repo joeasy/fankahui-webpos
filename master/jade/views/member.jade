@@ -10,7 +10,7 @@ h3
       //- button.pull-right.btn.btn-purple.btn-sm(ng-click='members.tableParams.reload()') Reload
       //- .panel-title Ajax
     table.table(ng-table='members.tableParams')
-      tbody
+      tbody(ng-class="{'whirl standard': members.tableParams.settings().$loading}")
         tr.text-center(ng-repeat='member in $data')
           td(data-title="'序号'") {{$index+1}}
           td(data-title="'头像'") 

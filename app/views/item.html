@@ -28,7 +28,7 @@
                      <th>操作</th>
                   </tr>
                </thead>
-               <tbody>
+               <tbody ng-class="{'whirl standard': items.tableParams.settings().$loading}">
                   <tr ng-repeat="entity in $data" class="text-center">
                      <td>
                         <div class="checkbox c-checkbox">
@@ -71,7 +71,7 @@
          <tab-heading>出入库记录</tab-heading>
          <div ng-controller="StocksController as stocks" class="table-responsive">
             <table ng-table="stocks.tableParams" class="table table-bordered table-striped">
-               <tbody>
+               <tbody ng-class="{'whirl standard': stocks.tableParams.settings().$loading}">
                   <tr ng-repeat="entity in $data" class="text-center">
                      <td data-title="'商品'" class="text-left">{{entity.sku.item.name}}</td>
                      <td data-title="'规格'">{{entity.sku.model || "-"}}</td>
@@ -90,7 +90,7 @@
          <tab-heading>库存盘点</tab-heading>
          <div ng-controller="ItemsController as items" class="table-responsive">
             <table ng-table="items.tableParams" class="table table-bordered table-striped">
-               <tbody>
+               <tbody ng-class="{'whirl standard': items.tableParams.settings().$loading}">
                   <tr ng-repeat="entity in $data" class="text-center">
                      <td data-title="'商品'" class="text-left">{{entity.item.name}}</td>
                      <td data-title="'规格'">{{entity.model || "-"}}</td>
