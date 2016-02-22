@@ -57,6 +57,12 @@
               templateUrl: helper.basepath('deal.html'),
               resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
+          .state('app.cost', {
+              url: '/cost',
+              title: 'Cost',
+              templateUrl: helper.basepath('cost.html'),
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+          })
           .state('app.item', {
               url: '/item',
               title: 'Item',
@@ -69,11 +75,29 @@
               templateUrl: helper.basepath('item-add.html'),
               resolve: helper.resolveFor('parsley')
           })
+          .state('app.card', {
+              url: '/card',
+              title: 'Card',
+              templateUrl: helper.basepath('card.html'),
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+          })
+          .state('app.campaign', {
+              url: '/campaign',
+              title: 'Campaign',
+              templateUrl: helper.basepath('campaign.html'),
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+          })
           .state('app.myshop', {
               url: '/myshop',
               title: 'MyShop',
               templateUrl: helper.basepath('myshop.html'),
               resolve: helper.resolveFor('xeditable')
+          })
+          .state('app.setting', {
+              url: '/setting',
+              title: 'Setting',
+              templateUrl: helper.basepath('setting.html'),
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.widgets', {
               url: '/widgets',

@@ -38,6 +38,7 @@
     "heading": {
       "HEADER": "主菜单",
       "OPERATE": "经营管理",
+      "MARTETING": "市场营销",
       "COMPONENTS": "Components",
       "MORE": "更多"
     },
@@ -47,8 +48,10 @@
       "MEMBER": "会员管理",
       "MASS": "微信互动",
       "DEAL": "销售查询",
-      "EXPENSE": "费用支出",
+      "COST": "费用支出",
       "ITEM": "商品管理",
+      "CARD": "优惠卷",
+      "CAMPAIGN": "促销活动",
       "MYSHOP": "我的门店",
       "SETTING": "系统设置",
       "WIDGETS": "Widgets",

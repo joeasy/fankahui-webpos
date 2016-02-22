@@ -36,16 +36,33 @@
     "translate": "sidebar.nav.DEAL"
   },
   {
-    "text": "Expense",
-    "sref": "app.expense",
+    "text": "Cost",
+    "sref": "app.cost",
     "icon": "fa fa-bars",
-    "translate": "sidebar.nav.EXPENSE"
+    "translate": "sidebar.nav.COST"
   },
   {
     "text": "Item",
     "sref": "app.item",
     "icon": "fa fa-barcode",
     "translate": "sidebar.nav.ITEM"
+  },
+  {
+    "text": "Marketing",
+    "heading": "true",
+    "translate": "sidebar.heading.MARTETING"
+  },
+  {
+    "text": "Card",
+    "sref": "app.card",
+    "icon": "fa fa-ticket",
+    "translate": "sidebar.nav.CARD"
+  },
+  {
+    "text": "Campaign",
+    "sref": "app.campaign",
+    "icon": "fa fa-rocket",
+    "translate": "sidebar.nav.CAMPAIGN"
   },
   {
     "text": "More",
