@@ -16,6 +16,13 @@
       this.countTotal = countTotal;
       this.checkout = checkout; 
       this.pay = pay;
+      this.payType = {
+        deposit: "会员储值",
+        cash: "现金支付",
+        bankcard: "刷卡支付",
+        wxpay: "微信支付",
+        alipay: "支付宝"
+      }
 
       function openDeal(member) {
         self.deal = {
@@ -74,9 +81,11 @@
       }
       
       function checkout () {
+        if(self.deal.member) self.deal.memberId = self.deal.member.id;
+        self.deal.fee = self.deal.totalAmount;
         self.deal.payment = {
-          amount: self.deal.totalAmount,
-          type: 'cash'
+          amount: self.deal.fee,
+          type: !!self.deal.member? 'deposit':'cash'
         }
         ngDialog.open({ 
           template: 'checkoutDialogId', 
@@ -86,6 +95,7 @@
       
       function pay() {
         self.deal.status = 'closed';
+        delete self.deal.member;
         return Deal.create(self.deal).$promise
       }
     }

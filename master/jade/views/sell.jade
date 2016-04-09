@@ -138,10 +138,7 @@ h3
         label.col-md-3.control-label 支付方式
         .col-md-9  
           select.form-control(ng-model="dealService.deal.payment.type")
-            option(value="cash") 现金支付
-            option(value="bankcard") 刷卡支付
-            option(value="wxpay") 微信支付
-            option(value="alipay") 支付宝
+            option(ng-repeat="(val, desc) in dealService.payType", value="{{val}}" ng-if="val != 'deposit' || !!dealService.deal.member") {{desc}}
       fieldset: .form-group
         label.col-md-3.control-label 备注
         .col-md-9  

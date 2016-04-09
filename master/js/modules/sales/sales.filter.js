@@ -13,15 +13,10 @@
         .filter('payment_type', paymentTypeFilter)
     ;
 
-    function paymentTypeFilter() {
-        var type = {
-          cash: "现金支付",
-          bankcard: "刷卡支付",
-          wxpay: "微信支付",
-          alipay: "支付宝"
-        }
+    paymentTypeFilter.$inject = ['dealService'];
+    function paymentTypeFilter(dealService) {
         return function(key) {
-          return type[key];
+          return dealService.payType[key];
         }
     }
 
