@@ -1,2 +1,130 @@
 <h3>
    系统设置</h3>
+<toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container>
+<form ng-controller="SettingController as setting" class="panel">
+   <tabset justified="true">
+      <tab>
+         <tab-heading>
+            销售配置</tab-heading>
+         <div class="panel">
+            <div class="panel-body">
+               <form class="form-horizontal">
+                  <fieldset>
+                     <legend>流水单号</legend>
+                     <div class="form-group">
+                        <div class="col-md-12">
+                           <span>初始流水单号</span>
+                           <input type="number" ng-model="user.shop.serialNumber" class="mr-sm" />
+                           <button ng-click="setting.update(true)" class="btn btn-sm btn-primary">保存</button>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <legend>销售抹零</legend>
+                     <div class="form-group">
+                        <div class="col-md-12">
+                           <label class="radio-inline c-radio">
+                              <input id="inlineradio1" type="radio" ng-value="1" ng-model="user.merchant.changeRate" ng-change="setting.update()" checked="checked" />
+                              <span class="fa fa-circle"></span>不抹零</label>
+                           <label class="radio-inline c-radio">
+                              <input id="inlineradio2" type="radio" ng-value="10" ng-model="user.merchant.changeRate" ng-change="setting.update()" />
+                              <span class="fa fa-circle"></span>抹分</label>
+                           <label class="radio-inline c-radio">
+                              <input id="inlineradio3" type="radio" ng-value="100" ng-model="user.merchant.changeRate" ng-change="setting.update()" />
+                              <span class="fa fa-circle"></span>抹角</label>
+                        </div>
+                     </div>
+                  </fieldset>
+               </form>
+            </div>
+         </div>
+      </tab>
+      <tab>
+         <tab-heading>商品配置</tab-heading>
+         <div class="panel">
+            <div class="panel-body">
+               <form class="form-horizontal">
+                  <fieldset>
+                     <legend>库存预警
+                        <label class="switch switch-lg pull-right">
+                           <input type="checkbox" checked="checked" ng-model="user.merchant.enableStockWarn" ng-change="setting.update()" />
+                           <span></span>
+                        </label>
+                     </legend>
+                     <div class="form-group">
+                        <label class="col-md-12">预警值</label>
+                        <div class="col-md-12">
+                           <span>商品库存低于</span>
+                           <input type="number" ng-model="user.merchant.stockWarnValue" />
+                           <span class="mr-sm">件时，提醒我。</span><a ng-click="setting.update()" class="btn btn-sm btn-primary">保存</a>
+                        </div>
+                     </div>
+                  </fieldset>
+               </form>
+            </div>
+         </div>
+      </tab>
+      <tab>
+         <tab-heading>会员配置</tab-heading>
+         <div class="panel">
+            <div class="panel-body">
+               <form class="form-horizontal">
+                  <fieldset>
+                     <legend>积分抵现
+                        <label class="switch switch-lg pull-right">
+                           <input type="checkbox" checked="checked" ng-change="setting.update()" ng-model="user.merchant.enableBonusBid" />
+                           <span></span>
+                        </label>
+                     </legend>
+                     <div class="form-group">
+                        <div class="col-md-12">
+                           <input type="number" ng-model="user.merchant.bonusBidRate" bonus="bonus" />
+                           <span class="mr-sm">积分 ＝ 1元</span><a ng-click="setting.update()" class="btn btn-sm btn-primary">保存</a>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <legend>积分规则</legend>
+                     <div class="form-group">
+                        <div class="col-md-12">
+                           <input type="number" ng-model="user.merchant.bonusOfferRate" currency="currency" />
+                           <span class="mr-sm">元 ＝ 1积分</span><a ng-click="setting.update()" class="btn btn-sm btn-primary">保存</a>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <legend>会员等级</legend>
+                     <div class="form-group">
+                        <div ng-repeat="level in user.merchant.memberLevels" class="col-md-12">
+                           <span>当积分在</span>
+                           <input type="number" ng-model="level.lower" />
+                           <span>到</span>
+                           <input type="number" ng-model="level.upper" />
+                           <span>之间，享受</span>
+                           <input type="number" ng-model="level.discount" />
+                           <span>折优惠</span>
+                           <input type="text" ng-model="level.name" />
+                           <span>会员</span>
+                           <a ng-click="user.merchant.memberLevels.pop()" ng-if="$index === user.merchant.memberLevels.length-1">
+                              <em class="fa fa-times mr-sm"></em>
+                           </a>
+                        </div>
+                        <div class="col-md-12">
+                           <a ng-click="setting.addMemberLevel()">
+                              <em class="fa fa-plus mr-sm"></em>新增会员等级</a>
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <div class="col-md-12">
+                           <hr/>
+                           <button ng-click="setting.update()" class="btn btn-primary">保存</button>
+                           <button ng-click="setting.updaeteMemberLevels()" class="btn btn-default">应用到全体会员</button>
+                        </div>
+                     </div>
+                  </fieldset>
+               </form>
+            </div>
+         </div>
+      </tab>
+   </tabset>
+</form>

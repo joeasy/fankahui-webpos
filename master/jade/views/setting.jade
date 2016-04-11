@@ -1,2 +1,114 @@
 h3 
   | 系统设置
+
+
+toaster-container(toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}")
+
+form.panel(ng-controller="SettingController as setting")
+  tabset(justified="true")
+    tab
+      tab-heading 
+        | 销售配置
+      .panel
+        .panel-body
+          form.form-horizontal
+            fieldset
+              legend 流水单号  
+              .form-group
+                .col-md-12
+                  span 初始流水单号  
+                  input.mr-sm(type='number', ng-model="user.shop.serialNumber")  
+                  button.btn.btn-sm.btn-primary(ng-click="setting.update(true)") 保存  
+            
+            fieldset
+              legend 销售抹零
+              .form-group
+                .col-md-12  
+                  label.radio-inline.c-radio
+                    input#inlineradio1(type='radio', ng-value="1", ng-model="user.merchant.changeRate", ng-change="setting.update()", checked)
+                    span.fa.fa-circle
+                    |  不抹零
+                  label.radio-inline.c-radio
+                    input#inlineradio2(type='radio', ng-value="10", ng-model="user.merchant.changeRate", ng-change="setting.update()")
+                    span.fa.fa-circle
+                    |  抹分
+                  label.radio-inline.c-radio
+                    input#inlineradio3(type='radio', ng-value="100", ng-model="user.merchant.changeRate", ng-change="setting.update()")
+                    span.fa.fa-circle
+                    |  抹角
+            
+    tab
+      tab-heading
+        | 商品配置
+      .panel
+        .panel-body
+          form.form-horizontal
+            fieldset
+              legend 库存预警
+                label.switch.switch-lg.pull-right
+                  input(type="checkbox", checked="checked", ng-model="user.merchant.enableStockWarn", ng-change="setting.update()")
+                  span
+              .form-group
+                label.col-md-12 预警值
+                .col-md-12
+                  span 商品库存低于
+                  input(type='number', ng-model="user.merchant.stockWarnValue")
+                  span.mr-sm 件时，提醒我。
+                  a.btn.btn-sm.btn-primary(ng-click="setting.update()") 保存
+
+    tab
+      tab-heading
+        | 会员配置
+      .panel
+        .panel-body
+          form.form-horizontal
+            fieldset
+              legend 积分抵现
+                label.switch.switch-lg.pull-right
+                  input(type="checkbox", checked="checked", ng-change="setting.update()", ng-model="user.merchant.enableBonusBid")
+                  span
+              .form-group
+                .col-md-12
+                  input(type='number', ng-model="user.merchant.bonusBidRate", bonus)  
+                  span.mr-sm 积分 ＝ 1元
+                  a.btn.btn-sm.btn-primary(ng-click="setting.update()") 保存
+
+
+            fieldset
+              legend 积分规则
+              .form-group
+                .col-md-12
+                  input(type='number', ng-model="user.merchant.bonusOfferRate", currency)  
+                  span.mr-sm 元 ＝ 1积分
+                  a.btn.btn-sm.btn-primary(ng-click="setting.update()") 保存
+
+            fieldset
+              legend 会员等级
+              .form-group
+                .col-md-12(ng-repeat="level in user.merchant.memberLevels")
+                  span 当积分在
+                  input(type='number', ng-model="level.lower")  
+                  span 到
+                  input(type='number', ng-model="level.upper")  
+                  span 之间，享受
+                  input(type='number', ng-model="level.discount")  
+                  span 折优惠
+                  input(type='text', ng-model="level.name")  
+                  span 会员 
+                  a(ng-click="user.merchant.memberLevels.pop()", ng-if="$index === user.merchant.memberLevels.length-1") 
+                    em.fa.fa-times.mr-sm 
+
+                .col-md-12
+                  a(ng-click="setting.addMemberLevel()")
+                    em.fa.fa-plus.mr-sm
+                    | 新增会员等级
+                    
+              .form-group
+                .col-md-12
+                  hr
+                  button.btn.btn-primary(ng-click='setting.update()') 保存
+                  button.btn.btn-default(ng-click='setting.updaeteMemberLevels()') 应用到全体会员
+                
+            
+            
+            
