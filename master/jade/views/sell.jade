@@ -47,7 +47,7 @@ h3
             em.fa.fa-calculator.fa-4x.text-muted
           .col-md-10
             .clearfix.ml
-              p.pull-left.mt0.h4 应付金额
+              p.pull-left.mt0.h4 金额总计
               p.pull-right.mt0.h4 {{dealService.countTotal()/100 | currency: '¥'}} 元
             .clearfix.ml
               p.pull-left.h4 商品总计
@@ -127,9 +127,17 @@ h3
         .col-md-9
           | 共计{{dealService.deal.totalQty}}件商品      
       fieldset: .form-group
+        label.col-md-3.control-label 总计金额  
+        .col-md-9  
+          | {{dealService.deal.totalAmount/100 | currency: '¥' }}  
+      fieldset: .form-group
+        label.col-md-3.control-label 折扣金额  
+        .col-md-9  
+          | {{dealService.deal.totalAmount/100 | currency: '¥' }}  
+      fieldset: .form-group
         label.col-md-3.control-label 应收金额  
         .col-md-9.fa-2x  
-          | {{dealService.deal.totalAmount/100 | currency: '¥' }}  
+          | {{dealService.deal.fee/100 | currency: '¥' }}  
       fieldset: .form-group
         label.col-md-3.control-label 实收金额
         .col-md-9  

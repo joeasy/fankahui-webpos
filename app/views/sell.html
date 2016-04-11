@@ -41,7 +41,7 @@
                </div>
                <div class="col-md-10">
                   <div class="clearfix ml">
-                     <p class="pull-left mt0 h4">应付金额</p>
+                     <p class="pull-left mt0 h4">金额总计</p>
                      <p class="pull-right mt0 h4">{{dealService.countTotal()/100 | currency: '¥'}} 元</p>
                   </div>
                   <div class="clearfix ml">
@@ -117,7 +117,9 @@
    </div>
    <!-- Templates -->
    <script type="text/ng-template" id="checkoutDialogId">
-      <div class="modal-header"><h3>结账</h3></div><div ng-class="{'whirl standard':submiting}" class="modal-body"><fieldset><div class="form-group"><label class="col-md-3 control-label">商品情况  </label><div class="col-md-9">共计{{dealService.deal.totalQty}}件商品      </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">应收金额  </label><div class="col-md-9 fa-2x"> 
-      {{dealService.deal.totalAmount/100 | currency: '¥' }}  </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">实收金额</label><div class="col-md-9"> <input type="number" ng-model="dealService.deal.payment.amount" currency="currency" class="form-control"/></div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">支付方式</label><div class="col-md-9"> <select ng-model="dealService.deal.payment.type" class="form-control"><option ng-repeat="(val, desc) in dealService.payType" value="{{val}}" ng-if="val != 'deposit' || !!dealService.deal.member">{{desc}}</option></select></div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">备注</label><div class="col-md-9"> <textarea row="2" ng-model="dealService.deal.memo" class="form-control"></textarea></div></div></fieldset></div><div class="modal-footer"><a type="button" ng-click="closeThisDialog()" class="pull-right btn btn-default mr">取消      </a><a ng-class="{disabled:submiting}" ng-click="submiting || confirm()" class="pull-right btn btn-primary mr">确定</a></div>
+      <div class="modal-header"><h3>结账</h3></div><div ng-class="{'whirl standard':submiting}" class="modal-body"><fieldset><div class="form-group"><label class="col-md-3 control-label">商品情况  </label><div class="col-md-9">共计{{dealService.deal.totalQty}}件商品      </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">总计金额  </label><div class="col-md-9"> 
+      {{dealService.deal.totalAmount/100 | currency: '¥' }}  </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">折扣金额  </label><div class="col-md-9"> 
+      {{dealService.deal.totalAmount/100 | currency: '¥' }}  </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">应收金额  </label><div class="col-md-9 fa-2x"> 
+      {{dealService.deal.fee/100 | currency: '¥' }}  </div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">实收金额</label><div class="col-md-9"> <input type="number" ng-model="dealService.deal.payment.amount" currency="currency" class="form-control"/></div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">支付方式</label><div class="col-md-9"> <select ng-model="dealService.deal.payment.type" class="form-control"><option ng-repeat="(val, desc) in dealService.payType" value="{{val}}" ng-if="val != 'deposit' || !!dealService.deal.member">{{desc}}</option></select></div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">备注</label><div class="col-md-9"> <textarea row="2" ng-model="dealService.deal.memo" class="form-control"></textarea></div></div></fieldset></div><div class="modal-footer"><a type="button" ng-click="closeThisDialog()" class="pull-right btn btn-default mr">取消      </a><a ng-class="{disabled:submiting}" ng-click="submiting || confirm()" class="pull-right btn btn-primary mr">确定</a></div>
    </script>
 </div>
