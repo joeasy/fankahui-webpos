@@ -16,6 +16,9 @@ h3
           td(data-title="'头像'") 
             img.img-thumbnail(ng-src="{{member.wxuser.headimgurl || 'app/img/user/02.jpg'}}", alt="", width="44", height="44")
           td(data-title="'用户名称'") {{member.name}}
+          td(data-title="'等级'") {{member.level || '普通'}}
+          td(data-title="'积分'") {{member.bonus || 0}}
+          td(data-title="'储值余额'") {{member.balance/100 || 0.00 | currency: '¥'}}
           td(data-title="'微信昵称'") {{member.wxuser.nickname}}
           td(data-title="'性别'") {{member.wxuser.sex | wx_sex}}
           td(data-title="'地区'") {{member.wxuser.province+member.wxuser.city}}

@@ -9,7 +9,9 @@
          <tbody ng-class="{'whirl standard': deals.tableParams.settings().$loading}">
             <tr ng-repeat="deal in $data" class="text-center">
                <td data-title="'流水号'">{{deal.serialNumber}}</td>
-               <td data-title="'销售金额'">{{deal.totalAmount/100 | currency: '¥'}}</td>
+               <td data-title="'商品总计'">{{deal.totalAmount/100 | currency: '¥'}}</td>
+               <td data-title="'折扣金额'">{{deal.discountAmount/100 || 0.00 | currency: '¥'}}</td>
+               <td data-title="'销售金额'">{{deal.fee/100 | currency: '¥'}}</td>
                <td data-title="'数量'">{{deal.totalQty}}</td>
                <td data-title="'支付方式'">{{deal.payment.type | payment_type}}</td>
                <td data-title="'顾客'">{{deal.member && deal.member.name || "走入顾客"}}</td>

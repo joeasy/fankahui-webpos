@@ -57,6 +57,7 @@
           });
           $scope.submiting = true;
         }
+        
     }
     
     DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];

@@ -122,32 +122,47 @@ h3
     .modal-header
       h3 结账
     .modal-body(ng-class="{'whirl standard':submiting}")
-      fieldset: .form-group
+      fieldset.mb0.pb0: .form-group
         label.col-md-3.control-label 商品情况  
         .col-md-9
           | 共计{{dealService.deal.totalQty}}件商品      
-      fieldset: .form-group
+      fieldset.mb0.pb0: .form-group
         label.col-md-3.control-label 总计金额  
         .col-md-9  
           | {{dealService.deal.totalAmount/100 | currency: '¥' }}  
-      fieldset: .form-group
+      fieldset.mb0.pb0: .form-group
         label.col-md-3.control-label 折扣金额  
         .col-md-9  
-          | {{dealService.deal.totalAmount/100 | currency: '¥' }}  
-      fieldset: .form-group
-        label.col-md-3.control-label 应收金额  
+          | {{dealService.deal.discountAmount/100 | currency: '¥' }}  
+      fieldset.mb0.pb0(ng-if="!!dealService.deal.member && user.merchant.enableBonusBid"): .form-group
+        label.col-md-3.control-label 积分抵扣  
+        .col-md-9  
+          | {{dealService.deal.bonusVouchAmount/100 | currency: '¥' }}  
+      fieldset.mb0.pb0: .form-group
+        label.col-md-3.control-label.fa-2x 应收  
         .col-md-9.fa-2x  
           | {{dealService.deal.fee/100 | currency: '¥' }}  
-      fieldset: .form-group
-        label.col-md-3.control-label 实收金额
-        .col-md-9  
-          input.form-control(type='number', ng-model="dealService.deal.payment.amount", currency)  
-      fieldset: .form-group
+      fieldset.mb0.pb0: .form-group
         label.col-md-3.control-label 支付方式
         .col-md-9  
-          select.form-control(ng-model="dealService.deal.payment.type")
-            option(ng-repeat="(val, desc) in dealService.payType", value="{{val}}" ng-if="val != 'deposit' || !!dealService.deal.member") {{desc}}
-      fieldset: .form-group
+          select.form-control(ng-model="dealService.deal.payment.type",  ng-change="dealService.onChangePayType()")
+            option(ng-repeat="(val, desc) in dealService.payType", value="{{val}}", ng-if="val !== 'deposit' || !!dealService.deal.member || dealService.deal.member.balance < dealService.deal.fee") {{desc}}
+      fieldset.mb0.pb0(ng-if="dealService.deal.payment.type === 'cash'"): .form-group
+        label.col-md-3.control-label 抹零
+        .col-md-9
+          | {{dealService.deal.payment.cost/100 | currency: '¥' }}
+      fieldset.mb0: .form-group
+        label.col-md-3.control-label 实收金额
+        .col-md-9  
+          input.form-control(type='number', ng-model="dealService.deal.payment.paid", currency, ng-if="dealService.deal.payment.type === 'cash'", ng-change="dealService.countChange()") 
+          span
+          span(ng-if="dealService.deal.payment.type !== 'cash'") 
+            | {{dealService.deal.payment.amount/100 | currency: '¥'}} 
+      fieldset.mb0(ng-if="dealService.deal.payment.type === 'cash'"): .form-group
+        label.col-md-3.control-label 找零
+        .col-md-9
+          | {{dealService.deal.payment.change/100 | currency: '¥'}}
+      fieldset.mb0.pb0: .form-group
         label.col-md-3.control-label 备注
         .col-md-9  
           textarea.form-control(row="2", ng-model="dealService.deal.memo")

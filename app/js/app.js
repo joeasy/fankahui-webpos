@@ -53,19 +53,13 @@
     'use strict';
 
     angular
-        .module('app.colors', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.charts', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.bootstrapui', []);
+        .module('app.colors', []);
 })();
 (function() {
     'use strict';
@@ -92,13 +86,19 @@
     'use strict';
 
     angular
-        .module('app.elements', []);
+        .module('app.dashboard', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.dashboard', []);
+        .module('app.bootstrapui', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.elements', []);
 })();
 (function() {
     'use strict';
@@ -110,13 +110,13 @@
     'use strict';
 
     angular
-        .module('app.flatdoc', []);
+        .module('app.forms', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.forms', []);
+        .module('app.flatdoc', []);
 })();
 (function() {
     'use strict';
@@ -140,13 +140,13 @@
     'use strict';
 
     angular
-        .module('app.loadingbar', []);
+        .module('app.locale', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.locale', []);
+        .module('app.loadingbar', []);
 })();
 (function() {
     'use strict';
@@ -164,13 +164,13 @@
     'use strict';
 
     angular
-        .module('app.myshop', []);
+        .module('app.members', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.members', []);
+        .module('app.myshop', []);
 })();
 (function() {
     'use strict';
@@ -216,13 +216,13 @@
     'use strict';
 
     angular
-        .module('app.settings', []);
+        .module('app.sales', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.sales', []);
+        .module('app.settings', []);
 })();
 (function() {
     'use strict';
@@ -249,56 +249,6 @@
         .module('app.utils', [
           'app.colors'
         ]);
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .constant('APP_COLORS', {
-          'primary':                '#5d9cec',
-          'success':                '#27c24c',
-          'info':                   '#23b7e5',
-          'warning':                '#ff902b',
-          'danger':                 '#f05050',
-          'inverse':                '#131e26',
-          'green':                  '#37bc9b',
-          'pink':                   '#f532e5',
-          'purple':                 '#7266ba',
-          'dark':                   '#3a3f51',
-          'yellow':                 '#fad732',
-          'gray-darker':            '#232735',
-          'gray-dark':              '#3a3f51',
-          'gray':                   '#dde6e9',
-          'gray-light':             '#e4eaec',
-          'gray-lighter':           '#edf1f2'
-        })
-        ;
-})();
-/**=========================================================
- * Module: colors.js
- * Services to retrieve global colors
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .service('Colors', Colors);
-
-    Colors.$inject = ['APP_COLORS'];
-    function Colors(APP_COLORS) {
-        this.byName = byName;
-
-        ////////////////
-
-        function byName(name) {
-          return (APP_COLORS[name] || '#fff');
-        }
-    }
-
 })();
 
 /**=========================================================
@@ -1897,6 +1847,607 @@
 
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .constant('APP_COLORS', {
+          'primary':                '#5d9cec',
+          'success':                '#27c24c',
+          'info':                   '#23b7e5',
+          'warning':                '#ff902b',
+          'danger':                 '#f05050',
+          'inverse':                '#131e26',
+          'green':                  '#37bc9b',
+          'pink':                   '#f532e5',
+          'purple':                 '#7266ba',
+          'dark':                   '#3a3f51',
+          'yellow':                 '#fad732',
+          'gray-darker':            '#232735',
+          'gray-dark':              '#3a3f51',
+          'gray':                   '#dde6e9',
+          'gray-light':             '#e4eaec',
+          'gray-lighter':           '#edf1f2'
+        })
+        ;
+})();
+/**=========================================================
+ * Module: colors.js
+ * Services to retrieve global colors
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .service('Colors', Colors);
+
+    Colors.$inject = ['APP_COLORS'];
+    function Colors(APP_COLORS) {
+        this.byName = byName;
+
+        ////////////////
+
+        function byName(name) {
+          return (APP_COLORS[name] || '#fff');
+        }
+    }
+
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .config(coreConfig)
+        .config(loopbackConfig)
+    ;
+
+    coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$httpProvider'];
+    function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide, $httpProvider){
+      
+      var core = angular.module('app.core');
+      // registering components after bootstrap
+      core.controller = $controllerProvider.register;
+      core.directive  = $compileProvider.directive;
+      core.filter     = $filterProvider.register;
+      core.factory    = $provide.factory;
+      core.service    = $provide.service;
+      core.constant   = $provide.constant;
+      core.value      = $provide.value;
+
+      $httpProvider.interceptors.push(["$q", "$location", "LoopBackAuth", function($q, $location, LoopBackAuth) {
+        return {
+          responseError: function(rejection) {
+            if (rejection.status == 401) {
+              LoopBackAuth.clearUser();
+              LoopBackAuth.clearStorage();
+              $location.path('/page/login')
+            }
+            return $q.reject(rejection);
+          }
+        };
+      }]);     
+    }
+    
+    loopbackConfig.$inject = ['LoopBackResourceProvider', 'urlBase'];
+    function loopbackConfig(LoopBackResourceProvider, urlBase) {
+      LoopBackResourceProvider.setUrlBase(urlBase);
+    }
+
+})();
+/**=========================================================
+ * Module: constants.js
+ * Define constants to inject across the application
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .constant('APP_MEDIAQUERY', {
+          'desktopLG':             1200,
+          'desktop':                992,
+          'tablet':                 768,
+          'mobile':                 480
+        })
+        .constant('urlBase', "http://0.0.0.0:3000/api")
+        // .constant('urlBase', "http://api.fankahui.com:3000/api")
+      ;
+
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .filter('role', roleFilter)
+    ;
+
+    function roleFilter() {
+        var role = {
+          owner: "业主",
+          shopManager: "店长",
+          cashier: "收银员"
+        };
+        return function(key) {
+          return role[key];
+        }
+    }
+    
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .run(appRun)
+        .run(currentUserRun)
+    ;
+
+    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
+    
+    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
+      
+      // Set reference to access them from any scope
+      $rootScope.$state = $state;
+      $rootScope.$stateParams = $stateParams;
+      $rootScope.$storage = $window.localStorage;
+
+      // Uncomment this to disable template cache
+      /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+          if (typeof(toState) !== 'undefined'){
+            $templateCache.remove(toState.templateUrl);
+          }
+      });*/
+
+      // Allows to use branding color with interpolation
+      // {{ colorByName('primary') }}
+      $rootScope.colorByName = Colors.byName;
+
+      // cancel click event easily
+      $rootScope.cancel = function($event) {
+        $event.stopPropagation();
+      };
+
+      // Hooks Example
+      // ----------------------------------- 
+
+      // Hook not found
+      $rootScope.$on('$stateNotFound',
+        function(event, unfoundState/*, fromState, fromParams*/) {
+            console.log(unfoundState.to); // "lazy.state"
+            console.log(unfoundState.toParams); // {a:1, b:2}
+            console.log(unfoundState.options); // {inherit:false} + default options
+        });
+      // Hook error
+      $rootScope.$on('$stateChangeError',
+        function(event, toState, toParams, fromState, fromParams, error){
+          console.log(error);
+        });
+      // Hook success
+      $rootScope.$on('$stateChangeSuccess',
+        function(/*event, toState, toParams, fromState, fromParams*/) {
+          // display new view from top
+          $window.scrollTo(0, 0);
+          // Save the route title
+          $rootScope.currTitle = $state.current.title;
+        });
+
+      // Load a title dynamically
+      $rootScope.currTitle = $state.current.title;
+      $rootScope.pageTitle = function() {
+        var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
+        document.title = title;
+        return title;
+      };      
+
+    }
+
+    currentUserRun.$inject = ['$rootScope', 'User', '$filter'];
+    
+    function currentUserRun($rootScope, User, $filter) {
+      
+      userDidLogined();
+      
+      function userDidLogined() {
+        if(User.isAuthenticated()) {
+          User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
+          .$promise.then(function (user) {
+            user.job = $filter('role')(user.role);
+            user.name = user.name || user.username;
+            user.picture = 'app/img/dummy.png';
+            $rootScope.user = user;
+          });
+        }
+      }
+      
+      $rootScope.$on('User.logined', userDidLogined);
+      
+    }
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .controller('DashboardController', DashboardController);
+
+    DashboardController.$inject = ['$scope', 'ChartData', '$timeout', 'Checkin'];
+    function DashboardController($scope, ChartData, $timeout, Checkin) {
+        var vm = this;
+
+        // Set Moment locale
+        moment.locale('zh-cn');
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          
+          if(!$scope.user) return;
+
+          // CHECKIN
+          // ----------------------------------- 
+          vm.checkins = Checkin.find({filter:{
+            where: {merchantId: $scope.user.shopId},
+            include: [{member: 'wxuser'}],
+            limit: 10, 
+            order: 'created DESC'
+          }});
+
+          // SPLINE
+          // ----------------------------------- 
+          vm.splineData = ChartData.load('server/chart/spline.json');
+          vm.splineOptions = {
+              series: {
+                  lines: {
+                      show: false
+                  },
+                  points: {
+                      show: true,
+                      radius: 4
+                  },
+                  splines: {
+                      show: true,
+                      tension: 0.4,
+                      lineWidth: 1,
+                      fill: 0.5
+                  }
+              },
+              grid: {
+                  borderColor: '#eee',
+                  borderWidth: 1,
+                  hoverable: true,
+                  backgroundColor: '#fcfcfc'
+              },
+              tooltip: true,
+              tooltipOpts: {
+                  content: function (label, x, y) { return x + ' : ' + y; }
+              },
+              xaxis: {
+                  tickColor: '#fcfcfc',
+                  mode: 'categories'
+              },
+              yaxis: {
+                  min: 0,
+                  max: 150, // optional: use it for a clear represetation
+                  tickColor: '#eee',
+                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
+                  tickFormatter: function (v) {
+                      return v/* + ' visitors'*/;
+                  }
+              },
+              shadowSize: 0
+          };
+
+
+          // PANEL REFRESH EVENTS
+          // ----------------------------------- 
+
+          $scope.$on('panel-refresh', function(event, id) {
+            
+            console.log('Simulating chart refresh during 3s on #'+id);
+
+            // Instead of timeout you can request a chart data
+            $timeout(function(){
+              
+              // directive listen for to remove the spinner 
+              // after we end up to perform own operations
+              $scope.$broadcast('removeSpinner', id);
+              
+              console.log('Refreshed #' + id);
+
+            }, 3000);
+
+          });
+
+
+          // PANEL DISMISS EVENTS
+          // ----------------------------------- 
+
+          // Before remove panel
+          $scope.$on('panel-remove', function(event, id, deferred){
+            
+            console.log('Panel #' + id + ' removing');
+            
+            // Here is obligatory to call the resolve() if we pretend to remove the panel finally
+            // Not calling resolve() will NOT remove the panel
+            // It's up to your app to decide if panel should be removed or not
+            deferred.resolve();
+          
+          });
+
+          // Panel removed ( only if above was resolved() )
+          $scope.$on('panel-removed', function(event, id){
+
+            console.log('Panel #' + id + ' removed');
+
+          });
+
+        }
+        
+        $scope.$on('User.logined', activate);
+        
+    }
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .filter('moment_unix', momentUnixFilter)
+        .filter('moment_from_now', momentFromNowFilter)
+        .filter('moment_unix_from_now', momentUnixFromNowFilter)
+    ;
+
+    function momentUnixFilter(input, format) {
+      return moment.unix(input).format(format || 'YYYY-MM-DD HH:mm:ss');
+    }
+    momentUnixFilter.$inject = ["input", "format"];
+    
+    function momentFromNowFilter() {
+      return function (input) {
+        return moment(input).fromNow();
+      };
+    }
+
+    function momentUnixFromNowFilter(input) {
+      return moment.unix(input).fromNow();
+    }
+    momentUnixFromNowFilter.$inject = ["input"];
+
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .controller('DashboardV2Controller', DashboardV2Controller);
+
+    DashboardV2Controller.$inject = ['$rootScope', '$scope', '$state'];
+    function DashboardV2Controller($rootScope, $scope, $state) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          
+          // Change layout mode
+          if( $state.includes('app-h') ) {
+            // Setup layout horizontal for demo
+            $rootScope.app.layout.horizontal = true;
+            $scope.$on('$destroy', function(){
+                $rootScope.app.layout.horizontal = false;
+            });            
+          }
+          else {
+            $rootScope.app.layout.isCollapsed = true;
+          }
+
+          // BAR STACKED
+          // ----------------------------------- 
+          vm.barStackedOptions = {
+              series: {
+                  stack: true,
+                  bars: {
+                      align: 'center',
+                      lineWidth: 0,
+                      show: true,
+                      barWidth: 0.6,
+                      fill: 0.9
+                  }
+              },
+              grid: {
+                  borderColor: '#eee',
+                  borderWidth: 1,
+                  hoverable: true,
+                  backgroundColor: '#fcfcfc'
+              },
+              tooltip: true,
+              tooltipOpts: {
+                  content: function (label, x, y) { return x + ' : ' + y; }
+              },
+              xaxis: {
+                  tickColor: '#fcfcfc',
+                  mode: 'categories'
+              },
+              yaxis: {
+                  min: 0,
+                  max: 200, // optional: use it for a clear represetation
+                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
+                  tickColor: '#eee'
+              },
+              shadowSize: 0
+          };
+
+          // SPLINE
+          // ----------------------------------- 
+
+          vm.splineOptions = {
+              series: {
+                  lines: {
+                      show: false
+                  },
+                  points: {
+                      show: true,
+                      radius: 4
+                  },
+                  splines: {
+                      show: true,
+                      tension: 0.4,
+                      lineWidth: 1,
+                      fill: 0.5
+                  }
+              },
+              grid: {
+                  borderColor: '#eee',
+                  borderWidth: 1,
+                  hoverable: true,
+                  backgroundColor: '#fcfcfc'
+              },
+              tooltip: true,
+              tooltipOpts: {
+                  content: function (label, x, y) { return x + ' : ' + y; }
+              },
+              xaxis: {
+                  tickColor: '#fcfcfc',
+                  mode: 'categories'
+              },
+              yaxis: {
+                  min: 0,
+                  max: 150, // optional: use it for a clear represetation
+                  tickColor: '#eee',
+                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
+                  tickFormatter: function (v) {
+                      return v/* + ' visitors'*/;
+                  }
+              },
+              shadowSize: 0
+          };
+        }
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .controller('DashboardV3Controller', DashboardV3Controller);
+
+    DashboardV3Controller.$inject = ['$rootScope'];
+    function DashboardV3Controller($rootScope) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+          // SPLINE
+          // ----------------------------------- 
+
+          vm.splineOptions = {
+              series: {
+                  lines: {
+                      show: false
+                  },
+                  points: {
+                      show: true,
+                      radius: 4
+                  },
+                  splines: {
+                      show: true,
+                      tension: 0.4,
+                      lineWidth: 1,
+                      fill: 0.5
+                  }
+              },
+              grid: {
+                  borderColor: '#eee',
+                  borderWidth: 1,
+                  hoverable: true,
+                  backgroundColor: '#fcfcfc'
+              },
+              tooltip: true,
+              tooltipOpts: {
+                  content: function (label, x, y) { return x + ' : ' + y; }
+              },
+              xaxis: {
+                  tickColor: '#fcfcfc',
+                  mode: 'categories'
+              },
+              yaxis: {
+                  min: 0,
+                  max: 150, // optional: use it for a clear represetation
+                  tickColor: '#eee',
+                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
+                  tickFormatter: function (v) {
+                      return v/* + ' visitors'*/;
+                  }
+              },
+              shadowSize: 0
+          };
+
+
+          vm.seriesData = {
+            'CA': 11100,   // Canada
+            'DE': 2510,    // Germany
+            'FR': 3710,    // France
+            'AU': 5710,    // Australia
+            'GB': 8310,    // Great Britain
+            'RU': 9310,    // Russia
+            'BR': 6610,    // Brazil
+            'IN': 7810,    // India
+            'CN': 4310,    // China
+            'US': 839,     // USA
+            'SA': 410      // Saudi Arabia
+          };
+          
+          vm.markersData = [
+            { latLng:[41.90, 12.45],  name:'Vatican City'          },
+            { latLng:[43.73, 7.41],   name:'Monaco'                },
+            { latLng:[-0.52, 166.93], name:'Nauru'                 },
+            { latLng:[-8.51, 179.21], name:'Tuvalu'                },
+            { latLng:[7.11,171.06],   name:'Marshall Islands'      },
+            { latLng:[17.3,-62.73],   name:'Saint Kitts and Nevis' },
+            { latLng:[3.2,73.22],     name:'Maldives'              },
+            { latLng:[35.88,14.5],    name:'Malta'                 },
+            { latLng:[41.0,-71.06],   name:'New England'           },
+            { latLng:[12.05,-61.75],  name:'Grenada'               },
+            { latLng:[13.16,-59.55],  name:'Barbados'              },
+            { latLng:[17.11,-61.85],  name:'Antigua and Barbuda'   },
+            { latLng:[-4.61,55.45],   name:'Seychelles'            },
+            { latLng:[7.35,134.46],   name:'Palau'                 },
+            { latLng:[42.5,1.51],     name:'Andorra'               }
+          ];
+        }
+    }
+})();
 /**=========================================================
  * Module: demo-alerts.js
  * Provides a simple demo for pagination
@@ -2456,188 +3007,6 @@
         }
     }
 })();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .config(coreConfig)
-        .config(loopbackConfig)
-    ;
-
-    coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$httpProvider'];
-    function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide, $httpProvider){
-      
-      var core = angular.module('app.core');
-      // registering components after bootstrap
-      core.controller = $controllerProvider.register;
-      core.directive  = $compileProvider.directive;
-      core.filter     = $filterProvider.register;
-      core.factory    = $provide.factory;
-      core.service    = $provide.service;
-      core.constant   = $provide.constant;
-      core.value      = $provide.value;
-
-      $httpProvider.interceptors.push(["$q", "$location", "LoopBackAuth", function($q, $location, LoopBackAuth) {
-        return {
-          responseError: function(rejection) {
-            if (rejection.status == 401) {
-              LoopBackAuth.clearUser();
-              LoopBackAuth.clearStorage();
-              $location.path('/page/login')
-            }
-            return $q.reject(rejection);
-          }
-        };
-      }]);     
-    }
-    
-    loopbackConfig.$inject = ['LoopBackResourceProvider', 'urlBase'];
-    function loopbackConfig(LoopBackResourceProvider, urlBase) {
-      LoopBackResourceProvider.setUrlBase(urlBase);
-    }
-
-})();
-/**=========================================================
- * Module: constants.js
- * Define constants to inject across the application
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .constant('APP_MEDIAQUERY', {
-          'desktopLG':             1200,
-          'desktop':                992,
-          'tablet':                 768,
-          'mobile':                 480
-        })
-        .constant('urlBase', "http://0.0.0.0:3000/api")
-        // .constant('urlBase', "http://api.fankahui.com:3000/api")
-      ;
-
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .filter('role', roleFilter)
-    ;
-
-    function roleFilter() {
-        var role = {
-          owner: "业主",
-          shopManager: "店长",
-          cashier: "收银员"
-        };
-        return function(key) {
-          return role[key];
-        }
-    }
-    
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .run(appRun)
-        .run(currentUserRun)
-    ;
-
-    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
-    
-    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
-      
-      // Set reference to access them from any scope
-      $rootScope.$state = $state;
-      $rootScope.$stateParams = $stateParams;
-      $rootScope.$storage = $window.localStorage;
-
-      // Uncomment this to disable template cache
-      /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-          if (typeof(toState) !== 'undefined'){
-            $templateCache.remove(toState.templateUrl);
-          }
-      });*/
-
-      // Allows to use branding color with interpolation
-      // {{ colorByName('primary') }}
-      $rootScope.colorByName = Colors.byName;
-
-      // cancel click event easily
-      $rootScope.cancel = function($event) {
-        $event.stopPropagation();
-      };
-
-      // Hooks Example
-      // ----------------------------------- 
-
-      // Hook not found
-      $rootScope.$on('$stateNotFound',
-        function(event, unfoundState/*, fromState, fromParams*/) {
-            console.log(unfoundState.to); // "lazy.state"
-            console.log(unfoundState.toParams); // {a:1, b:2}
-            console.log(unfoundState.options); // {inherit:false} + default options
-        });
-      // Hook error
-      $rootScope.$on('$stateChangeError',
-        function(event, toState, toParams, fromState, fromParams, error){
-          console.log(error);
-        });
-      // Hook success
-      $rootScope.$on('$stateChangeSuccess',
-        function(/*event, toState, toParams, fromState, fromParams*/) {
-          // display new view from top
-          $window.scrollTo(0, 0);
-          // Save the route title
-          $rootScope.currTitle = $state.current.title;
-        });
-
-      // Load a title dynamically
-      $rootScope.currTitle = $state.current.title;
-      $rootScope.pageTitle = function() {
-        var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
-        document.title = title;
-        return title;
-      };      
-
-    }
-
-    currentUserRun.$inject = ['$rootScope', 'User', '$filter'];
-    
-    function currentUserRun($rootScope, User, $filter) {
-      
-      userDidLogined();
-      
-      function userDidLogined() {
-        if(User.isAuthenticated()) {
-          User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
-          .$promise.then(function (user) {
-            user.job = $filter('role')(user.role);
-            user.name = user.name || user.username;
-            user.picture = 'app/img/dummy.png';
-            $rootScope.user = user;
-          });
-        }
-      }
-      
-      $rootScope.$on('User.logined', userDidLogined);
-      
-    }
-})();
-
 
 
 (function() {
@@ -3615,375 +3984,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .controller('DashboardController', DashboardController);
-
-    DashboardController.$inject = ['$scope', 'ChartData', '$timeout', 'Checkin'];
-    function DashboardController($scope, ChartData, $timeout, Checkin) {
-        var vm = this;
-
-        // Set Moment locale
-        moment.locale('zh-cn');
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          
-          if(!$scope.user) return;
-
-          // CHECKIN
-          // ----------------------------------- 
-          vm.checkins = Checkin.find({filter:{
-            where: {merchantId: $scope.user.shopId},
-            include: [{member: 'wxuser'}],
-            limit: 10, 
-            order: 'created DESC'
-          }});
-
-          // SPLINE
-          // ----------------------------------- 
-          vm.splineData = ChartData.load('server/chart/spline.json');
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-
-
-          // PANEL REFRESH EVENTS
-          // ----------------------------------- 
-
-          $scope.$on('panel-refresh', function(event, id) {
-            
-            console.log('Simulating chart refresh during 3s on #'+id);
-
-            // Instead of timeout you can request a chart data
-            $timeout(function(){
-              
-              // directive listen for to remove the spinner 
-              // after we end up to perform own operations
-              $scope.$broadcast('removeSpinner', id);
-              
-              console.log('Refreshed #' + id);
-
-            }, 3000);
-
-          });
-
-
-          // PANEL DISMISS EVENTS
-          // ----------------------------------- 
-
-          // Before remove panel
-          $scope.$on('panel-remove', function(event, id, deferred){
-            
-            console.log('Panel #' + id + ' removing');
-            
-            // Here is obligatory to call the resolve() if we pretend to remove the panel finally
-            // Not calling resolve() will NOT remove the panel
-            // It's up to your app to decide if panel should be removed or not
-            deferred.resolve();
-          
-          });
-
-          // Panel removed ( only if above was resolved() )
-          $scope.$on('panel-removed', function(event, id){
-
-            console.log('Panel #' + id + ' removed');
-
-          });
-
-        }
-        
-        $scope.$on('User.logined', activate);
-        
-    }
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .filter('moment_unix', momentUnixFilter)
-        .filter('moment_from_now', momentFromNowFilter)
-        .filter('moment_unix_from_now', momentUnixFromNowFilter)
-    ;
-
-    function momentUnixFilter(input, format) {
-      return moment.unix(input).format(format || 'YYYY-MM-DD HH:mm:ss');
-    }
-    momentUnixFilter.$inject = ["input", "format"];
-    
-    function momentFromNowFilter() {
-      return function (input) {
-        return moment(input).fromNow();
-      };
-    }
-
-    function momentUnixFromNowFilter(input) {
-      return moment.unix(input).fromNow();
-    }
-    momentUnixFromNowFilter.$inject = ["input"];
-
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .controller('DashboardV2Controller', DashboardV2Controller);
-
-    DashboardV2Controller.$inject = ['$rootScope', '$scope', '$state'];
-    function DashboardV2Controller($rootScope, $scope, $state) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          
-          // Change layout mode
-          if( $state.includes('app-h') ) {
-            // Setup layout horizontal for demo
-            $rootScope.app.layout.horizontal = true;
-            $scope.$on('$destroy', function(){
-                $rootScope.app.layout.horizontal = false;
-            });            
-          }
-          else {
-            $rootScope.app.layout.isCollapsed = true;
-          }
-
-          // BAR STACKED
-          // ----------------------------------- 
-          vm.barStackedOptions = {
-              series: {
-                  stack: true,
-                  bars: {
-                      align: 'center',
-                      lineWidth: 0,
-                      show: true,
-                      barWidth: 0.6,
-                      fill: 0.9
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 200, // optional: use it for a clear represetation
-                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
-                  tickColor: '#eee'
-              },
-              shadowSize: 0
-          };
-
-          // SPLINE
-          // ----------------------------------- 
-
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-        }
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .controller('DashboardV3Controller', DashboardV3Controller);
-
-    DashboardV3Controller.$inject = ['$rootScope'];
-    function DashboardV3Controller($rootScope) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // SPLINE
-          // ----------------------------------- 
-
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-
-
-          vm.seriesData = {
-            'CA': 11100,   // Canada
-            'DE': 2510,    // Germany
-            'FR': 3710,    // France
-            'AU': 5710,    // Australia
-            'GB': 8310,    // Great Britain
-            'RU': 9310,    // Russia
-            'BR': 6610,    // Brazil
-            'IN': 7810,    // India
-            'CN': 4310,    // China
-            'US': 839,     // USA
-            'SA': 410      // Saudi Arabia
-          };
-          
-          vm.markersData = [
-            { latLng:[41.90, 12.45],  name:'Vatican City'          },
-            { latLng:[43.73, 7.41],   name:'Monaco'                },
-            { latLng:[-0.52, 166.93], name:'Nauru'                 },
-            { latLng:[-8.51, 179.21], name:'Tuvalu'                },
-            { latLng:[7.11,171.06],   name:'Marshall Islands'      },
-            { latLng:[17.3,-62.73],   name:'Saint Kitts and Nevis' },
-            { latLng:[3.2,73.22],     name:'Maldives'              },
-            { latLng:[35.88,14.5],    name:'Malta'                 },
-            { latLng:[41.0,-71.06],   name:'New England'           },
-            { latLng:[12.05,-61.75],  name:'Grenada'               },
-            { latLng:[13.16,-59.55],  name:'Barbados'              },
-            { latLng:[17.11,-61.85],  name:'Antigua and Barbuda'   },
-            { latLng:[-4.61,55.45],   name:'Seychelles'            },
-            { latLng:[7.35,134.46],   name:'Palau'                 },
-            { latLng:[42.5,1.51],     name:'Andorra'               }
-          ];
-        }
-    }
-})();
 /**=========================================================
  * Module: article.js
  =========================================================*/
@@ -4595,55 +4595,6 @@
           ];
         }
     }
-})();
-
-/**=========================================================
- * Module: flatdoc.js
- * Creates the flatdoc markup and initializes the plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.flatdoc')
-        .directive('flatdoc', flatdoc);
-
-    function flatdoc () {
-
-        var directive = {
-            template: '<div role="flatdoc"><div role="flatdoc-menu"></div><div role="flatdoc-content"></div></div>',
-            link: link,
-            restrict: 'EA'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          Flatdoc.run({
-            fetcher: Flatdoc.file(attrs.src)
-          });
-          
-          var $root = $('html, body');
-          $(document).on('flatdoc:ready', function() {
-            var docMenu = $('[role="flatdoc-menu"]');
-            docMenu.find('a').on('click', function(e) {
-              e.preventDefault(); e.stopPropagation();
-              
-              var $this = $(this);
-              
-              docMenu.find('a.active').removeClass('active');
-              $this.addClass('active');
-
-              $root.animate({
-                    scrollTop: $(this.getAttribute('href')).offset().top - ($('.topnavbar').height() + 10)
-                }, 800);
-            });
-
-          });
-        }
-    }
-
-
 })();
 
 (function() {
@@ -5639,6 +5590,55 @@
 })();
 
 /**=========================================================
+ * Module: flatdoc.js
+ * Creates the flatdoc markup and initializes the plugin
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.flatdoc')
+        .directive('flatdoc', flatdoc);
+
+    function flatdoc () {
+
+        var directive = {
+            template: '<div role="flatdoc"><div role="flatdoc-menu"></div><div role="flatdoc-content"></div></div>',
+            link: link,
+            restrict: 'EA'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+          Flatdoc.run({
+            fetcher: Flatdoc.file(attrs.src)
+          });
+          
+          var $root = $('html, body');
+          $(document).on('flatdoc:ready', function() {
+            var docMenu = $('[role="flatdoc-menu"]');
+            docMenu.find('a').on('click', function(e) {
+              e.preventDefault(); e.stopPropagation();
+              
+              var $this = $(this);
+              
+              docMenu.find('a.active').removeClass('active');
+              $this.addClass('active');
+
+              $root.animate({
+                    scrollTop: $(this.getAttribute('href')).offset().top - ($('.topnavbar').height() + 10)
+                }, 800);
+            });
+
+          });
+        }
+    }
+
+
+})();
+
+/**=========================================================
  * Module: skycons.js
  * Include any animated weather icon from Skycons
  =========================================================*/
@@ -6051,50 +6051,6 @@
     'use strict';
 
     angular
-        .module('app.loadingbar')
-        .config(loadingbarConfig)
-        ;
-    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
-    function loadingbarConfig(cfpLoadingBarProvider){
-      cfpLoadingBarProvider.includeBar = true;
-      cfpLoadingBarProvider.includeSpinner = false;
-      cfpLoadingBarProvider.latencyThreshold = 500;
-      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .run(loadingbarRun)
-        ;
-    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
-    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
-
-      // Loading bar transition
-      // ----------------------------------- 
-      var thBar;
-      $rootScope.$on('$stateChangeStart', function() {
-          if($('.wrapper > section').length) // check if bar container exists
-            thBar = $timeout(function() {
-              cfpLoadingBar.start();
-            }, 0); // sets a latency Threshold
-      });
-      $rootScope.$on('$stateChangeSuccess', function(event) {
-          event.targetScope.$watch('$viewContentLoaded', function () {
-            $timeout.cancel(thBar);
-            cfpLoadingBar.complete();
-          });
-      });
-
-    }
-
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.locale')
         .config(localeConfig)
         ;
@@ -6146,6 +6102,50 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .config(loadingbarConfig)
+        ;
+    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
+    function loadingbarConfig(cfpLoadingBarProvider){
+      cfpLoadingBarProvider.includeBar = true;
+      cfpLoadingBarProvider.includeSpinner = false;
+      cfpLoadingBarProvider.latencyThreshold = 500;
+      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .run(loadingbarRun)
+        ;
+    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
+    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
+
+      // Loading bar transition
+      // ----------------------------------- 
+      var thBar;
+      $rootScope.$on('$stateChangeStart', function() {
+          if($('.wrapper > section').length) // check if bar container exists
+            thBar = $timeout(function() {
+              cfpLoadingBar.start();
+            }, 0); // sets a latency Threshold
+      });
+      $rootScope.$on('$stateChangeSuccess', function(event) {
+          event.targetScope.$watch('$viewContentLoaded', function () {
+            $timeout.cancel(thBar);
+            cfpLoadingBar.complete();
+          });
+      });
+
+    }
+
+})();
 /**=========================================================
  * Module: demo-pagination.js
  * Provides a simple demo for pagination
@@ -6624,6 +6624,96 @@
     'use strict';
 
     angular
+      .module('app.members')
+      .controller('MembersController', MembersController)
+    ;
+      
+    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService', 'dealService'];
+    function MembersController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, qrcodeService, dealService) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        $scope.qrcodeService = qrcodeService;
+        vm.keyword = "";
+        vm.tableParams = new ngTableParams({count: 10}, {
+          getData: function($defer, params) {
+            var filter = {where:{status:{ne:'deleted'}}, include:['wxuser']}
+            if(vm.keyword != '') {
+              var qs = {regex: keyword};
+              filter.where.or = [{"entities.sku.item.name":qs}];
+              params.page(1);
+            }
+            ngTableLBService.getData($defer, params, Member, filter);
+          }
+        });
+      }
+      
+      vm.sell = function (member) {
+        dealService.openDeal(member);
+        $scope.$state.go('app.sell');
+      }
+    }
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.members')
+        .filter('wx_sex', wxsexFilter)
+    ;
+
+    function wxsexFilter() {
+        // var type = {
+        //   cash: "现金支付",
+        //   bankcard: "刷卡支付",
+        //   wxpay: "微信支付",
+        //   alipay: "支付宝"
+        // }
+        var type = ['保密', '男', '女'];
+        return function(key) {
+          return type[key];
+        }
+    }
+
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.members')
+        .service('qrcodeService', qrcodeService);
+
+    qrcodeService.$inject = ['ngDialog'];
+    function qrcodeService(ngDialog) {
+      var self = this;
+      
+      this.showQRCode = showQRCode;
+      
+      function showQRCode(imageurl) {
+        imageurl = imageurl || 'app/img/qrcode-for-gh.jpg';
+        ngDialog.open({
+          template: "<img src="+imageurl+" class='img-responsive'>",
+          plain: true,
+          className: 'ngdialog-theme-default'
+        });    
+      }
+    }
+
+})();
+
+(function() {
+    'use strict';
+
+    angular
       .module('app.myshop', [])
       .controller('MyShopController', MyShopController)
       .controller('ShopsController', ShopsController)
@@ -6757,96 +6847,6 @@
     }
 
 })();
-(function() {
-    'use strict';
-
-    angular
-      .module('app.members')
-      .controller('MembersController', MembersController)
-    ;
-      
-    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService', 'dealService'];
-    function MembersController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, qrcodeService, dealService) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
-        $scope.qrcodeService = qrcodeService;
-        vm.keyword = "";
-        vm.tableParams = new ngTableParams({count: 10}, {
-          getData: function($defer, params) {
-            var filter = {where:{status:{ne:'deleted'}}, include:['wxuser']}
-            if(vm.keyword != '') {
-              var qs = {regex: keyword};
-              filter.where.or = [{"entities.sku.item.name":qs}];
-              params.page(1);
-            }
-            ngTableLBService.getData($defer, params, Member, filter);
-          }
-        });
-      }
-      
-      vm.sell = function (member) {
-        dealService.openDeal(member);
-        $scope.$state.go('app.sell');
-      }
-    }
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.members')
-        .filter('wx_sex', wxsexFilter)
-    ;
-
-    function wxsexFilter() {
-        // var type = {
-        //   cash: "现金支付",
-        //   bankcard: "刷卡支付",
-        //   wxpay: "微信支付",
-        //   alipay: "支付宝"
-        // }
-        var type = ['保密', '男', '女'];
-        return function(key) {
-          return type[key];
-        }
-    }
-
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.members')
-        .service('qrcodeService', qrcodeService);
-
-    qrcodeService.$inject = ['ngDialog'];
-    function qrcodeService(ngDialog) {
-      var self = this;
-      
-      this.showQRCode = showQRCode;
-      
-      function showQRCode(imageurl) {
-        imageurl = imageurl || 'app/img/qrcode-for-gh.jpg';
-        ngDialog.open({
-          template: "<img src="+imageurl+" class='img-responsive'>",
-          plain: true,
-          className: 'ngdialog-theme-default'
-        });    
-      }
-    }
-
-})();
-
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key
@@ -8596,6 +8596,259 @@
 })();
 
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sales')
+        .service('dealService', dealService);
+
+    dealService.$inject = ['Deal', 'Sku', 'ngDialog', '$rootScope'];
+    function dealService(Deal, Sku, ngDialog, $rootScope) {
+      var self = this;
+
+      this.openDeal = openDeal;
+      this.querySkus = querySkus;
+      this.register = register;
+      this.substractOne = substractOne;
+      this.countTotal = countTotal;
+      this.checkout = checkout; 
+      this.onChangePayType = onChangePayType;
+      this.countChange = countChange;
+      this.pay = pay;
+      this.payType = {
+        deposit: "会员储值",
+        cash: "现金支付",
+        bankcard: "刷卡支付",
+        wxpay: "微信支付",
+        alipay: "支付宝"
+      };
+
+      function openDeal(member) {
+        self.deal = {
+          entities: [],
+          totalAmount: 0,
+          totalQty: 0,
+          member: member,
+          status: 'opened',
+          created: new Date()
+        }
+        self.selectedSku = undefined;
+      }
+      
+      function querySkus (val) {
+        return Sku.find({filter:{where:{barcode:{regex: val}}}, limit: 10})
+        .$promise.then(function (skus) {
+          return skus;
+        });
+      }
+            
+      function register () {
+        if(self.selectedSku && self.selectedSku instanceof Sku) {
+          var entity = undefined;
+          angular.forEach(self.deal.entities, function (e) {
+            if(e.sku.barcode === self.selectedSku.barcode){
+              e.qty++;
+              entity = e;
+            }
+          });
+          if(!entity) {
+            entity = {
+              sku: self.selectedSku,
+              qty: 1
+            };
+            self.deal.entities.push(entity);
+          }
+        }
+        self.selectedSku = undefined;
+      }
+      
+      function substractOne (entity, index) {
+        entity.qty--;
+        if(entity.qty === 0) {
+          self.deal.entities.splice(index, 1);
+        }
+      }
+            
+      function countTotal () {
+        self.deal.totalAmount = 0;
+        self.deal.totalQty = 0;
+        angular.forEach(self.deal.entities, function (entity) {
+          self.deal.totalQty += entity.qty;
+          self.deal.totalAmount += entity.qty*entity.sku.price;
+        });
+        return self.deal.totalAmount;
+      }
+      
+      function checkout () {
+        self.deal.payment = {type: 'cash'};
+        if(self.deal.member) {
+          self.deal.memberId = self.deal.member.id;
+          self.deal.discountAmount = self.deal.totalAmount*(100-self.deal.member.discount)/100;
+          if($rootScope.user.merchant.enableBonusBid) {
+            self.deal.bonusVouchAmount = Math.round(self.deal.member.bonus/$rootScope.user.merchant.bonusBidRate);
+          }
+        } else {
+          self.deal.discountAmount = 0;
+        }
+        self.deal.fee = self.deal.totalAmount-self.deal.discountAmount;
+        if(self.deal.member) {
+          if($rootScope.user.merchant.enableBonusBid) {
+            if(self.deal.bonusVouchAmount > self.deal.fee) {
+              self.deal.bonusVouchAmount = self.deal.fee;
+            }
+            self.deal.fee -= self.deal.bonusVouchAmount;
+          }
+          if(self.deal.member.balance >= self.deal.fee) {
+            self.deal.payment.type = 'deposit';
+          }
+        } 
+        
+        onChangePayType();
+        
+        ngDialog.open({ 
+          template: 'checkoutDialogId', 
+          controller: 'checkoutDialogController'
+        });
+      }
+      
+      function onChangePayType() {
+        self.deal.payment.amount = self.deal.fee;
+        if(self.deal.payment.type === 'cash') {
+          self.deal.payment.cost = 0-self.deal.fee%$rootScope.user.merchant.changeRate;
+          self.deal.payment.amount += self.deal.payment.cost;
+          countChange();
+        } else if(self.deal.payment.type === 'deposit') {
+          self.deal.payment.cost = 0;
+          self.deal.payment.amount = 0-self.deal.fee;
+        } else {
+          self.deal.payment.cost = 0;
+          self.deal.payment.amount = self.deal.fee;
+        }
+      }
+      
+      function countChange() {
+        if(self.deal.payment.type === 'cash') {
+          self.deal.payment.paid = self.deal.payment.paid || self.deal.payment.amount;
+          self.deal.payment.change = self.deal.payment.amount - self.deal.payment.paid;
+        }
+      }
+            
+      function pay() {
+        self.deal.status = 'closed';
+        delete self.deal.member;
+        return Deal.create(self.deal).$promise
+      }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+      .module('app.sales')
+      .controller('SellController', SellController)
+      .controller('checkoutDialogController', checkoutDialogController)
+      .controller('DealsController', DealsController)
+    ;
+      
+    SellController.$inject = ['$scope', 'dealService', 'Checkin'];
+    function SellController($scope, dealService, Checkin) {
+      var vm = this;
+            
+      activate();
+      
+      function activate() {
+        $scope.dealService = dealService;
+        if(!dealService.deal) {
+          dealService.openDeal();
+        }
+        
+        // CHECKIN
+        // ----------------------------------- 
+        vm.checkins = Checkin.find({filter:{
+          where: {merchantId: $scope.user.shopId},
+          include: [{member: 'wxuser'}],
+          limit: 10, 
+          order: 'created DESC'
+        }});
+        
+        vm.templateUrl = 'checkinsTemplate.html';
+      }
+            
+    }
+    
+    checkoutDialogController.$inject = ['$scope', 'ngDialog', 'dealService', 'toaster'];
+    function checkoutDialogController($scope, ngDialog, dealService, toaster) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $scope.dealService = dealService;
+        }
+        
+        $scope.confirm = function () {
+          dealService.pay().then(function (deal) {
+            $scope.submiting = false;
+            ngDialog.close();
+            dealService.openDeal();
+            toaster.pop('success', '成功', "完成交易");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "交易未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+        
+    }
+    
+    DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];
+    function DealsController($scope, Deal, ngTableParams, ngTableLBService) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        vm.keyword = "";
+        vm.tableParams = new ngTableParams({count: 10}, {
+          getData: function($defer, params) {
+            var filter = {where:{status:{ne:'deleted'}}, include:[]}
+            if(vm.keyword != '') {
+              var qs = {regex: keyword};
+              filter.where.or = [{"entities.sku.item.name":qs}];
+              params.page(1);
+            }
+            ngTableLBService.getData($defer, params, Deal, filter);
+          }
+        });
+      }
+    }
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sales')
+        .filter('payment_type', paymentTypeFilter)
+    ;
+
+    paymentTypeFilter.$inject = ['dealService'];
+    function paymentTypeFilter(dealService) {
+        return function(key) {
+          return dealService.payType[key];
+        }
+    }
+
+})();
 (function () {
   'use strict';
 
@@ -8706,215 +8959,6 @@
 
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sales')
-        .service('dealService', dealService);
-
-    dealService.$inject = ['Deal', 'Sku', 'ngDialog'];
-    function dealService(Deal, Sku, ngDialog) {
-      var self = this;
-
-      this.openDeal = openDeal;
-      this.querySkus = querySkus;
-      this.register = register;
-      this.substractOne = substractOne;
-      this.countTotal = countTotal;
-      this.checkout = checkout; 
-      this.pay = pay;
-      this.payType = {
-        deposit: "会员储值",
-        cash: "现金支付",
-        bankcard: "刷卡支付",
-        wxpay: "微信支付",
-        alipay: "支付宝"
-      }
-
-      function openDeal(member) {
-        self.deal = {
-          entities: [],
-          totalAmount: 0,
-          totalQty: 0,
-          member: member,
-          status: 'opened',
-          created: new Date()
-        }
-        self.selectedSku = undefined;
-      }
-      
-      function querySkus (val) {
-        return Sku.find({filter:{where:{barcode:{regex: val}}}, limit: 10})
-        .$promise.then(function (skus) {
-          return skus;
-        });
-      }
-            
-      function register () {
-        if(self.selectedSku && self.selectedSku instanceof Sku) {
-          var entity = undefined;
-          angular.forEach(self.deal.entities, function (e) {
-            if(e.sku.barcode === self.selectedSku.barcode){
-              e.qty++;
-              entity = e;
-            }
-          });
-          if(!entity) {
-            entity = {
-              sku: self.selectedSku,
-              qty: 1
-            };
-            self.deal.entities.push(entity);
-          }
-        }
-        self.selectedSku = undefined;
-      }
-      
-      function substractOne (entity, index) {
-        entity.qty--;
-        if(entity.qty === 0) {
-          self.deal.entities.splice(index, 1);
-        }
-      }
-            
-      function countTotal () {
-        self.deal.totalAmount = 0;
-        self.deal.totalQty = 0;
-        angular.forEach(self.deal.entities, function (entity) {
-          self.deal.totalQty += entity.qty;
-          self.deal.totalAmount += entity.qty*entity.sku.price;
-        });
-        return self.deal.totalAmount;
-      }
-      
-      function checkout () {
-        if(self.deal.member) self.deal.memberId = self.deal.member.id;
-        self.deal.fee = self.deal.totalAmount;
-        self.deal.payment = {
-          amount: self.deal.fee,
-          type: !!self.deal.member? 'deposit':'cash'
-        }
-        ngDialog.open({ 
-          template: 'checkoutDialogId', 
-          controller: 'checkoutDialogController'
-        });
-      }
-      
-      function pay() {
-        self.deal.status = 'closed';
-        delete self.deal.member;
-        return Deal.create(self.deal).$promise
-      }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-      .module('app.sales')
-      .controller('SellController', SellController)
-      .controller('checkoutDialogController', checkoutDialogController)
-      .controller('DealsController', DealsController)
-    ;
-      
-    SellController.$inject = ['$scope', 'dealService', 'Checkin'];
-    function SellController($scope, dealService, Checkin) {
-      var vm = this;
-            
-      activate();
-      
-      function activate() {
-        $scope.dealService = dealService;
-        if(!dealService.deal) {
-          dealService.openDeal();
-        }
-        
-        // CHECKIN
-        // ----------------------------------- 
-        vm.checkins = Checkin.find({filter:{
-          where: {merchantId: $scope.user.shopId},
-          include: [{member: 'wxuser'}],
-          limit: 10, 
-          order: 'created DESC'
-        }});
-        
-        vm.templateUrl = 'checkinsTemplate.html';
-      }
-            
-    }
-    
-    checkoutDialogController.$inject = ['$scope', 'ngDialog', 'dealService', 'toaster'];
-    function checkoutDialogController($scope, ngDialog, dealService, toaster) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $scope.dealService = dealService;
-        }
-        
-        $scope.confirm = function () {
-          dealService.pay().then(function (deal) {
-            $scope.submiting = false;
-            ngDialog.close();
-            dealService.openDeal();
-            toaster.pop('success', '成功', "完成交易");
-          }, function (err) {
-            $scope.submiting = false;
-            toaster.pop('error', '失败', "交易未完成，请重试！")
-          });
-          $scope.submiting = true;
-        }
-    }
-    
-    DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];
-    function DealsController($scope, Deal, ngTableParams, ngTableLBService) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
-        vm.keyword = "";
-        vm.tableParams = new ngTableParams({count: 10}, {
-          getData: function($defer, params) {
-            var filter = {where:{status:{ne:'deleted'}}, include:[]}
-            if(vm.keyword != '') {
-              var qs = {regex: keyword};
-              filter.where.or = [{"entities.sku.item.name":qs}];
-              params.page(1);
-            }
-            ngTableLBService.getData($defer, params, Deal, filter);
-          }
-        });
-      }
-    }
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sales')
-        .filter('payment_type', paymentTypeFilter)
-    ;
-
-    paymentTypeFilter.$inject = ['dealService'];
-    function paymentTypeFilter(dealService) {
-        return function(key) {
-          return dealService.payType[key];
-        }
-    }
-
-})();
 /**=========================================================
  * Module: sidebar-menu.js
  * Handle sidebar collapsible elements
