@@ -1,0 +1,40 @@
+<h3>
+   会员管理
+   <button ng-click="qrcodeService.showQRCode(user.shop.qrcode)" class="btn btn-warning pull-right">
+      <em class="fa fa-qrcode fa-fw mr-sm"></em>签到注册</button>
+</h3>
+<div class="container-fluid">
+   <div class="panel panel-default">
+      <div class="panel-heading"></div>
+      <table ng-table="members.tableParams" class="table">
+         <tbody ng-class="{'whirl standard': members.tableParams.settings().$loading}">
+            <tr ng-repeat="member in $data" class="text-center">
+               <td data-title="'序号'">{{$index+1}}</td>
+               <td data-title="'头像'">
+                  <img ng-src="{{member.wxuser.headimgurl || 'app/img/user/02.jpg'}}" alt="" width="44" height="44" class="img-thumbnail" />
+               </td>
+               <td data-title="'用户名称'">{{member.name}}</td>
+               <td data-title="'等级'">{{member.level || '普通'}}</td>
+               <td data-title="'积分'">{{member.bonus || 0}}</td>
+               <td data-title="'储值余额'">{{member.balance/100 || 0.00 | currency: '¥'}}</td>
+               <td data-title="'微信昵称'">{{member.wxuser.nickname}}</td>
+               <td data-title="'性别'">{{member.wxuser.sex | wx_sex}}</td>
+               <td data-title="'地区'">{{member.wxuser.province+member.wxuser.city}}</td>
+               <td data-title="'登记日期'">{{member.created | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+               <td data-title="'操作'">
+                  <div dropdown="dropdown" class="btn-group"><a href="" ng-click="members.sell(member)" class="btn btn-default">记账</a>
+                     <button type="button" dropdown-toggle="" class="btn dropdown-toggle btn-default">
+                        <span class="caret"></span>
+                        <span class="sr-only"></span>
+                     </button>
+                     <ul role="menu" class="dropdown-menu">
+                        <li><a href="" ui-sref="app.member({memberId: member.id})">管理</a>
+                        </li>
+                     </ul>
+                  </div>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+</div>

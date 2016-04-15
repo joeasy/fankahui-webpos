@@ -29,45 +29,52 @@
               url: '/app',
               abstract: true,
               templateUrl: helper.basepath('app.html'),
-              resolve: helper.resolveFor('fastclick', 'modernizr', 'icons', 'screenfull', 'animo', 'sparklines', 'slimscroll', 'classyloader', 'toaster', 'whirl')
+              resolve: helper.resolveFor('fastclick', 'modernizr', 'icons', 'screenfull', 'animo', 'sparklines', 'slimscroll', 'classyloader', 'toaster', 'whirl', 'moment')
           })
           .state('app.dashboard', {
               url: '/dashboard',
               title: 'Dashboard',
               templateUrl: helper.basepath('dashboard.html'),
-              resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons', 'moment')
+              resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons')
           })
           .state('app.sell', {
               url: '/sell',
               title: 'sell',
               templateUrl: helper.basepath('sell.html'),
               controller: 'SellController as sell',
-              resolve: helper.resolveFor('ngTable', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'loaders.css', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngDialog', 'oitozero.ngSweetAlert', 'loaders.css', 'spinkit')
+          })
+          .state('app.members', {
+              url: '/members',
+              title: 'Members',
+              templateUrl: helper.basepath('members.html'),
+              controller: 'MembersController as members',
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.member', {
-              url: '/member',
-              title: 'Member',
+              url: '/members/:memberId',
+              title: 'Member Detail',
               templateUrl: helper.basepath('member.html'),
-              controller: 'MembersController as members',
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              controller: 'MemberController as member',
+              resolve: helper.resolveFor('ngTable', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.deal', {
               url: '/deal',
               title: 'Deal',
               templateUrl: helper.basepath('deal.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.cost', {
               url: '/cost',
               title: 'Cost',
               templateUrl: helper.basepath('cost.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.item', {
               url: '/item',
               title: 'Item',
               templateUrl: helper.basepath('item.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.item-add', {
               url: '/item-add',
@@ -79,13 +86,13 @@
               url: '/card',
               title: 'Card',
               templateUrl: helper.basepath('card.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.campaign', {
               url: '/campaign',
               title: 'Campaign',
               templateUrl: helper.basepath('campaign.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.myshop', {
               url: '/myshop',
@@ -97,7 +104,7 @@
               url: '/setting',
               title: 'Setting',
               templateUrl: helper.basepath('setting.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.widgets', {
               url: '/widgets',
@@ -259,7 +266,7 @@
               url: '/form-extended',
               title: 'Form Extended',
               templateUrl: helper.basepath('form-extended.html'),
-              resolve: helper.resolveFor('colorpicker.module', 'codemirror', 'moment', 'taginput','inputmask','localytics.directives', 'ui.bootstrap-slider', 'ngWig', 'filestyle', 'textAngular')
+              resolve: helper.resolveFor('colorpicker.module', 'codemirror', 'taginput','inputmask','localytics.directives', 'ui.bootstrap-slider', 'ngWig', 'filestyle', 'textAngular')
           })
           .state('app.form-validation', {
               url: '/form-validation',
@@ -388,7 +395,7 @@
               url: '/calendar',
               title: 'Calendar',
               templateUrl: helper.basepath('calendar.html'),
-              resolve: helper.resolveFor('jquery-ui', 'jquery-ui-widgets', 'moment', 'fullcalendar')
+              resolve: helper.resolveFor('jquery-ui', 'jquery-ui-widgets', 'fullcalendar')
           })
           .state('app.invoice', {
               url: '/invoice',
@@ -399,7 +406,7 @@
               url: '/search',
               title: 'Search',
               templateUrl: helper.basepath('search.html'),
-              resolve: helper.resolveFor('moment', 'localytics.directives', 'ui.bootstrap-slider')
+              resolve: helper.resolveFor('localytics.directives', 'ui.bootstrap-slider')
           })
           .state('app.todo', {
               url: '/todo',

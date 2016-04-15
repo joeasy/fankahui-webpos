@@ -53,8 +53,8 @@
       }
     }
     
-    ShopsController.$inject = ['$scope', 'ngTable', 'moment', 'Shop'];
-    function ShopsController($scope, ngTable, moment, Shop) {
+    ShopsController.$inject = ['$scope', 'ngTable', 'Shop'];
+    function ShopsController($scope, ngTable, Shop) {
       var vm = this;
       
       activate();

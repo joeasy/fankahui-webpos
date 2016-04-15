@@ -1,30 +1,181 @@
 <h3>
-   会员管理
-   <button ng-click="qrcodeService.showQRCode(user.shop.qrcode)" class="btn btn-warning pull-right">
-      <em class="fa fa-qrcode fa-fw mr-sm"></em>签到注册</button>
+   会员详情
+   <a ng-click="member.sell()" class="btn btn-primary pull-right mr">
+      <em class="fa fa-shopping-cart fa-fw mr-sm"></em>记账</a>
+   <a ng-click="member.recharge()" class="btn btn-warning pull-right mr">
+      <em class="fa fa-shopping-cart fa-fw mr-sm"></em>储值</a>
+   <a ng-click="member.setBonus()" class="btn btn-success pull-right mr">
+      <em class="fa fa-shopping-cart fa-fw mr-sm"></em>积分</a>
 </h3>
-<div class="container-fluid">
-   <div class="panel panel-default">
-      <div class="panel-heading"></div>
-      <table ng-table="members.tableParams" class="table">
-         <tbody ng-class="{'whirl standard': members.tableParams.settings().$loading}">
-            <tr ng-repeat="member in $data" class="text-center">
-               <td data-title="'序号'">{{$index+1}}</td>
-               <td data-title="'头像'">
-                  <img ng-src="{{member.wxuser.headimgurl || 'app/img/user/02.jpg'}}" alt="" width="44" height="44" class="img-thumbnail" />
-               </td>
-               <td data-title="'用户名称'">{{member.name}}</td>
-               <td data-title="'等级'">{{member.level || '普通'}}</td>
-               <td data-title="'积分'">{{member.bonus || 0}}</td>
-               <td data-title="'储值余额'">{{member.balance/100 || 0.00 | currency: '¥'}}</td>
-               <td data-title="'微信昵称'">{{member.wxuser.nickname}}</td>
-               <td data-title="'性别'">{{member.wxuser.sex | wx_sex}}</td>
-               <td data-title="'地区'">{{member.wxuser.province+member.wxuser.city}}</td>
-               <td data-title="'登记日期'">{{member.created | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-               <td data-title="'操作'"><a href="" ng-click="members.sell(member)">记账</a>
-               </td>
-            </tr>
-         </tbody>
-      </table>
+<div class="row">
+   <div class="col-md-4">
+      <!-- START profile widget-->
+      <div class="panel widget">
+         <div class="panel-body">
+            <div class="row row-table">
+               <div class="col-xs-6 text-center">
+                  <em ng-if="!member.member.wxuser.headimgurl" class="fa fa-user fa-4x text-muted"></em>
+                  <img ng-if="member.member.wxuser.headimgurl" src="{{member.member.wxuser.headimgurl}}" alt="Image" class="img-circle thumb96" />
+               </div>
+               <div class="col-xs-6">
+                  <h3 class="mt">{{member.member.name}}</h3>
+                  <ul class="list-unstyled">
+                     <li class="mb-sm"></li>
+                     <li class="mb-sm">
+                        <em class="fa fa-calendar fa-fw"></em>{{member.member.created | date:'yyyy-MM-dd'}}注册</li>
+                     <li class="mb-sm">
+                        <em class="fa fa-pencil fa-fw"></em>{{member.member.modified | date:'yyyy-MM-dd'}}更新</li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="panel-body bg-inverse">
+            <div class="row row-table text-center">
+               <div class="col-xs-4">
+                  <p class="m0 h3">{{member.member.bonus}}</p>
+                  <p class="m0 text-muted">积分</p>
+               </div>
+               <div class="col-xs-4 ph0">
+                  <p class="m0 h3">{{member.member.balance/100 | currency}}</p>
+                  <p class="m0 text-muted">储值</p>
+               </div>
+               <div class="col-xs-4">
+                  <p class="m0 h3">{{member.member.level}}</p>
+                  <p class="m0 text-muted">等级</p>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- END profile widget-->
    </div>
+   <div class="col-md-8">
+      <!-- START panel-->
+      <div id="panelDemo10" class="panel panel-info">
+         <div class="panel-heading">会员微信</div>
+         <div class="panel-body">
+            <div class="row">
+               <div class="col-md-6">
+                  <form class="form-horizontal p-20">
+                     <div class="form-group">
+                        <div class="col-sm-4">昵称:</div>
+                        <div class="col-sm-8">
+                           <strong>{{member.member.wxuser.nickname}}</strong>
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <div class="col-sm-4">性别:</div>
+                        <div class="col-sm-8">
+                           <strong>{{member.member.wxuser.sex | wx_sex}}</strong>
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <div class="col-sm-4">状态</div>
+                        <div class="col-sm-8">
+                           <div class="label label-info">{{member.member.wxuser.subscribe | wx_subscribe}}</div>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+               <div class="col-md-6">
+                  <form class="form-horizontal p-20">
+                     <div class="form-group">
+                        <div class="col-sm-4">国家:</div>
+                        <div class="col-sm-8">
+                           <strong>{{member.member.wxuser.country}}</strong>
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <div class="col-sm-4">省份:</div>
+                        <div class="col-sm-8">
+                           <strong>{{member.member.wxuser.province}}</strong>
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <div class="col-sm-4">城市:</div>
+                        <div class="col-sm-8">
+                           <strong>{{member.member.wxuser.city}}</strong>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+         <div class="panel-footer">OpenID: {{member.member.wxuser.id}}</div>
+      </div>
+      <!-- END panel-->
+   </div>
+</div>
+<!-- START panel tab-->
+<div class="panel">
+   <tabset justified="true">
+      <tab>
+         <tab-heading>
+            消费记录</tab-heading>
+         <div class="table-responsive">
+            <table ng-table="member.dealTableParams" class="table table-bordered table-striped">
+               <tbody ng-class="{'whirl standard': member.dealTableParams.settings().$loading}" class="text-center">
+                  <tr ng-repeat="deal in $data">
+                     <td data-title="'流水号'">{{deal.serialNumber}}</td>
+                     <td data-title="'商品总计'">{{deal.totalAmount/100 | currency: '¥'}}</td>
+                     <td data-title="'折扣金额'">{{deal.discountAmount/100 || 0.00 | currency: '¥'}}</td>
+                     <td data-title="'销售金额'">{{deal.fee/100 | currency: '¥'}}</td>
+                     <td data-title="'数量'">{{deal.totalQty}}</td>
+                     <td data-title="'支付方式'">{{deal.payment.type | payment_type}}</td>
+                     <td data-title="'记账日期'">{{deal.created | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </tab>
+      <tab>
+         <tab-heading>
+            储值</tab-heading>
+         <div class="table-responsive">
+            <table ng-table="member.depositTableParams" class="table table-bordered table-striped">
+               <tbody ng-class="{'whirl standard': member.depositTableParams.settings().$loading}" class="text-center">
+                  <tr ng-repeat="deposit in $data">
+                     <td data-title="'序号'">{{$index+1}}</td>
+                     <td data-title="'分类'">{{deposit | deposit_category}}</td>
+                     <td data-title="'金额'">{{deposit.amount/100 | currency: '¥'}}</td>
+                     <td data-title="'账户余额'">{{deposit.balance/100 | currency: '¥'}}</td>
+                     <td data-title="'交易门店'">{{deposit.shop.branch_name}}</td>
+                     <td data-title="'日期'">{{deposit.created | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </tab>
+      <tab>
+         <tab-heading>
+            积分</tab-heading>
+         <div class="table-responsive">
+            <table ng-table="member.bonusTableParams" class="table table-bordered table-striped">
+               <tbody ng-class="{'whirl standard': member.bonusTableParams.settings().$loading}" class="text-center">
+                  <tr ng-repeat="bonus in $data">
+                     <td data-title="'序号'">{{$index+1}}</td>
+                     <td data-title="'积分数量'">{{bonus.amount}}</td>
+                     <td data-title="'积分余额'">{{bonus.balance}}</td>
+                     <td data-title="'备注'">{{bonus.memo | bonus_memo}}</td>
+                     <td data-title="'经手人'">{{bonus.operator.username}}</td>
+                     <td data-title="'日期'">{{bonus.created | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </tab>
+   </tabset>
+   <!-- END panel tab-->
+
+   <!-- Templates -->
+   <!--Start Recharge Dialog-->
+   <script type="text/ng-template" id="rechargeDialogId">
+      <div class="modal-header"><h3>储值管理</h3></div><div ng-class="{'whirl standard':submiting}" class="modal-body"><fieldset class="mb0 pb0"><div class="form-group"><label class="col-md-3 control-label">储值余额  </label><div class="col-md-9">{{member.balance/100 | currency: '¥'}}      </div></div></fieldset><fieldset class="mb0 pb0"><div class="form-group"><label class="col-md-3 control-label">储值金额  </label><div class="col-md-9"> <input type="number" ng-model="data.amount" currency="currency" ng-blur="cash.paid = data.amount; countChange();" class="form-control"/><span>输入正数表示充值，输入负数表示提现。         </span></div></div></fieldset><fieldset class="mb0 pb0"><div class="form-group"><label class="col-md-3 control-label">支付方式</label><div class="col-md-9"> <select ng-model="data.type" ng-change="onChangePayType()" class="form-control"><option ng-repeat="(val, desc) in payType" value="{{val}}" ng-if="val !== 'deposit'">{{desc}}</option></select></div></div></fieldset><fieldset class="mb0"><div class="form-group"><label class="col-md-3 control-label">实收金额</label><div class="col-md-9"> <input type="number" ng-model="cash.paid" currency="currency" ng-if="data.type === 'cash'" ng-change="countChange()" class="form-control"/><span></span><span ng-if="data.type !== 'cash'"> 
+      {{data.amount/100 | currency: '¥'}} </span></div></div></fieldset><fieldset ng-if="data.type === 'cash'" class="mb0"><div class="form-group"><label class="col-md-3 control-label">找零</label><div class="col-md-9">{{cash.change/100 | currency: '¥'}}</div></div></fieldset><fieldset class="mb0 pb0"><div class="form-group"><label class="col-md-3 control-label">备注</label><div class="col-md-9"> <textarea row="2" ng-model="data.memo" class="form-control"></textarea></div></div></fieldset></div><div class="modal-footer"><a type="button" ng-click="closeThisDialog(0)" class="pull-right btn btn-default mr">取消      </a><a ng-class="{disabled:submiting}" ng-click="submiting || confirm()" class="pull-right btn btn-primary mr">确定</a></div>
+   </script>
+   <!--End Recharge Dialog-->
+   <!--Start Bonus Dialog-->
+   <script type="text/ng-template" id="bonusDialogId">
+      <div class="modal-header"><h3>积分管理</h3></div><div ng-class="{'whirl standard':submiting}" class="modal-body"><fieldset class="mb0 pb0"><div class="form-group"><label class="col-md-3 control-label">积分余额  </label><div class="col-md-9">{{member.bonus}}      </div></div></fieldset><fieldset class="mb0 pb0"><div class="form-group"><label class="col-md-3 control-label">积分数量  </label><div class="col-md-9"> <input type="number" ng-model="data.amount" class="form-control"/><span>输入正数表示累积，输入负数表示减计。         </span></div></div></fieldset></div><div class="modal-footer"><a type="button" ng-click="closeThisDialog(0)" class="pull-right btn btn-default mr">取消      </a><a ng-class="{disabled:submiting}" ng-click="submiting || confirm()" class="pull-right btn btn-primary mr">确定</a></div>
+   </script>
+   <!--End Recharge Dialog-->
 </div>

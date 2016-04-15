@@ -18,8 +18,8 @@
     "translate": "sidebar.nav.SELL"
   },
   {
-    "text": "Member",
-    "sref": "app.member",
+    "text": "Members",
+    "sref": "app.members",
     "icon": "icon-users",
     "label": "label label-info", 
     "translate": "sidebar.nav.MEMBER"

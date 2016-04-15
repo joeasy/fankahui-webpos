@@ -39,7 +39,7 @@
     vm.updaeteMemberLevels = function () {
       $scope.user.merchant.memberLevels.forEach(function (level) {
         Member.update({
-          where: {merchantId:$scope.user.merchant.id, bonus: {gte: level.lower, lte: level.upper}}
+          where: {merchantId:$scope.user.merchant.id, totalBonus: {gte: level.lower, lte: level.upper}}
         }, {
           discount: level.discount, level: level.name
         }, function sucess(result, res) {

@@ -117,8 +117,8 @@
       function onChangePayType() {
         self.deal.payment.amount = self.deal.fee;
         if(self.deal.payment.type === 'cash') {
-          self.deal.payment.cost = 0-self.deal.fee%$rootScope.user.merchant.changeRate;
-          self.deal.payment.amount += self.deal.payment.cost;
+          self.deal.payment.cost = self.deal.fee%$rootScope.user.merchant.changeRate;
+          self.deal.payment.amount -= self.deal.payment.cost;
           countChange();
         } else if(self.deal.payment.type === 'deposit') {
           self.deal.payment.cost = 0;

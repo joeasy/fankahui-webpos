@@ -53,6 +53,12 @@
     'use strict';
 
     angular
+        .module('app.bootstrapui', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.charts', []);
 })();
 (function() {
@@ -60,6 +66,12 @@
 
     angular
         .module('app.colors', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard', []);
 })();
 (function() {
     'use strict';
@@ -86,18 +98,6 @@
     'use strict';
 
     angular
-        .module('app.dashboard', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.elements', []);
 })();
 (function() {
@@ -110,13 +110,13 @@
     'use strict';
 
     angular
-        .module('app.forms', []);
+        .module('app.flatdoc', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.flatdoc', []);
+        .module('app.forms', []);
 })();
 (function() {
     'use strict';
@@ -140,13 +140,13 @@
     'use strict';
 
     angular
-        .module('app.locale', []);
+        .module('app.loadingbar', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.loadingbar', []);
+        .module('app.locale', []);
 })();
 (function() {
     'use strict';
@@ -176,13 +176,13 @@
     'use strict';
 
     angular
-        .module('app.navsearch', []);
+        .module('app.notify', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.notify', []);
+        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
@@ -249,6 +249,566 @@
         .module('app.utils', [
           'app.colors'
         ]);
+})();
+
+/**=========================================================
+ * Module: demo-alerts.js
+ * Provides a simple demo for pagination
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('AlertDemoCtrl', AlertDemoCtrl);
+
+    function AlertDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.alerts = [
+            { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
+            { type: 'warning', msg: 'Well done! You successfully read this important alert message.' }
+          ];
+
+          vm.addAlert = function() {
+            vm.alerts.push({msg: 'Another alert!'});
+          };
+
+          vm.closeAlert = function(index) {
+            vm.alerts.splice(index, 1);
+          };
+        }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .config(bootstrapuiConfig);
+
+    bootstrapuiConfig.$inject = ['$tooltipProvider'];
+    function bootstrapuiConfig($tooltipProvider){
+      $tooltipProvider.options({appendToBody: true});
+    }
+})();
+/**=========================================================
+ * Module: demo-buttons.js
+ * Provides a simple demo for buttons actions
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('ButtonsCtrl', ButtonsCtrl);
+
+    function ButtonsCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.singleModel = 1;
+
+          vm.radioModel = 'Middle';
+
+          vm.checkModel = {
+            left: false,
+            middle: true,
+            right: false
+          };
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-carousel.js
+ * Provides a simple demo for bootstrap ui carousel
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('CarouselDemoCtrl', CarouselDemoCtrl);
+
+    function CarouselDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.myInterval = 5000;
+          
+          var slides = vm.slides = [];
+          vm.addSlide = function() {
+            var newWidth = 800 + slides.length;
+            slides.push({
+              image: '//placekitten.com/' + newWidth + '/300',
+              text: ['More','Extra','Lots of','Surplus'][slides.length % 2] + ' ' +
+                ['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 2]
+            });
+          };
+          
+          for (var i=0; i<2; i++) {
+            vm.addSlide();
+          }
+
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-datepicker.js
+ * Provides a simple demo for bootstrap datepicker
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('DatepickerDemoCtrl', DatepickerDemoCtrl);
+
+    function DatepickerDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.today = function() {
+            vm.dt = new Date();
+          };
+          vm.today();
+
+          vm.clear = function () {
+            vm.dt = null;
+          };
+
+          // Disable weekend selection
+          vm.disabled = function(date, mode) {
+            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+          };
+
+          vm.toggleMin = function() {
+            vm.minDate = vm.minDate ? null : new Date();
+          };
+          vm.toggleMin();
+
+          vm.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            vm.opened = true;
+          };
+
+          vm.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+          };
+
+          vm.initDate = new Date('2019-10-20');
+          vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+          vm.format = vm.formats[0];
+        }
+    }
+})();
+
+
+/**=========================================================
+ * Module: modals.js
+ * Provides a simple way to implement bootstrap modals from templates
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('ModalController', ModalController);
+
+    ModalController.$inject = ['$modal'];
+    function ModalController($modal) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+          vm.open = function (size) {
+
+            var modalInstance = $modal.open({
+              templateUrl: '/myModalContent.html',
+              controller: ModalInstanceCtrl,
+              size: size
+            });
+
+            var state = $('#modal-state');
+            modalInstance.result.then(function () {
+              state.text('Modal dismissed with OK status');
+            }, function () {
+              state.text('Modal dismissed with Cancel status');
+            });
+          };
+
+          // Please note that $modalInstance represents a modal window (instance) dependency.
+          // It is not the same as the $modal service used above.
+
+          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance'];
+          function ModalInstanceCtrl($scope, $modalInstance) {
+
+            $scope.ok = function () {
+              $modalInstance.close('closed');
+            };
+
+            $scope.cancel = function () {
+              $modalInstance.dismiss('cancel');
+            };
+          }
+        }
+    }
+
+})();
+
+/**=========================================================
+ * Module: demo-pagination.js
+ * Provides a simple demo for pagination
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('PaginationDemoCtrl', PaginationDemoCtrl);
+
+    function PaginationDemoCtrl() {
+        var vm = this;
+
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.totalItems = 64;
+          vm.currentPage = 4;
+
+          vm.setPage = function (pageNo) {
+            vm.currentPage = pageNo;
+          };
+
+          vm.pageChanged = function() {
+            console.log('Page changed to: ' + vm.currentPage);
+          };
+
+          vm.maxSize = 5;
+          vm.bigTotalItems = 175;
+          vm.bigCurrentPage = 1;
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-popover.js
+ * Provides a simple demo for popovers
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('PopoverDemoCtrl', PopoverDemoCtrl);
+
+    function PopoverDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.dynamicPopover = 'Hello, World!';
+          vm.dynamicPopoverTitle = 'Title';
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-progress.js
+ * Provides a simple demo to animate progress bar
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('ProgressDemoCtrl', ProgressDemoCtrl);
+
+    function ProgressDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.max = 200;
+
+          vm.random = function() {
+            var value = Math.floor((Math.random() * 100) + 1);
+            var type;
+
+            if (value < 25) {
+              type = 'success';
+            } else if (value < 50) {
+              type = 'info';
+            } else if (value < 75) {
+              type = 'warning';
+            } else {
+              type = 'danger';
+            }
+
+            vm.showWarning = (type === 'danger' || type === 'warning');
+
+            vm.dynamic = value;
+            vm.type = type;
+          };
+          vm.random();
+
+          vm.randomStacked = function() {
+            vm.stacked = [];
+            var types = ['success', 'info', 'warning', 'danger'];
+
+            for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+                var index = Math.floor((Math.random() * 4));
+                vm.stacked.push({
+                  value: Math.floor((Math.random() * 30) + 1),
+                  type: types[index]
+                });
+            }
+          };
+          vm.randomStacked();
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-rating.js
+ * Provides a demo for ratings UI
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('RatingDemoCtrl', RatingDemoCtrl);
+
+    function RatingDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.rate = 7;
+          vm.max = 10;
+          vm.isReadonly = false;
+
+          vm.hoveringOver = function(value) {
+            vm.overStar = value;
+            vm.percent = 100 * (value / vm.max);
+          };
+
+          vm.ratingStates = [
+            {stateOn: 'fa fa-check', stateOff: 'fa fa-check-circle'},
+            {stateOn: 'fa fa-star', stateOff: 'fa fa-star-o'},
+            {stateOn: 'fa fa-heart', stateOff: 'fa fa-ban'},
+            {stateOn: 'fa fa-heart'},
+            {stateOff: 'fa fa-power-off'}
+          ];
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-timepicker.js
+ * Provides a simple demo for bootstrap ui timepicker
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('TimepickerDemoCtrl', TimepickerDemoCtrl);
+
+    function TimepickerDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.mytime = new Date();
+
+          vm.hstep = 1;
+          vm.mstep = 15;
+
+          vm.options = {
+            hstep: [1, 2, 3],
+            mstep: [1, 5, 10, 15, 25, 30]
+          };
+
+          vm.ismeridian = true;
+          vm.toggleMode = function() {
+            vm.ismeridian = ! vm.ismeridian;
+          };
+
+          vm.update = function() {
+            var d = new Date();
+            d.setHours( 14 );
+            d.setMinutes( 0 );
+            vm.mytime = d;
+          };
+
+          vm.changed = function () {
+            console.log('Time changed to: ' + vm.mytime);
+          };
+
+          vm.clear = function() {
+            vm.mytime = null;
+          };
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-tooltip.js
+ * Provides a simple demo for tooltip
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('TooltipDemoCtrl', TooltipDemoCtrl);
+
+    function TooltipDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.dynamicTooltip = 'Hello, World!';
+          vm.dynamicTooltipText = 'dynamic';
+          vm.htmlTooltip = 'I\'ve been made <b>bold</b>!';
+
+          vm.autoplace = function (context, source) {
+            //return (predictTooltipTop(source) < 0) ?  "bottom": "top";
+            var pos = 'top';
+            if(predictTooltipTop(source) < 0)
+              pos = 'bottom';
+            if(predictTooltipLeft(source) < 0)
+              pos = 'right';
+            return pos;
+          };
+
+            // Predicts tooltip top position 
+            // based on the trigger element
+            function predictTooltipTop(el) {
+              var top = el.offsetTop;
+              var height = 40; // asumes ~40px tooltip height
+
+              while(el.offsetParent) {
+                el = el.offsetParent;
+                top += el.offsetTop;
+              }
+              return (top - height) - (window.pageYOffset);
+            }
+
+            // Predicts tooltip top position 
+            // based on the trigger element
+            function predictTooltipLeft(el) {
+              var left = el.offsetLeft;
+              var width = el.offsetWidth;
+
+              while(el.offsetParent) {
+                el = el.offsetParent;
+                left += el.offsetLeft;
+              }
+              return (left - width) - (window.pageXOffset);
+            }
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-typeahead.js
+ * Provides a simple demo for typeahead
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('TypeaheadCtrl', TypeaheadCtrl);
+
+    TypeaheadCtrl.$inject = ['$http'];
+    function TypeaheadCtrl($http) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+          vm.selected = undefined;
+          vm.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+
+          // Any function returning a promise object can be used to load values asynchronously
+          vm.getLocation = function(val) {
+            return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
+              params: {
+                address: val,
+                sensor: false
+              }
+            }).then(function(res){
+              var addresses = [];
+              angular.forEach(res.data.results, function(item){
+                /*jshint -W106*/
+                addresses.push(item.formatted_address);
+              });
+              return addresses;
+            });
+          };
+
+          vm.statesWithFlags = [{'name':'Alabama','flag':'5/5c/Flag_of_Alabama.svg/45px-Flag_of_Alabama.svg.png'},{'name':'Alaska','flag':'e/e6/Flag_of_Alaska.svg/43px-Flag_of_Alaska.svg.png'},{'name':'Arizona','flag':'9/9d/Flag_of_Arizona.svg/45px-Flag_of_Arizona.svg.png'},{'name':'Arkansas','flag':'9/9d/Flag_of_Arkansas.svg/45px-Flag_of_Arkansas.svg.png'},{'name':'California','flag':'0/01/Flag_of_California.svg/45px-Flag_of_California.svg.png'},{'name':'Colorado','flag':'4/46/Flag_of_Colorado.svg/45px-Flag_of_Colorado.svg.png'},{'name':'Connecticut','flag':'9/96/Flag_of_Connecticut.svg/39px-Flag_of_Connecticut.svg.png'},{'name':'Delaware','flag':'c/c6/Flag_of_Delaware.svg/45px-Flag_of_Delaware.svg.png'},{'name':'Florida','flag':'f/f7/Flag_of_Florida.svg/45px-Flag_of_Florida.svg.png'},{'name':'Georgia','flag':'5/54/Flag_of_Georgia_%28U.S._state%29.svg/46px-Flag_of_Georgia_%28U.S._state%29.svg.png'},{'name':'Hawaii','flag':'e/ef/Flag_of_Hawaii.svg/46px-Flag_of_Hawaii.svg.png'},{'name':'Idaho','flag':'a/a4/Flag_of_Idaho.svg/38px-Flag_of_Idaho.svg.png'},{'name':'Illinois','flag':'0/01/Flag_of_Illinois.svg/46px-Flag_of_Illinois.svg.png'},{'name':'Indiana','flag':'a/ac/Flag_of_Indiana.svg/45px-Flag_of_Indiana.svg.png'},{'name':'Iowa','flag':'a/aa/Flag_of_Iowa.svg/44px-Flag_of_Iowa.svg.png'},{'name':'Kansas','flag':'d/da/Flag_of_Kansas.svg/46px-Flag_of_Kansas.svg.png'},{'name':'Kentucky','flag':'8/8d/Flag_of_Kentucky.svg/46px-Flag_of_Kentucky.svg.png'},{'name':'Louisiana','flag':'e/e0/Flag_of_Louisiana.svg/46px-Flag_of_Louisiana.svg.png'},{'name':'Maine','flag':'3/35/Flag_of_Maine.svg/45px-Flag_of_Maine.svg.png'},{'name':'Maryland','flag':'a/a0/Flag_of_Maryland.svg/45px-Flag_of_Maryland.svg.png'},{'name':'Massachusetts','flag':'f/f2/Flag_of_Massachusetts.svg/46px-Flag_of_Massachusetts.svg.png'},{'name':'Michigan','flag':'b/b5/Flag_of_Michigan.svg/45px-Flag_of_Michigan.svg.png'},{'name':'Minnesota','flag':'b/b9/Flag_of_Minnesota.svg/46px-Flag_of_Minnesota.svg.png'},{'name':'Mississippi','flag':'4/42/Flag_of_Mississippi.svg/45px-Flag_of_Mississippi.svg.png'},{'name':'Missouri','flag':'5/5a/Flag_of_Missouri.svg/46px-Flag_of_Missouri.svg.png'},{'name':'Montana','flag':'c/cb/Flag_of_Montana.svg/45px-Flag_of_Montana.svg.png'},{'name':'Nebraska','flag':'4/4d/Flag_of_Nebraska.svg/46px-Flag_of_Nebraska.svg.png'},{'name':'Nevada','flag':'f/f1/Flag_of_Nevada.svg/45px-Flag_of_Nevada.svg.png'},{'name':'New Hampshire','flag':'2/28/Flag_of_New_Hampshire.svg/45px-Flag_of_New_Hampshire.svg.png'},{'name':'New Jersey','flag':'9/92/Flag_of_New_Jersey.svg/45px-Flag_of_New_Jersey.svg.png'},{'name':'New Mexico','flag':'c/c3/Flag_of_New_Mexico.svg/45px-Flag_of_New_Mexico.svg.png'},{'name':'New York','flag':'1/1a/Flag_of_New_York.svg/46px-Flag_of_New_York.svg.png'},{'name':'North Carolina','flag':'b/bb/Flag_of_North_Carolina.svg/45px-Flag_of_North_Carolina.svg.png'},{'name':'North Dakota','flag':'e/ee/Flag_of_North_Dakota.svg/38px-Flag_of_North_Dakota.svg.png'},{'name':'Ohio','flag':'4/4c/Flag_of_Ohio.svg/46px-Flag_of_Ohio.svg.png'},{'name':'Oklahoma','flag':'6/6e/Flag_of_Oklahoma.svg/45px-Flag_of_Oklahoma.svg.png'},{'name':'Oregon','flag':'b/b9/Flag_of_Oregon.svg/46px-Flag_of_Oregon.svg.png'},{'name':'Pennsylvania','flag':'f/f7/Flag_of_Pennsylvania.svg/45px-Flag_of_Pennsylvania.svg.png'},{'name':'Rhode Island','flag':'f/f3/Flag_of_Rhode_Island.svg/32px-Flag_of_Rhode_Island.svg.png'},{'name':'South Carolina','flag':'6/69/Flag_of_South_Carolina.svg/45px-Flag_of_South_Carolina.svg.png'},{'name':'South Dakota','flag':'1/1a/Flag_of_South_Dakota.svg/46px-Flag_of_South_Dakota.svg.png'},{'name':'Tennessee','flag':'9/9e/Flag_of_Tennessee.svg/46px-Flag_of_Tennessee.svg.png'},{'name':'Texas','flag':'f/f7/Flag_of_Texas.svg/45px-Flag_of_Texas.svg.png'},{'name':'Utah','flag':'f/f6/Flag_of_Utah.svg/45px-Flag_of_Utah.svg.png'},{'name':'Vermont','flag':'4/49/Flag_of_Vermont.svg/46px-Flag_of_Vermont.svg.png'},{'name':'Virginia','flag':'4/47/Flag_of_Virginia.svg/44px-Flag_of_Virginia.svg.png'},{'name':'Washington','flag':'5/54/Flag_of_Washington.svg/46px-Flag_of_Washington.svg.png'},{'name':'West Virginia','flag':'2/22/Flag_of_West_Virginia.svg/46px-Flag_of_West_Virginia.svg.png'},{'name':'Wisconsin','flag':'2/22/Flag_of_Wisconsin.svg/45px-Flag_of_Wisconsin.svg.png'},{'name':'Wyoming','flag':'b/bc/Flag_of_Wyoming.svg/43px-Flag_of_Wyoming.svg.png'}];
+
+        }
+    }
 })();
 
 /**=========================================================
@@ -1901,188 +2461,6 @@
     'use strict';
 
     angular
-        .module('app.core')
-        .config(coreConfig)
-        .config(loopbackConfig)
-    ;
-
-    coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$httpProvider'];
-    function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide, $httpProvider){
-      
-      var core = angular.module('app.core');
-      // registering components after bootstrap
-      core.controller = $controllerProvider.register;
-      core.directive  = $compileProvider.directive;
-      core.filter     = $filterProvider.register;
-      core.factory    = $provide.factory;
-      core.service    = $provide.service;
-      core.constant   = $provide.constant;
-      core.value      = $provide.value;
-
-      $httpProvider.interceptors.push(["$q", "$location", "LoopBackAuth", function($q, $location, LoopBackAuth) {
-        return {
-          responseError: function(rejection) {
-            if (rejection.status == 401) {
-              LoopBackAuth.clearUser();
-              LoopBackAuth.clearStorage();
-              $location.path('/page/login')
-            }
-            return $q.reject(rejection);
-          }
-        };
-      }]);     
-    }
-    
-    loopbackConfig.$inject = ['LoopBackResourceProvider', 'urlBase'];
-    function loopbackConfig(LoopBackResourceProvider, urlBase) {
-      LoopBackResourceProvider.setUrlBase(urlBase);
-    }
-
-})();
-/**=========================================================
- * Module: constants.js
- * Define constants to inject across the application
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .constant('APP_MEDIAQUERY', {
-          'desktopLG':             1200,
-          'desktop':                992,
-          'tablet':                 768,
-          'mobile':                 480
-        })
-        .constant('urlBase', "http://0.0.0.0:3000/api")
-        // .constant('urlBase', "http://api.fankahui.com:3000/api")
-      ;
-
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .filter('role', roleFilter)
-    ;
-
-    function roleFilter() {
-        var role = {
-          owner: "业主",
-          shopManager: "店长",
-          cashier: "收银员"
-        };
-        return function(key) {
-          return role[key];
-        }
-    }
-    
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .run(appRun)
-        .run(currentUserRun)
-    ;
-
-    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
-    
-    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
-      
-      // Set reference to access them from any scope
-      $rootScope.$state = $state;
-      $rootScope.$stateParams = $stateParams;
-      $rootScope.$storage = $window.localStorage;
-
-      // Uncomment this to disable template cache
-      /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-          if (typeof(toState) !== 'undefined'){
-            $templateCache.remove(toState.templateUrl);
-          }
-      });*/
-
-      // Allows to use branding color with interpolation
-      // {{ colorByName('primary') }}
-      $rootScope.colorByName = Colors.byName;
-
-      // cancel click event easily
-      $rootScope.cancel = function($event) {
-        $event.stopPropagation();
-      };
-
-      // Hooks Example
-      // ----------------------------------- 
-
-      // Hook not found
-      $rootScope.$on('$stateNotFound',
-        function(event, unfoundState/*, fromState, fromParams*/) {
-            console.log(unfoundState.to); // "lazy.state"
-            console.log(unfoundState.toParams); // {a:1, b:2}
-            console.log(unfoundState.options); // {inherit:false} + default options
-        });
-      // Hook error
-      $rootScope.$on('$stateChangeError',
-        function(event, toState, toParams, fromState, fromParams, error){
-          console.log(error);
-        });
-      // Hook success
-      $rootScope.$on('$stateChangeSuccess',
-        function(/*event, toState, toParams, fromState, fromParams*/) {
-          // display new view from top
-          $window.scrollTo(0, 0);
-          // Save the route title
-          $rootScope.currTitle = $state.current.title;
-        });
-
-      // Load a title dynamically
-      $rootScope.currTitle = $state.current.title;
-      $rootScope.pageTitle = function() {
-        var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
-        document.title = title;
-        return title;
-      };      
-
-    }
-
-    currentUserRun.$inject = ['$rootScope', 'User', '$filter'];
-    
-    function currentUserRun($rootScope, User, $filter) {
-      
-      userDidLogined();
-      
-      function userDidLogined() {
-        if(User.isAuthenticated()) {
-          User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
-          .$promise.then(function (user) {
-            user.job = $filter('role')(user.role);
-            user.name = user.name || user.username;
-            user.picture = 'app/img/dummy.png';
-            $rootScope.user = user;
-          });
-        }
-      }
-      
-      $rootScope.$on('User.logined', userDidLogined);
-      
-    }
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
         .module('app.dashboard')
         .controller('DashboardController', DashboardController);
 
@@ -2448,565 +2826,187 @@
         }
     }
 })();
-/**=========================================================
- * Module: demo-alerts.js
- * Provides a simple demo for pagination
- =========================================================*/
 (function() {
     'use strict';
 
     angular
-        .module('app.bootstrapui')
-        .controller('AlertDemoCtrl', AlertDemoCtrl);
+        .module('app.core')
+        .config(coreConfig)
+        .config(loopbackConfig)
+    ;
 
-    function AlertDemoCtrl() {
-        var vm = this;
+    coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$httpProvider'];
+    function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide, $httpProvider){
+      
+      var core = angular.module('app.core');
+      // registering components after bootstrap
+      core.controller = $controllerProvider.register;
+      core.directive  = $compileProvider.directive;
+      core.filter     = $filterProvider.register;
+      core.factory    = $provide.factory;
+      core.service    = $provide.service;
+      core.constant   = $provide.constant;
+      core.value      = $provide.value;
 
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.alerts = [
-            { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
-            { type: 'warning', msg: 'Well done! You successfully read this important alert message.' }
-          ];
-
-          vm.addAlert = function() {
-            vm.alerts.push({msg: 'Another alert!'});
-          };
-
-          vm.closeAlert = function(index) {
-            vm.alerts.splice(index, 1);
-          };
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .config(bootstrapuiConfig);
-
-    bootstrapuiConfig.$inject = ['$tooltipProvider'];
-    function bootstrapuiConfig($tooltipProvider){
-      $tooltipProvider.options({appendToBody: true});
-    }
-})();
-/**=========================================================
- * Module: demo-buttons.js
- * Provides a simple demo for buttons actions
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('ButtonsCtrl', ButtonsCtrl);
-
-    function ButtonsCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.singleModel = 1;
-
-          vm.radioModel = 'Middle';
-
-          vm.checkModel = {
-            left: false,
-            middle: true,
-            right: false
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-carousel.js
- * Provides a simple demo for bootstrap ui carousel
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('CarouselDemoCtrl', CarouselDemoCtrl);
-
-    function CarouselDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.myInterval = 5000;
-          
-          var slides = vm.slides = [];
-          vm.addSlide = function() {
-            var newWidth = 800 + slides.length;
-            slides.push({
-              image: '//placekitten.com/' + newWidth + '/300',
-              text: ['More','Extra','Lots of','Surplus'][slides.length % 2] + ' ' +
-                ['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 2]
-            });
-          };
-          
-          for (var i=0; i<2; i++) {
-            vm.addSlide();
+      $httpProvider.interceptors.push(["$q", "$location", "LoopBackAuth", function($q, $location, LoopBackAuth) {
+        return {
+          responseError: function(rejection) {
+            if (rejection.status == 401) {
+              LoopBackAuth.clearUser();
+              LoopBackAuth.clearStorage();
+              $location.path('/page/login')
+            }
+            return $q.reject(rejection);
           }
-
-        }
+        };
+      }]);     
     }
-})();
+    
+    loopbackConfig.$inject = ['LoopBackResourceProvider', 'urlBase'];
+    function loopbackConfig(LoopBackResourceProvider, urlBase) {
+      LoopBackResourceProvider.setUrlBase(urlBase);
+    }
 
+})();
 /**=========================================================
- * Module: demo-datepicker.js
- * Provides a simple demo for bootstrap datepicker
+ * Module: constants.js
+ * Define constants to inject across the application
  =========================================================*/
 
 (function() {
     'use strict';
 
     angular
-        .module('app.bootstrapui')
-        .controller('DatepickerDemoCtrl', DatepickerDemoCtrl);
+        .module('app.core')
+        .constant('APP_MEDIAQUERY', {
+          'desktopLG':             1200,
+          'desktop':                992,
+          'tablet':                 768,
+          'mobile':                 480
+        })
+        .constant('urlBase', "http://0.0.0.0:3000/api")
+        // .constant('urlBase', "http://api.fankahui.com:3000/api")
+      ;
 
-    function DatepickerDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.today = function() {
-            vm.dt = new Date();
-          };
-          vm.today();
-
-          vm.clear = function () {
-            vm.dt = null;
-          };
-
-          // Disable weekend selection
-          vm.disabled = function(date, mode) {
-            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-          };
-
-          vm.toggleMin = function() {
-            vm.minDate = vm.minDate ? null : new Date();
-          };
-          vm.toggleMin();
-
-          vm.open = function($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            vm.opened = true;
-          };
-
-          vm.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-          };
-
-          vm.initDate = new Date('2019-10-20');
-          vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-          vm.format = vm.formats[0];
-        }
-    }
 })();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
 
-
-/**=========================================================
- * Module: modals.js
- * Provides a simple way to implement bootstrap modals from templates
- =========================================================*/
 (function() {
     'use strict';
 
     angular
-        .module('app.bootstrapui')
-        .controller('ModalController', ModalController);
+        .module('app.core')
+        .filter('role', roleFilter)
+    ;
 
-    ModalController.$inject = ['$modal'];
-    function ModalController($modal) {
-        var vm = this;
+    function roleFilter() {
+        var role = {
+          owner: "业主",
+          shopManager: "店长",
+          cashier: "收银员"
+        };
+        return function(key) {
+          return role[key];
+        }
+    }
+    
+})();
+(function() {
+    'use strict';
 
-        activate();
+    angular
+        .module('app.core')
+        .run(appRun)
+        .run(currentUserRun)
+    ;
 
-        ////////////////
+    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
+    
+    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
+      
+      // Set reference to access them from any scope
+      $rootScope.$state = $state;
+      $rootScope.$stateParams = $stateParams;
+      $rootScope.$storage = $window.localStorage;
 
-        function activate() {
-
-          vm.open = function (size) {
-
-            var modalInstance = $modal.open({
-              templateUrl: '/myModalContent.html',
-              controller: ModalInstanceCtrl,
-              size: size
-            });
-
-            var state = $('#modal-state');
-            modalInstance.result.then(function () {
-              state.text('Modal dismissed with OK status');
-            }, function () {
-              state.text('Modal dismissed with Cancel status');
-            });
-          };
-
-          // Please note that $modalInstance represents a modal window (instance) dependency.
-          // It is not the same as the $modal service used above.
-
-          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance'];
-          function ModalInstanceCtrl($scope, $modalInstance) {
-
-            $scope.ok = function () {
-              $modalInstance.close('closed');
-            };
-
-            $scope.cancel = function () {
-              $modalInstance.dismiss('cancel');
-            };
+      // Uncomment this to disable template cache
+      /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+          if (typeof(toState) !== 'undefined'){
+            $templateCache.remove(toState.templateUrl);
           }
-        }
+      });*/
+
+      // Allows to use branding color with interpolation
+      // {{ colorByName('primary') }}
+      $rootScope.colorByName = Colors.byName;
+
+      // cancel click event easily
+      $rootScope.cancel = function($event) {
+        $event.stopPropagation();
+      };
+
+      // Hooks Example
+      // ----------------------------------- 
+
+      // Hook not found
+      $rootScope.$on('$stateNotFound',
+        function(event, unfoundState/*, fromState, fromParams*/) {
+            console.log(unfoundState.to); // "lazy.state"
+            console.log(unfoundState.toParams); // {a:1, b:2}
+            console.log(unfoundState.options); // {inherit:false} + default options
+        });
+      // Hook error
+      $rootScope.$on('$stateChangeError',
+        function(event, toState, toParams, fromState, fromParams, error){
+          console.log(error);
+        });
+      // Hook success
+      $rootScope.$on('$stateChangeSuccess',
+        function(/*event, toState, toParams, fromState, fromParams*/) {
+          // display new view from top
+          $window.scrollTo(0, 0);
+          // Save the route title
+          $rootScope.currTitle = $state.current.title;
+        });
+
+      // Load a title dynamically
+      $rootScope.currTitle = $state.current.title;
+      $rootScope.pageTitle = function() {
+        var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
+        document.title = title;
+        return title;
+      };      
+
     }
 
-})();
-
-/**=========================================================
- * Module: demo-pagination.js
- * Provides a simple demo for pagination
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('PaginationDemoCtrl', PaginationDemoCtrl);
-
-    function PaginationDemoCtrl() {
-        var vm = this;
-
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.totalItems = 64;
-          vm.currentPage = 4;
-
-          vm.setPage = function (pageNo) {
-            vm.currentPage = pageNo;
-          };
-
-          vm.pageChanged = function() {
-            console.log('Page changed to: ' + vm.currentPage);
-          };
-
-          vm.maxSize = 5;
-          vm.bigTotalItems = 175;
-          vm.bigCurrentPage = 1;
+    currentUserRun.$inject = ['$rootScope', 'User', '$filter'];
+    
+    function currentUserRun($rootScope, User, $filter) {
+      
+      userDidLogined();
+      
+      function userDidLogined() {
+        if(User.isAuthenticated()) {
+          User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
+          .$promise.then(function (user) {
+            user.job = $filter('role')(user.role);
+            user.name = user.name || user.username;
+            user.picture = 'app/img/dummy.png';
+            $rootScope.user = user;
+          });
         }
-    }
-})();
-
-/**=========================================================
- * Module: demo-popover.js
- * Provides a simple demo for popovers
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('PopoverDemoCtrl', PopoverDemoCtrl);
-
-    function PopoverDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.dynamicPopover = 'Hello, World!';
-          vm.dynamicPopoverTitle = 'Title';
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-progress.js
- * Provides a simple demo to animate progress bar
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('ProgressDemoCtrl', ProgressDemoCtrl);
-
-    function ProgressDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.max = 200;
-
-          vm.random = function() {
-            var value = Math.floor((Math.random() * 100) + 1);
-            var type;
-
-            if (value < 25) {
-              type = 'success';
-            } else if (value < 50) {
-              type = 'info';
-            } else if (value < 75) {
-              type = 'warning';
-            } else {
-              type = 'danger';
-            }
-
-            vm.showWarning = (type === 'danger' || type === 'warning');
-
-            vm.dynamic = value;
-            vm.type = type;
-          };
-          vm.random();
-
-          vm.randomStacked = function() {
-            vm.stacked = [];
-            var types = ['success', 'info', 'warning', 'danger'];
-
-            for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
-                var index = Math.floor((Math.random() * 4));
-                vm.stacked.push({
-                  value: Math.floor((Math.random() * 30) + 1),
-                  type: types[index]
-                });
-            }
-          };
-          vm.randomStacked();
-        }
+      }
+      
+      $rootScope.$on('User.logined', userDidLogined);
+      
     }
 })();
 
-/**=========================================================
- * Module: demo-rating.js
- * Provides a demo for ratings UI
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('RatingDemoCtrl', RatingDemoCtrl);
-
-    function RatingDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.rate = 7;
-          vm.max = 10;
-          vm.isReadonly = false;
-
-          vm.hoveringOver = function(value) {
-            vm.overStar = value;
-            vm.percent = 100 * (value / vm.max);
-          };
-
-          vm.ratingStates = [
-            {stateOn: 'fa fa-check', stateOff: 'fa fa-check-circle'},
-            {stateOn: 'fa fa-star', stateOff: 'fa fa-star-o'},
-            {stateOn: 'fa fa-heart', stateOff: 'fa fa-ban'},
-            {stateOn: 'fa fa-heart'},
-            {stateOff: 'fa fa-power-off'}
-          ];
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-timepicker.js
- * Provides a simple demo for bootstrap ui timepicker
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TimepickerDemoCtrl', TimepickerDemoCtrl);
-
-    function TimepickerDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.mytime = new Date();
-
-          vm.hstep = 1;
-          vm.mstep = 15;
-
-          vm.options = {
-            hstep: [1, 2, 3],
-            mstep: [1, 5, 10, 15, 25, 30]
-          };
-
-          vm.ismeridian = true;
-          vm.toggleMode = function() {
-            vm.ismeridian = ! vm.ismeridian;
-          };
-
-          vm.update = function() {
-            var d = new Date();
-            d.setHours( 14 );
-            d.setMinutes( 0 );
-            vm.mytime = d;
-          };
-
-          vm.changed = function () {
-            console.log('Time changed to: ' + vm.mytime);
-          };
-
-          vm.clear = function() {
-            vm.mytime = null;
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-tooltip.js
- * Provides a simple demo for tooltip
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TooltipDemoCtrl', TooltipDemoCtrl);
-
-    function TooltipDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.dynamicTooltip = 'Hello, World!';
-          vm.dynamicTooltipText = 'dynamic';
-          vm.htmlTooltip = 'I\'ve been made <b>bold</b>!';
-
-          vm.autoplace = function (context, source) {
-            //return (predictTooltipTop(source) < 0) ?  "bottom": "top";
-            var pos = 'top';
-            if(predictTooltipTop(source) < 0)
-              pos = 'bottom';
-            if(predictTooltipLeft(source) < 0)
-              pos = 'right';
-            return pos;
-          };
-
-            // Predicts tooltip top position 
-            // based on the trigger element
-            function predictTooltipTop(el) {
-              var top = el.offsetTop;
-              var height = 40; // asumes ~40px tooltip height
-
-              while(el.offsetParent) {
-                el = el.offsetParent;
-                top += el.offsetTop;
-              }
-              return (top - height) - (window.pageYOffset);
-            }
-
-            // Predicts tooltip top position 
-            // based on the trigger element
-            function predictTooltipLeft(el) {
-              var left = el.offsetLeft;
-              var width = el.offsetWidth;
-
-              while(el.offsetParent) {
-                el = el.offsetParent;
-                left += el.offsetLeft;
-              }
-              return (left - width) - (window.pageXOffset);
-            }
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-typeahead.js
- * Provides a simple demo for typeahead
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TypeaheadCtrl', TypeaheadCtrl);
-
-    TypeaheadCtrl.$inject = ['$http'];
-    function TypeaheadCtrl($http) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.selected = undefined;
-          vm.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
-
-          // Any function returning a promise object can be used to load values asynchronously
-          vm.getLocation = function(val) {
-            return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
-              params: {
-                address: val,
-                sensor: false
-              }
-            }).then(function(res){
-              var addresses = [];
-              angular.forEach(res.data.results, function(item){
-                /*jshint -W106*/
-                addresses.push(item.formatted_address);
-              });
-              return addresses;
-            });
-          };
-
-          vm.statesWithFlags = [{'name':'Alabama','flag':'5/5c/Flag_of_Alabama.svg/45px-Flag_of_Alabama.svg.png'},{'name':'Alaska','flag':'e/e6/Flag_of_Alaska.svg/43px-Flag_of_Alaska.svg.png'},{'name':'Arizona','flag':'9/9d/Flag_of_Arizona.svg/45px-Flag_of_Arizona.svg.png'},{'name':'Arkansas','flag':'9/9d/Flag_of_Arkansas.svg/45px-Flag_of_Arkansas.svg.png'},{'name':'California','flag':'0/01/Flag_of_California.svg/45px-Flag_of_California.svg.png'},{'name':'Colorado','flag':'4/46/Flag_of_Colorado.svg/45px-Flag_of_Colorado.svg.png'},{'name':'Connecticut','flag':'9/96/Flag_of_Connecticut.svg/39px-Flag_of_Connecticut.svg.png'},{'name':'Delaware','flag':'c/c6/Flag_of_Delaware.svg/45px-Flag_of_Delaware.svg.png'},{'name':'Florida','flag':'f/f7/Flag_of_Florida.svg/45px-Flag_of_Florida.svg.png'},{'name':'Georgia','flag':'5/54/Flag_of_Georgia_%28U.S._state%29.svg/46px-Flag_of_Georgia_%28U.S._state%29.svg.png'},{'name':'Hawaii','flag':'e/ef/Flag_of_Hawaii.svg/46px-Flag_of_Hawaii.svg.png'},{'name':'Idaho','flag':'a/a4/Flag_of_Idaho.svg/38px-Flag_of_Idaho.svg.png'},{'name':'Illinois','flag':'0/01/Flag_of_Illinois.svg/46px-Flag_of_Illinois.svg.png'},{'name':'Indiana','flag':'a/ac/Flag_of_Indiana.svg/45px-Flag_of_Indiana.svg.png'},{'name':'Iowa','flag':'a/aa/Flag_of_Iowa.svg/44px-Flag_of_Iowa.svg.png'},{'name':'Kansas','flag':'d/da/Flag_of_Kansas.svg/46px-Flag_of_Kansas.svg.png'},{'name':'Kentucky','flag':'8/8d/Flag_of_Kentucky.svg/46px-Flag_of_Kentucky.svg.png'},{'name':'Louisiana','flag':'e/e0/Flag_of_Louisiana.svg/46px-Flag_of_Louisiana.svg.png'},{'name':'Maine','flag':'3/35/Flag_of_Maine.svg/45px-Flag_of_Maine.svg.png'},{'name':'Maryland','flag':'a/a0/Flag_of_Maryland.svg/45px-Flag_of_Maryland.svg.png'},{'name':'Massachusetts','flag':'f/f2/Flag_of_Massachusetts.svg/46px-Flag_of_Massachusetts.svg.png'},{'name':'Michigan','flag':'b/b5/Flag_of_Michigan.svg/45px-Flag_of_Michigan.svg.png'},{'name':'Minnesota','flag':'b/b9/Flag_of_Minnesota.svg/46px-Flag_of_Minnesota.svg.png'},{'name':'Mississippi','flag':'4/42/Flag_of_Mississippi.svg/45px-Flag_of_Mississippi.svg.png'},{'name':'Missouri','flag':'5/5a/Flag_of_Missouri.svg/46px-Flag_of_Missouri.svg.png'},{'name':'Montana','flag':'c/cb/Flag_of_Montana.svg/45px-Flag_of_Montana.svg.png'},{'name':'Nebraska','flag':'4/4d/Flag_of_Nebraska.svg/46px-Flag_of_Nebraska.svg.png'},{'name':'Nevada','flag':'f/f1/Flag_of_Nevada.svg/45px-Flag_of_Nevada.svg.png'},{'name':'New Hampshire','flag':'2/28/Flag_of_New_Hampshire.svg/45px-Flag_of_New_Hampshire.svg.png'},{'name':'New Jersey','flag':'9/92/Flag_of_New_Jersey.svg/45px-Flag_of_New_Jersey.svg.png'},{'name':'New Mexico','flag':'c/c3/Flag_of_New_Mexico.svg/45px-Flag_of_New_Mexico.svg.png'},{'name':'New York','flag':'1/1a/Flag_of_New_York.svg/46px-Flag_of_New_York.svg.png'},{'name':'North Carolina','flag':'b/bb/Flag_of_North_Carolina.svg/45px-Flag_of_North_Carolina.svg.png'},{'name':'North Dakota','flag':'e/ee/Flag_of_North_Dakota.svg/38px-Flag_of_North_Dakota.svg.png'},{'name':'Ohio','flag':'4/4c/Flag_of_Ohio.svg/46px-Flag_of_Ohio.svg.png'},{'name':'Oklahoma','flag':'6/6e/Flag_of_Oklahoma.svg/45px-Flag_of_Oklahoma.svg.png'},{'name':'Oregon','flag':'b/b9/Flag_of_Oregon.svg/46px-Flag_of_Oregon.svg.png'},{'name':'Pennsylvania','flag':'f/f7/Flag_of_Pennsylvania.svg/45px-Flag_of_Pennsylvania.svg.png'},{'name':'Rhode Island','flag':'f/f3/Flag_of_Rhode_Island.svg/32px-Flag_of_Rhode_Island.svg.png'},{'name':'South Carolina','flag':'6/69/Flag_of_South_Carolina.svg/45px-Flag_of_South_Carolina.svg.png'},{'name':'South Dakota','flag':'1/1a/Flag_of_South_Dakota.svg/46px-Flag_of_South_Dakota.svg.png'},{'name':'Tennessee','flag':'9/9e/Flag_of_Tennessee.svg/46px-Flag_of_Tennessee.svg.png'},{'name':'Texas','flag':'f/f7/Flag_of_Texas.svg/45px-Flag_of_Texas.svg.png'},{'name':'Utah','flag':'f/f6/Flag_of_Utah.svg/45px-Flag_of_Utah.svg.png'},{'name':'Vermont','flag':'4/49/Flag_of_Vermont.svg/46px-Flag_of_Vermont.svg.png'},{'name':'Virginia','flag':'4/47/Flag_of_Virginia.svg/44px-Flag_of_Virginia.svg.png'},{'name':'Washington','flag':'5/54/Flag_of_Washington.svg/46px-Flag_of_Washington.svg.png'},{'name':'West Virginia','flag':'2/22/Flag_of_West_Virginia.svg/46px-Flag_of_West_Virginia.svg.png'},{'name':'Wisconsin','flag':'2/22/Flag_of_Wisconsin.svg/45px-Flag_of_Wisconsin.svg.png'},{'name':'Wyoming','flag':'b/bc/Flag_of_Wyoming.svg/43px-Flag_of_Wyoming.svg.png'}];
-
-        }
-    }
-})();
 
 
 (function() {
@@ -4597,6 +4597,55 @@
     }
 })();
 
+/**=========================================================
+ * Module: flatdoc.js
+ * Creates the flatdoc markup and initializes the plugin
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.flatdoc')
+        .directive('flatdoc', flatdoc);
+
+    function flatdoc () {
+
+        var directive = {
+            template: '<div role="flatdoc"><div role="flatdoc-menu"></div><div role="flatdoc-content"></div></div>',
+            link: link,
+            restrict: 'EA'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+          Flatdoc.run({
+            fetcher: Flatdoc.file(attrs.src)
+          });
+          
+          var $root = $('html, body');
+          $(document).on('flatdoc:ready', function() {
+            var docMenu = $('[role="flatdoc-menu"]');
+            docMenu.find('a').on('click', function(e) {
+              e.preventDefault(); e.stopPropagation();
+              
+              var $this = $(this);
+              
+              docMenu.find('a.active').removeClass('active');
+              $this.addClass('active');
+
+              $root.animate({
+                    scrollTop: $(this.getAttribute('href')).offset().top - ($('.topnavbar').height() + 10)
+                }, 800);
+            });
+
+          });
+        }
+    }
+
+
+})();
+
 (function() {
     'use strict';
 
@@ -5590,55 +5639,6 @@
 })();
 
 /**=========================================================
- * Module: flatdoc.js
- * Creates the flatdoc markup and initializes the plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.flatdoc')
-        .directive('flatdoc', flatdoc);
-
-    function flatdoc () {
-
-        var directive = {
-            template: '<div role="flatdoc"><div role="flatdoc-menu"></div><div role="flatdoc-content"></div></div>',
-            link: link,
-            restrict: 'EA'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          Flatdoc.run({
-            fetcher: Flatdoc.file(attrs.src)
-          });
-          
-          var $root = $('html, body');
-          $(document).on('flatdoc:ready', function() {
-            var docMenu = $('[role="flatdoc-menu"]');
-            docMenu.find('a').on('click', function(e) {
-              e.preventDefault(); e.stopPropagation();
-              
-              var $this = $(this);
-              
-              docMenu.find('a.active').removeClass('active');
-              $this.addClass('active');
-
-              $root.animate({
-                    scrollTop: $(this.getAttribute('href')).offset().top - ($('.topnavbar').height() + 10)
-                }, 800);
-            });
-
-          });
-        }
-    }
-
-
-})();
-
-/**=========================================================
  * Module: skycons.js
  * Include any animated weather icon from Skycons
  =========================================================*/
@@ -6051,6 +6051,50 @@
     'use strict';
 
     angular
+        .module('app.loadingbar')
+        .config(loadingbarConfig)
+        ;
+    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
+    function loadingbarConfig(cfpLoadingBarProvider){
+      cfpLoadingBarProvider.includeBar = true;
+      cfpLoadingBarProvider.includeSpinner = false;
+      cfpLoadingBarProvider.latencyThreshold = 500;
+      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .run(loadingbarRun)
+        ;
+    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
+    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
+
+      // Loading bar transition
+      // ----------------------------------- 
+      var thBar;
+      $rootScope.$on('$stateChangeStart', function() {
+          if($('.wrapper > section').length) // check if bar container exists
+            thBar = $timeout(function() {
+              cfpLoadingBar.start();
+            }, 0); // sets a latency Threshold
+      });
+      $rootScope.$on('$stateChangeSuccess', function(event) {
+          event.targetScope.$watch('$viewContentLoaded', function () {
+            $timeout.cancel(thBar);
+            cfpLoadingBar.complete();
+          });
+      });
+
+    }
+
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.locale')
         .config(localeConfig)
         ;
@@ -6102,50 +6146,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .config(loadingbarConfig)
-        ;
-    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
-    function loadingbarConfig(cfpLoadingBarProvider){
-      cfpLoadingBarProvider.includeBar = true;
-      cfpLoadingBarProvider.includeSpinner = false;
-      cfpLoadingBarProvider.latencyThreshold = 500;
-      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .run(loadingbarRun)
-        ;
-    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
-    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
-
-      // Loading bar transition
-      // ----------------------------------- 
-      var thBar;
-      $rootScope.$on('$stateChangeStart', function() {
-          if($('.wrapper > section').length) // check if bar container exists
-            thBar = $timeout(function() {
-              cfpLoadingBar.start();
-            }, 0); // sets a latency Threshold
-      });
-      $rootScope.$on('$stateChangeSuccess', function(event) {
-          event.targetScope.$watch('$viewContentLoaded', function () {
-            $timeout.cancel(thBar);
-            cfpLoadingBar.complete();
-          });
-      });
-
-    }
-
-})();
 /**=========================================================
  * Module: demo-pagination.js
  * Provides a simple demo for pagination
@@ -6626,6 +6626,9 @@
     angular
       .module('app.members')
       .controller('MembersController', MembersController)
+      .controller('MemberController', MemberController)
+      .controller('rechargeDialogController', rechargeDialogController)
+      .controller('bonusDialogController', bonusDialogController)
     ;
       
     MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService', 'dealService'];
@@ -6655,6 +6658,191 @@
         $scope.$state.go('app.sell');
       }
     }
+    
+    MemberController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'dealService', 'ngDialog'];
+    function MemberController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, dealService, ngDialog) {
+      var vm = this;
+      var memberId = $scope.$state.params.memberId;
+            
+      vm.dealTableParams = new ngTableParams({
+        count: 10
+      }, {
+        getData: function($defer, params) {
+          var opt = {where:{status:{ne:'deleted'}}}
+          opt.limit = params.count()
+          opt.skip = (params.page()-1)*opt.limit
+          Member.deals.count({id: memberId, where: opt.where}, function (result) {
+            vm.dealTableParams.total(result.count);
+          });
+          Member.deals({id: memberId, filter:opt}, $defer.resolve);
+        }
+      });     
+      
+      vm.depositTableParams = new ngTableParams({
+        count: 10
+      }, {
+        getData: function($defer, params) {
+          var opt = {
+            where:{status:{ne:'deleted'}, or:[{type: 'deposit'}, {category: 'deposit'}]},
+            include: ['shop']
+          }
+          opt.limit = params.count()
+          opt.skip = (params.page()-1)*opt.limit
+          Member.payments.count({id: memberId, where: opt.where}, function (result) {
+            vm.depositTableParams.total(result.count);
+          });
+          Member.payments({id: memberId, filter:opt}, $defer.resolve);
+        }
+      });
+
+      vm.bonusTableParams = new ngTableParams({
+        count: 10
+      }, {
+        getData: function($defer, params) {
+          var opt = {
+            where:{status:{ne:'deleted'}},
+            include: []
+          }
+          opt.limit = params.count()
+          opt.skip = (params.page()-1)*opt.limit
+          Member.bonuses.count({id: memberId, where: opt.where}, function (result) {
+            vm.bonusTableParams.total(result.count);
+          });
+          Member.bonuses({id: memberId, filter:opt}, $defer.resolve);
+        }
+      });
+
+      activate();
+      
+      function activate() {
+        
+        memberId = $scope.$state.params.memberId;
+
+        vm.member = Member.findOne({filter: {
+          where: {id: memberId}, 
+          include:['wxuser']
+        }});
+        
+        vm.dealTableParams.reload();
+        vm.depositTableParams.reload();
+        vm.bonusTableParams.reload();
+      }
+
+      vm.sell = function () {
+        dealService.openDeal(vm.member);
+        $scope.$state.go('app.sell');
+      }
+      
+      vm.recharge = function () {
+        ngDialog.open({ 
+          template: 'rechargeDialogId', 
+          controller: 'rechargeDialogController'
+        }).closePromise.then(function (data) {
+          activate();
+        });
+      }
+      
+      vm.setBonus = function () {
+        ngDialog.open({ 
+          template: 'bonusDialogId', 
+          controller: 'bonusDialogController'
+        }).closePromise.then(function (data) {
+          activate();
+        });
+      }
+    }
+    
+    rechargeDialogController.$inject = ['$scope', 'ngDialog', 'Member', 'toaster', 'dealService'];
+    function rechargeDialogController($scope, ngDialog, Member, toaster, dealService) {
+
+        activate();
+
+        ////////////////
+
+        var memberId = $scope.$state.params.memberId;
+        function activate() {
+          memberId = $scope.$state.params.memberId;
+          $scope.member = Member.findById({id:memberId});
+          $scope.data = {
+            type: 'cash', 
+            amount: 0,
+            category: 'deposit'
+          };
+          $scope.payType = dealService.payType;
+          $scope.cash = {
+            paid: 0,
+            change: 0,
+          }
+        }
+        
+        $scope.onChangePayType = function () {
+          if(data.type === 'cash') {
+            $scope.data.cost = $scope.data.amount%$scope.user.merchant.changeRate;
+            $scope.data.amount -= $scope.data.cost;
+            $scope.countChange();
+          } else {
+            $scope.data.cost = 0;
+          }
+        }
+        
+        $scope.countChange = function () {
+          $scope.cash.paid =  $scope.cash.paid;
+          $scope.cash.change = $scope.data.amount - $scope.cash.paid;
+        }
+        
+        $scope.confirm = function () {
+          if($scope.data.amount === 0) {
+            return;
+          }
+          Member.payments.create({id: memberId}, $scope.data).$promise.then(function (result) {
+            $scope.submiting = false;
+            ngDialog.close();
+            toaster.pop('success', '成功', "完成储值操作");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "储值操作未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+        
+    }
+    
+    bonusDialogController.$inject = ['$scope', 'ngDialog', 'Member', 'toaster'];
+    function bonusDialogController($scope, ngDialog, Member, toaster) {
+
+        activate();
+
+        ////////////////
+
+        var memberId = $scope.$state.params.memberId;
+        function activate() {
+          memberId = $scope.$state.params.memberId;
+          $scope.member = Member.findById({id:memberId});
+          $scope.data = {
+            amount: 0,
+            memo: 'manual'
+          };
+        }
+        
+        $scope.confirm = function () {
+          if($scope.data.amount === 0) {
+            return;
+          } else if($scope.data.amount > 0) {
+            $scope.data.memo = 'manual';
+          } else if($scope.data.amount < 0) {
+            $scope.data.memo = 'writeoff';
+          }
+          Member.bonuses.create({id: memberId}, $scope.data).$promise.then(function (result) {
+            $scope.submiting = false;
+            ngDialog.close();
+            toaster.pop('success', '成功', "完成储值操作");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "储值操作未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+    }
 })();
 /**
  * AngularJS default filter with the following expression:
@@ -6669,21 +6857,49 @@
     angular
         .module('app.members')
         .filter('wx_sex', wxsexFilter)
+        .filter('wx_subscribe', wxsubscribeFilter)
+        .filter('deposit_category', depositcategoryFilter)
+        .filter('bonus_memo', bonusMemoFilter)
     ;
 
     function wxsexFilter() {
-        // var type = {
-        //   cash: "现金支付",
-        //   bankcard: "刷卡支付",
-        //   wxpay: "微信支付",
-        //   alipay: "支付宝"
-        // }
         var type = ['保密', '男', '女'];
         return function(key) {
           return type[key];
         }
     }
+    
+    function wxsubscribeFilter() {
+      var state = ['未关注', '已关注'];
+      return function (key) {
+        return state[key];
+      }
+    }
+    
+    function depositcategoryFilter() {
+      return function (deposit) {
+        if(deposit.type === 'deposit') {
+          return deposit.amount < 0 ? '储值消费':'储值退款';
+        } else if(deposit.category === 'deposit') {
+          return deposit.amount < 0 ? '提现':'充值';
+        } else {
+          return '未知';
+        }
+      }
+    }
 
+    function bonusMemoFilter() {
+      var memo = {
+        reward: '消费积分',
+        vouch: '消费抵扣',
+        manual: '手动积分',
+        writeoff: '手动减计',
+        exchange: '兑换'
+      }
+      return function (key) {
+        return memo[key];
+      }
+    }
 })();
 (function() {
     'use strict';
@@ -6765,8 +6981,8 @@
       }
     }
     
-    ShopsController.$inject = ['$scope', 'ngTable', 'moment', 'Shop'];
-    function ShopsController($scope, ngTable, moment, Shop) {
+    ShopsController.$inject = ['$scope', 'ngTable', 'Shop'];
+    function ShopsController($scope, ngTable, Shop) {
       var vm = this;
       
       activate();
@@ -6847,115 +7063,6 @@
     }
 
 })();
-/**=========================================================
- * Module: navbar-search.js
- * Navbar search toggler * Auto dismiss on ESC key
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .directive('searchOpen', searchOpen)
-        .directive('searchDismiss', searchDismiss);
-
-    //
-    // directives definition
-    // 
-    
-    function searchOpen () {
-        var directive = {
-            controller: searchOpenController,
-            restrict: 'A'
-        };
-        return directive;
-
-    }
-
-    function searchDismiss () {
-        var directive = {
-            controller: searchDismissController,
-            restrict: 'A'
-        };
-        return directive;
-        
-    }
-
-    //
-    // Contrller definition
-    // 
-    
-    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchOpenController ($scope, $element, NavSearch) {
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.toggle);
-    }
-
-    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchDismissController ($scope, $element, NavSearch) {
-      
-      var inputSelector = '.navbar-form input[type="text"]';
-
-      $(inputSelector)
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('keyup', function(e) {
-          if (e.keyCode === 27) // ESC
-            NavSearch.dismiss();
-        });
-        
-      // click anywhere closes the search
-      $(document).on('click', NavSearch.dismiss);
-      // dismissable options
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.dismiss);
-    }
-
-})();
-
-
-/**=========================================================
- * Module: nav-search.js
- * Services to share navbar search functions
- =========================================================*/
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .service('NavSearch', NavSearch);
-
-    function NavSearch() {
-        this.toggle = toggle;
-        this.dismiss = dismiss;
-
-        ////////////////
-
-        var navbarFormSelector = 'form.navbar-form';
-
-        function toggle() {
-          var navbarForm = $(navbarFormSelector);
-
-          navbarForm.toggleClass('open');
-          
-          var isOpen = navbarForm.hasClass('open');
-          
-          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
-        }
-
-        function dismiss() {
-          $(navbarFormSelector)
-            .removeClass('open') // Close control
-            .find('input[type="text"]').blur() // remove focus
-            .val('') // Empty input
-            ;
-        }        
-    }
-})();
-
 /**=========================================================
  * Module: demo-notify.js
  * Provides a simple demo for notify
@@ -7187,6 +7294,115 @@
     
     return notify;
 }(jQuery));
+
+/**=========================================================
+ * Module: navbar-search.js
+ * Navbar search toggler * Auto dismiss on ESC key
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .directive('searchOpen', searchOpen)
+        .directive('searchDismiss', searchDismiss);
+
+    //
+    // directives definition
+    // 
+    
+    function searchOpen () {
+        var directive = {
+            controller: searchOpenController,
+            restrict: 'A'
+        };
+        return directive;
+
+    }
+
+    function searchDismiss () {
+        var directive = {
+            controller: searchDismissController,
+            restrict: 'A'
+        };
+        return directive;
+        
+    }
+
+    //
+    // Contrller definition
+    // 
+    
+    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchOpenController ($scope, $element, NavSearch) {
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.toggle);
+    }
+
+    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchDismissController ($scope, $element, NavSearch) {
+      
+      var inputSelector = '.navbar-form input[type="text"]';
+
+      $(inputSelector)
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('keyup', function(e) {
+          if (e.keyCode === 27) // ESC
+            NavSearch.dismiss();
+        });
+        
+      // click anywhere closes the search
+      $(document).on('click', NavSearch.dismiss);
+      // dismissable options
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.dismiss);
+    }
+
+})();
+
+
+/**=========================================================
+ * Module: nav-search.js
+ * Services to share navbar search functions
+ =========================================================*/
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .service('NavSearch', NavSearch);
+
+    function NavSearch() {
+        this.toggle = toggle;
+        this.dismiss = dismiss;
+
+        ////////////////
+
+        var navbarFormSelector = 'form.navbar-form';
+
+        function toggle() {
+          var navbarForm = $(navbarFormSelector);
+
+          navbarForm.toggleClass('open');
+          
+          var isOpen = navbarForm.hasClass('open');
+          
+          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
+        }
+
+        function dismiss() {
+          $(navbarFormSelector)
+            .removeClass('open') // Close control
+            .find('input[type="text"]').blur() // remove focus
+            .val('') // Empty input
+            ;
+        }        
+    }
+})();
 
 /**=========================================================
  * Module: access-login.js
@@ -7985,45 +8201,52 @@
               url: '/app',
               abstract: true,
               templateUrl: helper.basepath('app.html'),
-              resolve: helper.resolveFor('fastclick', 'modernizr', 'icons', 'screenfull', 'animo', 'sparklines', 'slimscroll', 'classyloader', 'toaster', 'whirl')
+              resolve: helper.resolveFor('fastclick', 'modernizr', 'icons', 'screenfull', 'animo', 'sparklines', 'slimscroll', 'classyloader', 'toaster', 'whirl', 'moment')
           })
           .state('app.dashboard', {
               url: '/dashboard',
               title: 'Dashboard',
               templateUrl: helper.basepath('dashboard.html'),
-              resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons', 'moment')
+              resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons')
           })
           .state('app.sell', {
               url: '/sell',
               title: 'sell',
               templateUrl: helper.basepath('sell.html'),
               controller: 'SellController as sell',
-              resolve: helper.resolveFor('ngTable', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'loaders.css', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngDialog', 'oitozero.ngSweetAlert', 'loaders.css', 'spinkit')
+          })
+          .state('app.members', {
+              url: '/members',
+              title: 'Members',
+              templateUrl: helper.basepath('members.html'),
+              controller: 'MembersController as members',
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.member', {
-              url: '/member',
-              title: 'Member',
+              url: '/members/:memberId',
+              title: 'Member Detail',
               templateUrl: helper.basepath('member.html'),
-              controller: 'MembersController as members',
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              controller: 'MemberController as member',
+              resolve: helper.resolveFor('ngTable', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.deal', {
               url: '/deal',
               title: 'Deal',
               templateUrl: helper.basepath('deal.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.cost', {
               url: '/cost',
               title: 'Cost',
               templateUrl: helper.basepath('cost.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.item', {
               url: '/item',
               title: 'Item',
               templateUrl: helper.basepath('item.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.item-add', {
               url: '/item-add',
@@ -8035,13 +8258,13 @@
               url: '/card',
               title: 'Card',
               templateUrl: helper.basepath('card.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.campaign', {
               url: '/campaign',
               title: 'Campaign',
               templateUrl: helper.basepath('campaign.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.myshop', {
               url: '/myshop',
@@ -8053,7 +8276,7 @@
               url: '/setting',
               title: 'Setting',
               templateUrl: helper.basepath('setting.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'moment', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.widgets', {
               url: '/widgets',
@@ -8215,7 +8438,7 @@
               url: '/form-extended',
               title: 'Form Extended',
               templateUrl: helper.basepath('form-extended.html'),
-              resolve: helper.resolveFor('colorpicker.module', 'codemirror', 'moment', 'taginput','inputmask','localytics.directives', 'ui.bootstrap-slider', 'ngWig', 'filestyle', 'textAngular')
+              resolve: helper.resolveFor('colorpicker.module', 'codemirror', 'taginput','inputmask','localytics.directives', 'ui.bootstrap-slider', 'ngWig', 'filestyle', 'textAngular')
           })
           .state('app.form-validation', {
               url: '/form-validation',
@@ -8344,7 +8567,7 @@
               url: '/calendar',
               title: 'Calendar',
               templateUrl: helper.basepath('calendar.html'),
-              resolve: helper.resolveFor('jquery-ui', 'jquery-ui-widgets', 'moment', 'fullcalendar')
+              resolve: helper.resolveFor('jquery-ui', 'jquery-ui-widgets', 'fullcalendar')
           })
           .state('app.invoice', {
               url: '/invoice',
@@ -8355,7 +8578,7 @@
               url: '/search',
               title: 'Search',
               templateUrl: helper.basepath('search.html'),
-              resolve: helper.resolveFor('moment', 'localytics.directives', 'ui.bootstrap-slider')
+              resolve: helper.resolveFor('localytics.directives', 'ui.bootstrap-slider')
           })
           .state('app.todo', {
               url: '/todo',
@@ -8715,8 +8938,8 @@
       function onChangePayType() {
         self.deal.payment.amount = self.deal.fee;
         if(self.deal.payment.type === 'cash') {
-          self.deal.payment.cost = 0-self.deal.fee%$rootScope.user.merchant.changeRate;
-          self.deal.payment.amount += self.deal.payment.cost;
+          self.deal.payment.cost = self.deal.fee%$rootScope.user.merchant.changeRate;
+          self.deal.payment.amount -= self.deal.payment.cost;
           countChange();
         } else if(self.deal.payment.type === 'deposit') {
           self.deal.payment.cost = 0;
@@ -8890,7 +9113,7 @@
     vm.updaeteMemberLevels = function () {
       $scope.user.merchant.memberLevels.forEach(function (level) {
         Member.update({
-          where: {merchantId:$scope.user.merchant.id, bonus: {gte: level.lower, lte: level.upper}}
+          where: {merchantId:$scope.user.merchant.id, totalBonus: {gte: level.lower, lte: level.upper}}
         }, {
           discount: level.discount, level: level.name
         }, function sucess(result, res) {
