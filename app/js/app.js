@@ -71,12 +71,6 @@
     'use strict';
 
     angular
-        .module('app.dashboard', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.core', [
             'ngRoute',
             'ngAnimate',
@@ -93,6 +87,12 @@
             'ui.utils',
             'lbServices'
         ]);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard', []);
 })();
 (function() {
     'use strict';
@@ -176,13 +176,13 @@
     'use strict';
 
     angular
-        .module('app.notify', []);
+        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.navsearch', []);
+        .module('app.notify', []);
 })();
 (function() {
     'use strict';
@@ -2461,6 +2461,188 @@
     'use strict';
 
     angular
+        .module('app.core')
+        .config(coreConfig)
+        .config(loopbackConfig)
+    ;
+
+    coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$httpProvider'];
+    function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide, $httpProvider){
+      
+      var core = angular.module('app.core');
+      // registering components after bootstrap
+      core.controller = $controllerProvider.register;
+      core.directive  = $compileProvider.directive;
+      core.filter     = $filterProvider.register;
+      core.factory    = $provide.factory;
+      core.service    = $provide.service;
+      core.constant   = $provide.constant;
+      core.value      = $provide.value;
+
+      $httpProvider.interceptors.push(["$q", "$location", "LoopBackAuth", function($q, $location, LoopBackAuth) {
+        return {
+          responseError: function(rejection) {
+            if (rejection.status == 401) {
+              LoopBackAuth.clearUser();
+              LoopBackAuth.clearStorage();
+              $location.path('/page/login')
+            }
+            return $q.reject(rejection);
+          }
+        };
+      }]);     
+    }
+    
+    loopbackConfig.$inject = ['LoopBackResourceProvider', 'urlBase'];
+    function loopbackConfig(LoopBackResourceProvider, urlBase) {
+      LoopBackResourceProvider.setUrlBase(urlBase);
+    }
+
+})();
+/**=========================================================
+ * Module: constants.js
+ * Define constants to inject across the application
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .constant('APP_MEDIAQUERY', {
+          'desktopLG':             1200,
+          'desktop':                992,
+          'tablet':                 768,
+          'mobile':                 480
+        })
+        .constant('urlBase', "http://0.0.0.0:3000/api")
+        // .constant('urlBase', "http://api.fankahui.com:3000/api")
+      ;
+
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .filter('role', roleFilter)
+    ;
+
+    function roleFilter() {
+        var role = {
+          owner: "业主",
+          shopManager: "店长",
+          cashier: "收银员"
+        };
+        return function(key) {
+          return role[key];
+        }
+    }
+    
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.core')
+        .run(appRun)
+        .run(currentUserRun)
+    ;
+
+    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
+    
+    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
+      
+      // Set reference to access them from any scope
+      $rootScope.$state = $state;
+      $rootScope.$stateParams = $stateParams;
+      $rootScope.$storage = $window.localStorage;
+
+      // Uncomment this to disable template cache
+      /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+          if (typeof(toState) !== 'undefined'){
+            $templateCache.remove(toState.templateUrl);
+          }
+      });*/
+
+      // Allows to use branding color with interpolation
+      // {{ colorByName('primary') }}
+      $rootScope.colorByName = Colors.byName;
+
+      // cancel click event easily
+      $rootScope.cancel = function($event) {
+        $event.stopPropagation();
+      };
+
+      // Hooks Example
+      // ----------------------------------- 
+
+      // Hook not found
+      $rootScope.$on('$stateNotFound',
+        function(event, unfoundState/*, fromState, fromParams*/) {
+            console.log(unfoundState.to); // "lazy.state"
+            console.log(unfoundState.toParams); // {a:1, b:2}
+            console.log(unfoundState.options); // {inherit:false} + default options
+        });
+      // Hook error
+      $rootScope.$on('$stateChangeError',
+        function(event, toState, toParams, fromState, fromParams, error){
+          console.log(error);
+        });
+      // Hook success
+      $rootScope.$on('$stateChangeSuccess',
+        function(/*event, toState, toParams, fromState, fromParams*/) {
+          // display new view from top
+          $window.scrollTo(0, 0);
+          // Save the route title
+          $rootScope.currTitle = $state.current.title;
+        });
+
+      // Load a title dynamically
+      $rootScope.currTitle = $state.current.title;
+      $rootScope.pageTitle = function() {
+        var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
+        document.title = title;
+        return title;
+      };      
+
+    }
+
+    currentUserRun.$inject = ['$rootScope', 'User', '$filter'];
+    
+    function currentUserRun($rootScope, User, $filter) {
+      
+      userDidLogined();
+      
+      function userDidLogined() {
+        if(User.isAuthenticated()) {
+          User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
+          .$promise.then(function (user) {
+            user.job = $filter('role')(user.role);
+            user.name = user.name || user.username;
+            user.picture = 'app/img/dummy.png';
+            $rootScope.user = user;
+          });
+        }
+      }
+      
+      $rootScope.$on('User.logined', userDidLogined);
+      
+    }
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
         .module('app.dashboard')
         .controller('DashboardController', DashboardController);
 
@@ -2826,188 +3008,6 @@
         }
     }
 })();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .config(coreConfig)
-        .config(loopbackConfig)
-    ;
-
-    coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$httpProvider'];
-    function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide, $httpProvider){
-      
-      var core = angular.module('app.core');
-      // registering components after bootstrap
-      core.controller = $controllerProvider.register;
-      core.directive  = $compileProvider.directive;
-      core.filter     = $filterProvider.register;
-      core.factory    = $provide.factory;
-      core.service    = $provide.service;
-      core.constant   = $provide.constant;
-      core.value      = $provide.value;
-
-      $httpProvider.interceptors.push(["$q", "$location", "LoopBackAuth", function($q, $location, LoopBackAuth) {
-        return {
-          responseError: function(rejection) {
-            if (rejection.status == 401) {
-              LoopBackAuth.clearUser();
-              LoopBackAuth.clearStorage();
-              $location.path('/page/login')
-            }
-            return $q.reject(rejection);
-          }
-        };
-      }]);     
-    }
-    
-    loopbackConfig.$inject = ['LoopBackResourceProvider', 'urlBase'];
-    function loopbackConfig(LoopBackResourceProvider, urlBase) {
-      LoopBackResourceProvider.setUrlBase(urlBase);
-    }
-
-})();
-/**=========================================================
- * Module: constants.js
- * Define constants to inject across the application
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .constant('APP_MEDIAQUERY', {
-          'desktopLG':             1200,
-          'desktop':                992,
-          'tablet':                 768,
-          'mobile':                 480
-        })
-        .constant('urlBase', "http://0.0.0.0:3000/api")
-        // .constant('urlBase', "http://api.fankahui.com:3000/api")
-      ;
-
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .filter('role', roleFilter)
-    ;
-
-    function roleFilter() {
-        var role = {
-          owner: "业主",
-          shopManager: "店长",
-          cashier: "收银员"
-        };
-        return function(key) {
-          return role[key];
-        }
-    }
-    
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .run(appRun)
-        .run(currentUserRun)
-    ;
-
-    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
-    
-    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
-      
-      // Set reference to access them from any scope
-      $rootScope.$state = $state;
-      $rootScope.$stateParams = $stateParams;
-      $rootScope.$storage = $window.localStorage;
-
-      // Uncomment this to disable template cache
-      /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-          if (typeof(toState) !== 'undefined'){
-            $templateCache.remove(toState.templateUrl);
-          }
-      });*/
-
-      // Allows to use branding color with interpolation
-      // {{ colorByName('primary') }}
-      $rootScope.colorByName = Colors.byName;
-
-      // cancel click event easily
-      $rootScope.cancel = function($event) {
-        $event.stopPropagation();
-      };
-
-      // Hooks Example
-      // ----------------------------------- 
-
-      // Hook not found
-      $rootScope.$on('$stateNotFound',
-        function(event, unfoundState/*, fromState, fromParams*/) {
-            console.log(unfoundState.to); // "lazy.state"
-            console.log(unfoundState.toParams); // {a:1, b:2}
-            console.log(unfoundState.options); // {inherit:false} + default options
-        });
-      // Hook error
-      $rootScope.$on('$stateChangeError',
-        function(event, toState, toParams, fromState, fromParams, error){
-          console.log(error);
-        });
-      // Hook success
-      $rootScope.$on('$stateChangeSuccess',
-        function(/*event, toState, toParams, fromState, fromParams*/) {
-          // display new view from top
-          $window.scrollTo(0, 0);
-          // Save the route title
-          $rootScope.currTitle = $state.current.title;
-        });
-
-      // Load a title dynamically
-      $rootScope.currTitle = $state.current.title;
-      $rootScope.pageTitle = function() {
-        var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
-        document.title = title;
-        return title;
-      };      
-
-    }
-
-    currentUserRun.$inject = ['$rootScope', 'User', '$filter'];
-    
-    function currentUserRun($rootScope, User, $filter) {
-      
-      userDidLogined();
-      
-      function userDidLogined() {
-        if(User.isAuthenticated()) {
-          User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
-          .$promise.then(function (user) {
-            user.job = $filter('role')(user.role);
-            user.name = user.name || user.username;
-            user.picture = 'app/img/dummy.png';
-            $rootScope.user = user;
-          });
-        }
-      }
-      
-      $rootScope.$on('User.logined', userDidLogined);
-      
-    }
-})();
-
-
 
 (function() {
     'use strict';
@@ -7064,6 +7064,115 @@
 
 })();
 /**=========================================================
+ * Module: navbar-search.js
+ * Navbar search toggler * Auto dismiss on ESC key
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .directive('searchOpen', searchOpen)
+        .directive('searchDismiss', searchDismiss);
+
+    //
+    // directives definition
+    // 
+    
+    function searchOpen () {
+        var directive = {
+            controller: searchOpenController,
+            restrict: 'A'
+        };
+        return directive;
+
+    }
+
+    function searchDismiss () {
+        var directive = {
+            controller: searchDismissController,
+            restrict: 'A'
+        };
+        return directive;
+        
+    }
+
+    //
+    // Contrller definition
+    // 
+    
+    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchOpenController ($scope, $element, NavSearch) {
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.toggle);
+    }
+
+    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchDismissController ($scope, $element, NavSearch) {
+      
+      var inputSelector = '.navbar-form input[type="text"]';
+
+      $(inputSelector)
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('keyup', function(e) {
+          if (e.keyCode === 27) // ESC
+            NavSearch.dismiss();
+        });
+        
+      // click anywhere closes the search
+      $(document).on('click', NavSearch.dismiss);
+      // dismissable options
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.dismiss);
+    }
+
+})();
+
+
+/**=========================================================
+ * Module: nav-search.js
+ * Services to share navbar search functions
+ =========================================================*/
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .service('NavSearch', NavSearch);
+
+    function NavSearch() {
+        this.toggle = toggle;
+        this.dismiss = dismiss;
+
+        ////////////////
+
+        var navbarFormSelector = 'form.navbar-form';
+
+        function toggle() {
+          var navbarForm = $(navbarFormSelector);
+
+          navbarForm.toggleClass('open');
+          
+          var isOpen = navbarForm.hasClass('open');
+          
+          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
+        }
+
+        function dismiss() {
+          $(navbarFormSelector)
+            .removeClass('open') // Close control
+            .find('input[type="text"]').blur() // remove focus
+            .val('') // Empty input
+            ;
+        }        
+    }
+})();
+
+/**=========================================================
  * Module: demo-notify.js
  * Provides a simple demo for notify
  =========================================================*/
@@ -7294,115 +7403,6 @@
     
     return notify;
 }(jQuery));
-
-/**=========================================================
- * Module: navbar-search.js
- * Navbar search toggler * Auto dismiss on ESC key
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .directive('searchOpen', searchOpen)
-        .directive('searchDismiss', searchDismiss);
-
-    //
-    // directives definition
-    // 
-    
-    function searchOpen () {
-        var directive = {
-            controller: searchOpenController,
-            restrict: 'A'
-        };
-        return directive;
-
-    }
-
-    function searchDismiss () {
-        var directive = {
-            controller: searchDismissController,
-            restrict: 'A'
-        };
-        return directive;
-        
-    }
-
-    //
-    // Contrller definition
-    // 
-    
-    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchOpenController ($scope, $element, NavSearch) {
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.toggle);
-    }
-
-    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchDismissController ($scope, $element, NavSearch) {
-      
-      var inputSelector = '.navbar-form input[type="text"]';
-
-      $(inputSelector)
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('keyup', function(e) {
-          if (e.keyCode === 27) // ESC
-            NavSearch.dismiss();
-        });
-        
-      // click anywhere closes the search
-      $(document).on('click', NavSearch.dismiss);
-      // dismissable options
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.dismiss);
-    }
-
-})();
-
-
-/**=========================================================
- * Module: nav-search.js
- * Services to share navbar search functions
- =========================================================*/
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .service('NavSearch', NavSearch);
-
-    function NavSearch() {
-        this.toggle = toggle;
-        this.dismiss = dismiss;
-
-        ////////////////
-
-        var navbarFormSelector = 'form.navbar-form';
-
-        function toggle() {
-          var navbarForm = $(navbarFormSelector);
-
-          navbarForm.toggleClass('open');
-          
-          var isOpen = navbarForm.hasClass('open');
-          
-          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
-        }
-
-        function dismiss() {
-          $(navbarFormSelector)
-            .removeClass('open') // Close control
-            .find('input[type="text"]').blur() // remove focus
-            .val('') // Empty input
-            ;
-        }        
-    }
-})();
 
 /**=========================================================
  * Module: access-login.js
@@ -9082,11 +9082,84 @@
   SettingController.$inject = ['$scope', '$rootScope', 'Merchant', 'Shop', 'Member', 'toaster'];
   function SettingController($scope, $rootScope, Merchant, Shop, Member, toaster) {
     var vm = this;
+    vm.industry = {
+      "IT科技": {
+        "互联网/电子商务": "1",
+        "IT软件与服务": "2",
+        "IT硬件与设备": "3",
+        "电子技术": "4",
+        "通信与运营商": "5",
+        "网络游戏": "6"
+      },
+      "金融业": {
+        "银行": "7",
+        "基金|理财|信托": "8",
+        "保险": "9"
+      },
+      "餐饮": {
+        "餐饮": "10"
+      },
+      "酒店旅游": {
+        "酒店": "11",
+        "旅游": "12"
+      },
+      "运输与仓储": {
+        "快递": "13",
+        "物流": "14",
+        "仓储": "15"
+      },
+      "教育": {
+        "培训": "16",
+        "院校": "17"
+      },
+      "政府与公共事业": {
+        "学术科研": "18",
+        "交警": "19",
+        "博物馆": "20",
+        "公共事业|非盈利机构": "21"
+      },
+      "医药护理": {
+        "医药医疗": "22",
+        "护理美容": "23",
+        "保健与卫生": "24"
+      },
+      "交通工具": {
+        "汽车相关": "25",
+        "摩托车相关": "26",
+        "火车相关": "27",
+        "飞机相关": "28"
+      },
+      "房地产": {
+        "建筑": "29",
+        "物业": "30"
+      },
+      "消费品": {
+        "消费品": "31"
+      },
+      "商业服务": {
+        "法律": "32",
+        "会展": "33",
+        "中介服务": "34",
+        "认证": "35",
+        "审计": "36"
+      },
+      "文体娱乐": {
+        "传媒": "37",
+        "体育": "38",
+        "娱乐休闲": "39"
+      },
+      "印刷": {
+        "印刷": "40"
+      },
+      "其它": {
+        "其它": "41"
+      }
+    };
 
     activete();
 
     function activete() {
-
+      vm.wxgh = Merchant.prototype$__get__wxgh({id: $scope.user.merchantId, refresh: true});
     }
 
     vm.update = function (isShop) {
@@ -9123,6 +9196,20 @@
         });
       });
     }
+            
+    vm.updateWxgh = function () {
+      vm.update();
+      Merchant.updateWxgh({
+        id: vm.wxgh.id,
+        appid: vm.wxgh.appid,
+        appsecret: vm.wxgh.appsecret,
+        industry: $scope.user.merchant.industry
+      }, function (result) {
+        toaster.pop('success', '成功', "微信公众号设置已经保存");
+      }, function (reason) {
+        toaster.pop('error', '失败', "设置未成功，请重试！")
+      });
+    } 
   }
 })();
 (function() {

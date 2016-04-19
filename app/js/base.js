@@ -3404,12 +3404,12 @@ module.factory(
 
         /**
          * @ngdoc method
-         * @name lbServices.Merchant#prototype$__get__wxaccesstokens
+         * @name lbServices.Merchant#prototype$__get__wxgh
          * @methodOf lbServices.Merchant
          *
          * @description
          *
-         * Fetches hasOne relation wxaccesstokens.
+         * Fetches belongsTo relation wxgh.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -3432,113 +3432,9 @@ module.factory(
          * This usually means the response is a `Merchant` object.)
          * </em>
          */
-        "prototype$__get__wxaccesstokens": {
-          url: urlBase + "/merchants/:id/wxaccesstokens",
+        "prototype$__get__wxgh": {
+          url: urlBase + "/merchants/:id/wxgh",
           method: "GET"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Merchant#prototype$__create__wxaccesstokens
-         * @methodOf lbServices.Merchant
-         *
-         * @description
-         *
-         * Creates a new instance in wxaccesstokens of this model.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Merchant` object.)
-         * </em>
-         */
-        "prototype$__create__wxaccesstokens": {
-          url: urlBase + "/merchants/:id/wxaccesstokens",
-          method: "POST"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Merchant#prototype$__update__wxaccesstokens
-         * @methodOf lbServices.Merchant
-         *
-         * @description
-         *
-         * Update wxaccesstokens of this model.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Merchant` object.)
-         * </em>
-         */
-        "prototype$__update__wxaccesstokens": {
-          url: urlBase + "/merchants/:id/wxaccesstokens",
-          method: "PUT"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Merchant#prototype$__destroy__wxaccesstokens
-         * @methodOf lbServices.Merchant
-         *
-         * @description
-         *
-         * Deletes wxaccesstokens of this model.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * This method returns no data.
-         */
-        "prototype$__destroy__wxaccesstokens": {
-          url: urlBase + "/merchants/:id/wxaccesstokens",
-          method: "DELETE"
         },
 
         /**
@@ -3960,6 +3856,44 @@ module.factory(
          */
         "createChangeStream": {
           url: urlBase + "/merchants/change-stream",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Merchant#updateWxgh
+         * @methodOf lbServices.Merchant
+         *
+         * @description
+         *
+         * setup weixin gh
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Merchant` object.)
+         * </em>
+         */
+        "updateWxgh": {
+          url: urlBase + "/merchants/wxgh",
           method: "POST"
         },
 
