@@ -13,20 +13,24 @@ function fetchDeal(dealId) {
   
   $.ajax({
     url: wxjssdk.apiBaseUrl+"/deals/"+dealId,
+    // url: wxjssdk.apiBaseUrl+"/deals/findOne",
+    // data: {
+    //   filter: {include:['bonuses'], where:{id:dealId}}
+    // },
     crossDomain: true,
     success: function (data) {
       console.log(data);
 
       var created = new Date(data.created);
-      $('#created').html(created.toLocaleString('zh-CN'));
+      $('#created').html(created.toLocaleDateString('zh-CN', {hour12: false})+" "+created.getHours()+":"+created.getMinutes());
 
-      data.entities.forEach(function (entity) {
+      data.entities.forEach(function (entity, index) {
         var dom = '<div class="weui_cell"> \
                     <div class="weui_cell_bd weui_cell_primary"> \
-                      <p>'+entity.sku.item.name+'</p> \
+                      <p>'+entity.sku.item.name+' '+entity.sku.model+'</p> \
                     </div> \
                     <div class="weui_cell_ft"> \
-                      ¥ '+entity.sku.price/100+' x \
+                      ¥ '+(entity.sku.price/100).toFixed(2)+' x \
                       '+entity.qty+' \
                     </div> \
                    </div>';
@@ -34,11 +38,14 @@ function fetchDeal(dealId) {
         $('#itemList').append(dom);
         
         $('#totalQty').html(data.totalQty);
-        $('#totalAmount').html('¥ '+data.totalAmount/100);
-        $('#discountAmount').html('¥ '+(data.discountAmount||0)/100);
-        $('#bonusVouchAmount').html('¥ '+(data.bonusVouchAmount||0)/100);
-        $('#fee').html('¥ '+data.fee/100);
-        $('#payment').html('¥ '+Math.abs(data.payment.amount)/100);
+        $('#totalAmount').html('¥ '+(data.totalAmount/100).toFixed(2));
+        $('#discountAmount').html('¥ '+(0-(data.discountAmount||0)/100).toFixed(2));
+        $('#bonusVouchAmount').html('¥ '+(0-(data.bonusVouchAmount||0)/100).toFixed(2));
+        $('#payment').html('¥ '+(Math.abs(data.payment.amount)/100).toFixed(2));
+        $('#vouchBonus').html(data.vouchBonus);
+        $('#rewardBonus').html(data.rewardBonus);
+        $('#memberBonus').html(data.member.bonus);
+        $('#memberBalance').html('¥ '+(data.member.balance/100).toFixed(2));
         $('#business_name').html(data.shop.business_name);
         $('#branch_name').html(data.shop.branch_name);
       });

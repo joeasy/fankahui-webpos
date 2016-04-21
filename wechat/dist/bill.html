@@ -8,40 +8,67 @@
   </head>
   <body ontouchstart>
     <div class="weui_panel">
-      <div class="weui_panel_hd">交易时间: <strong id="created"></strong></div>
+      <div class="weui_panel_hd">
+        商品清单: 共<strong id="totalQty">0</strong> 件
+      </div>
+      <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_small_appmsg">
+          <div class="weui_cells" id="itemList"></div>
+        </div>
+      </div>
     </div>
     <div class="weui_panel">
-      <div class="weui_panel_hd">商品清单: 共<strong id="totalQty">0</strong> 件</div>
       <div class="weui_panel_bd">
         <div class="weui_media_box weui_media_small_appmsg">
-          <div class="weui_cells" id="itemList">
+          <div class="weui_cells">
+            <div class="weui_cell">
+              <div class="weui_cell_bd weui_cell_primary">总计:</div>
+              <div class="weui_cell_ft" id="totalAmount">0</div>
+            </div>
+            <div class="weui_cell">
+              <div class="weui_cell_bd weui_cell_primary">折扣:</div>
+              <div class="weui_cell_ft" id="discountAmount">0</div>
+            </div>
+            <div class="weui_cell">
+              <div class="weui_cell_bd weui_cell_primary">积分抵现:</div>
+              <div class="weui_cell_ft" id="bonusVouchAmount">0</div>
+            </div>
+            <div class="weui_cell">
+              <div class="weui_cell_bd weui_cell_primary">实付金额:</div>
+              <div class="weui_cell_ft" id="payment">0</div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="weui_panel_hd">总计: <stong id="totalAmount">0</stong></div>
+      <div class="weui_panel_ft">成交于: <strong id="created"></strong></div>
+    </div>
+    
+    <div class="weui_panel">
+      <div class="weui_panel_hd">会员账号</div>
       <div class="weui_panel_bd">
         <div class="weui_media_box weui_media_small_appmsg">
-          <div class="weui_cells weui_cells_form">
+          <div class="weui_cells">
             <div class="weui_cell">
-              <div class="weui_cell_hd"><label class="weui_label weui_media_desc">折扣</label></div>
-              <div class="weui_cell_bd weui_cell_primary" id="discountAmount">0</div>
+              <div class="weui_cell_bd weui_cell_primary">储值余额:</div>
+              <div class="weui_cell_ft" id="memberBalance">0</div>
             </div>
             <div class="weui_cell">
-              <div class="weui_cell_hd"><label class="weui_label weui_media_desc">积分抵现</label></div>
-              <div class="weui_cell_bd weui_cell_primary" id="bonusVouchAmount">0</div>
+              <div class="weui_cell_bd weui_cell_primary">抵扣积分:</div>
+              <div class="weui_cell_ft" id="vouchBonus">0</div>
             </div>
-            <!-- <div class="weui_cell">
-              <div class="weui_cell_hd"><label class="weui_label weui_media_desc">应付</label></div>
-              <div class="weui_cell_bd weui_cell_primary" id="fee">0</div>
-            </div> -->
             <div class="weui_cell">
-              <div class="weui_cell_hd"><label class="weui_label weui_media_desc">实付</label></div>
-              <div class="weui_cell_bd weui_cell_primary" id="payment">0</div>
+              <div class="weui_cell_bd weui_cell_primary">获得积分:</div>
+              <div class="weui_cell_ft" id="rewardBonus">0</div>
+            </div>
+            <div class="weui_cell">
+              <div class="weui_cell_bd weui_cell_primary">积分余额:</div>
+              <div class="weui_cell_ft" id="memberBonus">0</div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
     <div class="weui_panel">
       <div class="weui_panel_hd">商户门店</div>
       <div class="weui_panel_bd">
