@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+      <title>账单详情</title>
+      <link rel="stylesheet" href="http://res.wx.qq.com/open/libs/weui/0.4.1/weui.min.css"/>
+  </head>
+  <body ontouchstart>
+    <div class="weui_panel">
+      <div class="weui_panel_hd">交易时间: <strong id="created"></strong></div>
+    </div>
+    <div class="weui_panel">
+      <div class="weui_panel_hd">商品清单: 共<strong id="totalQty">0</strong> 件</div>
+      <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_small_appmsg">
+          <div class="weui_cells" id="itemList">
+          </div>
+        </div>
+      </div>
+      <div class="weui_panel_hd">总计: <stong id="totalAmount">0</stong></div>
+      <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_small_appmsg">
+          <div class="weui_cells weui_cells_form">
+            <div class="weui_cell">
+              <div class="weui_cell_hd"><label class="weui_label weui_media_desc">折扣</label></div>
+              <div class="weui_cell_bd weui_cell_primary" id="discountAmount">0</div>
+            </div>
+            <div class="weui_cell">
+              <div class="weui_cell_hd"><label class="weui_label weui_media_desc">积分抵现</label></div>
+              <div class="weui_cell_bd weui_cell_primary" id="bonusVouchAmount">0</div>
+            </div>
+            <!-- <div class="weui_cell">
+              <div class="weui_cell_hd"><label class="weui_label weui_media_desc">应付</label></div>
+              <div class="weui_cell_bd weui_cell_primary" id="fee">0</div>
+            </div> -->
+            <div class="weui_cell">
+              <div class="weui_cell_hd"><label class="weui_label weui_media_desc">实付</label></div>
+              <div class="weui_cell_bd weui_cell_primary" id="payment">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="weui_panel">
+      <div class="weui_panel_hd">商户门店</div>
+      <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_small_appmsg">
+          <div class="weui_cells weui_cells_access">
+            <a class="weui_cell" href="javascript:;">
+              <div class="weui_cell_hd"><img src=""></div>
+              <div class="weui_cell_bd weui_cell_primary">
+                <p id="business_name"></p>
+              </div>
+              <span class="weui_cell_ft" id="branch_name"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="weui_panel weui_panel_access">
+      <div class="weui_panel_hd">优惠券</div>
+      <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_appmsg">
+          <h4 class="weui_media_desc">商户没有提供优惠券</h4>
+        </div>
+        <!-- <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
+          <div class="weui_media_hd">
+            <img class="weui_media_appmsg_thumb" src="" alt="">
+          </div>
+          <div class="weui_media_bd">
+            <h4 class="weui_media_title">卡卷标题</h4>
+            <p class="weui_media_desc">卡卷简介</p>
+          </div>
+        </a> -->
+      </div>
+      <!-- <a class="weui_panel_ft" href="javascript:void(0);">查看更多</a> -->
+    </div>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+    <script src="http://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+    <script src="./js/page/bill.bundle.js"></script>
+  </body>
+</html>
