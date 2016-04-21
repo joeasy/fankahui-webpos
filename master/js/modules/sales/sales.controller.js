@@ -6,6 +6,8 @@
       .controller('SellController', SellController)
       .controller('checkoutDialogController', checkoutDialogController)
       .controller('DealsController', DealsController)
+      .controller('DealController', DealController)
+      .controller('checkoutReturnDialogController', checkoutReturnDialogController)
     ;
       
     SellController.$inject = ['$scope', 'dealService', 'Checkin'];
@@ -81,4 +83,68 @@
         });
       }
     }
+    
+    DealController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService', 'returnService'];
+    function DealController($scope, Deal, ngTableParams, ngTableLBService, returnService) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        vm.returnSku = {};
+        vm.deal = Deal.findOne({filter:{
+          where: {id: $scope.$state.params.dealId},
+          include:['returns', 'bonuses']
+        }});
+        vm.deal.$promise.then(function (deal) {
+          vm.deal.entities.forEach(function (entity) {
+            entity.returnedQty = 0;
+            vm.returnSku[entity.sku.id] = entity;
+          });
+          if(vm.deal.returns && vm.deal.returns.length > 0) {
+            vm.deal.returns.forEach(function (ret) {
+              ret.entities.forEach(function (returnEntity) {
+                vm.returnSku[returnEntity.sku.id].returnedQty += returnEntity.qty;
+              });
+            });
+            vm.return = vm.deal.returns[0];
+          } else {
+            vm.return = {entities:[]};
+          }
+          returnService.openReturn(vm.deal);
+        });
+      }
+      
+      vm.goReturn = function (entity) {
+        returnService.checkout(entity).then(function (data) {
+          activate();
+        });
+      }
+    }
+
+    checkoutReturnDialogController.$inject = ['$scope', 'ngDialog', 'returnService', 'toaster'];
+    function checkoutReturnDialogController($scope, ngDialog, returnService, toaster) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $scope.returnService = returnService;
+        }
+        
+        $scope.confirm = function () {
+          returnService.doReturn().then(function (ret) {
+            $scope.submiting = false;
+            ngDialog.close();
+            toaster.pop('success', '成功', "完成退款退货");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "退款退货未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+        
+    }
+
 })();

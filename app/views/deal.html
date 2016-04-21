@@ -1,23 +1,290 @@
-<h3>
-   销售查询</h3>
-<div ng-controller="DealsController as deals" class="container-fluid">
-   <div class="panel panel-default">
-      <div class="panel-heading">
-         <button ng-click="deals.tableParams.reload()" class="pull-right btn btn-purple btn-sm">刷新</button>
+<h3>交易 # {{dc.deal.serialNumber}}</h3>
+<div class="panel">
+   <div class="panel-heading">交易摘要</div>
+   <div class="panel-body">
+      <div class="row">
+         <div class="col-md-6">
+            <p class="lead bb">交易详情</p>
+            <form class="form-horizontal p-20">
+               <div class="form-group">
+                  <div class="col-sm-4">流水号:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.serialNumber}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">成交时间:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.created | date:'yyyy-MM-dd HH:mm'}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">客户名:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.member && dc.deal.member.name || '走入客户'}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">数量:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.totalQty}} 件</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">金额:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.totalAmount/100 | currency}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">状态</div>
+                  <div class="col-sm-8">
+                     <div class="label label-info">{{dc.deal.status | deal_status}}</div>
+                  </div>
+               </div>
+            </form>
+         </div>
+         <div class="col-md-6">
+            <p class="lead bb">客户</p>
+            <form class="form-horizontal p-20">
+               <div class="form-group">
+                  <div class="col-sm-4">客户编号:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.member.id}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">客户名:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.member && dc.deal.member.name || '走入客户'}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">等级</div>
+                  <div class="col-sm-8">
+                     <div class="label label-success">{{dc.deal.member.level}}</div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">积分余额:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.member.bonus}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">储值余额:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.member.balance/100 | currency}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">微信openid:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.member.wxuserId}}</strong>
+                  </div>
+               </div>
+            </form>
+         </div>
       </div>
-      <table ng-table="deals.tableParams" class="table">
-         <tbody ng-class="{'whirl standard': deals.tableParams.settings().$loading}">
-            <tr ng-repeat="deal in $data" class="text-center">
-               <td data-title="'流水号'">{{deal.serialNumber}}</td>
-               <td data-title="'商品总计'">{{deal.totalAmount/100 | currency: '¥'}}</td>
-               <td data-title="'折扣金额'">{{deal.discountAmount/100 || 0.00 | currency: '¥'}}</td>
-               <td data-title="'销售金额'">{{deal.fee/100 | currency: '¥'}}</td>
-               <td data-title="'数量'">{{deal.totalQty}}</td>
-               <td data-title="'支付方式'">{{deal.payment.type | payment_type}}</td>
-               <td data-title="'顾客'">{{deal.member && deal.member.name || "走入顾客"}}</td>
-               <td data-title="'记账日期'">{{deal.created | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-            </tr>
-         </tbody>
-      </table>
+      <div class="row">
+         <div class="col-md-6">
+            <p class="lead bb">结算</p>
+            <form class="form-horizontal p-20">
+               <div class="form-group">
+                  <div class="col-sm-4">商品金额:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.totalAmount/100 | currency}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">折扣:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.discountAmount/100 | currency}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">积分抵扣:</div>
+                  <div class="col-sm-8">
+                     <strong>{{(dc.deal.bonusVouchAmount/100 || 0) | currency}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">应付:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.fee/100 | currency}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">支付方式:</div>
+                  <div class="col-sm-8">
+                     <div class="label label-warning">{{dc.deal.payment.type | payment_type}}</div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">实付:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.payment.amount/100 | currency}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">抹零:</div>
+                  <div class="col-sm-8">
+                     <strong>{{(dc.deal.payment.change/100 || 0) | currency}}</strong>
+                  </div>
+               </div>
+            </form>
+         </div>
+         <div class="col-md-6">
+            <p class="lead bb">经手人</p>
+            <form class="form-horizontal p-20">
+               <div class="form-group">
+                  <div class="col-sm-4">门店名:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.shop.branch_name}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">经手人:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.operator.name || dc.deal.operator.username}}</strong>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">职务:</div>
+                  <div class="col-sm-8">
+                     <div class="label label-info">{{dc.deal.operator.role | role}}</div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class="col-sm-4">电话:</div>
+                  <div class="col-sm-8">
+                     <strong>{{dc.deal.operator.phone}}</strong>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
    </div>
+</div>
+<!-- START panel tab-->
+<div class="panel">
+   <tabset justified="true">
+      <tab>
+         <tab-heading>交易明细</tab-heading>
+         <div class="table-responsive table-bordered mb-lg">
+            <table class="table">
+               <thead>
+                  <tr>
+                     <th>序号 #</th>
+                     <th>商品描述</th>
+                     <th>型号</th>
+                     <th class="text-right">数量 (件)</th>
+                     <th class="text-right">单价（元）</th>
+                     <th class="text-right">小计(元)</th>
+                     <th class="text-right">已退 (件)</th>
+                     <th class="text-center">操作</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr ng-repeat="entity in dc.deal.entities">
+                     <td>{{$index+1}}</td>
+                     <td>{{entity.sku.item.name}}</td>
+                     <td>{{entity.sku.model}}</td>
+                     <td class="text-right">{{entity.qty}}</td>
+                     <td class="text-right">{{entity.sku.price/100 | currency: '¥'}}</td>
+                     <td class="text-right">{{entity.qty*entity.sku.price/100 | currency: '¥'}}</td>
+                     <td class="text-right">{{entity.returnedQty}}</td>
+                     <td class="text-center">
+                        <a type="button" ng-click="dc.goReturn()" class="btn btn-sm btn-warning">
+                           <em class="fa fa-undo fa-fw"></em>退货</a>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+         <hr class="hidden-print" />
+         <div class="clearfix">
+            <button type="button" class="btn btn-success pull-left mr">
+               <em class="fa fa-share fa-fw mr-sm"></em>推送账单</button>
+            <button type="button" ng-click="dc.goReturn()" class="btn btn-danger pull-right mr">
+               <em class="fa fa-undo fa-fw"></em>整单退货</button>
+         </div>
+      </tab>
+      <tab>
+         <tab-heading>退款退货</tab-heading>
+         <div class="row clearfix">
+            <div class="col-md-3">
+               <div class="panel panel-primary">
+                  <div class="panel-heading">
+                     <div class="panel-title">退货记录</div>
+                  </div>
+                  <!-- START list group-->
+                  <div class="list-group">
+                     <div ng-if="!dc.return.id" class="list-group-item">没有退货</div>
+                     <!-- START list group item-->
+                     <div ng-repeat="r in dc.deal.returns" ng-click="dc.return = r" ng-class="{'list-group-item-info': dc.return.id === r.id}" class="list-group-item">
+                        <div class="media-box">
+                           <div class="pull-left">
+                              <span class="fa-stack">
+                                 <em class="fa fa-circle fa-stack-2x text-purple"></em>
+                                 <em class="fa fa-undo fa-stack-1x fa-inverse text-white"></em>
+                              </span>
+                           </div>
+                           <div class="media-box-body clearfix">
+                              <small class="text-muted pull-right ml">{{r.totalQty}}件</small>
+                              <div class="media-box-heading">
+                                 <div class="text-purple m0">{{r.fee/100|currency: '¥'}}</div>
+                              </div>
+                              <p class="m0">
+                                 <small>
+                                    <em>{{r.created | date:'yyyy-MM-dd HH:mm'}}</em>
+                                 </small>
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- END list group item-->
+                  </div>
+                  <!-- END list group-->
+               </div>
+            </div>
+            <div class="col-md-9">
+               <div class="panel panel-info">
+                  <div class="panel-heading">
+                     <div class="panel-title">退货明细</div>
+                  </div>
+                  <div class="table-responsive table-bordered mb-lg">
+                     <table class="table">
+                        <thead>
+                           <tr>
+                              <th>序号 #</th>
+                              <th>商品描述</th>
+                              <th>型号</th>
+                              <th class="text-right">数量 (件)</th>
+                              <th class="text-right">单价（元）</th>
+                              <th class="text-right">小计(元)</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr ng-repeat="entity in dc.return.entities">
+                              <td>{{$index+1}}</td>
+                              <td>{{entity.sku.item.name}}</td>
+                              <td>{{entity.sku.model}}</td>
+                              <td class="text-right">{{entity.qty}}</td>
+                              <td class="text-right">{{entity.sku.price/100 | currency: '¥'}}</td>
+                              <td class="text-right">{{entity.qty*entity.sku.price/100 | currency: '¥'}}</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </tab>
+   </tabset>
+   <!-- Templates -->
+   <script type="text/ng-template" id="checkoutReturnDialogId">
+      <div class="modal-header"><h3>退货</h3></div><div ng-class="{'whirl standard':submiting}" class="modal-body"><fieldset><div class="form-group"><div ng-repeat="entity in returnService.postData.entities" class="col-md-12"><span class="mr">{{$index+1}}. {{entity.sku.item.name}} - {{entity.sku.model}}</span><input type="number" ng-model="entity.qty" ng-change="returnService.count()" class="pull-right text-right"/></div></div></fieldset><fieldset><div class="form-group"><div class="col-md-6 pull-left">共计: {{returnService.postData.totalQty}}件  </div><div class="col-md-6 pull-right text-right">   
+      总计: {{returnService.postData.payment.amount/100 | currency: '¥' }}  </div></div></fieldset></div><div class="modal-footer"><a type="button" ng-click="closeThisDialog()" class="pull-right btn btn-default mr">取消      </a><a ng-class="{disabled:submiting}" ng-click="submiting || confirm()" class="pull-right btn btn-primary mr">确定</a></div>
+   </script>
 </div>

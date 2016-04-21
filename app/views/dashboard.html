@@ -101,7 +101,7 @@
                <!-- START list group-->
                <scrollable height="180" class="list-group">
                   <!-- START list group item-->
-                  <a ng-repeat="checkin in dash.checkins" href="#" class="list-group-item">
+                  <a ng-repeat="checkin in dash.checkins" ui-sref="app.sell()" class="list-group-item">
                      <div class="media-box">
                         <div class="pull-left">
                            <img src="{{checkin.member.wxuser.headimgurl}}" alt="Image" class="media-box-object img-circle thumb32" />

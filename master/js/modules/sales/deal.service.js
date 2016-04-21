@@ -3,7 +3,9 @@
 
     angular
         .module('app.sales')
-        .service('dealService', dealService);
+        .service('dealService', dealService)
+        .service('returnService', returnService)
+    ;
 
     dealService.$inject = ['Deal', 'Sku', 'ngDialog', '$rootScope'];
     function dealService(Deal, Sku, ngDialog, $rootScope) {
@@ -117,29 +119,96 @@
       function onChangePayType() {
         self.deal.payment.amount = self.deal.fee;
         if(self.deal.payment.type === 'cash') {
-          self.deal.payment.cost = self.deal.fee%$rootScope.user.merchant.changeRate;
-          self.deal.payment.amount -= self.deal.payment.cost;
+          self.deal.payment.change = self.deal.fee%$rootScope.user.merchant.changeRate;
+          self.deal.payment.amount -= self.deal.payment.change;
           countChange();
         } else if(self.deal.payment.type === 'deposit') {
-          self.deal.payment.cost = 0;
           self.deal.payment.amount = 0-self.deal.fee;
         } else {
-          self.deal.payment.cost = 0;
           self.deal.payment.amount = self.deal.fee;
         }
       }
       
       function countChange() {
         if(self.deal.payment.type === 'cash') {
-          self.deal.payment.paid = self.deal.payment.paid || self.deal.payment.amount;
-          self.deal.payment.change = self.deal.payment.amount - self.deal.payment.paid;
+          self.cash = self.cash || {};
+          self.cash.paid = self.cash.paid || self.deal.payment.amount;
+          self.cash.change = self.deal.payment.amount - self.cash.paid;
         }
       }
             
       function pay() {
         self.deal.status = 'closed';
         delete self.deal.member;
-        return Deal.create(self.deal).$promise
+        return Deal.create(self.deal).$promise;
+      }
+    }
+
+    returnService.$inject = ['Deal', 'Sku', 'ngDialog', '$rootScope'];
+    function returnService(Deal, Sku, ngDialog, $rootScope) {
+      var self = this;
+
+      this.openReturn = openReturn;
+      this.checkout = checkout;
+      this.doReturn = doReturn;
+      this.count = count;
+      
+      function openReturn(deal) {
+        self.deal = deal;
+        self.postData = {
+          entities: [],
+          totalAmount: 0,
+          totalQty: 0,
+          status: 'opened',
+          created: new Date()
+        }
+      }
+      
+      function count() {
+        self.postData.totalAmount = 0;
+        self.postData.totalQty = 0;
+        self.postData.entities.forEach(function (entity) {
+          self.postData.totalAmount += entity.qty*entity.sku.price;
+          self.postData.totalQty += entity.qty;
+        });
+
+        self.postData.discountAmount = 0;
+        if(self.deal.member) {
+          self.postData.discountAmount = self.postData.totalAmount*(100-self.deal.member.discount)/100;           }
+        self.postData.fee = self.postData.totalAmount - self.postData.discountAmount;
+        self.postData.payment.amount = self.postData.fee;
+        if(self.postData.payment.type === 'cash') {
+          self.postData.payment.change = self.postData.fee%$rootScope.user.merchant.changeRate;
+          self.postData.payment.amount -= self.postData.payment.change;
+        }
+      }
+      
+      function checkout(entity) {
+        self.postData.payment = {type: self.deal.payment.type};
+        
+        var entities = self.deal.entities;
+        if(entity) entities = [entity];
+        
+        self.postData.entities = [];
+        entities.forEach(function (entity) {
+          var e =  {
+            sku: entity.sku,
+            qty: entity.qty - entity.returnedQty
+          }
+          if(e.qty > 0) self.postData.entities.push(e);
+        });
+        
+        count();
+        
+        return ngDialog.open({ 
+          template: 'checkoutReturnDialogId', 
+          controller: 'checkoutReturnDialogController'
+        }).closePromise;
+      }
+      
+      function doReturn() {
+        self.postData.status = 'closed';
+        return Deal.returns.create({id: self.deal.id}, self.postData).$promise;
       }
     }
 })();

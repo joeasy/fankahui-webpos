@@ -31,7 +31,7 @@
   },
   {
     "text": "Deal",
-    "sref": "app.deal",
+    "sref": "app.deals",
     "icon": "fa fa-list",
     "translate": "sidebar.nav.DEAL"
   },

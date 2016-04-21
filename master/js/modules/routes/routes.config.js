@@ -58,11 +58,18 @@
               controller: 'MemberController as member',
               resolve: helper.resolveFor('ngTable', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
+          .state('app.deals', {
+              url: '/deals',
+              title: 'Deals',
+              templateUrl: helper.basepath('deals.html'),
+              resolve: helper.resolveFor('ngTable', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+          })
           .state('app.deal', {
-              url: '/deal',
+              url: '/deals/:dealId',
               title: 'Deal',
               templateUrl: helper.basepath('deal.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              controller: 'DealController as dc',
+              resolve: helper.resolveFor('ngTable', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.cost', {
               url: '/cost',

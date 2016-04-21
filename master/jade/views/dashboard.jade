@@ -75,7 +75,7 @@ h3
           // START list group
           scrollable.list-group(height="180")
             // START list group item
-            a.list-group-item(ng-repeat="checkin in dash.checkins",href='#')
+            a.list-group-item(ng-repeat="checkin in dash.checkins", ui-sref="app.sell()")
               .media-box
                 .pull-left
                   img.media-box-object.img-circle.thumb32(src="{{checkin.member.wxuser.headimgurl}}", alt="Image")

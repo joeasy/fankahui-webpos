@@ -10,6 +10,7 @@
 
     angular
         .module('app.sales')
+        .filter('deal_status', dealStatusFilter)
         .filter('payment_type', paymentTypeFilter)
     ;
 
@@ -20,4 +21,13 @@
         }
     }
 
+    // dealStatusFilter.$inject = [];
+    function dealStatusFilter() {
+      var dic = {
+        closed: '已完成'
+      }
+      return function (key) {
+        return dic[key];
+      }
+    }
 })();

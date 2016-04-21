@@ -53,19 +53,13 @@
     'use strict';
 
     angular
-        .module('app.bootstrapui', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.charts', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.colors', []);
+        .module('app.bootstrapui', []);
 })();
 (function() {
     'use strict';
@@ -87,6 +81,12 @@
             'ui.utils',
             'lbServices'
         ]);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors', []);
 })();
 (function() {
     'use strict';
@@ -158,13 +158,13 @@
     'use strict';
 
     angular
-        .module('app.maps', []);
+        .module('app.members', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.members', []);
+        .module('app.maps', []);
 })();
 (function() {
     'use strict';
@@ -176,13 +176,13 @@
     'use strict';
 
     angular
-        .module('app.navsearch', []);
+        .module('app.notify', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.notify', []);
+        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
@@ -216,13 +216,13 @@
     'use strict';
 
     angular
-        .module('app.sales', []);
+        .module('app.settings', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.settings', []);
+        .module('app.sales', []);
 })();
 (function() {
     'use strict';
@@ -249,566 +249,6 @@
         .module('app.utils', [
           'app.colors'
         ]);
-})();
-
-/**=========================================================
- * Module: demo-alerts.js
- * Provides a simple demo for pagination
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('AlertDemoCtrl', AlertDemoCtrl);
-
-    function AlertDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.alerts = [
-            { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
-            { type: 'warning', msg: 'Well done! You successfully read this important alert message.' }
-          ];
-
-          vm.addAlert = function() {
-            vm.alerts.push({msg: 'Another alert!'});
-          };
-
-          vm.closeAlert = function(index) {
-            vm.alerts.splice(index, 1);
-          };
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .config(bootstrapuiConfig);
-
-    bootstrapuiConfig.$inject = ['$tooltipProvider'];
-    function bootstrapuiConfig($tooltipProvider){
-      $tooltipProvider.options({appendToBody: true});
-    }
-})();
-/**=========================================================
- * Module: demo-buttons.js
- * Provides a simple demo for buttons actions
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('ButtonsCtrl', ButtonsCtrl);
-
-    function ButtonsCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.singleModel = 1;
-
-          vm.radioModel = 'Middle';
-
-          vm.checkModel = {
-            left: false,
-            middle: true,
-            right: false
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-carousel.js
- * Provides a simple demo for bootstrap ui carousel
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('CarouselDemoCtrl', CarouselDemoCtrl);
-
-    function CarouselDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.myInterval = 5000;
-          
-          var slides = vm.slides = [];
-          vm.addSlide = function() {
-            var newWidth = 800 + slides.length;
-            slides.push({
-              image: '//placekitten.com/' + newWidth + '/300',
-              text: ['More','Extra','Lots of','Surplus'][slides.length % 2] + ' ' +
-                ['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 2]
-            });
-          };
-          
-          for (var i=0; i<2; i++) {
-            vm.addSlide();
-          }
-
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-datepicker.js
- * Provides a simple demo for bootstrap datepicker
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('DatepickerDemoCtrl', DatepickerDemoCtrl);
-
-    function DatepickerDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.today = function() {
-            vm.dt = new Date();
-          };
-          vm.today();
-
-          vm.clear = function () {
-            vm.dt = null;
-          };
-
-          // Disable weekend selection
-          vm.disabled = function(date, mode) {
-            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-          };
-
-          vm.toggleMin = function() {
-            vm.minDate = vm.minDate ? null : new Date();
-          };
-          vm.toggleMin();
-
-          vm.open = function($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            vm.opened = true;
-          };
-
-          vm.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-          };
-
-          vm.initDate = new Date('2019-10-20');
-          vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-          vm.format = vm.formats[0];
-        }
-    }
-})();
-
-
-/**=========================================================
- * Module: modals.js
- * Provides a simple way to implement bootstrap modals from templates
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('ModalController', ModalController);
-
-    ModalController.$inject = ['$modal'];
-    function ModalController($modal) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.open = function (size) {
-
-            var modalInstance = $modal.open({
-              templateUrl: '/myModalContent.html',
-              controller: ModalInstanceCtrl,
-              size: size
-            });
-
-            var state = $('#modal-state');
-            modalInstance.result.then(function () {
-              state.text('Modal dismissed with OK status');
-            }, function () {
-              state.text('Modal dismissed with Cancel status');
-            });
-          };
-
-          // Please note that $modalInstance represents a modal window (instance) dependency.
-          // It is not the same as the $modal service used above.
-
-          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance'];
-          function ModalInstanceCtrl($scope, $modalInstance) {
-
-            $scope.ok = function () {
-              $modalInstance.close('closed');
-            };
-
-            $scope.cancel = function () {
-              $modalInstance.dismiss('cancel');
-            };
-          }
-        }
-    }
-
-})();
-
-/**=========================================================
- * Module: demo-pagination.js
- * Provides a simple demo for pagination
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('PaginationDemoCtrl', PaginationDemoCtrl);
-
-    function PaginationDemoCtrl() {
-        var vm = this;
-
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.totalItems = 64;
-          vm.currentPage = 4;
-
-          vm.setPage = function (pageNo) {
-            vm.currentPage = pageNo;
-          };
-
-          vm.pageChanged = function() {
-            console.log('Page changed to: ' + vm.currentPage);
-          };
-
-          vm.maxSize = 5;
-          vm.bigTotalItems = 175;
-          vm.bigCurrentPage = 1;
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-popover.js
- * Provides a simple demo for popovers
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('PopoverDemoCtrl', PopoverDemoCtrl);
-
-    function PopoverDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.dynamicPopover = 'Hello, World!';
-          vm.dynamicPopoverTitle = 'Title';
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-progress.js
- * Provides a simple demo to animate progress bar
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('ProgressDemoCtrl', ProgressDemoCtrl);
-
-    function ProgressDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.max = 200;
-
-          vm.random = function() {
-            var value = Math.floor((Math.random() * 100) + 1);
-            var type;
-
-            if (value < 25) {
-              type = 'success';
-            } else if (value < 50) {
-              type = 'info';
-            } else if (value < 75) {
-              type = 'warning';
-            } else {
-              type = 'danger';
-            }
-
-            vm.showWarning = (type === 'danger' || type === 'warning');
-
-            vm.dynamic = value;
-            vm.type = type;
-          };
-          vm.random();
-
-          vm.randomStacked = function() {
-            vm.stacked = [];
-            var types = ['success', 'info', 'warning', 'danger'];
-
-            for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
-                var index = Math.floor((Math.random() * 4));
-                vm.stacked.push({
-                  value: Math.floor((Math.random() * 30) + 1),
-                  type: types[index]
-                });
-            }
-          };
-          vm.randomStacked();
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-rating.js
- * Provides a demo for ratings UI
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('RatingDemoCtrl', RatingDemoCtrl);
-
-    function RatingDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.rate = 7;
-          vm.max = 10;
-          vm.isReadonly = false;
-
-          vm.hoveringOver = function(value) {
-            vm.overStar = value;
-            vm.percent = 100 * (value / vm.max);
-          };
-
-          vm.ratingStates = [
-            {stateOn: 'fa fa-check', stateOff: 'fa fa-check-circle'},
-            {stateOn: 'fa fa-star', stateOff: 'fa fa-star-o'},
-            {stateOn: 'fa fa-heart', stateOff: 'fa fa-ban'},
-            {stateOn: 'fa fa-heart'},
-            {stateOff: 'fa fa-power-off'}
-          ];
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-timepicker.js
- * Provides a simple demo for bootstrap ui timepicker
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TimepickerDemoCtrl', TimepickerDemoCtrl);
-
-    function TimepickerDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.mytime = new Date();
-
-          vm.hstep = 1;
-          vm.mstep = 15;
-
-          vm.options = {
-            hstep: [1, 2, 3],
-            mstep: [1, 5, 10, 15, 25, 30]
-          };
-
-          vm.ismeridian = true;
-          vm.toggleMode = function() {
-            vm.ismeridian = ! vm.ismeridian;
-          };
-
-          vm.update = function() {
-            var d = new Date();
-            d.setHours( 14 );
-            d.setMinutes( 0 );
-            vm.mytime = d;
-          };
-
-          vm.changed = function () {
-            console.log('Time changed to: ' + vm.mytime);
-          };
-
-          vm.clear = function() {
-            vm.mytime = null;
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-tooltip.js
- * Provides a simple demo for tooltip
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TooltipDemoCtrl', TooltipDemoCtrl);
-
-    function TooltipDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.dynamicTooltip = 'Hello, World!';
-          vm.dynamicTooltipText = 'dynamic';
-          vm.htmlTooltip = 'I\'ve been made <b>bold</b>!';
-
-          vm.autoplace = function (context, source) {
-            //return (predictTooltipTop(source) < 0) ?  "bottom": "top";
-            var pos = 'top';
-            if(predictTooltipTop(source) < 0)
-              pos = 'bottom';
-            if(predictTooltipLeft(source) < 0)
-              pos = 'right';
-            return pos;
-          };
-
-            // Predicts tooltip top position 
-            // based on the trigger element
-            function predictTooltipTop(el) {
-              var top = el.offsetTop;
-              var height = 40; // asumes ~40px tooltip height
-
-              while(el.offsetParent) {
-                el = el.offsetParent;
-                top += el.offsetTop;
-              }
-              return (top - height) - (window.pageYOffset);
-            }
-
-            // Predicts tooltip top position 
-            // based on the trigger element
-            function predictTooltipLeft(el) {
-              var left = el.offsetLeft;
-              var width = el.offsetWidth;
-
-              while(el.offsetParent) {
-                el = el.offsetParent;
-                left += el.offsetLeft;
-              }
-              return (left - width) - (window.pageXOffset);
-            }
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-typeahead.js
- * Provides a simple demo for typeahead
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TypeaheadCtrl', TypeaheadCtrl);
-
-    TypeaheadCtrl.$inject = ['$http'];
-    function TypeaheadCtrl($http) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.selected = undefined;
-          vm.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
-
-          // Any function returning a promise object can be used to load values asynchronously
-          vm.getLocation = function(val) {
-            return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
-              params: {
-                address: val,
-                sensor: false
-              }
-            }).then(function(res){
-              var addresses = [];
-              angular.forEach(res.data.results, function(item){
-                /*jshint -W106*/
-                addresses.push(item.formatted_address);
-              });
-              return addresses;
-            });
-          };
-
-          vm.statesWithFlags = [{'name':'Alabama','flag':'5/5c/Flag_of_Alabama.svg/45px-Flag_of_Alabama.svg.png'},{'name':'Alaska','flag':'e/e6/Flag_of_Alaska.svg/43px-Flag_of_Alaska.svg.png'},{'name':'Arizona','flag':'9/9d/Flag_of_Arizona.svg/45px-Flag_of_Arizona.svg.png'},{'name':'Arkansas','flag':'9/9d/Flag_of_Arkansas.svg/45px-Flag_of_Arkansas.svg.png'},{'name':'California','flag':'0/01/Flag_of_California.svg/45px-Flag_of_California.svg.png'},{'name':'Colorado','flag':'4/46/Flag_of_Colorado.svg/45px-Flag_of_Colorado.svg.png'},{'name':'Connecticut','flag':'9/96/Flag_of_Connecticut.svg/39px-Flag_of_Connecticut.svg.png'},{'name':'Delaware','flag':'c/c6/Flag_of_Delaware.svg/45px-Flag_of_Delaware.svg.png'},{'name':'Florida','flag':'f/f7/Flag_of_Florida.svg/45px-Flag_of_Florida.svg.png'},{'name':'Georgia','flag':'5/54/Flag_of_Georgia_%28U.S._state%29.svg/46px-Flag_of_Georgia_%28U.S._state%29.svg.png'},{'name':'Hawaii','flag':'e/ef/Flag_of_Hawaii.svg/46px-Flag_of_Hawaii.svg.png'},{'name':'Idaho','flag':'a/a4/Flag_of_Idaho.svg/38px-Flag_of_Idaho.svg.png'},{'name':'Illinois','flag':'0/01/Flag_of_Illinois.svg/46px-Flag_of_Illinois.svg.png'},{'name':'Indiana','flag':'a/ac/Flag_of_Indiana.svg/45px-Flag_of_Indiana.svg.png'},{'name':'Iowa','flag':'a/aa/Flag_of_Iowa.svg/44px-Flag_of_Iowa.svg.png'},{'name':'Kansas','flag':'d/da/Flag_of_Kansas.svg/46px-Flag_of_Kansas.svg.png'},{'name':'Kentucky','flag':'8/8d/Flag_of_Kentucky.svg/46px-Flag_of_Kentucky.svg.png'},{'name':'Louisiana','flag':'e/e0/Flag_of_Louisiana.svg/46px-Flag_of_Louisiana.svg.png'},{'name':'Maine','flag':'3/35/Flag_of_Maine.svg/45px-Flag_of_Maine.svg.png'},{'name':'Maryland','flag':'a/a0/Flag_of_Maryland.svg/45px-Flag_of_Maryland.svg.png'},{'name':'Massachusetts','flag':'f/f2/Flag_of_Massachusetts.svg/46px-Flag_of_Massachusetts.svg.png'},{'name':'Michigan','flag':'b/b5/Flag_of_Michigan.svg/45px-Flag_of_Michigan.svg.png'},{'name':'Minnesota','flag':'b/b9/Flag_of_Minnesota.svg/46px-Flag_of_Minnesota.svg.png'},{'name':'Mississippi','flag':'4/42/Flag_of_Mississippi.svg/45px-Flag_of_Mississippi.svg.png'},{'name':'Missouri','flag':'5/5a/Flag_of_Missouri.svg/46px-Flag_of_Missouri.svg.png'},{'name':'Montana','flag':'c/cb/Flag_of_Montana.svg/45px-Flag_of_Montana.svg.png'},{'name':'Nebraska','flag':'4/4d/Flag_of_Nebraska.svg/46px-Flag_of_Nebraska.svg.png'},{'name':'Nevada','flag':'f/f1/Flag_of_Nevada.svg/45px-Flag_of_Nevada.svg.png'},{'name':'New Hampshire','flag':'2/28/Flag_of_New_Hampshire.svg/45px-Flag_of_New_Hampshire.svg.png'},{'name':'New Jersey','flag':'9/92/Flag_of_New_Jersey.svg/45px-Flag_of_New_Jersey.svg.png'},{'name':'New Mexico','flag':'c/c3/Flag_of_New_Mexico.svg/45px-Flag_of_New_Mexico.svg.png'},{'name':'New York','flag':'1/1a/Flag_of_New_York.svg/46px-Flag_of_New_York.svg.png'},{'name':'North Carolina','flag':'b/bb/Flag_of_North_Carolina.svg/45px-Flag_of_North_Carolina.svg.png'},{'name':'North Dakota','flag':'e/ee/Flag_of_North_Dakota.svg/38px-Flag_of_North_Dakota.svg.png'},{'name':'Ohio','flag':'4/4c/Flag_of_Ohio.svg/46px-Flag_of_Ohio.svg.png'},{'name':'Oklahoma','flag':'6/6e/Flag_of_Oklahoma.svg/45px-Flag_of_Oklahoma.svg.png'},{'name':'Oregon','flag':'b/b9/Flag_of_Oregon.svg/46px-Flag_of_Oregon.svg.png'},{'name':'Pennsylvania','flag':'f/f7/Flag_of_Pennsylvania.svg/45px-Flag_of_Pennsylvania.svg.png'},{'name':'Rhode Island','flag':'f/f3/Flag_of_Rhode_Island.svg/32px-Flag_of_Rhode_Island.svg.png'},{'name':'South Carolina','flag':'6/69/Flag_of_South_Carolina.svg/45px-Flag_of_South_Carolina.svg.png'},{'name':'South Dakota','flag':'1/1a/Flag_of_South_Dakota.svg/46px-Flag_of_South_Dakota.svg.png'},{'name':'Tennessee','flag':'9/9e/Flag_of_Tennessee.svg/46px-Flag_of_Tennessee.svg.png'},{'name':'Texas','flag':'f/f7/Flag_of_Texas.svg/45px-Flag_of_Texas.svg.png'},{'name':'Utah','flag':'f/f6/Flag_of_Utah.svg/45px-Flag_of_Utah.svg.png'},{'name':'Vermont','flag':'4/49/Flag_of_Vermont.svg/46px-Flag_of_Vermont.svg.png'},{'name':'Virginia','flag':'4/47/Flag_of_Virginia.svg/44px-Flag_of_Virginia.svg.png'},{'name':'Washington','flag':'5/54/Flag_of_Washington.svg/46px-Flag_of_Washington.svg.png'},{'name':'West Virginia','flag':'2/22/Flag_of_West_Virginia.svg/46px-Flag_of_West_Virginia.svg.png'},{'name':'Wisconsin','flag':'2/22/Flag_of_Wisconsin.svg/45px-Flag_of_Wisconsin.svg.png'},{'name':'Wyoming','flag':'b/bc/Flag_of_Wyoming.svg/43px-Flag_of_Wyoming.svg.png'}];
-
-        }
-    }
 })();
 
 /**=========================================================
@@ -2407,54 +1847,564 @@
 
 })();
 
+/**=========================================================
+ * Module: demo-alerts.js
+ * Provides a simple demo for pagination
+ =========================================================*/
 (function() {
     'use strict';
 
     angular
-        .module('app.colors')
-        .constant('APP_COLORS', {
-          'primary':                '#5d9cec',
-          'success':                '#27c24c',
-          'info':                   '#23b7e5',
-          'warning':                '#ff902b',
-          'danger':                 '#f05050',
-          'inverse':                '#131e26',
-          'green':                  '#37bc9b',
-          'pink':                   '#f532e5',
-          'purple':                 '#7266ba',
-          'dark':                   '#3a3f51',
-          'yellow':                 '#fad732',
-          'gray-darker':            '#232735',
-          'gray-dark':              '#3a3f51',
-          'gray':                   '#dde6e9',
-          'gray-light':             '#e4eaec',
-          'gray-lighter':           '#edf1f2'
-        })
-        ;
+        .module('app.bootstrapui')
+        .controller('AlertDemoCtrl', AlertDemoCtrl);
+
+    function AlertDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.alerts = [
+            { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
+            { type: 'warning', msg: 'Well done! You successfully read this important alert message.' }
+          ];
+
+          vm.addAlert = function() {
+            vm.alerts.push({msg: 'Another alert!'});
+          };
+
+          vm.closeAlert = function(index) {
+            vm.alerts.splice(index, 1);
+          };
+        }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .config(bootstrapuiConfig);
+
+    bootstrapuiConfig.$inject = ['$tooltipProvider'];
+    function bootstrapuiConfig($tooltipProvider){
+      $tooltipProvider.options({appendToBody: true});
+    }
 })();
 /**=========================================================
- * Module: colors.js
- * Services to retrieve global colors
+ * Module: demo-buttons.js
+ * Provides a simple demo for buttons actions
  =========================================================*/
 
 (function() {
     'use strict';
 
     angular
-        .module('app.colors')
-        .service('Colors', Colors);
+        .module('app.bootstrapui')
+        .controller('ButtonsCtrl', ButtonsCtrl);
 
-    Colors.$inject = ['APP_COLORS'];
-    function Colors(APP_COLORS) {
-        this.byName = byName;
+    function ButtonsCtrl() {
+        var vm = this;
+
+        activate();
 
         ////////////////
 
-        function byName(name) {
-          return (APP_COLORS[name] || '#fff');
+        function activate() {
+          vm.singleModel = 1;
+
+          vm.radioModel = 'Middle';
+
+          vm.checkModel = {
+            left: false,
+            middle: true,
+            right: false
+          };
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-carousel.js
+ * Provides a simple demo for bootstrap ui carousel
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('CarouselDemoCtrl', CarouselDemoCtrl);
+
+    function CarouselDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.myInterval = 5000;
+          
+          var slides = vm.slides = [];
+          vm.addSlide = function() {
+            var newWidth = 800 + slides.length;
+            slides.push({
+              image: '//placekitten.com/' + newWidth + '/300',
+              text: ['More','Extra','Lots of','Surplus'][slides.length % 2] + ' ' +
+                ['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 2]
+            });
+          };
+          
+          for (var i=0; i<2; i++) {
+            vm.addSlide();
+          }
+
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-datepicker.js
+ * Provides a simple demo for bootstrap datepicker
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('DatepickerDemoCtrl', DatepickerDemoCtrl);
+
+    function DatepickerDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.today = function() {
+            vm.dt = new Date();
+          };
+          vm.today();
+
+          vm.clear = function () {
+            vm.dt = null;
+          };
+
+          // Disable weekend selection
+          vm.disabled = function(date, mode) {
+            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+          };
+
+          vm.toggleMin = function() {
+            vm.minDate = vm.minDate ? null : new Date();
+          };
+          vm.toggleMin();
+
+          vm.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            vm.opened = true;
+          };
+
+          vm.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+          };
+
+          vm.initDate = new Date('2019-10-20');
+          vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+          vm.format = vm.formats[0];
+        }
+    }
+})();
+
+
+/**=========================================================
+ * Module: modals.js
+ * Provides a simple way to implement bootstrap modals from templates
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('ModalController', ModalController);
+
+    ModalController.$inject = ['$modal'];
+    function ModalController($modal) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+          vm.open = function (size) {
+
+            var modalInstance = $modal.open({
+              templateUrl: '/myModalContent.html',
+              controller: ModalInstanceCtrl,
+              size: size
+            });
+
+            var state = $('#modal-state');
+            modalInstance.result.then(function () {
+              state.text('Modal dismissed with OK status');
+            }, function () {
+              state.text('Modal dismissed with Cancel status');
+            });
+          };
+
+          // Please note that $modalInstance represents a modal window (instance) dependency.
+          // It is not the same as the $modal service used above.
+
+          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance'];
+          function ModalInstanceCtrl($scope, $modalInstance) {
+
+            $scope.ok = function () {
+              $modalInstance.close('closed');
+            };
+
+            $scope.cancel = function () {
+              $modalInstance.dismiss('cancel');
+            };
+          }
         }
     }
 
+})();
+
+/**=========================================================
+ * Module: demo-pagination.js
+ * Provides a simple demo for pagination
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('PaginationDemoCtrl', PaginationDemoCtrl);
+
+    function PaginationDemoCtrl() {
+        var vm = this;
+
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.totalItems = 64;
+          vm.currentPage = 4;
+
+          vm.setPage = function (pageNo) {
+            vm.currentPage = pageNo;
+          };
+
+          vm.pageChanged = function() {
+            console.log('Page changed to: ' + vm.currentPage);
+          };
+
+          vm.maxSize = 5;
+          vm.bigTotalItems = 175;
+          vm.bigCurrentPage = 1;
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-popover.js
+ * Provides a simple demo for popovers
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('PopoverDemoCtrl', PopoverDemoCtrl);
+
+    function PopoverDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.dynamicPopover = 'Hello, World!';
+          vm.dynamicPopoverTitle = 'Title';
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-progress.js
+ * Provides a simple demo to animate progress bar
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('ProgressDemoCtrl', ProgressDemoCtrl);
+
+    function ProgressDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.max = 200;
+
+          vm.random = function() {
+            var value = Math.floor((Math.random() * 100) + 1);
+            var type;
+
+            if (value < 25) {
+              type = 'success';
+            } else if (value < 50) {
+              type = 'info';
+            } else if (value < 75) {
+              type = 'warning';
+            } else {
+              type = 'danger';
+            }
+
+            vm.showWarning = (type === 'danger' || type === 'warning');
+
+            vm.dynamic = value;
+            vm.type = type;
+          };
+          vm.random();
+
+          vm.randomStacked = function() {
+            vm.stacked = [];
+            var types = ['success', 'info', 'warning', 'danger'];
+
+            for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+                var index = Math.floor((Math.random() * 4));
+                vm.stacked.push({
+                  value: Math.floor((Math.random() * 30) + 1),
+                  type: types[index]
+                });
+            }
+          };
+          vm.randomStacked();
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-rating.js
+ * Provides a demo for ratings UI
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('RatingDemoCtrl', RatingDemoCtrl);
+
+    function RatingDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.rate = 7;
+          vm.max = 10;
+          vm.isReadonly = false;
+
+          vm.hoveringOver = function(value) {
+            vm.overStar = value;
+            vm.percent = 100 * (value / vm.max);
+          };
+
+          vm.ratingStates = [
+            {stateOn: 'fa fa-check', stateOff: 'fa fa-check-circle'},
+            {stateOn: 'fa fa-star', stateOff: 'fa fa-star-o'},
+            {stateOn: 'fa fa-heart', stateOff: 'fa fa-ban'},
+            {stateOn: 'fa fa-heart'},
+            {stateOff: 'fa fa-power-off'}
+          ];
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-timepicker.js
+ * Provides a simple demo for bootstrap ui timepicker
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('TimepickerDemoCtrl', TimepickerDemoCtrl);
+
+    function TimepickerDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.mytime = new Date();
+
+          vm.hstep = 1;
+          vm.mstep = 15;
+
+          vm.options = {
+            hstep: [1, 2, 3],
+            mstep: [1, 5, 10, 15, 25, 30]
+          };
+
+          vm.ismeridian = true;
+          vm.toggleMode = function() {
+            vm.ismeridian = ! vm.ismeridian;
+          };
+
+          vm.update = function() {
+            var d = new Date();
+            d.setHours( 14 );
+            d.setMinutes( 0 );
+            vm.mytime = d;
+          };
+
+          vm.changed = function () {
+            console.log('Time changed to: ' + vm.mytime);
+          };
+
+          vm.clear = function() {
+            vm.mytime = null;
+          };
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-tooltip.js
+ * Provides a simple demo for tooltip
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('TooltipDemoCtrl', TooltipDemoCtrl);
+
+    function TooltipDemoCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          vm.dynamicTooltip = 'Hello, World!';
+          vm.dynamicTooltipText = 'dynamic';
+          vm.htmlTooltip = 'I\'ve been made <b>bold</b>!';
+
+          vm.autoplace = function (context, source) {
+            //return (predictTooltipTop(source) < 0) ?  "bottom": "top";
+            var pos = 'top';
+            if(predictTooltipTop(source) < 0)
+              pos = 'bottom';
+            if(predictTooltipLeft(source) < 0)
+              pos = 'right';
+            return pos;
+          };
+
+            // Predicts tooltip top position 
+            // based on the trigger element
+            function predictTooltipTop(el) {
+              var top = el.offsetTop;
+              var height = 40; // asumes ~40px tooltip height
+
+              while(el.offsetParent) {
+                el = el.offsetParent;
+                top += el.offsetTop;
+              }
+              return (top - height) - (window.pageYOffset);
+            }
+
+            // Predicts tooltip top position 
+            // based on the trigger element
+            function predictTooltipLeft(el) {
+              var left = el.offsetLeft;
+              var width = el.offsetWidth;
+
+              while(el.offsetParent) {
+                el = el.offsetParent;
+                left += el.offsetLeft;
+              }
+              return (left - width) - (window.pageXOffset);
+            }
+        }
+    }
+})();
+
+/**=========================================================
+ * Module: demo-typeahead.js
+ * Provides a simple demo for typeahead
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.bootstrapui')
+        .controller('TypeaheadCtrl', TypeaheadCtrl);
+
+    TypeaheadCtrl.$inject = ['$http'];
+    function TypeaheadCtrl($http) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+          vm.selected = undefined;
+          vm.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+
+          // Any function returning a promise object can be used to load values asynchronously
+          vm.getLocation = function(val) {
+            return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
+              params: {
+                address: val,
+                sensor: false
+              }
+            }).then(function(res){
+              var addresses = [];
+              angular.forEach(res.data.results, function(item){
+                /*jshint -W106*/
+                addresses.push(item.formatted_address);
+              });
+              return addresses;
+            });
+          };
+
+          vm.statesWithFlags = [{'name':'Alabama','flag':'5/5c/Flag_of_Alabama.svg/45px-Flag_of_Alabama.svg.png'},{'name':'Alaska','flag':'e/e6/Flag_of_Alaska.svg/43px-Flag_of_Alaska.svg.png'},{'name':'Arizona','flag':'9/9d/Flag_of_Arizona.svg/45px-Flag_of_Arizona.svg.png'},{'name':'Arkansas','flag':'9/9d/Flag_of_Arkansas.svg/45px-Flag_of_Arkansas.svg.png'},{'name':'California','flag':'0/01/Flag_of_California.svg/45px-Flag_of_California.svg.png'},{'name':'Colorado','flag':'4/46/Flag_of_Colorado.svg/45px-Flag_of_Colorado.svg.png'},{'name':'Connecticut','flag':'9/96/Flag_of_Connecticut.svg/39px-Flag_of_Connecticut.svg.png'},{'name':'Delaware','flag':'c/c6/Flag_of_Delaware.svg/45px-Flag_of_Delaware.svg.png'},{'name':'Florida','flag':'f/f7/Flag_of_Florida.svg/45px-Flag_of_Florida.svg.png'},{'name':'Georgia','flag':'5/54/Flag_of_Georgia_%28U.S._state%29.svg/46px-Flag_of_Georgia_%28U.S._state%29.svg.png'},{'name':'Hawaii','flag':'e/ef/Flag_of_Hawaii.svg/46px-Flag_of_Hawaii.svg.png'},{'name':'Idaho','flag':'a/a4/Flag_of_Idaho.svg/38px-Flag_of_Idaho.svg.png'},{'name':'Illinois','flag':'0/01/Flag_of_Illinois.svg/46px-Flag_of_Illinois.svg.png'},{'name':'Indiana','flag':'a/ac/Flag_of_Indiana.svg/45px-Flag_of_Indiana.svg.png'},{'name':'Iowa','flag':'a/aa/Flag_of_Iowa.svg/44px-Flag_of_Iowa.svg.png'},{'name':'Kansas','flag':'d/da/Flag_of_Kansas.svg/46px-Flag_of_Kansas.svg.png'},{'name':'Kentucky','flag':'8/8d/Flag_of_Kentucky.svg/46px-Flag_of_Kentucky.svg.png'},{'name':'Louisiana','flag':'e/e0/Flag_of_Louisiana.svg/46px-Flag_of_Louisiana.svg.png'},{'name':'Maine','flag':'3/35/Flag_of_Maine.svg/45px-Flag_of_Maine.svg.png'},{'name':'Maryland','flag':'a/a0/Flag_of_Maryland.svg/45px-Flag_of_Maryland.svg.png'},{'name':'Massachusetts','flag':'f/f2/Flag_of_Massachusetts.svg/46px-Flag_of_Massachusetts.svg.png'},{'name':'Michigan','flag':'b/b5/Flag_of_Michigan.svg/45px-Flag_of_Michigan.svg.png'},{'name':'Minnesota','flag':'b/b9/Flag_of_Minnesota.svg/46px-Flag_of_Minnesota.svg.png'},{'name':'Mississippi','flag':'4/42/Flag_of_Mississippi.svg/45px-Flag_of_Mississippi.svg.png'},{'name':'Missouri','flag':'5/5a/Flag_of_Missouri.svg/46px-Flag_of_Missouri.svg.png'},{'name':'Montana','flag':'c/cb/Flag_of_Montana.svg/45px-Flag_of_Montana.svg.png'},{'name':'Nebraska','flag':'4/4d/Flag_of_Nebraska.svg/46px-Flag_of_Nebraska.svg.png'},{'name':'Nevada','flag':'f/f1/Flag_of_Nevada.svg/45px-Flag_of_Nevada.svg.png'},{'name':'New Hampshire','flag':'2/28/Flag_of_New_Hampshire.svg/45px-Flag_of_New_Hampshire.svg.png'},{'name':'New Jersey','flag':'9/92/Flag_of_New_Jersey.svg/45px-Flag_of_New_Jersey.svg.png'},{'name':'New Mexico','flag':'c/c3/Flag_of_New_Mexico.svg/45px-Flag_of_New_Mexico.svg.png'},{'name':'New York','flag':'1/1a/Flag_of_New_York.svg/46px-Flag_of_New_York.svg.png'},{'name':'North Carolina','flag':'b/bb/Flag_of_North_Carolina.svg/45px-Flag_of_North_Carolina.svg.png'},{'name':'North Dakota','flag':'e/ee/Flag_of_North_Dakota.svg/38px-Flag_of_North_Dakota.svg.png'},{'name':'Ohio','flag':'4/4c/Flag_of_Ohio.svg/46px-Flag_of_Ohio.svg.png'},{'name':'Oklahoma','flag':'6/6e/Flag_of_Oklahoma.svg/45px-Flag_of_Oklahoma.svg.png'},{'name':'Oregon','flag':'b/b9/Flag_of_Oregon.svg/46px-Flag_of_Oregon.svg.png'},{'name':'Pennsylvania','flag':'f/f7/Flag_of_Pennsylvania.svg/45px-Flag_of_Pennsylvania.svg.png'},{'name':'Rhode Island','flag':'f/f3/Flag_of_Rhode_Island.svg/32px-Flag_of_Rhode_Island.svg.png'},{'name':'South Carolina','flag':'6/69/Flag_of_South_Carolina.svg/45px-Flag_of_South_Carolina.svg.png'},{'name':'South Dakota','flag':'1/1a/Flag_of_South_Dakota.svg/46px-Flag_of_South_Dakota.svg.png'},{'name':'Tennessee','flag':'9/9e/Flag_of_Tennessee.svg/46px-Flag_of_Tennessee.svg.png'},{'name':'Texas','flag':'f/f7/Flag_of_Texas.svg/45px-Flag_of_Texas.svg.png'},{'name':'Utah','flag':'f/f6/Flag_of_Utah.svg/45px-Flag_of_Utah.svg.png'},{'name':'Vermont','flag':'4/49/Flag_of_Vermont.svg/46px-Flag_of_Vermont.svg.png'},{'name':'Virginia','flag':'4/47/Flag_of_Virginia.svg/44px-Flag_of_Virginia.svg.png'},{'name':'Washington','flag':'5/54/Flag_of_Washington.svg/46px-Flag_of_Washington.svg.png'},{'name':'West Virginia','flag':'2/22/Flag_of_West_Virginia.svg/46px-Flag_of_West_Virginia.svg.png'},{'name':'Wisconsin','flag':'2/22/Flag_of_Wisconsin.svg/45px-Flag_of_Wisconsin.svg.png'},{'name':'Wyoming','flag':'b/bc/Flag_of_Wyoming.svg/43px-Flag_of_Wyoming.svg.png'}];
+
+        }
+    }
 })();
 
 (function() {
@@ -2537,7 +2487,7 @@
 
     function roleFilter() {
         var role = {
-          owner: "业主",
+          owner: "老板",
           shopManager: "店长",
           cashier: "收银员"
         };
@@ -2638,6 +2588,56 @@
     }
 })();
 
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .constant('APP_COLORS', {
+          'primary':                '#5d9cec',
+          'success':                '#27c24c',
+          'info':                   '#23b7e5',
+          'warning':                '#ff902b',
+          'danger':                 '#f05050',
+          'inverse':                '#131e26',
+          'green':                  '#37bc9b',
+          'pink':                   '#f532e5',
+          'purple':                 '#7266ba',
+          'dark':                   '#3a3f51',
+          'yellow':                 '#fad732',
+          'gray-darker':            '#232735',
+          'gray-dark':              '#3a3f51',
+          'gray':                   '#dde6e9',
+          'gray-light':             '#e4eaec',
+          'gray-lighter':           '#edf1f2'
+        })
+        ;
+})();
+/**=========================================================
+ * Module: colors.js
+ * Services to retrieve global colors
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .service('Colors', Colors);
+
+    Colors.$inject = ['APP_COLORS'];
+    function Colors(APP_COLORS) {
+        this.byName = byName;
+
+        ////////////////
+
+        function byName(name) {
+          return (APP_COLORS[name] || '#fff');
+        }
+    }
+
+})();
 
 (function() {
     'use strict';
@@ -6284,6 +6284,312 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+      .module('app.members')
+      .controller('MembersController', MembersController)
+      .controller('MemberController', MemberController)
+      .controller('rechargeDialogController', rechargeDialogController)
+      .controller('bonusDialogController', bonusDialogController)
+    ;
+      
+    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService', 'dealService'];
+    function MembersController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, qrcodeService, dealService) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        $scope.qrcodeService = qrcodeService;
+        vm.keyword = "";
+        vm.tableParams = new ngTableParams({count: 10}, {
+          getData: function($defer, params) {
+            var filter = {where:{status:{ne:'deleted'}}, include:['wxuser']}
+            if(vm.keyword != '') {
+              var qs = {regex: keyword};
+              filter.where.or = [{"entities.sku.item.name":qs}];
+              params.page(1);
+            }
+            ngTableLBService.getData($defer, params, Member, filter);
+          }
+        });
+      }
+      
+      vm.sell = function (member) {
+        dealService.openDeal(member);
+        $scope.$state.go('app.sell');
+      }
+    }
+    
+    MemberController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'dealService', 'ngDialog'];
+    function MemberController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, dealService, ngDialog) {
+      var vm = this;
+      var memberId = $scope.$state.params.memberId;
+            
+      vm.dealTableParams = new ngTableParams({
+        count: 10
+      }, {
+        getData: function($defer, params) {
+          var opt = {where:{status:{ne:'deleted'}}}
+          opt.limit = params.count()
+          opt.skip = (params.page()-1)*opt.limit
+          Member.deals.count({id: memberId, where: opt.where}, function (result) {
+            vm.dealTableParams.total(result.count);
+          });
+          Member.deals({id: memberId, filter:opt}, $defer.resolve);
+        }
+      });     
+      
+      vm.depositTableParams = new ngTableParams({
+        count: 10
+      }, {
+        getData: function($defer, params) {
+          var opt = {
+            where:{status:{ne:'deleted'}, or:[{type: 'deposit'}, {category: 'deposit'}]},
+            include: ['shop']
+          }
+          opt.limit = params.count()
+          opt.skip = (params.page()-1)*opt.limit
+          Member.payments.count({id: memberId, where: opt.where}, function (result) {
+            vm.depositTableParams.total(result.count);
+          });
+          Member.payments({id: memberId, filter:opt}, $defer.resolve);
+        }
+      });
+
+      vm.bonusTableParams = new ngTableParams({
+        count: 10
+      }, {
+        getData: function($defer, params) {
+          var opt = {
+            where:{status:{ne:'deleted'}},
+            include: []
+          }
+          opt.limit = params.count()
+          opt.skip = (params.page()-1)*opt.limit
+          Member.bonuses.count({id: memberId, where: opt.where}, function (result) {
+            vm.bonusTableParams.total(result.count);
+          });
+          Member.bonuses({id: memberId, filter:opt}, $defer.resolve);
+        }
+      });
+
+      activate();
+      
+      function activate() {
+        
+        memberId = $scope.$state.params.memberId;
+
+        vm.member = Member.findOne({filter: {
+          where: {id: memberId}, 
+          include:['wxuser']
+        }});
+        
+        vm.dealTableParams.reload();
+        vm.depositTableParams.reload();
+        vm.bonusTableParams.reload();
+      }
+
+      vm.sell = function () {
+        dealService.openDeal(vm.member);
+        $scope.$state.go('app.sell');
+      }
+      
+      vm.recharge = function () {
+        ngDialog.open({ 
+          template: 'rechargeDialogId', 
+          controller: 'rechargeDialogController'
+        }).closePromise.then(function (data) {
+          activate();
+        });
+      }
+      
+      vm.setBonus = function () {
+        ngDialog.open({ 
+          template: 'bonusDialogId', 
+          controller: 'bonusDialogController'
+        }).closePromise.then(function (data) {
+          activate();
+        });
+      }
+    }
+    
+    rechargeDialogController.$inject = ['$scope', 'ngDialog', 'Member', 'toaster', 'dealService'];
+    function rechargeDialogController($scope, ngDialog, Member, toaster, dealService) {
+
+        activate();
+
+        ////////////////
+
+        var memberId = $scope.$state.params.memberId;
+        function activate() {
+          memberId = $scope.$state.params.memberId;
+          $scope.member = Member.findById({id:memberId});
+          $scope.data = {
+            type: 'cash', 
+            amount: 0,
+            category: 'deposit'
+          };
+          $scope.payType = dealService.payType;
+          $scope.cash = {
+            paid: 0,
+            change: 0,
+          }
+        }
+        
+        $scope.onChangePayType = function () {
+          if(data.type === 'cash') {
+            $scope.data.cost = $scope.data.amount%$scope.user.merchant.changeRate;
+            $scope.data.amount -= $scope.data.cost;
+            $scope.countChange();
+          } else {
+            $scope.data.cost = 0;
+          }
+        }
+        
+        $scope.countChange = function () {
+          $scope.cash.paid =  $scope.cash.paid;
+          $scope.cash.change = $scope.data.amount - $scope.cash.paid;
+        }
+        
+        $scope.confirm = function () {
+          if($scope.data.amount === 0) {
+            return;
+          }
+          Member.payments.create({id: memberId}, $scope.data).$promise.then(function (result) {
+            $scope.submiting = false;
+            ngDialog.close();
+            toaster.pop('success', '成功', "完成储值操作");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "储值操作未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+        
+    }
+    
+    bonusDialogController.$inject = ['$scope', 'ngDialog', 'Member', 'toaster'];
+    function bonusDialogController($scope, ngDialog, Member, toaster) {
+
+        activate();
+
+        ////////////////
+
+        var memberId = $scope.$state.params.memberId;
+        function activate() {
+          memberId = $scope.$state.params.memberId;
+          $scope.member = Member.findById({id:memberId});
+          $scope.data = {
+            amount: 0,
+            memo: 'manual'
+          };
+        }
+        
+        $scope.confirm = function () {
+          if($scope.data.amount === 0) {
+            return;
+          } else if($scope.data.amount > 0) {
+            $scope.data.memo = 'manual';
+          } else if($scope.data.amount < 0) {
+            $scope.data.memo = 'writeoff';
+          }
+          Member.bonuses.create({id: memberId}, $scope.data).$promise.then(function (result) {
+            $scope.submiting = false;
+            ngDialog.close();
+            toaster.pop('success', '成功', "完成储值操作");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "储值操作未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+    }
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.members')
+        .filter('wx_sex', wxsexFilter)
+        .filter('wx_subscribe', wxsubscribeFilter)
+        .filter('deposit_category', depositcategoryFilter)
+        .filter('bonus_memo', bonusMemoFilter)
+    ;
+
+    function wxsexFilter() {
+        var type = ['保密', '男', '女'];
+        return function(key) {
+          return type[key];
+        }
+    }
+    
+    function wxsubscribeFilter() {
+      var state = ['未关注', '已关注'];
+      return function (key) {
+        return state[key];
+      }
+    }
+    
+    function depositcategoryFilter() {
+      return function (deposit) {
+        if(deposit.type === 'deposit') {
+          return deposit.amount < 0 ? '储值消费':'储值退款';
+        } else if(deposit.category === 'deposit') {
+          return deposit.amount < 0 ? '提现':'充值';
+        } else {
+          return '未知';
+        }
+      }
+    }
+
+    function bonusMemoFilter() {
+      var memo = {
+        reward: '消费积分',
+        vouch: '消费抵扣',
+        manual: '手动积分',
+        writeoff: '手动减计',
+        exchange: '兑换'
+      }
+      return function (key) {
+        return memo[key];
+      }
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.members')
+        .service('qrcodeService', qrcodeService);
+
+    qrcodeService.$inject = ['ngDialog'];
+    function qrcodeService(ngDialog) {
+      var self = this;
+      
+      this.showQRCode = showQRCode;
+      
+      function showQRCode(imageurl) {
+        imageurl = imageurl || 'app/img/qrcode-for-gh.jpg';
+        ngDialog.open({
+          template: "<img src="+imageurl+" class='img-responsive'>",
+          plain: true,
+          className: 'ngdialog-theme-default'
+        });    
+      }
+    }
+
+})();
+
 /**=========================================================
  * Module: modals.js
  * Provides a simple way to implement bootstrap modals from templates
@@ -6624,312 +6930,6 @@
     'use strict';
 
     angular
-      .module('app.members')
-      .controller('MembersController', MembersController)
-      .controller('MemberController', MemberController)
-      .controller('rechargeDialogController', rechargeDialogController)
-      .controller('bonusDialogController', bonusDialogController)
-    ;
-      
-    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService', 'dealService'];
-    function MembersController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, qrcodeService, dealService) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
-        $scope.qrcodeService = qrcodeService;
-        vm.keyword = "";
-        vm.tableParams = new ngTableParams({count: 10}, {
-          getData: function($defer, params) {
-            var filter = {where:{status:{ne:'deleted'}}, include:['wxuser']}
-            if(vm.keyword != '') {
-              var qs = {regex: keyword};
-              filter.where.or = [{"entities.sku.item.name":qs}];
-              params.page(1);
-            }
-            ngTableLBService.getData($defer, params, Member, filter);
-          }
-        });
-      }
-      
-      vm.sell = function (member) {
-        dealService.openDeal(member);
-        $scope.$state.go('app.sell');
-      }
-    }
-    
-    MemberController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'dealService', 'ngDialog'];
-    function MemberController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, dealService, ngDialog) {
-      var vm = this;
-      var memberId = $scope.$state.params.memberId;
-            
-      vm.dealTableParams = new ngTableParams({
-        count: 10
-      }, {
-        getData: function($defer, params) {
-          var opt = {where:{status:{ne:'deleted'}}}
-          opt.limit = params.count()
-          opt.skip = (params.page()-1)*opt.limit
-          Member.deals.count({id: memberId, where: opt.where}, function (result) {
-            vm.dealTableParams.total(result.count);
-          });
-          Member.deals({id: memberId, filter:opt}, $defer.resolve);
-        }
-      });     
-      
-      vm.depositTableParams = new ngTableParams({
-        count: 10
-      }, {
-        getData: function($defer, params) {
-          var opt = {
-            where:{status:{ne:'deleted'}, or:[{type: 'deposit'}, {category: 'deposit'}]},
-            include: ['shop']
-          }
-          opt.limit = params.count()
-          opt.skip = (params.page()-1)*opt.limit
-          Member.payments.count({id: memberId, where: opt.where}, function (result) {
-            vm.depositTableParams.total(result.count);
-          });
-          Member.payments({id: memberId, filter:opt}, $defer.resolve);
-        }
-      });
-
-      vm.bonusTableParams = new ngTableParams({
-        count: 10
-      }, {
-        getData: function($defer, params) {
-          var opt = {
-            where:{status:{ne:'deleted'}},
-            include: []
-          }
-          opt.limit = params.count()
-          opt.skip = (params.page()-1)*opt.limit
-          Member.bonuses.count({id: memberId, where: opt.where}, function (result) {
-            vm.bonusTableParams.total(result.count);
-          });
-          Member.bonuses({id: memberId, filter:opt}, $defer.resolve);
-        }
-      });
-
-      activate();
-      
-      function activate() {
-        
-        memberId = $scope.$state.params.memberId;
-
-        vm.member = Member.findOne({filter: {
-          where: {id: memberId}, 
-          include:['wxuser']
-        }});
-        
-        vm.dealTableParams.reload();
-        vm.depositTableParams.reload();
-        vm.bonusTableParams.reload();
-      }
-
-      vm.sell = function () {
-        dealService.openDeal(vm.member);
-        $scope.$state.go('app.sell');
-      }
-      
-      vm.recharge = function () {
-        ngDialog.open({ 
-          template: 'rechargeDialogId', 
-          controller: 'rechargeDialogController'
-        }).closePromise.then(function (data) {
-          activate();
-        });
-      }
-      
-      vm.setBonus = function () {
-        ngDialog.open({ 
-          template: 'bonusDialogId', 
-          controller: 'bonusDialogController'
-        }).closePromise.then(function (data) {
-          activate();
-        });
-      }
-    }
-    
-    rechargeDialogController.$inject = ['$scope', 'ngDialog', 'Member', 'toaster', 'dealService'];
-    function rechargeDialogController($scope, ngDialog, Member, toaster, dealService) {
-
-        activate();
-
-        ////////////////
-
-        var memberId = $scope.$state.params.memberId;
-        function activate() {
-          memberId = $scope.$state.params.memberId;
-          $scope.member = Member.findById({id:memberId});
-          $scope.data = {
-            type: 'cash', 
-            amount: 0,
-            category: 'deposit'
-          };
-          $scope.payType = dealService.payType;
-          $scope.cash = {
-            paid: 0,
-            change: 0,
-          }
-        }
-        
-        $scope.onChangePayType = function () {
-          if(data.type === 'cash') {
-            $scope.data.cost = $scope.data.amount%$scope.user.merchant.changeRate;
-            $scope.data.amount -= $scope.data.cost;
-            $scope.countChange();
-          } else {
-            $scope.data.cost = 0;
-          }
-        }
-        
-        $scope.countChange = function () {
-          $scope.cash.paid =  $scope.cash.paid;
-          $scope.cash.change = $scope.data.amount - $scope.cash.paid;
-        }
-        
-        $scope.confirm = function () {
-          if($scope.data.amount === 0) {
-            return;
-          }
-          Member.payments.create({id: memberId}, $scope.data).$promise.then(function (result) {
-            $scope.submiting = false;
-            ngDialog.close();
-            toaster.pop('success', '成功', "完成储值操作");
-          }, function (err) {
-            $scope.submiting = false;
-            toaster.pop('error', '失败', "储值操作未完成，请重试！")
-          });
-          $scope.submiting = true;
-        }
-        
-    }
-    
-    bonusDialogController.$inject = ['$scope', 'ngDialog', 'Member', 'toaster'];
-    function bonusDialogController($scope, ngDialog, Member, toaster) {
-
-        activate();
-
-        ////////////////
-
-        var memberId = $scope.$state.params.memberId;
-        function activate() {
-          memberId = $scope.$state.params.memberId;
-          $scope.member = Member.findById({id:memberId});
-          $scope.data = {
-            amount: 0,
-            memo: 'manual'
-          };
-        }
-        
-        $scope.confirm = function () {
-          if($scope.data.amount === 0) {
-            return;
-          } else if($scope.data.amount > 0) {
-            $scope.data.memo = 'manual';
-          } else if($scope.data.amount < 0) {
-            $scope.data.memo = 'writeoff';
-          }
-          Member.bonuses.create({id: memberId}, $scope.data).$promise.then(function (result) {
-            $scope.submiting = false;
-            ngDialog.close();
-            toaster.pop('success', '成功', "完成储值操作");
-          }, function (err) {
-            $scope.submiting = false;
-            toaster.pop('error', '失败', "储值操作未完成，请重试！")
-          });
-          $scope.submiting = true;
-        }
-    }
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.members')
-        .filter('wx_sex', wxsexFilter)
-        .filter('wx_subscribe', wxsubscribeFilter)
-        .filter('deposit_category', depositcategoryFilter)
-        .filter('bonus_memo', bonusMemoFilter)
-    ;
-
-    function wxsexFilter() {
-        var type = ['保密', '男', '女'];
-        return function(key) {
-          return type[key];
-        }
-    }
-    
-    function wxsubscribeFilter() {
-      var state = ['未关注', '已关注'];
-      return function (key) {
-        return state[key];
-      }
-    }
-    
-    function depositcategoryFilter() {
-      return function (deposit) {
-        if(deposit.type === 'deposit') {
-          return deposit.amount < 0 ? '储值消费':'储值退款';
-        } else if(deposit.category === 'deposit') {
-          return deposit.amount < 0 ? '提现':'充值';
-        } else {
-          return '未知';
-        }
-      }
-    }
-
-    function bonusMemoFilter() {
-      var memo = {
-        reward: '消费积分',
-        vouch: '消费抵扣',
-        manual: '手动积分',
-        writeoff: '手动减计',
-        exchange: '兑换'
-      }
-      return function (key) {
-        return memo[key];
-      }
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.members')
-        .service('qrcodeService', qrcodeService);
-
-    qrcodeService.$inject = ['ngDialog'];
-    function qrcodeService(ngDialog) {
-      var self = this;
-      
-      this.showQRCode = showQRCode;
-      
-      function showQRCode(imageurl) {
-        imageurl = imageurl || 'app/img/qrcode-for-gh.jpg';
-        ngDialog.open({
-          template: "<img src="+imageurl+" class='img-responsive'>",
-          plain: true,
-          className: 'ngdialog-theme-default'
-        });    
-      }
-    }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
       .module('app.myshop', [])
       .controller('MyShopController', MyShopController)
       .controller('ShopsController', ShopsController)
@@ -7063,115 +7063,6 @@
     }
 
 })();
-/**=========================================================
- * Module: navbar-search.js
- * Navbar search toggler * Auto dismiss on ESC key
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .directive('searchOpen', searchOpen)
-        .directive('searchDismiss', searchDismiss);
-
-    //
-    // directives definition
-    // 
-    
-    function searchOpen () {
-        var directive = {
-            controller: searchOpenController,
-            restrict: 'A'
-        };
-        return directive;
-
-    }
-
-    function searchDismiss () {
-        var directive = {
-            controller: searchDismissController,
-            restrict: 'A'
-        };
-        return directive;
-        
-    }
-
-    //
-    // Contrller definition
-    // 
-    
-    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchOpenController ($scope, $element, NavSearch) {
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.toggle);
-    }
-
-    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchDismissController ($scope, $element, NavSearch) {
-      
-      var inputSelector = '.navbar-form input[type="text"]';
-
-      $(inputSelector)
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('keyup', function(e) {
-          if (e.keyCode === 27) // ESC
-            NavSearch.dismiss();
-        });
-        
-      // click anywhere closes the search
-      $(document).on('click', NavSearch.dismiss);
-      // dismissable options
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.dismiss);
-    }
-
-})();
-
-
-/**=========================================================
- * Module: nav-search.js
- * Services to share navbar search functions
- =========================================================*/
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .service('NavSearch', NavSearch);
-
-    function NavSearch() {
-        this.toggle = toggle;
-        this.dismiss = dismiss;
-
-        ////////////////
-
-        var navbarFormSelector = 'form.navbar-form';
-
-        function toggle() {
-          var navbarForm = $(navbarFormSelector);
-
-          navbarForm.toggleClass('open');
-          
-          var isOpen = navbarForm.hasClass('open');
-          
-          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
-        }
-
-        function dismiss() {
-          $(navbarFormSelector)
-            .removeClass('open') // Close control
-            .find('input[type="text"]').blur() // remove focus
-            .val('') // Empty input
-            ;
-        }        
-    }
-})();
-
 /**=========================================================
  * Module: demo-notify.js
  * Provides a simple demo for notify
@@ -7403,6 +7294,115 @@
     
     return notify;
 }(jQuery));
+
+/**=========================================================
+ * Module: navbar-search.js
+ * Navbar search toggler * Auto dismiss on ESC key
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .directive('searchOpen', searchOpen)
+        .directive('searchDismiss', searchDismiss);
+
+    //
+    // directives definition
+    // 
+    
+    function searchOpen () {
+        var directive = {
+            controller: searchOpenController,
+            restrict: 'A'
+        };
+        return directive;
+
+    }
+
+    function searchDismiss () {
+        var directive = {
+            controller: searchDismissController,
+            restrict: 'A'
+        };
+        return directive;
+        
+    }
+
+    //
+    // Contrller definition
+    // 
+    
+    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchOpenController ($scope, $element, NavSearch) {
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.toggle);
+    }
+
+    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchDismissController ($scope, $element, NavSearch) {
+      
+      var inputSelector = '.navbar-form input[type="text"]';
+
+      $(inputSelector)
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('keyup', function(e) {
+          if (e.keyCode === 27) // ESC
+            NavSearch.dismiss();
+        });
+        
+      // click anywhere closes the search
+      $(document).on('click', NavSearch.dismiss);
+      // dismissable options
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.dismiss);
+    }
+
+})();
+
+
+/**=========================================================
+ * Module: nav-search.js
+ * Services to share navbar search functions
+ =========================================================*/
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .service('NavSearch', NavSearch);
+
+    function NavSearch() {
+        this.toggle = toggle;
+        this.dismiss = dismiss;
+
+        ////////////////
+
+        var navbarFormSelector = 'form.navbar-form';
+
+        function toggle() {
+          var navbarForm = $(navbarFormSelector);
+
+          navbarForm.toggleClass('open');
+          
+          var isOpen = navbarForm.hasClass('open');
+          
+          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
+        }
+
+        function dismiss() {
+          $(navbarFormSelector)
+            .removeClass('open') // Close control
+            .find('input[type="text"]').blur() // remove focus
+            .val('') // Empty input
+            ;
+        }        
+    }
+})();
 
 /**=========================================================
  * Module: access-login.js
@@ -8230,11 +8230,18 @@
               controller: 'MemberController as member',
               resolve: helper.resolveFor('ngTable', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
+          .state('app.deals', {
+              url: '/deals',
+              title: 'Deals',
+              templateUrl: helper.basepath('deals.html'),
+              resolve: helper.resolveFor('ngTable', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+          })
           .state('app.deal', {
-              url: '/deal',
+              url: '/deals/:dealId',
               title: 'Deal',
               templateUrl: helper.basepath('deal.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
+              controller: 'DealController as dc',
+              resolve: helper.resolveFor('ngTable', 'ngDialog', 'oitozero.ngSweetAlert', 'spinkit')
           })
           .state('app.cost', {
               url: '/cost',
@@ -8819,259 +8826,6 @@
 })();
 
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sales')
-        .service('dealService', dealService);
-
-    dealService.$inject = ['Deal', 'Sku', 'ngDialog', '$rootScope'];
-    function dealService(Deal, Sku, ngDialog, $rootScope) {
-      var self = this;
-
-      this.openDeal = openDeal;
-      this.querySkus = querySkus;
-      this.register = register;
-      this.substractOne = substractOne;
-      this.countTotal = countTotal;
-      this.checkout = checkout; 
-      this.onChangePayType = onChangePayType;
-      this.countChange = countChange;
-      this.pay = pay;
-      this.payType = {
-        deposit: "会员储值",
-        cash: "现金支付",
-        bankcard: "刷卡支付",
-        wxpay: "微信支付",
-        alipay: "支付宝"
-      };
-
-      function openDeal(member) {
-        self.deal = {
-          entities: [],
-          totalAmount: 0,
-          totalQty: 0,
-          member: member,
-          status: 'opened',
-          created: new Date()
-        }
-        self.selectedSku = undefined;
-      }
-      
-      function querySkus (val) {
-        return Sku.find({filter:{where:{barcode:{regex: val}}}, limit: 10})
-        .$promise.then(function (skus) {
-          return skus;
-        });
-      }
-            
-      function register () {
-        if(self.selectedSku && self.selectedSku instanceof Sku) {
-          var entity = undefined;
-          angular.forEach(self.deal.entities, function (e) {
-            if(e.sku.barcode === self.selectedSku.barcode){
-              e.qty++;
-              entity = e;
-            }
-          });
-          if(!entity) {
-            entity = {
-              sku: self.selectedSku,
-              qty: 1
-            };
-            self.deal.entities.push(entity);
-          }
-        }
-        self.selectedSku = undefined;
-      }
-      
-      function substractOne (entity, index) {
-        entity.qty--;
-        if(entity.qty === 0) {
-          self.deal.entities.splice(index, 1);
-        }
-      }
-            
-      function countTotal () {
-        self.deal.totalAmount = 0;
-        self.deal.totalQty = 0;
-        angular.forEach(self.deal.entities, function (entity) {
-          self.deal.totalQty += entity.qty;
-          self.deal.totalAmount += entity.qty*entity.sku.price;
-        });
-        return self.deal.totalAmount;
-      }
-      
-      function checkout () {
-        self.deal.payment = {type: 'cash'};
-        if(self.deal.member) {
-          self.deal.memberId = self.deal.member.id;
-          self.deal.discountAmount = self.deal.totalAmount*(100-self.deal.member.discount)/100;
-          if($rootScope.user.merchant.enableBonusBid) {
-            self.deal.bonusVouchAmount = Math.round(self.deal.member.bonus/$rootScope.user.merchant.bonusBidRate);
-          }
-        } else {
-          self.deal.discountAmount = 0;
-        }
-        self.deal.fee = self.deal.totalAmount-self.deal.discountAmount;
-        if(self.deal.member) {
-          if($rootScope.user.merchant.enableBonusBid) {
-            if(self.deal.bonusVouchAmount > self.deal.fee) {
-              self.deal.bonusVouchAmount = self.deal.fee;
-            }
-            self.deal.fee -= self.deal.bonusVouchAmount;
-          }
-          if(self.deal.member.balance >= self.deal.fee) {
-            self.deal.payment.type = 'deposit';
-          }
-        } 
-        
-        onChangePayType();
-        
-        ngDialog.open({ 
-          template: 'checkoutDialogId', 
-          controller: 'checkoutDialogController'
-        });
-      }
-      
-      function onChangePayType() {
-        self.deal.payment.amount = self.deal.fee;
-        if(self.deal.payment.type === 'cash') {
-          self.deal.payment.cost = self.deal.fee%$rootScope.user.merchant.changeRate;
-          self.deal.payment.amount -= self.deal.payment.cost;
-          countChange();
-        } else if(self.deal.payment.type === 'deposit') {
-          self.deal.payment.cost = 0;
-          self.deal.payment.amount = 0-self.deal.fee;
-        } else {
-          self.deal.payment.cost = 0;
-          self.deal.payment.amount = self.deal.fee;
-        }
-      }
-      
-      function countChange() {
-        if(self.deal.payment.type === 'cash') {
-          self.deal.payment.paid = self.deal.payment.paid || self.deal.payment.amount;
-          self.deal.payment.change = self.deal.payment.amount - self.deal.payment.paid;
-        }
-      }
-            
-      function pay() {
-        self.deal.status = 'closed';
-        delete self.deal.member;
-        return Deal.create(self.deal).$promise
-      }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-      .module('app.sales')
-      .controller('SellController', SellController)
-      .controller('checkoutDialogController', checkoutDialogController)
-      .controller('DealsController', DealsController)
-    ;
-      
-    SellController.$inject = ['$scope', 'dealService', 'Checkin'];
-    function SellController($scope, dealService, Checkin) {
-      var vm = this;
-            
-      activate();
-      
-      function activate() {
-        $scope.dealService = dealService;
-        if(!dealService.deal) {
-          dealService.openDeal();
-        }
-        
-        // CHECKIN
-        // ----------------------------------- 
-        vm.checkins = Checkin.find({filter:{
-          where: {merchantId: $scope.user.shopId},
-          include: [{member: 'wxuser'}],
-          limit: 10, 
-          order: 'created DESC'
-        }});
-        
-        vm.templateUrl = 'checkinsTemplate.html';
-      }
-            
-    }
-    
-    checkoutDialogController.$inject = ['$scope', 'ngDialog', 'dealService', 'toaster'];
-    function checkoutDialogController($scope, ngDialog, dealService, toaster) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $scope.dealService = dealService;
-        }
-        
-        $scope.confirm = function () {
-          dealService.pay().then(function (deal) {
-            $scope.submiting = false;
-            ngDialog.close();
-            dealService.openDeal();
-            toaster.pop('success', '成功', "完成交易");
-          }, function (err) {
-            $scope.submiting = false;
-            toaster.pop('error', '失败', "交易未完成，请重试！")
-          });
-          $scope.submiting = true;
-        }
-        
-    }
-    
-    DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];
-    function DealsController($scope, Deal, ngTableParams, ngTableLBService) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
-        vm.keyword = "";
-        vm.tableParams = new ngTableParams({count: 10}, {
-          getData: function($defer, params) {
-            var filter = {where:{status:{ne:'deleted'}}, include:[]}
-            if(vm.keyword != '') {
-              var qs = {regex: keyword};
-              filter.where.or = [{"entities.sku.item.name":qs}];
-              params.page(1);
-            }
-            ngTableLBService.getData($defer, params, Deal, filter);
-          }
-        });
-      }
-    }
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sales')
-        .filter('payment_type', paymentTypeFilter)
-    ;
-
-    paymentTypeFilter.$inject = ['dealService'];
-    function paymentTypeFilter(dealService) {
-        return function(key) {
-          return dealService.payType[key];
-        }
-    }
-
-})();
 (function () {
   'use strict';
 
@@ -9269,6 +9023,404 @@
 
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sales')
+        .service('dealService', dealService)
+        .service('returnService', returnService)
+    ;
+
+    dealService.$inject = ['Deal', 'Sku', 'ngDialog', '$rootScope'];
+    function dealService(Deal, Sku, ngDialog, $rootScope) {
+      var self = this;
+
+      this.openDeal = openDeal;
+      this.querySkus = querySkus;
+      this.register = register;
+      this.substractOne = substractOne;
+      this.countTotal = countTotal;
+      this.checkout = checkout; 
+      this.onChangePayType = onChangePayType;
+      this.countChange = countChange;
+      this.pay = pay;
+      this.payType = {
+        deposit: "会员储值",
+        cash: "现金支付",
+        bankcard: "刷卡支付",
+        wxpay: "微信支付",
+        alipay: "支付宝"
+      };
+
+      function openDeal(member) {
+        self.deal = {
+          entities: [],
+          totalAmount: 0,
+          totalQty: 0,
+          member: member,
+          status: 'opened',
+          created: new Date()
+        }
+        self.selectedSku = undefined;
+      }
+      
+      function querySkus (val) {
+        return Sku.find({filter:{where:{barcode:{regex: val}}}, limit: 10})
+        .$promise.then(function (skus) {
+          return skus;
+        });
+      }
+            
+      function register () {
+        if(self.selectedSku && self.selectedSku instanceof Sku) {
+          var entity = undefined;
+          angular.forEach(self.deal.entities, function (e) {
+            if(e.sku.barcode === self.selectedSku.barcode){
+              e.qty++;
+              entity = e;
+            }
+          });
+          if(!entity) {
+            entity = {
+              sku: self.selectedSku,
+              qty: 1
+            };
+            self.deal.entities.push(entity);
+          }
+        }
+        self.selectedSku = undefined;
+      }
+      
+      function substractOne (entity, index) {
+        entity.qty--;
+        if(entity.qty === 0) {
+          self.deal.entities.splice(index, 1);
+        }
+      }
+            
+      function countTotal () {
+        self.deal.totalAmount = 0;
+        self.deal.totalQty = 0;
+        angular.forEach(self.deal.entities, function (entity) {
+          self.deal.totalQty += entity.qty;
+          self.deal.totalAmount += entity.qty*entity.sku.price;
+        });
+        return self.deal.totalAmount;
+      }
+      
+      function checkout () {
+        self.deal.payment = {type: 'cash'};
+        if(self.deal.member) {
+          self.deal.memberId = self.deal.member.id;
+          self.deal.discountAmount = self.deal.totalAmount*(100-self.deal.member.discount)/100;
+          if($rootScope.user.merchant.enableBonusBid) {
+            self.deal.bonusVouchAmount = Math.round(self.deal.member.bonus/$rootScope.user.merchant.bonusBidRate);
+          }
+        } else {
+          self.deal.discountAmount = 0;
+        }
+        self.deal.fee = self.deal.totalAmount-self.deal.discountAmount;
+        if(self.deal.member) {
+          if($rootScope.user.merchant.enableBonusBid) {
+            if(self.deal.bonusVouchAmount > self.deal.fee) {
+              self.deal.bonusVouchAmount = self.deal.fee;
+            }
+            self.deal.fee -= self.deal.bonusVouchAmount;
+          }
+          if(self.deal.member.balance >= self.deal.fee) {
+            self.deal.payment.type = 'deposit';
+          }
+        } 
+        
+        onChangePayType();
+        
+        ngDialog.open({ 
+          template: 'checkoutDialogId', 
+          controller: 'checkoutDialogController'
+        });
+      }
+      
+      function onChangePayType() {
+        self.deal.payment.amount = self.deal.fee;
+        if(self.deal.payment.type === 'cash') {
+          self.deal.payment.change = self.deal.fee%$rootScope.user.merchant.changeRate;
+          self.deal.payment.amount -= self.deal.payment.change;
+          countChange();
+        } else if(self.deal.payment.type === 'deposit') {
+          self.deal.payment.amount = 0-self.deal.fee;
+        } else {
+          self.deal.payment.amount = self.deal.fee;
+        }
+      }
+      
+      function countChange() {
+        if(self.deal.payment.type === 'cash') {
+          self.cash = self.cash || {};
+          self.cash.paid = self.cash.paid || self.deal.payment.amount;
+          self.cash.change = self.deal.payment.amount - self.cash.paid;
+        }
+      }
+            
+      function pay() {
+        self.deal.status = 'closed';
+        delete self.deal.member;
+        return Deal.create(self.deal).$promise;
+      }
+    }
+
+    returnService.$inject = ['Deal', 'Sku', 'ngDialog', '$rootScope'];
+    function returnService(Deal, Sku, ngDialog, $rootScope) {
+      var self = this;
+
+      this.openReturn = openReturn;
+      this.checkout = checkout;
+      this.doReturn = doReturn;
+      this.count = count;
+      
+      function openReturn(deal) {
+        self.deal = deal;
+        self.postData = {
+          entities: [],
+          totalAmount: 0,
+          totalQty: 0,
+          status: 'opened',
+          created: new Date()
+        }
+      }
+      
+      function count() {
+        self.postData.totalAmount = 0;
+        self.postData.totalQty = 0;
+        self.postData.entities.forEach(function (entity) {
+          self.postData.totalAmount += entity.qty*entity.sku.price;
+          self.postData.totalQty += entity.qty;
+        });
+
+        self.postData.discountAmount = 0;
+        if(self.deal.member) {
+          self.postData.discountAmount = self.postData.totalAmount*(100-self.deal.member.discount)/100;           }
+        self.postData.fee = self.postData.totalAmount - self.postData.discountAmount;
+        self.postData.payment.amount = self.postData.fee;
+        if(self.postData.payment.type === 'cash') {
+          self.postData.payment.change = self.postData.fee%$rootScope.user.merchant.changeRate;
+          self.postData.payment.amount -= self.postData.payment.change;
+        }
+      }
+      
+      function checkout(entity) {
+        self.postData.payment = {type: self.deal.payment.type};
+        
+        var entities = self.deal.entities;
+        if(entity) entities = [entity];
+        
+        self.postData.entities = [];
+        entities.forEach(function (entity) {
+          var e =  {
+            sku: entity.sku,
+            qty: entity.qty - entity.returnedQty
+          }
+          if(e.qty > 0) self.postData.entities.push(e);
+        });
+        
+        count();
+        
+        return ngDialog.open({ 
+          template: 'checkoutReturnDialogId', 
+          controller: 'checkoutReturnDialogController'
+        }).closePromise;
+      }
+      
+      function doReturn() {
+        self.postData.status = 'closed';
+        return Deal.returns.create({id: self.deal.id}, self.postData).$promise;
+      }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+      .module('app.sales')
+      .controller('SellController', SellController)
+      .controller('checkoutDialogController', checkoutDialogController)
+      .controller('DealsController', DealsController)
+      .controller('DealController', DealController)
+      .controller('checkoutReturnDialogController', checkoutReturnDialogController)
+    ;
+      
+    SellController.$inject = ['$scope', 'dealService', 'Checkin'];
+    function SellController($scope, dealService, Checkin) {
+      var vm = this;
+            
+      activate();
+      
+      function activate() {
+        $scope.dealService = dealService;
+        if(!dealService.deal) {
+          dealService.openDeal();
+        }
+        
+        // CHECKIN
+        // ----------------------------------- 
+        vm.checkins = Checkin.find({filter:{
+          where: {merchantId: $scope.user.shopId},
+          include: [{member: 'wxuser'}],
+          limit: 10, 
+          order: 'created DESC'
+        }});
+        
+        vm.templateUrl = 'checkinsTemplate.html';
+      }
+            
+    }
+    
+    checkoutDialogController.$inject = ['$scope', 'ngDialog', 'dealService', 'toaster'];
+    function checkoutDialogController($scope, ngDialog, dealService, toaster) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $scope.dealService = dealService;
+        }
+        
+        $scope.confirm = function () {
+          dealService.pay().then(function (deal) {
+            $scope.submiting = false;
+            ngDialog.close();
+            dealService.openDeal();
+            toaster.pop('success', '成功', "完成交易");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "交易未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+        
+    }
+    
+    DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];
+    function DealsController($scope, Deal, ngTableParams, ngTableLBService) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        vm.keyword = "";
+        vm.tableParams = new ngTableParams({count: 10}, {
+          getData: function($defer, params) {
+            var filter = {where:{status:{ne:'deleted'}}, include:[]}
+            if(vm.keyword != '') {
+              var qs = {regex: keyword};
+              filter.where.or = [{"entities.sku.item.name":qs}];
+              params.page(1);
+            }
+            ngTableLBService.getData($defer, params, Deal, filter);
+          }
+        });
+      }
+    }
+    
+    DealController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService', 'returnService'];
+    function DealController($scope, Deal, ngTableParams, ngTableLBService, returnService) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        vm.returnSku = {};
+        vm.deal = Deal.findOne({filter:{
+          where: {id: $scope.$state.params.dealId},
+          include:['returns', 'bonuses']
+        }});
+        vm.deal.$promise.then(function (deal) {
+          vm.deal.entities.forEach(function (entity) {
+            entity.returnedQty = 0;
+            vm.returnSku[entity.sku.id] = entity;
+          });
+          if(vm.deal.returns && vm.deal.returns.length > 0) {
+            vm.deal.returns.forEach(function (ret) {
+              ret.entities.forEach(function (returnEntity) {
+                vm.returnSku[returnEntity.sku.id].returnedQty += returnEntity.qty;
+              });
+            });
+            vm.return = vm.deal.returns[0];
+          } else {
+            vm.return = {entities:[]};
+          }
+          returnService.openReturn(vm.deal);
+        });
+      }
+      
+      vm.goReturn = function (entity) {
+        returnService.checkout(entity).then(function (data) {
+          activate();
+        });
+      }
+    }
+
+    checkoutReturnDialogController.$inject = ['$scope', 'ngDialog', 'returnService', 'toaster'];
+    function checkoutReturnDialogController($scope, ngDialog, returnService, toaster) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $scope.returnService = returnService;
+        }
+        
+        $scope.confirm = function () {
+          returnService.doReturn().then(function (ret) {
+            $scope.submiting = false;
+            ngDialog.close();
+            toaster.pop('success', '成功', "完成退款退货");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "退款退货未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+        
+    }
+
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sales')
+        .filter('deal_status', dealStatusFilter)
+        .filter('payment_type', paymentTypeFilter)
+    ;
+
+    paymentTypeFilter.$inject = ['dealService'];
+    function paymentTypeFilter(dealService) {
+        return function(key) {
+          return dealService.payType[key];
+        }
+    }
+
+    // dealStatusFilter.$inject = [];
+    function dealStatusFilter() {
+      var dic = {
+        closed: '已完成'
+      }
+      return function (key) {
+        return dic[key];
+      }
+    }
+})();
 /**=========================================================
  * Module: sidebar-menu.js
  * Handle sidebar collapsible elements

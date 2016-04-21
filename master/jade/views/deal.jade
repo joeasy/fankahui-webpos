@@ -1,19 +1,226 @@
-h3 
-  | 销售查询
+h3 交易  # {{dc.deal.serialNumber}}
+
+.panel
+  .panel-heading 交易摘要
+  .panel-body
+    .row
+      .col-md-6
+        p.lead.bb 交易详情
+        form.form-horizontal.p-20
+          .form-group
+            .col-sm-4 流水号:
+            .col-sm-8
+              strong {{dc.deal.serialNumber}}
+          .form-group
+            .col-sm-4 成交时间:
+            .col-sm-8
+              strong {{dc.deal.created | date:'yyyy-MM-dd HH:mm'}}
+          .form-group
+            .col-sm-4 客户名:
+            .col-sm-8
+              strong {{dc.deal.member && dc.deal.member.name || '走入客户'}}
+          .form-group
+            .col-sm-4 数量: 
+            .col-sm-8
+              strong {{dc.deal.totalQty}} 件
+          .form-group
+            .col-sm-4 金额: 
+            .col-sm-8
+              strong {{dc.deal.totalAmount/100 | currency}}
+          .form-group
+            .col-sm-4 状态
+            .col-sm-8
+              .label.label-info {{dc.deal.status | deal_status}}
+
+      .col-md-6
+        p.lead.bb 客户
+        form.form-horizontal.p-20
+          .form-group
+            .col-sm-4 客户编号:
+            .col-sm-8
+              strong {{dc.deal.member.id}}
+          .form-group
+            .col-sm-4 客户名:
+            .col-sm-8
+              strong {{dc.deal.member && dc.deal.member.name || '走入客户'}}
+          .form-group
+            .col-sm-4 等级
+            .col-sm-8
+              .label.label-success {{dc.deal.member.level}}
+          .form-group
+            .col-sm-4 积分余额:
+            .col-sm-8
+              strong {{dc.deal.member.bonus}}
+          .form-group
+            .col-sm-4 储值余额: 
+            .col-sm-8
+              strong {{dc.deal.member.balance/100 | currency}}
+          .form-group
+            .col-sm-4 微信openid:
+            .col-sm-8
+              strong {{dc.deal.member.wxuserId}}
+    .row 
+      .col-md-6
+        p.lead.bb 结算
+        form.form-horizontal.p-20
+          .form-group
+            .col-sm-4 商品金额:
+            .col-sm-8
+              strong {{dc.deal.totalAmount/100 | currency}}
+          .form-group
+            .col-sm-4 折扣:
+            .col-sm-8
+              strong {{dc.deal.discountAmount/100 | currency}}
+          .form-group
+            .col-sm-4 积分抵扣:
+            .col-sm-8
+              strong {{(dc.deal.bonusVouchAmount/100 || 0) | currency}}
+          .form-group
+            .col-sm-4 应付:
+            .col-sm-8
+              strong {{dc.deal.fee/100 | currency}}
+          .form-group
+            .col-sm-4 支付方式:
+            .col-sm-8
+              .label.label-warning {{dc.deal.payment.type | payment_type}}
+          .form-group
+            .col-sm-4 实付:
+            .col-sm-8
+              strong {{dc.deal.payment.amount/100 | currency}}
+          .form-group
+            .col-sm-4 抹零:
+            .col-sm-8
+              strong {{(dc.deal.payment.change/100 || 0) | currency}}
+
+      .col-md-6
+        p.lead.bb 经手人
+        form.form-horizontal.p-20
+          .form-group
+            .col-sm-4 门店名:
+            .col-sm-8
+              strong {{dc.deal.shop.branch_name}}
+          .form-group
+            .col-sm-4 经手人:
+            .col-sm-8
+              strong {{dc.deal.operator.name || dc.deal.operator.username}}
+          .form-group
+            .col-sm-4 职务:
+            .col-sm-8
+              .label.label-info {{dc.deal.operator.role | role}}
+          .form-group
+            .col-sm-4 电话:
+            .col-sm-8
+              strong {{dc.deal.operator.phone}}
+        
+// START panel tab
+.panel
+  tabset(justified="true")
+    tab
+      tab-heading 交易明细
+      .table-responsive.table-bordered.mb-lg
+        table.table
+          thead
+            tr
+              th 序号 #
+              th 商品描述
+              th 型号
+              th.text-right 数量 (件)
+              th.text-right 单价（元）
+              th.text-right 小计(元)
+              th.text-right 已退 (件)
+              th.text-center 操作
+          tbody
+            tr(ng-repeat="entity in dc.deal.entities")
+              td {{$index+1}}
+              td {{entity.sku.item.name}}
+              td {{entity.sku.model}}
+              td.text-right {{entity.qty}}
+              td.text-right {{entity.sku.price/100 | currency: '¥'}}
+              td.text-right {{entity.qty*entity.sku.price/100 | currency: '¥'}}
+              td.text-right {{entity.returnedQty}}
+              td.text-center
+                a.btn.btn-sm.btn-warning(type="button", ng-click="dc.goReturn()")
+                  em.fa.fa-undo.fa-fw
+                  | 退货
+
+      hr.hidden-print
+      .clearfix
+        button(type="button").btn.btn-success.pull-left.mr 
+          em.fa.fa-share.fa-fw.mr-sm
+          | 推送账单
+        //- button(type="button", onclick="window.print();").btn.btn-default.pull-left Print
+        button(type="button", ng-click="dc.goReturn()").btn.btn-danger.pull-right.mr 
+          em.fa.fa-undo.fa-fw
+          | 整单退货
+
+    tab
+      tab-heading 退款退货
+      .row.clearfix
+        .col-md-3
+          .panel.panel-primary
+            .panel-heading
+              .panel-title 退货记录
+            // START list group
+            .list-group
+              .list-group-item(ng-if="!dc.return.id") 没有退货
+              // START list group item
+              .list-group-item(ng-repeat="r in dc.deal.returns", ng-click="dc.return = r", ng-class="{'list-group-item-info': dc.return.id === r.id}")
+                .media-box
+                  .pull-left
+                    span.fa-stack
+                      em.fa.fa-circle.fa-stack-2x.text-purple
+                      em.fa.fa-undo.fa-stack-1x.fa-inverse.text-white
+                  .media-box-body.clearfix
+                    small.text-muted.pull-right.ml {{r.totalQty}}件
+                    .media-box-heading
+                      .text-purple.m0 {{r.fee/100|currency: '¥'}}
+                    p.m0: small
+                      em {{r.created | date:'yyyy-MM-dd HH:mm'}}
+              // END list group item
+            // END list group
+        .col-md-9
+          .panel.panel-info
+            .panel-heading
+              .panel-title 退货明细
+            .table-responsive.table-bordered.mb-lg
+              table.table
+                thead
+                  tr
+                    th 序号 #
+                    th 商品描述
+                    th 型号
+                    th.text-right 数量 (件)
+                    th.text-right 单价（元）
+                    th.text-right 小计(元)
+                tbody
+                  tr(ng-repeat="entity in dc.return.entities")
+                    td {{$index+1}}
+                    td {{entity.sku.item.name}}
+                    td {{entity.sku.model}}
+                    td.text-right {{entity.qty}}
+                    td.text-right {{entity.sku.price/100 | currency: '¥'}}
+                    td.text-right {{entity.qty*entity.sku.price/100 | currency: '¥'}}
+
+
+  <!-- Templates -->
   
-.container-fluid(ng-controller="DealsController as deals")
-  .panel.panel-default
-    .panel-heading
-      button.pull-right.btn.btn-purple.btn-sm(ng-click='deals.tableParams.reload()') 刷新
-      //- .panel-title Ajax
-    table.table(ng-table='deals.tableParams')
-      tbody(ng-class="{'whirl standard': deals.tableParams.settings().$loading}")
-        tr.text-center(ng-repeat='deal in $data')
-          td(data-title="'流水号'") {{deal.serialNumber}}
-          td(data-title="'商品总计'") {{deal.totalAmount/100 | currency: '¥'}}
-          td(data-title="'折扣金额'") {{deal.discountAmount/100 || 0.00 | currency: '¥'}}
-          td(data-title="'销售金额'") {{deal.fee/100 | currency: '¥'}}
-          td(data-title="'数量'") {{deal.totalQty}}
-          td(data-title="'支付方式'") {{deal.payment.type | payment_type}}
-          td(data-title="'顾客'") {{deal.member && deal.member.name || "走入顾客"}}
-          td(data-title="'记账日期'") {{deal.created | date:'yyyy-MM-dd HH:mm:ss'}}
+  script(type="text/ng-template", id="checkoutReturnDialogId")
+    .modal-header
+      h3 退货
+    .modal-body(ng-class="{'whirl standard':submiting}")
+      fieldset
+        .form-group
+          .col-md-12(ng-repeat="entity in returnService.postData.entities")
+            span.mr {{$index+1}}. {{entity.sku.item.name}} - {{entity.sku.model}}
+            input.pull-right.text-right(type="number", ng-model="entity.qty", ng-change="returnService.count()") 
+      fieldset: .form-group
+        .col-md-6.pull-left
+          | 共计: {{returnService.postData.totalQty}}件  
+        .col-md-6.pull-right.text-right    
+          | 总计: {{returnService.postData.payment.amount/100 | currency: '¥' }}  
+
+    .modal-footer
+      a.pull-right.btn.btn-default.mr(type='button', ng-click='closeThisDialog()') 取消      
+      a.pull-right.btn.btn-primary.mr(ng-class="{disabled:submiting}", ng-click='submiting || confirm()') 确定
+  
+    

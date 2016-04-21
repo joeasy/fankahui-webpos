@@ -15,7 +15,7 @@
 
     function roleFilter() {
         var role = {
-          owner: "业主",
+          owner: "老板",
           shopManager: "店长",
           cashier: "收银员"
         };

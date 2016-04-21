@@ -150,18 +150,18 @@ h3
       fieldset.mb0.pb0(ng-if="dealService.deal.payment.type === 'cash'"): .form-group
         label.col-md-3.control-label 抹零
         .col-md-9
-          | {{dealService.deal.payment.cost/100 | currency: '¥' }}
+          | {{dealService.deal.payment.change/100 | currency: '¥' }}
       fieldset.mb0: .form-group
         label.col-md-3.control-label 实收金额
         .col-md-9  
-          input.form-control(type='number', ng-model="dealService.deal.payment.paid", currency, ng-if="dealService.deal.payment.type === 'cash'", ng-change="dealService.countChange()") 
+          input.form-control(type='number', ng-model="dealService.cash.paid", currency, ng-if="dealService.deal.payment.type === 'cash'", ng-change="dealService.countChange()") 
           span
           span(ng-if="dealService.deal.payment.type !== 'cash'") 
             | {{dealService.deal.payment.amount/100 | currency: '¥'}} 
       fieldset.mb0(ng-if="dealService.deal.payment.type === 'cash'"): .form-group
         label.col-md-3.control-label 找零
         .col-md-9
-          | {{dealService.deal.payment.change/100 | currency: '¥'}}
+          | {{dealService.cash.change/100 | currency: '¥'}}
       fieldset.mb0.pb0: .form-group
         label.col-md-3.control-label 备注
         .col-md-9  
