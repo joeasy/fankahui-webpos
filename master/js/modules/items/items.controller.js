@@ -133,7 +133,7 @@
           filter: vm.filter.text
         }, {
           getData: function($defer, params) {
-            var opt = {where:{}, include:['sku', 'operator']}
+            var opt = {where:{}, include:['sku']}
             opt.limit = params.count()
             opt.skip = (params.page()-1)*opt.limit
             if(vm.filter.text != '') {
@@ -146,7 +146,6 @@
           }
         });
       }
-      
     }
 
 })();
