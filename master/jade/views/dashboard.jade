@@ -8,30 +8,30 @@ h3
     // START widget
     .panel.widget.bg-primary
       .row.row-table
-        .col-xs-4.text-center.bg-primary-dark.pv-lg
-          em.icon-cloud-upload.fa-3x
-        .col-xs-8.pv-lg
-          .h2.mt0 1700
-          .text-uppercase Uploads
+        .col-xs-3.text-center.bg-primary-dark.pv-lg
+          em.fa.fa-shopping-cart.fa-2x
+        .col-xs-9.pv-lg
+          .h2.mt0 {{dash.statData.amount/100 | currency}}
+          .text-uppercase 销售收入
   .col-lg-3.col-sm-6
     // START widget
     .panel.widget.bg-purple
       .row.row-table
-        .col-xs-4.text-center.bg-purple-dark.pv-lg
-          em.icon-globe.fa-3x
-        .col-xs-8.pv-lg
-          .h2.mt0 700
-            small GB
-          .text-uppercase Quota
+        .col-xs-3.text-center.bg-purple-dark.pv-lg
+          em.fa.fa-tags.fa-2x
+        .col-xs-9.pv-lg
+          .h2.mt0 {{dash.statData.qty}}
+            small 件
+          .text-uppercase 销售数量
   .col-lg-3.col-md-6.col-sm-12
     // START widget
     .panel.widget.bg-green
       .row.row-table
-        .col-xs-4.text-center.bg-green-dark.pv-lg
-          em.icon-bubbles.fa-3x
-        .col-xs-8.pv-lg
-          .h2.mt0 500
-          .text-uppercase Reviews
+        .col-xs-3.text-center.bg-green-dark.pv-lg
+          em.icon-users.fa-2x
+        .col-xs-9.pv-lg
+          .h2.mt0 {{dash.statData.deposit/100 | currency}}
+          .text-uppercase 会员储值
   .col-lg-3.col-md-6.col-sm-12
     // START date widget
     .panel.widget
@@ -51,7 +51,7 @@ h3
 
 .row
   // START dashboard main content
-  .col-lg-9(ng-controller="DashboardController as dash")
+  .col-lg-9
     .row
       .col-lg-4
         // START widget
@@ -78,13 +78,13 @@ h3
             a.list-group-item(ng-repeat="checkin in dash.checkins", ui-sref="app.sell()")
               .media-box
                 .pull-left
-                  img.media-box-object.img-circle.thumb32(src="{{checkin.member.wxuser.headimgurl}}", alt="Image")
+                  img.media-box-object.img-circle.thumb32(src="{{checkin.member.wxuser.headimgurl || 'app/img/dummy.png'}}", alt="Image")
                 .media-box-body.clearfix
                   small.pull-right {{checkin.created | moment_from_now }}
                   strong.media-box-heading.text-primary 
                     span.circle.circle-success.circle-lg.text-left
-                    | {{checkin.member.name}}
-                  p.mb-sm: small 积分：{{checkin.member.bonus || 0}} | 储值余额：{{checkin.member.balance || 0}}
+                    | {{checkin.member.name || '走入客户'}}
+                  p.mb-sm: small 积分：{{checkin.member.bonus || 0}} | 储值余额：{{(checkin.member.balance/100 || 0) | currency}}
             // END list group item
           // END list group
 

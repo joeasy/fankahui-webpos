@@ -5,8 +5,8 @@
         .module('app.dashboard')
         .controller('DashboardController', DashboardController);
 
-    DashboardController.$inject = ['$scope', 'ChartData', '$timeout', 'Checkin'];
-    function DashboardController($scope, ChartData, $timeout, Checkin) {
+    DashboardController.$inject = ['$scope', 'ChartData', '$timeout', 'Checkin', 'Deal', 'Payment'];
+    function DashboardController($scope, ChartData, $timeout, Checkin, Deal, Payment) {
         var vm = this;
 
         // Set Moment locale
@@ -20,6 +20,18 @@
           
           if(!$scope.user) return;
 
+          // Statistic
+          // ----------------------------------- 
+          vm.statData = {amount: 0, qty: 0, deposit: 0};
+          
+          Deal.stat({filter:{where:{status: 'closed', "payment.amount": {$gt: 0}}}}, function (res) {
+            vm.statData.amount = res[0].amount;
+            vm.statData.qty = res[0].qty;
+          });
+          
+          Payment.stat({filter:{where:{status: 'closed', category: 'deposit'}}}, function (res) {
+            vm.statData.deposit = res[0].amount;
+          })
           // CHECKIN
           // ----------------------------------- 
           vm.checkins = Checkin.find({filter:{

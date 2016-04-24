@@ -8,12 +8,12 @@
       <!-- START widget-->
       <div class="panel widget bg-primary">
          <div class="row row-table">
-            <div class="col-xs-4 text-center bg-primary-dark pv-lg">
-               <em class="icon-cloud-upload fa-3x"></em>
+            <div class="col-xs-3 text-center bg-primary-dark pv-lg">
+               <em class="fa fa-shopping-cart fa-2x"></em>
             </div>
-            <div class="col-xs-8 pv-lg">
-               <div class="h2 mt0">1700</div>
-               <div class="text-uppercase">Uploads</div>
+            <div class="col-xs-9 pv-lg">
+               <div class="h2 mt0">{{dash.statData.amount/100 | currency}}</div>
+               <div class="text-uppercase">销售收入</div>
             </div>
          </div>
       </div>
@@ -22,14 +22,14 @@
       <!-- START widget-->
       <div class="panel widget bg-purple">
          <div class="row row-table">
-            <div class="col-xs-4 text-center bg-purple-dark pv-lg">
-               <em class="icon-globe fa-3x"></em>
+            <div class="col-xs-3 text-center bg-purple-dark pv-lg">
+               <em class="fa fa-tags fa-2x"></em>
             </div>
-            <div class="col-xs-8 pv-lg">
-               <div class="h2 mt0">700
-                  <small>GB</small>
+            <div class="col-xs-9 pv-lg">
+               <div class="h2 mt0">{{dash.statData.qty}}
+                  <small>件</small>
                </div>
-               <div class="text-uppercase">Quota</div>
+               <div class="text-uppercase">销售数量</div>
             </div>
          </div>
       </div>
@@ -38,12 +38,12 @@
       <!-- START widget-->
       <div class="panel widget bg-green">
          <div class="row row-table">
-            <div class="col-xs-4 text-center bg-green-dark pv-lg">
-               <em class="icon-bubbles fa-3x"></em>
+            <div class="col-xs-3 text-center bg-green-dark pv-lg">
+               <em class="icon-users fa-2x"></em>
             </div>
-            <div class="col-xs-8 pv-lg">
-               <div class="h2 mt0">500</div>
-               <div class="text-uppercase">Reviews</div>
+            <div class="col-xs-9 pv-lg">
+               <div class="h2 mt0">{{dash.statData.deposit/100 | currency}}</div>
+               <div class="text-uppercase">会员储值</div>
             </div>
          </div>
       </div>
@@ -72,7 +72,7 @@
 <!-- END widgets box-->
 <div class="row">
    <!-- START dashboard main content-->
-   <div ng-controller="DashboardController as dash" class="col-lg-9">
+   <div class="col-lg-9">
       <div class="row">
          <div class="col-lg-4">
             <!-- START widget-->
@@ -104,14 +104,14 @@
                   <a ng-repeat="checkin in dash.checkins" ui-sref="app.sell()" class="list-group-item">
                      <div class="media-box">
                         <div class="pull-left">
-                           <img src="{{checkin.member.wxuser.headimgurl}}" alt="Image" class="media-box-object img-circle thumb32" />
+                           <img src="{{checkin.member.wxuser.headimgurl || 'app/img/dummy.png'}}" alt="Image" class="media-box-object img-circle thumb32" />
                         </div>
                         <div class="media-box-body clearfix">
                            <small class="pull-right">{{checkin.created | moment_from_now }}</small>
                            <strong class="media-box-heading text-primary">
-                              <span class="circle circle-success circle-lg text-left"></span>{{checkin.member.name}}</strong>
+                              <span class="circle circle-success circle-lg text-left"></span>{{checkin.member.name || '走入客户'}}</strong>
                            <p class="mb-sm">
-                              <small>积分：{{checkin.member.bonus || 0}} | 储值余额：{{checkin.member.balance || 0}}</small>
+                              <small>积分：{{checkin.member.bonus || 0}} | 储值余额：{{(checkin.member.balance/100 || 0) | currency}}</small>
                            </p>
                         </div>
                      </div>

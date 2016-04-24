@@ -92,13 +92,13 @@
     'use strict';
 
     angular
-        .module('app.dashboard', []);
+        .module('app.elements', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.elements', []);
+        .module('app.dashboard', []);
 })();
 (function() {
     'use strict';
@@ -110,13 +110,13 @@
     'use strict';
 
     angular
-        .module('app.flatdoc', []);
+        .module('app.forms', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.forms', []);
+        .module('app.flatdoc', []);
 })();
 (function() {
     'use strict';
@@ -158,13 +158,19 @@
     'use strict';
 
     angular
+        .module('app.maps', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.members', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.maps', []);
+        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
@@ -177,12 +183,6 @@
 
     angular
         .module('app.notify', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
@@ -216,13 +216,13 @@
     'use strict';
 
     angular
-        .module('app.settings', []);
+        .module('app.sales', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.sales', []);
+        .module('app.settings', []);
 })();
 (function() {
     'use strict';
@@ -2639,375 +2639,6 @@
 
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .controller('DashboardController', DashboardController);
-
-    DashboardController.$inject = ['$scope', 'ChartData', '$timeout', 'Checkin'];
-    function DashboardController($scope, ChartData, $timeout, Checkin) {
-        var vm = this;
-
-        // Set Moment locale
-        moment.locale('zh-cn');
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          
-          if(!$scope.user) return;
-
-          // CHECKIN
-          // ----------------------------------- 
-          vm.checkins = Checkin.find({filter:{
-            where: {merchantId: $scope.user.shopId},
-            include: [{member: 'wxuser'}],
-            limit: 10, 
-            order: 'created DESC'
-          }});
-
-          // SPLINE
-          // ----------------------------------- 
-          vm.splineData = ChartData.load('server/chart/spline.json');
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-
-
-          // PANEL REFRESH EVENTS
-          // ----------------------------------- 
-
-          $scope.$on('panel-refresh', function(event, id) {
-            
-            console.log('Simulating chart refresh during 3s on #'+id);
-
-            // Instead of timeout you can request a chart data
-            $timeout(function(){
-              
-              // directive listen for to remove the spinner 
-              // after we end up to perform own operations
-              $scope.$broadcast('removeSpinner', id);
-              
-              console.log('Refreshed #' + id);
-
-            }, 3000);
-
-          });
-
-
-          // PANEL DISMISS EVENTS
-          // ----------------------------------- 
-
-          // Before remove panel
-          $scope.$on('panel-remove', function(event, id, deferred){
-            
-            console.log('Panel #' + id + ' removing');
-            
-            // Here is obligatory to call the resolve() if we pretend to remove the panel finally
-            // Not calling resolve() will NOT remove the panel
-            // It's up to your app to decide if panel should be removed or not
-            deferred.resolve();
-          
-          });
-
-          // Panel removed ( only if above was resolved() )
-          $scope.$on('panel-removed', function(event, id){
-
-            console.log('Panel #' + id + ' removed');
-
-          });
-
-        }
-        
-        $scope.$on('User.logined', activate);
-        
-    }
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .filter('moment_unix', momentUnixFilter)
-        .filter('moment_from_now', momentFromNowFilter)
-        .filter('moment_unix_from_now', momentUnixFromNowFilter)
-    ;
-
-    function momentUnixFilter(input, format) {
-      return moment.unix(input).format(format || 'YYYY-MM-DD HH:mm:ss');
-    }
-    momentUnixFilter.$inject = ["input", "format"];
-    
-    function momentFromNowFilter() {
-      return function (input) {
-        return moment(input).fromNow();
-      };
-    }
-
-    function momentUnixFromNowFilter(input) {
-      return moment.unix(input).fromNow();
-    }
-    momentUnixFromNowFilter.$inject = ["input"];
-
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .controller('DashboardV2Controller', DashboardV2Controller);
-
-    DashboardV2Controller.$inject = ['$rootScope', '$scope', '$state'];
-    function DashboardV2Controller($rootScope, $scope, $state) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          
-          // Change layout mode
-          if( $state.includes('app-h') ) {
-            // Setup layout horizontal for demo
-            $rootScope.app.layout.horizontal = true;
-            $scope.$on('$destroy', function(){
-                $rootScope.app.layout.horizontal = false;
-            });            
-          }
-          else {
-            $rootScope.app.layout.isCollapsed = true;
-          }
-
-          // BAR STACKED
-          // ----------------------------------- 
-          vm.barStackedOptions = {
-              series: {
-                  stack: true,
-                  bars: {
-                      align: 'center',
-                      lineWidth: 0,
-                      show: true,
-                      barWidth: 0.6,
-                      fill: 0.9
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 200, // optional: use it for a clear represetation
-                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
-                  tickColor: '#eee'
-              },
-              shadowSize: 0
-          };
-
-          // SPLINE
-          // ----------------------------------- 
-
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-        }
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .controller('DashboardV3Controller', DashboardV3Controller);
-
-    DashboardV3Controller.$inject = ['$rootScope'];
-    function DashboardV3Controller($rootScope) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // SPLINE
-          // ----------------------------------- 
-
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-
-
-          vm.seriesData = {
-            'CA': 11100,   // Canada
-            'DE': 2510,    // Germany
-            'FR': 3710,    // France
-            'AU': 5710,    // Australia
-            'GB': 8310,    // Great Britain
-            'RU': 9310,    // Russia
-            'BR': 6610,    // Brazil
-            'IN': 7810,    // India
-            'CN': 4310,    // China
-            'US': 839,     // USA
-            'SA': 410      // Saudi Arabia
-          };
-          
-          vm.markersData = [
-            { latLng:[41.90, 12.45],  name:'Vatican City'          },
-            { latLng:[43.73, 7.41],   name:'Monaco'                },
-            { latLng:[-0.52, 166.93], name:'Nauru'                 },
-            { latLng:[-8.51, 179.21], name:'Tuvalu'                },
-            { latLng:[7.11,171.06],   name:'Marshall Islands'      },
-            { latLng:[17.3,-62.73],   name:'Saint Kitts and Nevis' },
-            { latLng:[3.2,73.22],     name:'Maldives'              },
-            { latLng:[35.88,14.5],    name:'Malta'                 },
-            { latLng:[41.0,-71.06],   name:'New England'           },
-            { latLng:[12.05,-61.75],  name:'Grenada'               },
-            { latLng:[13.16,-59.55],  name:'Barbados'              },
-            { latLng:[17.11,-61.85],  name:'Antigua and Barbuda'   },
-            { latLng:[-4.61,55.45],   name:'Seychelles'            },
-            { latLng:[7.35,134.46],   name:'Palau'                 },
-            { latLng:[42.5,1.51],     name:'Andorra'               }
-          ];
-        }
-    }
-})();
 
 (function() {
     'use strict';
@@ -3984,6 +3615,387 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .controller('DashboardController', DashboardController);
+
+    DashboardController.$inject = ['$scope', 'ChartData', '$timeout', 'Checkin', 'Deal', 'Payment'];
+    function DashboardController($scope, ChartData, $timeout, Checkin, Deal, Payment) {
+        var vm = this;
+
+        // Set Moment locale
+        moment.locale('zh-cn');
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          
+          if(!$scope.user) return;
+
+          // Statistic
+          // ----------------------------------- 
+          vm.statData = {amount: 0, qty: 0, deposit: 0};
+          
+          Deal.stat({filter:{where:{status: 'closed', "payment.amount": {$gt: 0}}}}, function (res) {
+            vm.statData.amount = res[0].amount;
+            vm.statData.qty = res[0].qty;
+          });
+          
+          Payment.stat({filter:{where:{status: 'closed', category: 'deposit'}}}, function (res) {
+            vm.statData.deposit = res[0].amount;
+          })
+          // CHECKIN
+          // ----------------------------------- 
+          vm.checkins = Checkin.find({filter:{
+            where: {merchantId: $scope.user.shopId},
+            include: [{member: 'wxuser'}],
+            limit: 10, 
+            order: 'created DESC'
+          }});
+
+          // SPLINE
+          // ----------------------------------- 
+          vm.splineData = ChartData.load('server/chart/spline.json');
+          vm.splineOptions = {
+              series: {
+                  lines: {
+                      show: false
+                  },
+                  points: {
+                      show: true,
+                      radius: 4
+                  },
+                  splines: {
+                      show: true,
+                      tension: 0.4,
+                      lineWidth: 1,
+                      fill: 0.5
+                  }
+              },
+              grid: {
+                  borderColor: '#eee',
+                  borderWidth: 1,
+                  hoverable: true,
+                  backgroundColor: '#fcfcfc'
+              },
+              tooltip: true,
+              tooltipOpts: {
+                  content: function (label, x, y) { return x + ' : ' + y; }
+              },
+              xaxis: {
+                  tickColor: '#fcfcfc',
+                  mode: 'categories'
+              },
+              yaxis: {
+                  min: 0,
+                  max: 150, // optional: use it for a clear represetation
+                  tickColor: '#eee',
+                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
+                  tickFormatter: function (v) {
+                      return v/* + ' visitors'*/;
+                  }
+              },
+              shadowSize: 0
+          };
+
+
+          // PANEL REFRESH EVENTS
+          // ----------------------------------- 
+
+          $scope.$on('panel-refresh', function(event, id) {
+            
+            console.log('Simulating chart refresh during 3s on #'+id);
+
+            // Instead of timeout you can request a chart data
+            $timeout(function(){
+              
+              // directive listen for to remove the spinner 
+              // after we end up to perform own operations
+              $scope.$broadcast('removeSpinner', id);
+              
+              console.log('Refreshed #' + id);
+
+            }, 3000);
+
+          });
+
+
+          // PANEL DISMISS EVENTS
+          // ----------------------------------- 
+
+          // Before remove panel
+          $scope.$on('panel-remove', function(event, id, deferred){
+            
+            console.log('Panel #' + id + ' removing');
+            
+            // Here is obligatory to call the resolve() if we pretend to remove the panel finally
+            // Not calling resolve() will NOT remove the panel
+            // It's up to your app to decide if panel should be removed or not
+            deferred.resolve();
+          
+          });
+
+          // Panel removed ( only if above was resolved() )
+          $scope.$on('panel-removed', function(event, id){
+
+            console.log('Panel #' + id + ' removed');
+
+          });
+
+        }
+        
+        $scope.$on('User.logined', activate);
+        
+    }
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .filter('moment_unix', momentUnixFilter)
+        .filter('moment_from_now', momentFromNowFilter)
+        .filter('moment_unix_from_now', momentUnixFromNowFilter)
+    ;
+
+    function momentUnixFilter(input, format) {
+      return moment.unix(input).format(format || 'YYYY-MM-DD HH:mm:ss');
+    }
+    momentUnixFilter.$inject = ["input", "format"];
+    
+    function momentFromNowFilter() {
+      return function (input) {
+        return moment(input).fromNow();
+      };
+    }
+
+    function momentUnixFromNowFilter(input) {
+      return moment.unix(input).fromNow();
+    }
+    momentUnixFromNowFilter.$inject = ["input"];
+
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .controller('DashboardV2Controller', DashboardV2Controller);
+
+    DashboardV2Controller.$inject = ['$rootScope', '$scope', '$state'];
+    function DashboardV2Controller($rootScope, $scope, $state) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          
+          // Change layout mode
+          if( $state.includes('app-h') ) {
+            // Setup layout horizontal for demo
+            $rootScope.app.layout.horizontal = true;
+            $scope.$on('$destroy', function(){
+                $rootScope.app.layout.horizontal = false;
+            });            
+          }
+          else {
+            $rootScope.app.layout.isCollapsed = true;
+          }
+
+          // BAR STACKED
+          // ----------------------------------- 
+          vm.barStackedOptions = {
+              series: {
+                  stack: true,
+                  bars: {
+                      align: 'center',
+                      lineWidth: 0,
+                      show: true,
+                      barWidth: 0.6,
+                      fill: 0.9
+                  }
+              },
+              grid: {
+                  borderColor: '#eee',
+                  borderWidth: 1,
+                  hoverable: true,
+                  backgroundColor: '#fcfcfc'
+              },
+              tooltip: true,
+              tooltipOpts: {
+                  content: function (label, x, y) { return x + ' : ' + y; }
+              },
+              xaxis: {
+                  tickColor: '#fcfcfc',
+                  mode: 'categories'
+              },
+              yaxis: {
+                  min: 0,
+                  max: 200, // optional: use it for a clear represetation
+                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
+                  tickColor: '#eee'
+              },
+              shadowSize: 0
+          };
+
+          // SPLINE
+          // ----------------------------------- 
+
+          vm.splineOptions = {
+              series: {
+                  lines: {
+                      show: false
+                  },
+                  points: {
+                      show: true,
+                      radius: 4
+                  },
+                  splines: {
+                      show: true,
+                      tension: 0.4,
+                      lineWidth: 1,
+                      fill: 0.5
+                  }
+              },
+              grid: {
+                  borderColor: '#eee',
+                  borderWidth: 1,
+                  hoverable: true,
+                  backgroundColor: '#fcfcfc'
+              },
+              tooltip: true,
+              tooltipOpts: {
+                  content: function (label, x, y) { return x + ' : ' + y; }
+              },
+              xaxis: {
+                  tickColor: '#fcfcfc',
+                  mode: 'categories'
+              },
+              yaxis: {
+                  min: 0,
+                  max: 150, // optional: use it for a clear represetation
+                  tickColor: '#eee',
+                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
+                  tickFormatter: function (v) {
+                      return v/* + ' visitors'*/;
+                  }
+              },
+              shadowSize: 0
+          };
+        }
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.dashboard')
+        .controller('DashboardV3Controller', DashboardV3Controller);
+
+    DashboardV3Controller.$inject = ['$rootScope'];
+    function DashboardV3Controller($rootScope) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+          // SPLINE
+          // ----------------------------------- 
+
+          vm.splineOptions = {
+              series: {
+                  lines: {
+                      show: false
+                  },
+                  points: {
+                      show: true,
+                      radius: 4
+                  },
+                  splines: {
+                      show: true,
+                      tension: 0.4,
+                      lineWidth: 1,
+                      fill: 0.5
+                  }
+              },
+              grid: {
+                  borderColor: '#eee',
+                  borderWidth: 1,
+                  hoverable: true,
+                  backgroundColor: '#fcfcfc'
+              },
+              tooltip: true,
+              tooltipOpts: {
+                  content: function (label, x, y) { return x + ' : ' + y; }
+              },
+              xaxis: {
+                  tickColor: '#fcfcfc',
+                  mode: 'categories'
+              },
+              yaxis: {
+                  min: 0,
+                  max: 150, // optional: use it for a clear represetation
+                  tickColor: '#eee',
+                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
+                  tickFormatter: function (v) {
+                      return v/* + ' visitors'*/;
+                  }
+              },
+              shadowSize: 0
+          };
+
+
+          vm.seriesData = {
+            'CA': 11100,   // Canada
+            'DE': 2510,    // Germany
+            'FR': 3710,    // France
+            'AU': 5710,    // Australia
+            'GB': 8310,    // Great Britain
+            'RU': 9310,    // Russia
+            'BR': 6610,    // Brazil
+            'IN': 7810,    // India
+            'CN': 4310,    // China
+            'US': 839,     // USA
+            'SA': 410      // Saudi Arabia
+          };
+          
+          vm.markersData = [
+            { latLng:[41.90, 12.45],  name:'Vatican City'          },
+            { latLng:[43.73, 7.41],   name:'Monaco'                },
+            { latLng:[-0.52, 166.93], name:'Nauru'                 },
+            { latLng:[-8.51, 179.21], name:'Tuvalu'                },
+            { latLng:[7.11,171.06],   name:'Marshall Islands'      },
+            { latLng:[17.3,-62.73],   name:'Saint Kitts and Nevis' },
+            { latLng:[3.2,73.22],     name:'Maldives'              },
+            { latLng:[35.88,14.5],    name:'Malta'                 },
+            { latLng:[41.0,-71.06],   name:'New England'           },
+            { latLng:[12.05,-61.75],  name:'Grenada'               },
+            { latLng:[13.16,-59.55],  name:'Barbados'              },
+            { latLng:[17.11,-61.85],  name:'Antigua and Barbuda'   },
+            { latLng:[-4.61,55.45],   name:'Seychelles'            },
+            { latLng:[7.35,134.46],   name:'Palau'                 },
+            { latLng:[42.5,1.51],     name:'Andorra'               }
+          ];
+        }
+    }
+})();
 /**=========================================================
  * Module: article.js
  =========================================================*/
@@ -4595,55 +4607,6 @@
           ];
         }
     }
-})();
-
-/**=========================================================
- * Module: flatdoc.js
- * Creates the flatdoc markup and initializes the plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.flatdoc')
-        .directive('flatdoc', flatdoc);
-
-    function flatdoc () {
-
-        var directive = {
-            template: '<div role="flatdoc"><div role="flatdoc-menu"></div><div role="flatdoc-content"></div></div>',
-            link: link,
-            restrict: 'EA'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          Flatdoc.run({
-            fetcher: Flatdoc.file(attrs.src)
-          });
-          
-          var $root = $('html, body');
-          $(document).on('flatdoc:ready', function() {
-            var docMenu = $('[role="flatdoc-menu"]');
-            docMenu.find('a').on('click', function(e) {
-              e.preventDefault(); e.stopPropagation();
-              
-              var $this = $(this);
-              
-              docMenu.find('a.active').removeClass('active');
-              $this.addClass('active');
-
-              $root.animate({
-                    scrollTop: $(this.getAttribute('href')).offset().top - ($('.topnavbar').height() + 10)
-                }, 800);
-            });
-
-          });
-        }
-    }
-
-
 })();
 
 (function() {
@@ -5639,6 +5602,55 @@
 })();
 
 /**=========================================================
+ * Module: flatdoc.js
+ * Creates the flatdoc markup and initializes the plugin
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.flatdoc')
+        .directive('flatdoc', flatdoc);
+
+    function flatdoc () {
+
+        var directive = {
+            template: '<div role="flatdoc"><div role="flatdoc-menu"></div><div role="flatdoc-content"></div></div>',
+            link: link,
+            restrict: 'EA'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+          Flatdoc.run({
+            fetcher: Flatdoc.file(attrs.src)
+          });
+          
+          var $root = $('html, body');
+          $(document).on('flatdoc:ready', function() {
+            var docMenu = $('[role="flatdoc-menu"]');
+            docMenu.find('a').on('click', function(e) {
+              e.preventDefault(); e.stopPropagation();
+              
+              var $this = $(this);
+              
+              docMenu.find('a.active').removeClass('active');
+              $this.addClass('active');
+
+              $root.animate({
+                    scrollTop: $(this.getAttribute('href')).offset().top - ($('.topnavbar').height() + 10)
+                }, 800);
+            });
+
+          });
+        }
+    }
+
+
+})();
+
+/**=========================================================
  * Module: skycons.js
  * Include any animated weather icon from Skycons
  =========================================================*/
@@ -6284,312 +6296,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-      .module('app.members')
-      .controller('MembersController', MembersController)
-      .controller('MemberController', MemberController)
-      .controller('rechargeDialogController', rechargeDialogController)
-      .controller('bonusDialogController', bonusDialogController)
-    ;
-      
-    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService', 'dealService'];
-    function MembersController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, qrcodeService, dealService) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
-        $scope.qrcodeService = qrcodeService;
-        vm.keyword = "";
-        vm.tableParams = new ngTableParams({count: 10}, {
-          getData: function($defer, params) {
-            var filter = {where:{status:{ne:'deleted'}}, include:['wxuser']}
-            if(vm.keyword != '') {
-              var qs = {regex: keyword};
-              filter.where.or = [{"entities.sku.item.name":qs}];
-              params.page(1);
-            }
-            ngTableLBService.getData($defer, params, Member, filter);
-          }
-        });
-      }
-      
-      vm.sell = function (member) {
-        dealService.openDeal(member);
-        $scope.$state.go('app.sell');
-      }
-    }
-    
-    MemberController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'dealService', 'ngDialog'];
-    function MemberController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, dealService, ngDialog) {
-      var vm = this;
-      var memberId = $scope.$state.params.memberId;
-            
-      vm.dealTableParams = new ngTableParams({
-        count: 10
-      }, {
-        getData: function($defer, params) {
-          var opt = {where:{status:{ne:'deleted'}}}
-          opt.limit = params.count()
-          opt.skip = (params.page()-1)*opt.limit
-          Member.deals.count({id: memberId, where: opt.where}, function (result) {
-            vm.dealTableParams.total(result.count);
-          });
-          Member.deals({id: memberId, filter:opt}, $defer.resolve);
-        }
-      });     
-      
-      vm.depositTableParams = new ngTableParams({
-        count: 10
-      }, {
-        getData: function($defer, params) {
-          var opt = {
-            where:{status:{ne:'deleted'}, or:[{type: 'deposit'}, {category: 'deposit'}]},
-            include: ['shop']
-          }
-          opt.limit = params.count()
-          opt.skip = (params.page()-1)*opt.limit
-          Member.payments.count({id: memberId, where: opt.where}, function (result) {
-            vm.depositTableParams.total(result.count);
-          });
-          Member.payments({id: memberId, filter:opt}, $defer.resolve);
-        }
-      });
-
-      vm.bonusTableParams = new ngTableParams({
-        count: 10
-      }, {
-        getData: function($defer, params) {
-          var opt = {
-            where:{status:{ne:'deleted'}},
-            include: []
-          }
-          opt.limit = params.count()
-          opt.skip = (params.page()-1)*opt.limit
-          Member.bonuses.count({id: memberId, where: opt.where}, function (result) {
-            vm.bonusTableParams.total(result.count);
-          });
-          Member.bonuses({id: memberId, filter:opt}, $defer.resolve);
-        }
-      });
-
-      activate();
-      
-      function activate() {
-        
-        memberId = $scope.$state.params.memberId;
-
-        vm.member = Member.findOne({filter: {
-          where: {id: memberId}, 
-          include:['wxuser']
-        }});
-        
-        vm.dealTableParams.reload();
-        vm.depositTableParams.reload();
-        vm.bonusTableParams.reload();
-      }
-
-      vm.sell = function () {
-        dealService.openDeal(vm.member);
-        $scope.$state.go('app.sell');
-      }
-      
-      vm.recharge = function () {
-        ngDialog.open({ 
-          template: 'rechargeDialogId', 
-          controller: 'rechargeDialogController'
-        }).closePromise.then(function (data) {
-          activate();
-        });
-      }
-      
-      vm.setBonus = function () {
-        ngDialog.open({ 
-          template: 'bonusDialogId', 
-          controller: 'bonusDialogController'
-        }).closePromise.then(function (data) {
-          activate();
-        });
-      }
-    }
-    
-    rechargeDialogController.$inject = ['$scope', 'ngDialog', 'Member', 'toaster', 'dealService'];
-    function rechargeDialogController($scope, ngDialog, Member, toaster, dealService) {
-
-        activate();
-
-        ////////////////
-
-        var memberId = $scope.$state.params.memberId;
-        function activate() {
-          memberId = $scope.$state.params.memberId;
-          $scope.member = Member.findById({id:memberId});
-          $scope.data = {
-            type: 'cash', 
-            amount: 0,
-            category: 'deposit'
-          };
-          $scope.payType = dealService.payType;
-          $scope.cash = {
-            paid: 0,
-            change: 0,
-          }
-        }
-        
-        $scope.onChangePayType = function () {
-          if(data.type === 'cash') {
-            $scope.data.cost = $scope.data.amount%$scope.user.merchant.changeRate;
-            $scope.data.amount -= $scope.data.cost;
-            $scope.countChange();
-          } else {
-            $scope.data.cost = 0;
-          }
-        }
-        
-        $scope.countChange = function () {
-          $scope.cash.paid =  $scope.cash.paid;
-          $scope.cash.change = $scope.data.amount - $scope.cash.paid;
-        }
-        
-        $scope.confirm = function () {
-          if($scope.data.amount === 0) {
-            return;
-          }
-          Member.payments.create({id: memberId}, $scope.data).$promise.then(function (result) {
-            $scope.submiting = false;
-            ngDialog.close();
-            toaster.pop('success', '成功', "完成储值操作");
-          }, function (err) {
-            $scope.submiting = false;
-            toaster.pop('error', '失败', "储值操作未完成，请重试！")
-          });
-          $scope.submiting = true;
-        }
-        
-    }
-    
-    bonusDialogController.$inject = ['$scope', 'ngDialog', 'Member', 'toaster'];
-    function bonusDialogController($scope, ngDialog, Member, toaster) {
-
-        activate();
-
-        ////////////////
-
-        var memberId = $scope.$state.params.memberId;
-        function activate() {
-          memberId = $scope.$state.params.memberId;
-          $scope.member = Member.findById({id:memberId});
-          $scope.data = {
-            amount: 0,
-            memo: 'manual'
-          };
-        }
-        
-        $scope.confirm = function () {
-          if($scope.data.amount === 0) {
-            return;
-          } else if($scope.data.amount > 0) {
-            $scope.data.memo = 'manual';
-          } else if($scope.data.amount < 0) {
-            $scope.data.memo = 'writeoff';
-          }
-          Member.bonuses.create({id: memberId}, $scope.data).$promise.then(function (result) {
-            $scope.submiting = false;
-            ngDialog.close();
-            toaster.pop('success', '成功', "完成储值操作");
-          }, function (err) {
-            $scope.submiting = false;
-            toaster.pop('error', '失败', "储值操作未完成，请重试！")
-          });
-          $scope.submiting = true;
-        }
-    }
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.members')
-        .filter('wx_sex', wxsexFilter)
-        .filter('wx_subscribe', wxsubscribeFilter)
-        .filter('deposit_category', depositcategoryFilter)
-        .filter('bonus_memo', bonusMemoFilter)
-    ;
-
-    function wxsexFilter() {
-        var type = ['保密', '男', '女'];
-        return function(key) {
-          return type[key];
-        }
-    }
-    
-    function wxsubscribeFilter() {
-      var state = ['未关注', '已关注'];
-      return function (key) {
-        return state[key];
-      }
-    }
-    
-    function depositcategoryFilter() {
-      return function (deposit) {
-        if(deposit.type === 'deposit') {
-          return deposit.amount < 0 ? '储值消费':'储值退款';
-        } else if(deposit.category === 'deposit') {
-          return deposit.amount < 0 ? '提现':'充值';
-        } else {
-          return '未知';
-        }
-      }
-    }
-
-    function bonusMemoFilter() {
-      var memo = {
-        reward: '消费积分',
-        vouch: '消费抵扣',
-        manual: '手动积分',
-        writeoff: '手动减计',
-        exchange: '兑换'
-      }
-      return function (key) {
-        return memo[key];
-      }
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.members')
-        .service('qrcodeService', qrcodeService);
-
-    qrcodeService.$inject = ['ngDialog'];
-    function qrcodeService(ngDialog) {
-      var self = this;
-      
-      this.showQRCode = showQRCode;
-      
-      function showQRCode(imageurl) {
-        imageurl = imageurl || 'app/img/qrcode-for-gh.jpg';
-        ngDialog.open({
-          template: "<img src="+imageurl+" class='img-responsive'>",
-          plain: true,
-          className: 'ngdialog-theme-default'
-        });    
-      }
-    }
-
-})();
-
 /**=========================================================
  * Module: modals.js
  * Provides a simple way to implement bootstrap modals from templates
@@ -6923,6 +6629,421 @@
             { latLng:[42.5,1.51],     name:'Andorra'               }
           ];
         }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+      .module('app.members')
+      .controller('MembersController', MembersController)
+      .controller('MemberController', MemberController)
+      .controller('rechargeDialogController', rechargeDialogController)
+      .controller('bonusDialogController', bonusDialogController)
+    ;
+      
+    MembersController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'qrcodeService', 'dealService'];
+    function MembersController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, qrcodeService, dealService) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        $scope.qrcodeService = qrcodeService;
+        vm.keyword = "";
+        vm.tableParams = new ngTableParams({count: 10}, {
+          getData: function($defer, params) {
+            var filter = {where:{status:{ne:'deleted'}}, include:['wxuser']}
+            if(vm.keyword != '') {
+              var qs = {regex: keyword};
+              filter.where.or = [{"entities.sku.item.name":qs}];
+              params.page(1);
+            }
+            ngTableLBService.getData($defer, params, Member, filter);
+          }
+        });
+      }
+      
+      vm.sell = function (member) {
+        dealService.openDeal(member);
+        $scope.$state.go('app.sell');
+      }
+    }
+    
+    MemberController.$inject = ['$scope', 'Member', 'ngTableParams', 'ngTableLBService', 'SweetAlert', 'dealService', 'ngDialog'];
+    function MemberController($scope, Member, ngTableParams, ngTableLBService, SweetAlert, dealService, ngDialog) {
+      var vm = this;
+      var memberId = $scope.$state.params.memberId;
+            
+      vm.dealTableParams = new ngTableParams({
+        count: 10
+      }, {
+        getData: function($defer, params) {
+          var opt = {where:{status:{ne:'deleted'}}}
+          opt.limit = params.count()
+          opt.skip = (params.page()-1)*opt.limit
+          Member.deals.count({id: memberId, where: opt.where}, function (result) {
+            vm.dealTableParams.total(result.count);
+          });
+          Member.deals({id: memberId, filter:opt}, $defer.resolve);
+        }
+      });     
+      
+      vm.depositTableParams = new ngTableParams({
+        count: 10
+      }, {
+        getData: function($defer, params) {
+          var opt = {
+            where:{status:{ne:'deleted'}, or:[{type: 'deposit'}, {category: 'deposit'}]},
+            include: ['shop']
+          }
+          opt.limit = params.count()
+          opt.skip = (params.page()-1)*opt.limit
+          Member.payments.count({id: memberId, where: opt.where}, function (result) {
+            vm.depositTableParams.total(result.count);
+          });
+          Member.payments({id: memberId, filter:opt}, $defer.resolve);
+        }
+      });
+
+      vm.bonusTableParams = new ngTableParams({
+        count: 10
+      }, {
+        getData: function($defer, params) {
+          var opt = {
+            where:{status:{ne:'deleted'}},
+            include: []
+          }
+          opt.limit = params.count()
+          opt.skip = (params.page()-1)*opt.limit
+          Member.bonuses.count({id: memberId, where: opt.where}, function (result) {
+            vm.bonusTableParams.total(result.count);
+          });
+          Member.bonuses({id: memberId, filter:opt}, $defer.resolve);
+        }
+      });
+
+      activate();
+      
+      function activate() {
+        
+        memberId = $scope.$state.params.memberId;
+
+        vm.member = Member.findOne({filter: {
+          where: {id: memberId}, 
+          include:['wxuser']
+        }});
+        
+        vm.dealTableParams.reload();
+        vm.depositTableParams.reload();
+        vm.bonusTableParams.reload();
+      }
+
+      vm.sell = function () {
+        dealService.openDeal(vm.member);
+        $scope.$state.go('app.sell');
+      }
+      
+      vm.recharge = function () {
+        ngDialog.open({ 
+          template: 'rechargeDialogId', 
+          controller: 'rechargeDialogController'
+        }).closePromise.then(function (data) {
+          activate();
+        });
+      }
+      
+      vm.setBonus = function () {
+        ngDialog.open({ 
+          template: 'bonusDialogId', 
+          controller: 'bonusDialogController'
+        }).closePromise.then(function (data) {
+          activate();
+        });
+      }
+    }
+    
+    rechargeDialogController.$inject = ['$scope', 'ngDialog', 'Member', 'toaster', 'dealService'];
+    function rechargeDialogController($scope, ngDialog, Member, toaster, dealService) {
+
+        activate();
+
+        ////////////////
+
+        var memberId = $scope.$state.params.memberId;
+        function activate() {
+          memberId = $scope.$state.params.memberId;
+          $scope.member = Member.findById({id:memberId});
+          $scope.data = {
+            type: 'cash', 
+            amount: 0,
+            category: 'deposit'
+          };
+          $scope.payType = dealService.payType;
+          $scope.cash = {
+            paid: 0,
+            change: 0,
+          }
+        }
+        
+        $scope.onChangePayType = function () {
+          if(data.type === 'cash') {
+            $scope.data.cost = $scope.data.amount%$scope.user.merchant.changeRate;
+            $scope.data.amount -= $scope.data.cost;
+            $scope.countChange();
+          } else {
+            $scope.data.cost = 0;
+          }
+        }
+        
+        $scope.countChange = function () {
+          $scope.cash.paid =  $scope.cash.paid;
+          $scope.cash.change = $scope.data.amount - $scope.cash.paid;
+        }
+        
+        $scope.confirm = function () {
+          if($scope.data.amount === 0) {
+            return;
+          }
+          Member.payments.create({id: memberId}, $scope.data).$promise.then(function (result) {
+            $scope.submiting = false;
+            ngDialog.close();
+            toaster.pop('success', '成功', "完成储值操作");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "储值操作未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+        
+    }
+    
+    bonusDialogController.$inject = ['$scope', 'ngDialog', 'Member', 'toaster'];
+    function bonusDialogController($scope, ngDialog, Member, toaster) {
+
+        activate();
+
+        ////////////////
+
+        var memberId = $scope.$state.params.memberId;
+        function activate() {
+          memberId = $scope.$state.params.memberId;
+          $scope.member = Member.findById({id:memberId});
+          $scope.data = {
+            amount: 0,
+            memo: 'manual'
+          };
+        }
+        
+        $scope.confirm = function () {
+          if($scope.data.amount === 0) {
+            return;
+          } else if($scope.data.amount > 0) {
+            $scope.data.memo = 'manual';
+          } else if($scope.data.amount < 0) {
+            $scope.data.memo = 'writeoff';
+          }
+          Member.bonuses.create({id: memberId}, $scope.data).$promise.then(function (result) {
+            $scope.submiting = false;
+            ngDialog.close();
+            toaster.pop('success', '成功', "完成储值操作");
+          }, function (err) {
+            $scope.submiting = false;
+            toaster.pop('error', '失败', "储值操作未完成，请重试！")
+          });
+          $scope.submiting = true;
+        }
+    }
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.members')
+        .filter('wx_sex', wxsexFilter)
+        .filter('wx_subscribe', wxsubscribeFilter)
+        .filter('deposit_category', depositcategoryFilter)
+        .filter('bonus_memo', bonusMemoFilter)
+    ;
+
+    function wxsexFilter() {
+        var type = ['保密', '男', '女'];
+        return function(key) {
+          return type[key];
+        }
+    }
+    
+    function wxsubscribeFilter() {
+      var state = ['未关注', '已关注'];
+      return function (key) {
+        return state[key];
+      }
+    }
+    
+    function depositcategoryFilter() {
+      return function (deposit) {
+        if(deposit.type === 'deposit') {
+          return deposit.amount < 0 ? '储值消费':'储值退款';
+        } else if(deposit.category === 'deposit') {
+          return deposit.amount < 0 ? '提现':'充值';
+        } else {
+          return '未知';
+        }
+      }
+    }
+
+    function bonusMemoFilter() {
+      var memo = {
+        reward: '消费积分',
+        vouch: '消费抵扣',
+        manual: '手动积分',
+        writeoff: '手动减计',
+        exchange: '兑换'
+      }
+      return function (key) {
+        return memo[key];
+      }
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.members')
+        .service('qrcodeService', qrcodeService);
+
+    qrcodeService.$inject = ['ngDialog'];
+    function qrcodeService(ngDialog) {
+      var self = this;
+      
+      this.showQRCode = showQRCode;
+      
+      function showQRCode(imageurl) {
+        imageurl = imageurl || 'app/img/qrcode-for-gh.jpg';
+        ngDialog.open({
+          template: "<img src="+imageurl+" class='img-responsive'>",
+          plain: true,
+          className: 'ngdialog-theme-default'
+        });    
+      }
+    }
+
+})();
+
+/**=========================================================
+ * Module: navbar-search.js
+ * Navbar search toggler * Auto dismiss on ESC key
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .directive('searchOpen', searchOpen)
+        .directive('searchDismiss', searchDismiss);
+
+    //
+    // directives definition
+    // 
+    
+    function searchOpen () {
+        var directive = {
+            controller: searchOpenController,
+            restrict: 'A'
+        };
+        return directive;
+
+    }
+
+    function searchDismiss () {
+        var directive = {
+            controller: searchDismissController,
+            restrict: 'A'
+        };
+        return directive;
+        
+    }
+
+    //
+    // Contrller definition
+    // 
+    
+    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchOpenController ($scope, $element, NavSearch) {
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.toggle);
+    }
+
+    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchDismissController ($scope, $element, NavSearch) {
+      
+      var inputSelector = '.navbar-form input[type="text"]';
+
+      $(inputSelector)
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('keyup', function(e) {
+          if (e.keyCode === 27) // ESC
+            NavSearch.dismiss();
+        });
+        
+      // click anywhere closes the search
+      $(document).on('click', NavSearch.dismiss);
+      // dismissable options
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.dismiss);
+    }
+
+})();
+
+
+/**=========================================================
+ * Module: nav-search.js
+ * Services to share navbar search functions
+ =========================================================*/
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .service('NavSearch', NavSearch);
+
+    function NavSearch() {
+        this.toggle = toggle;
+        this.dismiss = dismiss;
+
+        ////////////////
+
+        var navbarFormSelector = 'form.navbar-form';
+
+        function toggle() {
+          var navbarForm = $(navbarFormSelector);
+
+          navbarForm.toggleClass('open');
+          
+          var isOpen = navbarForm.hasClass('open');
+          
+          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
+        }
+
+        function dismiss() {
+          $(navbarFormSelector)
+            .removeClass('open') // Close control
+            .find('input[type="text"]').blur() // remove focus
+            .val('') // Empty input
+            ;
+        }        
     }
 })();
 
@@ -7294,115 +7415,6 @@
     
     return notify;
 }(jQuery));
-
-/**=========================================================
- * Module: navbar-search.js
- * Navbar search toggler * Auto dismiss on ESC key
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .directive('searchOpen', searchOpen)
-        .directive('searchDismiss', searchDismiss);
-
-    //
-    // directives definition
-    // 
-    
-    function searchOpen () {
-        var directive = {
-            controller: searchOpenController,
-            restrict: 'A'
-        };
-        return directive;
-
-    }
-
-    function searchDismiss () {
-        var directive = {
-            controller: searchDismissController,
-            restrict: 'A'
-        };
-        return directive;
-        
-    }
-
-    //
-    // Contrller definition
-    // 
-    
-    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchOpenController ($scope, $element, NavSearch) {
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.toggle);
-    }
-
-    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchDismissController ($scope, $element, NavSearch) {
-      
-      var inputSelector = '.navbar-form input[type="text"]';
-
-      $(inputSelector)
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('keyup', function(e) {
-          if (e.keyCode === 27) // ESC
-            NavSearch.dismiss();
-        });
-        
-      // click anywhere closes the search
-      $(document).on('click', NavSearch.dismiss);
-      // dismissable options
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.dismiss);
-    }
-
-})();
-
-
-/**=========================================================
- * Module: nav-search.js
- * Services to share navbar search functions
- =========================================================*/
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .service('NavSearch', NavSearch);
-
-    function NavSearch() {
-        this.toggle = toggle;
-        this.dismiss = dismiss;
-
-        ////////////////
-
-        var navbarFormSelector = 'form.navbar-form';
-
-        function toggle() {
-          var navbarForm = $(navbarFormSelector);
-
-          navbarForm.toggleClass('open');
-          
-          var isOpen = navbarForm.hasClass('open');
-          
-          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
-        }
-
-        function dismiss() {
-          $(navbarFormSelector)
-            .removeClass('open') // Close control
-            .find('input[type="text"]').blur() // remove focus
-            .val('') // Empty input
-            ;
-        }        
-    }
-})();
 
 /**=========================================================
  * Module: access-login.js
@@ -8207,6 +8219,7 @@
               url: '/dashboard',
               title: 'Dashboard',
               templateUrl: helper.basepath('dashboard.html'),
+              controller: 'DashboardController as dash',
               resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons')
           })
           .state('app.sell', {
@@ -8826,203 +8839,6 @@
 })();
 
 
-(function () {
-  'use strict';
-
-  angular
-      .module('app.settings')
-      .controller('SettingController', SettingController)
-  
-  SettingController.$inject = ['$scope', '$rootScope', 'Merchant', 'Shop', 'Member', 'toaster'];
-  function SettingController($scope, $rootScope, Merchant, Shop, Member, toaster) {
-    var vm = this;
-    vm.industry = {
-      "IT科技": {
-        "互联网/电子商务": "1",
-        "IT软件与服务": "2",
-        "IT硬件与设备": "3",
-        "电子技术": "4",
-        "通信与运营商": "5",
-        "网络游戏": "6"
-      },
-      "金融业": {
-        "银行": "7",
-        "基金|理财|信托": "8",
-        "保险": "9"
-      },
-      "餐饮": {
-        "餐饮": "10"
-      },
-      "酒店旅游": {
-        "酒店": "11",
-        "旅游": "12"
-      },
-      "运输与仓储": {
-        "快递": "13",
-        "物流": "14",
-        "仓储": "15"
-      },
-      "教育": {
-        "培训": "16",
-        "院校": "17"
-      },
-      "政府与公共事业": {
-        "学术科研": "18",
-        "交警": "19",
-        "博物馆": "20",
-        "公共事业|非盈利机构": "21"
-      },
-      "医药护理": {
-        "医药医疗": "22",
-        "护理美容": "23",
-        "保健与卫生": "24"
-      },
-      "交通工具": {
-        "汽车相关": "25",
-        "摩托车相关": "26",
-        "火车相关": "27",
-        "飞机相关": "28"
-      },
-      "房地产": {
-        "建筑": "29",
-        "物业": "30"
-      },
-      "消费品": {
-        "消费品": "31"
-      },
-      "商业服务": {
-        "法律": "32",
-        "会展": "33",
-        "中介服务": "34",
-        "认证": "35",
-        "审计": "36"
-      },
-      "文体娱乐": {
-        "传媒": "37",
-        "体育": "38",
-        "娱乐休闲": "39"
-      },
-      "印刷": {
-        "印刷": "40"
-      },
-      "其它": {
-        "其它": "41"
-      }
-    };
-
-    activete();
-
-    function activete() {
-      vm.wxgh = Merchant.prototype$__get__wxgh({id: $scope.user.merchantId, refresh: true});
-    }
-
-    vm.update = function (isShop) {
-      var model = Merchant;
-      var data = $scope.user.merchant;
-      if(isShop) {
-        data = $scope.user.shop;
-        model = Shop;
-      }
-      model.update({where: {id: data.id}}, data, function success(result, res) {
-        toaster.pop('success', '成功', "设置已经保存");
-      }, function error(res) {
-        toaster.pop('error', '失败', "设置未成功，请重试！")
-      });
-    }
-    
-    vm.addMemberLevel = function () {
-      var levels = $scope.user.merchant.memberLevels || [];
-      var last = levels.length > 0 && levels[levels.length-1] || {upper: -1};
-      levels.push({lower: last.upper+1, upper: last.upper+1000, discount:100, name: 'VIP'});
-      if(!$scope.user.merchant.memberLevels) $scope.user.merchant.memberLevels = levels;
-    }
-    
-    vm.updaeteMemberLevels = function () {
-      $scope.user.merchant.memberLevels.forEach(function (level) {
-        Member.update({
-          where: {merchantId:$scope.user.merchant.id, totalBonus: {gte: level.lower, lte: level.upper}}
-        }, {
-          discount: level.discount, level: level.name
-        }, function sucess(result, res) {
-          toaster.pop('success', '成功', "更新全体会员等级完成");
-        }, function error(res) {
-          toaster.pop('error', '失败', "更新全体会员等级未成功，请重试！")
-        });
-      });
-    }
-            
-    vm.updateWxgh = function () {
-      vm.update();
-      Merchant.updateWxgh({
-        id: vm.wxgh.id,
-        appid: vm.wxgh.appid,
-        appsecret: vm.wxgh.appsecret,
-        industry: $scope.user.merchant.industry
-      }, function (result) {
-        toaster.pop('success', '成功', "微信公众号设置已经保存");
-      }, function (reason) {
-        toaster.pop('error', '失败', "设置未成功，请重试！")
-      });
-    } 
-  }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.settings')
-        .run(settingsRun);
-
-    settingsRun.$inject = ['$rootScope', '$localStorage'];
-
-    function settingsRun($rootScope, $localStorage){
-
-      // Global Settings
-      // ----------------------------------- 
-      $rootScope.app = {
-        name: '泛卡汇WebPOS',
-        description: '在线收银系统',
-        year: ((new Date()).getFullYear()),
-        layout: {
-          isFixed: true,
-          isCollapsed: false,
-          isBoxed: false,
-          isRTL: false,
-          horizontal: false,
-          isFloat: false,
-          asideHover: false,
-          theme: "app/css/theme-e.css"
-        },
-        useFullLayout: false,
-        hiddenFooter: false,
-        offsidebarOpen: false,
-        asideToggled: false,
-        viewAnimation: 'ng-fadeInUp'
-      };
-
-      // Setup the layout mode
-      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
-
-      // Restore layout settings
-      if( angular.isDefined($localStorage.layout) )
-        $rootScope.app.layout = $localStorage.layout;
-      else
-        $localStorage.layout = $rootScope.app.layout;
-
-      $rootScope.$watch('app.layout', function () {
-        $localStorage.layout = $rootScope.app.layout;
-      }, true);
-
-      // Close submenu when sidebar change from collapsed to normal
-      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
-        if( newValue === false )
-          $rootScope.$broadcast('closeSidebarMenu');
-      });
-
-    }
-
-})();
-
 (function() {
     'use strict';
 
@@ -9421,6 +9237,203 @@
       }
     }
 })();
+(function () {
+  'use strict';
+
+  angular
+      .module('app.settings')
+      .controller('SettingController', SettingController)
+  
+  SettingController.$inject = ['$scope', '$rootScope', 'Merchant', 'Shop', 'Member', 'toaster'];
+  function SettingController($scope, $rootScope, Merchant, Shop, Member, toaster) {
+    var vm = this;
+    vm.industry = {
+      "IT科技": {
+        "互联网/电子商务": "1",
+        "IT软件与服务": "2",
+        "IT硬件与设备": "3",
+        "电子技术": "4",
+        "通信与运营商": "5",
+        "网络游戏": "6"
+      },
+      "金融业": {
+        "银行": "7",
+        "基金|理财|信托": "8",
+        "保险": "9"
+      },
+      "餐饮": {
+        "餐饮": "10"
+      },
+      "酒店旅游": {
+        "酒店": "11",
+        "旅游": "12"
+      },
+      "运输与仓储": {
+        "快递": "13",
+        "物流": "14",
+        "仓储": "15"
+      },
+      "教育": {
+        "培训": "16",
+        "院校": "17"
+      },
+      "政府与公共事业": {
+        "学术科研": "18",
+        "交警": "19",
+        "博物馆": "20",
+        "公共事业|非盈利机构": "21"
+      },
+      "医药护理": {
+        "医药医疗": "22",
+        "护理美容": "23",
+        "保健与卫生": "24"
+      },
+      "交通工具": {
+        "汽车相关": "25",
+        "摩托车相关": "26",
+        "火车相关": "27",
+        "飞机相关": "28"
+      },
+      "房地产": {
+        "建筑": "29",
+        "物业": "30"
+      },
+      "消费品": {
+        "消费品": "31"
+      },
+      "商业服务": {
+        "法律": "32",
+        "会展": "33",
+        "中介服务": "34",
+        "认证": "35",
+        "审计": "36"
+      },
+      "文体娱乐": {
+        "传媒": "37",
+        "体育": "38",
+        "娱乐休闲": "39"
+      },
+      "印刷": {
+        "印刷": "40"
+      },
+      "其它": {
+        "其它": "41"
+      }
+    };
+
+    activete();
+
+    function activete() {
+      vm.wxgh = Merchant.prototype$__get__wxgh({id: $scope.user.merchantId, refresh: true});
+    }
+
+    vm.update = function (isShop) {
+      var model = Merchant;
+      var data = $scope.user.merchant;
+      if(isShop) {
+        data = $scope.user.shop;
+        model = Shop;
+      }
+      model.update({where: {id: data.id}}, data, function success(result, res) {
+        toaster.pop('success', '成功', "设置已经保存");
+      }, function error(res) {
+        toaster.pop('error', '失败', "设置未成功，请重试！")
+      });
+    }
+    
+    vm.addMemberLevel = function () {
+      var levels = $scope.user.merchant.memberLevels || [];
+      var last = levels.length > 0 && levels[levels.length-1] || {upper: -1};
+      levels.push({lower: last.upper+1, upper: last.upper+1000, discount:100, name: 'VIP'});
+      if(!$scope.user.merchant.memberLevels) $scope.user.merchant.memberLevels = levels;
+    }
+    
+    vm.updaeteMemberLevels = function () {
+      $scope.user.merchant.memberLevels.forEach(function (level) {
+        Member.update({
+          where: {merchantId:$scope.user.merchant.id, totalBonus: {gte: level.lower, lte: level.upper}}
+        }, {
+          discount: level.discount, level: level.name
+        }, function sucess(result, res) {
+          toaster.pop('success', '成功', "更新全体会员等级完成");
+        }, function error(res) {
+          toaster.pop('error', '失败', "更新全体会员等级未成功，请重试！")
+        });
+      });
+    }
+            
+    vm.updateWxgh = function () {
+      vm.update();
+      Merchant.updateWxgh({
+        id: vm.wxgh.id,
+        appid: vm.wxgh.appid,
+        appsecret: vm.wxgh.appsecret,
+        industry: $scope.user.merchant.industry
+      }, function (result) {
+        toaster.pop('success', '成功', "微信公众号设置已经保存");
+      }, function (reason) {
+        toaster.pop('error', '失败', "设置未成功，请重试！")
+      });
+    } 
+  }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.settings')
+        .run(settingsRun);
+
+    settingsRun.$inject = ['$rootScope', '$localStorage'];
+
+    function settingsRun($rootScope, $localStorage){
+
+      // Global Settings
+      // ----------------------------------- 
+      $rootScope.app = {
+        name: '泛卡汇WebPOS',
+        description: '在线收银系统',
+        year: ((new Date()).getFullYear()),
+        layout: {
+          isFixed: true,
+          isCollapsed: false,
+          isBoxed: false,
+          isRTL: false,
+          horizontal: false,
+          isFloat: false,
+          asideHover: false,
+          theme: "app/css/theme-e.css"
+        },
+        useFullLayout: false,
+        hiddenFooter: false,
+        offsidebarOpen: false,
+        asideToggled: false,
+        viewAnimation: 'ng-fadeInUp'
+      };
+
+      // Setup the layout mode
+      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
+
+      // Restore layout settings
+      if( angular.isDefined($localStorage.layout) )
+        $rootScope.app.layout = $localStorage.layout;
+      else
+        $localStorage.layout = $rootScope.app.layout;
+
+      $rootScope.$watch('app.layout', function () {
+        $localStorage.layout = $rootScope.app.layout;
+      }, true);
+
+      // Close submenu when sidebar change from collapsed to normal
+      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
+        if( newValue === false )
+          $rootScope.$broadcast('closeSidebarMenu');
+      });
+
+    }
+
+})();
+
 /**=========================================================
  * Module: sidebar-menu.js
  * Handle sidebar collapsible elements

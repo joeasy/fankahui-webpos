@@ -7603,6 +7603,72 @@ module.factory(
           method: "POST"
         },
 
+        /**
+         * @ngdoc method
+         * @name lbServices.Member#getOAuthAccessToken
+         * @methodOf lbServices.Member
+         *
+         * @description
+         *
+         * Get Wechat OAuth access token
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `code` – `{string=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Member` object.)
+         * </em>
+         */
+        "getOAuthAccessToken": {
+          url: urlBase + "/members/getoauthaccesstoken",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Member#getUserByCode
+         * @methodOf lbServices.Member
+         *
+         * @description
+         *
+         * Get Wechat OAuth user by code
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `code` – `{string=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Member` object.)
+         * </em>
+         */
+        "getUserByCode": {
+          url: urlBase + "/members/getuserbycode",
+          method: "GET"
+        },
+
         // INTERNAL. Use Checkin.member() instead.
         "::get::checkin::member": {
           url: urlBase + "/checkins/:id/member",
@@ -13258,6 +13324,40 @@ module.factory(
         "createChangeStream": {
           url: urlBase + "/payments/change-stream",
           method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Payment#stat
+         * @methodOf lbServices.Payment
+         *
+         * @description
+         *
+         * statistic payment
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - 
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Payment` object.)
+         * </em>
+         */
+        "stat": {
+          isArray: true,
+          url: urlBase + "/payments/stat",
+          method: "GET"
         },
 
         // INTERNAL. Use Member.payments.findById() instead.

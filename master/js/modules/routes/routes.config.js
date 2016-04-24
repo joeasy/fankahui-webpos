@@ -35,6 +35,7 @@
               url: '/dashboard',
               title: 'Dashboard',
               templateUrl: helper.basepath('dashboard.html'),
+              controller: 'DashboardController as dash',
               resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons')
           })
           .state('app.sell', {
