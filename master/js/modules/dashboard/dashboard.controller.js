@@ -25,11 +25,13 @@
           vm.statData = {amount: 0, qty: 0, deposit: 0};
           
           Deal.stat({filter:{where:{status: 'closed', "payment.amount": {$gt: 0}}}}, function (res) {
+            if(res.length === 0) return;
             vm.statData.amount = res[0].amount;
             vm.statData.qty = res[0].qty;
           });
           
           Payment.stat({filter:{where:{status: 'closed', category: 'deposit'}}}, function (res) {
+            if(res.length === 0) return;
             vm.statData.deposit = res[0].amount;
           })
           // CHECKIN
