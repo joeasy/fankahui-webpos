@@ -1626,12 +1626,6 @@ module.factory(
           method: "GET"
         },
 
-        // INTERNAL. Use Stock.operator() instead.
-        "::get::stock::operator": {
-          url: urlBase + "/stocks/:id/operator",
-          method: "GET"
-        },
-
         /**
          * @ngdoc method
          * @name lbServices.User#getCurrent
@@ -4868,12 +4862,6 @@ module.factory(
           method: "GET"
         },
 
-        // INTERNAL. Use Stock.operator() instead.
-        "prototype$__get__operator": {
-          url: urlBase + "/stocks/:id/operator",
-          method: "GET"
-        },
-
         /**
          * @ngdoc method
          * @name lbServices.Stock#create
@@ -5543,42 +5531,6 @@ module.factory(
         R.merchant = function() {
           var TargetResource = $injector.get("Merchant");
           var action = TargetResource["::get::stock::merchant"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Stock#operator
-         * @methodOf lbServices.Stock
-         *
-         * @description
-         *
-         * Fetches belongsTo relation operator.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         *  - `refresh` – `{boolean=}` - 
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `User` object.)
-         * </em>
-         */
-        R.operator = function() {
-          var TargetResource = $injector.get("User");
-          var action = TargetResource["::get::stock::operator"];
           return action.apply(R, arguments);
         };
 
@@ -13769,9 +13721,9 @@ module.factory(
       { 'id': '@id' },
       {
 
-        // INTERNAL. Use Cost.costcatalog() instead.
-        "prototype$__get__costcatalog": {
-          url: urlBase + "/costs/:id/costcatalog",
+        // INTERNAL. Use Cost.costcategory() instead.
+        "prototype$__get__costcategory": {
+          url: urlBase + "/costs/:id/costcategory",
           method: "GET"
         },
 
@@ -14341,12 +14293,12 @@ module.factory(
 
         /**
          * @ngdoc method
-         * @name lbServices.Cost#costcatalog
+         * @name lbServices.Cost#costcategory
          * @methodOf lbServices.Cost
          *
          * @description
          *
-         * Fetches belongsTo relation costcatalog.
+         * Fetches belongsTo relation costcategory.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -14366,1070 +14318,12 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
+         * This usually means the response is a `Costcategory` object.)
          * </em>
          */
-        R.costcatalog = function() {
-          var TargetResource = $injector.get("Costcatalog");
-          var action = TargetResource["::get::cost::costcatalog"];
-          return action.apply(R, arguments);
-        };
-
-    return R;
-  }]);
-
-/**
- * @ngdoc object
- * @name lbServices.Costcatalog
- * @header lbServices.Costcatalog
- * @object
- *
- * @description
- *
- * A $resource object for interacting with the `Costcatalog` model.
- *
- * ## Example
- *
- * See
- * {@link http://docs.angularjs.org/api/ngResource.$resource#example $resource}
- * for an example of using this object.
- *
- */
-module.factory(
-  "Costcatalog",
-  ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
-    var R = Resource(
-      urlBase + "/costcatalogs/:id",
-      { 'id': '@id' },
-      {
-
-        // INTERNAL. Use Costcatalog.subcatalogs.findById() instead.
-        "prototype$__findById__subcatalogs": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/costcatalogs/:id/subcatalogs/:fk",
-          method: "GET"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.destroyById() instead.
-        "prototype$__destroyById__subcatalogs": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/costcatalogs/:id/subcatalogs/:fk",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.updateById() instead.
-        "prototype$__updateById__subcatalogs": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/costcatalogs/:id/subcatalogs/:fk",
-          method: "PUT"
-        },
-
-        // INTERNAL. Use Costcatalog.uppercatalog() instead.
-        "prototype$__get__uppercatalog": {
-          url: urlBase + "/costcatalogs/:id/uppercatalog",
-          method: "GET"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs() instead.
-        "prototype$__get__subcatalogs": {
-          isArray: true,
-          url: urlBase + "/costcatalogs/:id/subcatalogs",
-          method: "GET"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.create() instead.
-        "prototype$__create__subcatalogs": {
-          url: urlBase + "/costcatalogs/:id/subcatalogs",
-          method: "POST"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.destroyAll() instead.
-        "prototype$__delete__subcatalogs": {
-          url: urlBase + "/costcatalogs/:id/subcatalogs",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.count() instead.
-        "prototype$__count__subcatalogs": {
-          url: urlBase + "/costcatalogs/:id/subcatalogs/count",
-          method: "GET"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#create
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Create a new instance of the model and persist it into the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *   This method does not accept any parameters.
-         *   Supply an empty object or omit this argument altogether.
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        "create": {
-          url: urlBase + "/costcatalogs",
-          method: "POST"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#createMany
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Create a new instance of the model and persist it into the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *   This method does not accept any parameters.
-         *   Supply an empty object or omit this argument altogether.
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Array.<Object>,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Array.<Object>} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        "createMany": {
-          isArray: true,
-          url: urlBase + "/costcatalogs",
-          method: "POST"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#upsert
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Update an existing model instance or insert a new one into the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *   This method does not accept any parameters.
-         *   Supply an empty object or omit this argument altogether.
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        "upsert": {
-          url: urlBase + "/costcatalogs",
-          method: "PUT"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#exists
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Check whether a model instance exists in the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - Model id
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * Data properties:
-         *
-         *  - `exists` – `{boolean=}` - 
-         */
-        "exists": {
-          url: urlBase + "/costcatalogs/:id/exists",
-          method: "GET"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#findById
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Find a model instance by id from the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - Model id
-         *
-         *  - `filter` – `{object=}` - Filter defining fields and include
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        "findById": {
-          url: urlBase + "/costcatalogs/:id",
-          method: "GET"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#find
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Find all instances of the model matched by filter from the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `filter` – `{object=}` - Filter defining fields, where, include, order, offset, and limit
-         *
-         * @param {function(Array.<Object>,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Array.<Object>} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        "find": {
-          isArray: true,
-          url: urlBase + "/costcatalogs",
-          method: "GET"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#findOne
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Find first instance of the model matched by filter from the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `filter` – `{object=}` - Filter defining fields, where, include, order, offset, and limit
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        "findOne": {
-          url: urlBase + "/costcatalogs/findOne",
-          method: "GET"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#updateAll
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Update instances of the model matched by where from the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `where` – `{object=}` - Criteria to match model instances
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * The number of instances updated
-         */
-        "updateAll": {
-          url: urlBase + "/costcatalogs/update",
-          method: "POST"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#deleteById
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Delete a model instance by id from the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - Model id
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        "deleteById": {
-          url: urlBase + "/costcatalogs/:id",
-          method: "DELETE"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#count
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Count instances of the model matched by where from the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `where` – `{object=}` - Criteria to match model instances
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * Data properties:
-         *
-         *  - `count` – `{number=}` - 
-         */
-        "count": {
-          url: urlBase + "/costcatalogs/count",
-          method: "GET"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#prototype$updateAttributes
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Update attributes for a model instance and persist it into the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        "prototype$updateAttributes": {
-          url: urlBase + "/costcatalogs/:id",
-          method: "PUT"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#createChangeStream
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Create a change stream.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *   This method does not accept any parameters.
-         *   Supply an empty object or omit this argument altogether.
-         *
-         * @param {Object} postData Request data.
-         *
-         *  - `options` – `{object=}` - 
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * Data properties:
-         *
-         *  - `changes` – `{ReadableStream=}` - 
-         */
-        "createChangeStream": {
-          url: urlBase + "/costcatalogs/change-stream",
-          method: "POST"
-        },
-
-        // INTERNAL. Use Cost.costcatalog() instead.
-        "::get::cost::costcatalog": {
-          url: urlBase + "/costs/:id/costcatalog",
-          method: "GET"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.findById() instead.
-        "::findById::costcatalog::subcatalogs": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/costcatalogs/:id/subcatalogs/:fk",
-          method: "GET"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.destroyById() instead.
-        "::destroyById::costcatalog::subcatalogs": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/costcatalogs/:id/subcatalogs/:fk",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.updateById() instead.
-        "::updateById::costcatalog::subcatalogs": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/costcatalogs/:id/subcatalogs/:fk",
-          method: "PUT"
-        },
-
-        // INTERNAL. Use Costcatalog.uppercatalog() instead.
-        "::get::costcatalog::uppercatalog": {
-          url: urlBase + "/costcatalogs/:id/uppercatalog",
-          method: "GET"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs() instead.
-        "::get::costcatalog::subcatalogs": {
-          isArray: true,
-          url: urlBase + "/costcatalogs/:id/subcatalogs",
-          method: "GET"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.create() instead.
-        "::create::costcatalog::subcatalogs": {
-          url: urlBase + "/costcatalogs/:id/subcatalogs",
-          method: "POST"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.createMany() instead.
-        "::createMany::costcatalog::subcatalogs": {
-          isArray: true,
-          url: urlBase + "/costcatalogs/:id/subcatalogs",
-          method: "POST"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.destroyAll() instead.
-        "::delete::costcatalog::subcatalogs": {
-          url: urlBase + "/costcatalogs/:id/subcatalogs",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use Costcatalog.subcatalogs.count() instead.
-        "::count::costcatalog::subcatalogs": {
-          url: urlBase + "/costcatalogs/:id/subcatalogs/count",
-          method: "GET"
-        },
-      }
-    );
-
-
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#updateOrCreate
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Update an existing model instance or insert a new one into the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *   This method does not accept any parameters.
-         *   Supply an empty object or omit this argument altogether.
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        R["updateOrCreate"] = R["upsert"];
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#update
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Update instances of the model matched by where from the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `where` – `{object=}` - Criteria to match model instances
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * The number of instances updated
-         */
-        R["update"] = R["updateAll"];
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#destroyById
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Delete a model instance by id from the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - Model id
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        R["destroyById"] = R["deleteById"];
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#removeById
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Delete a model instance by id from the data source.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - Model id
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        R["removeById"] = R["deleteById"];
-
-
-    /**
-    * @ngdoc property
-    * @name lbServices.Costcatalog#modelName
-    * @propertyOf lbServices.Costcatalog
-    * @description
-    * The name of the model represented by this $resource,
-    * i.e. `Costcatalog`.
-    */
-    R.modelName = "Costcatalog";
-
-    /**
-     * @ngdoc object
-     * @name lbServices.Costcatalog.subcatalogs
-     * @header lbServices.Costcatalog.subcatalogs
-     * @object
-     * @description
-     *
-     * The object `Costcatalog.subcatalogs` groups methods
-     * manipulating `Costcatalog` instances related to `Costcatalog`.
-     *
-     * Call {@link lbServices.Costcatalog#subcatalogs Costcatalog.subcatalogs()}
-     * to query all related instances.
-     */
-
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#subcatalogs
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Queries subcatalogs of costcatalog.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         *  - `filter` – `{object=}` - 
-         *
-         * @param {function(Array.<Object>,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Array.<Object>} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        R.subcatalogs = function() {
-          var TargetResource = $injector.get("Costcatalog");
-          var action = TargetResource["::get::costcatalog::subcatalogs"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog.subcatalogs#count
-         * @methodOf lbServices.Costcatalog.subcatalogs
-         *
-         * @description
-         *
-         * Counts subcatalogs of costcatalog.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         *  - `where` – `{object=}` - Criteria to match model instances
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * Data properties:
-         *
-         *  - `count` – `{number=}` - 
-         */
-        R.subcatalogs.count = function() {
-          var TargetResource = $injector.get("Costcatalog");
-          var action = TargetResource["::count::costcatalog::subcatalogs"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog.subcatalogs#create
-         * @methodOf lbServices.Costcatalog.subcatalogs
-         *
-         * @description
-         *
-         * Creates a new instance in subcatalogs of this model.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        R.subcatalogs.create = function() {
-          var TargetResource = $injector.get("Costcatalog");
-          var action = TargetResource["::create::costcatalog::subcatalogs"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog.subcatalogs#createMany
-         * @methodOf lbServices.Costcatalog.subcatalogs
-         *
-         * @description
-         *
-         * Creates a new instance in subcatalogs of this model.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Array.<Object>,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Array.<Object>} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        R.subcatalogs.createMany = function() {
-          var TargetResource = $injector.get("Costcatalog");
-          var action = TargetResource["::createMany::costcatalog::subcatalogs"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog.subcatalogs#destroyAll
-         * @methodOf lbServices.Costcatalog.subcatalogs
-         *
-         * @description
-         *
-         * Deletes all subcatalogs of this model.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * This method returns no data.
-         */
-        R.subcatalogs.destroyAll = function() {
-          var TargetResource = $injector.get("Costcatalog");
-          var action = TargetResource["::delete::costcatalog::subcatalogs"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog.subcatalogs#destroyById
-         * @methodOf lbServices.Costcatalog.subcatalogs
-         *
-         * @description
-         *
-         * Delete a related item by id for subcatalogs.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         *  - `fk` – `{*}` - Foreign key for subcatalogs
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * This method returns no data.
-         */
-        R.subcatalogs.destroyById = function() {
-          var TargetResource = $injector.get("Costcatalog");
-          var action = TargetResource["::destroyById::costcatalog::subcatalogs"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog.subcatalogs#findById
-         * @methodOf lbServices.Costcatalog.subcatalogs
-         *
-         * @description
-         *
-         * Find a related item by id for subcatalogs.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         *  - `fk` – `{*}` - Foreign key for subcatalogs
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        R.subcatalogs.findById = function() {
-          var TargetResource = $injector.get("Costcatalog");
-          var action = TargetResource["::findById::costcatalog::subcatalogs"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog.subcatalogs#updateById
-         * @methodOf lbServices.Costcatalog.subcatalogs
-         *
-         * @description
-         *
-         * Update a related item by id for subcatalogs.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         *  - `fk` – `{*}` - Foreign key for subcatalogs
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        R.subcatalogs.updateById = function() {
-          var TargetResource = $injector.get("Costcatalog");
-          var action = TargetResource["::updateById::costcatalog::subcatalogs"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Costcatalog#uppercatalog
-         * @methodOf lbServices.Costcatalog
-         *
-         * @description
-         *
-         * Fetches belongsTo relation uppercatalog.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         *  - `refresh` – `{boolean=}` - 
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Costcatalog` object.)
-         * </em>
-         */
-        R.uppercatalog = function() {
-          var TargetResource = $injector.get("Costcatalog");
-          var action = TargetResource["::get::costcatalog::uppercatalog"];
+        R.costcategory = function() {
+          var TargetResource = $injector.get("Costcategory");
+          var action = TargetResource["::get::cost::costcategory"];
           return action.apply(R, arguments);
         };
 
@@ -16728,6 +15622,1016 @@ module.factory(
         R.shops.updateById = function() {
           var TargetResource = $injector.get("Shop");
           var action = TargetResource["::updateById::campaign::shops"];
+          return action.apply(R, arguments);
+        };
+
+    return R;
+  }]);
+
+/**
+ * @ngdoc object
+ * @name lbServices.Costcategory
+ * @header lbServices.Costcategory
+ * @object
+ *
+ * @description
+ *
+ * A $resource object for interacting with the `Costcategory` model.
+ *
+ * ## Example
+ *
+ * See
+ * {@link http://docs.angularjs.org/api/ngResource.$resource#example $resource}
+ * for an example of using this object.
+ *
+ */
+module.factory(
+  "Costcategory",
+  ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
+    var R = Resource(
+      urlBase + "/costcategories/:id",
+      { 'id': '@id' },
+      {
+
+        // INTERNAL. Use Costcategory.subcategories.findById() instead.
+        "prototype$__findById__subcategories": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/costcategories/:id/subcategories/:fk",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.destroyById() instead.
+        "prototype$__destroyById__subcategories": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/costcategories/:id/subcategories/:fk",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.updateById() instead.
+        "prototype$__updateById__subcategories": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/costcategories/:id/subcategories/:fk",
+          method: "PUT"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories() instead.
+        "prototype$__get__subcategories": {
+          isArray: true,
+          url: urlBase + "/costcategories/:id/subcategories",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.create() instead.
+        "prototype$__create__subcategories": {
+          url: urlBase + "/costcategories/:id/subcategories",
+          method: "POST"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.destroyAll() instead.
+        "prototype$__delete__subcategories": {
+          url: urlBase + "/costcategories/:id/subcategories",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.count() instead.
+        "prototype$__count__subcategories": {
+          url: urlBase + "/costcategories/:id/subcategories/count",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#create
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Create a new instance of the model and persist it into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        "create": {
+          url: urlBase + "/costcategories",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#createMany
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Create a new instance of the model and persist it into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        "createMany": {
+          isArray: true,
+          url: urlBase + "/costcategories",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#upsert
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        "upsert": {
+          url: urlBase + "/costcategories",
+          method: "PUT"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#exists
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Check whether a model instance exists in the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `exists` – `{boolean=}` - 
+         */
+        "exists": {
+          url: urlBase + "/costcategories/:id/exists",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#findById
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Find a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         *  - `filter` – `{object=}` - Filter defining fields and include
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        "findById": {
+          url: urlBase + "/costcategories/:id",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#find
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Find all instances of the model matched by filter from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, include, order, offset, and limit
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        "find": {
+          isArray: true,
+          url: urlBase + "/costcategories",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#findOne
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Find first instance of the model matched by filter from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, include, order, offset, and limit
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        "findOne": {
+          url: urlBase + "/costcategories/findOne",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#updateAll
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * The number of instances updated
+         */
+        "updateAll": {
+          url: urlBase + "/costcategories/update",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#deleteById
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        "deleteById": {
+          url: urlBase + "/costcategories/:id",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#count
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Count instances of the model matched by where from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        "count": {
+          url: urlBase + "/costcategories/count",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#prototype$updateAttributes
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Update attributes for a model instance and persist it into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        "prototype$updateAttributes": {
+          url: urlBase + "/costcategories/:id",
+          method: "PUT"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#createChangeStream
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Create a change stream.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         *  - `options` – `{object=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `changes` – `{ReadableStream=}` - 
+         */
+        "createChangeStream": {
+          url: urlBase + "/costcategories/change-stream",
+          method: "POST"
+        },
+
+        // INTERNAL. Use Cost.costcategory() instead.
+        "::get::cost::costcategory": {
+          url: urlBase + "/costs/:id/costcategory",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.findById() instead.
+        "::findById::costcategory::subcategories": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/costcategories/:id/subcategories/:fk",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.destroyById() instead.
+        "::destroyById::costcategory::subcategories": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/costcategories/:id/subcategories/:fk",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.updateById() instead.
+        "::updateById::costcategory::subcategories": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/costcategories/:id/subcategories/:fk",
+          method: "PUT"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories() instead.
+        "::get::costcategory::subcategories": {
+          isArray: true,
+          url: urlBase + "/costcategories/:id/subcategories",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.create() instead.
+        "::create::costcategory::subcategories": {
+          url: urlBase + "/costcategories/:id/subcategories",
+          method: "POST"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.createMany() instead.
+        "::createMany::costcategory::subcategories": {
+          isArray: true,
+          url: urlBase + "/costcategories/:id/subcategories",
+          method: "POST"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.destroyAll() instead.
+        "::delete::costcategory::subcategories": {
+          url: urlBase + "/costcategories/:id/subcategories",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Costcategory.subcategories.count() instead.
+        "::count::costcategory::subcategories": {
+          url: urlBase + "/costcategories/:id/subcategories/count",
+          method: "GET"
+        },
+      }
+    );
+
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#updateOrCreate
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        R["updateOrCreate"] = R["upsert"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#update
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * The number of instances updated
+         */
+        R["update"] = R["updateAll"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#destroyById
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        R["destroyById"] = R["deleteById"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#removeById
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        R["removeById"] = R["deleteById"];
+
+
+    /**
+    * @ngdoc property
+    * @name lbServices.Costcategory#modelName
+    * @propertyOf lbServices.Costcategory
+    * @description
+    * The name of the model represented by this $resource,
+    * i.e. `Costcategory`.
+    */
+    R.modelName = "Costcategory";
+
+    /**
+     * @ngdoc object
+     * @name lbServices.Costcategory.subcategories
+     * @header lbServices.Costcategory.subcategories
+     * @object
+     * @description
+     *
+     * The object `Costcategory.subcategories` groups methods
+     * manipulating `Costcategory` instances related to `Costcategory`.
+     *
+     * Call {@link lbServices.Costcategory#subcategories Costcategory.subcategories()}
+     * to query all related instances.
+     */
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory#subcategories
+         * @methodOf lbServices.Costcategory
+         *
+         * @description
+         *
+         * Queries subcategories of costcategory.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `filter` – `{object=}` - 
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        R.subcategories = function() {
+          var TargetResource = $injector.get("Costcategory");
+          var action = TargetResource["::get::costcategory::subcategories"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory.subcategories#count
+         * @methodOf lbServices.Costcategory.subcategories
+         *
+         * @description
+         *
+         * Counts subcategories of costcategory.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        R.subcategories.count = function() {
+          var TargetResource = $injector.get("Costcategory");
+          var action = TargetResource["::count::costcategory::subcategories"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory.subcategories#create
+         * @methodOf lbServices.Costcategory.subcategories
+         *
+         * @description
+         *
+         * Creates a new instance in subcategories of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        R.subcategories.create = function() {
+          var TargetResource = $injector.get("Costcategory");
+          var action = TargetResource["::create::costcategory::subcategories"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory.subcategories#createMany
+         * @methodOf lbServices.Costcategory.subcategories
+         *
+         * @description
+         *
+         * Creates a new instance in subcategories of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        R.subcategories.createMany = function() {
+          var TargetResource = $injector.get("Costcategory");
+          var action = TargetResource["::createMany::costcategory::subcategories"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory.subcategories#destroyAll
+         * @methodOf lbServices.Costcategory.subcategories
+         *
+         * @description
+         *
+         * Deletes all subcategories of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.subcategories.destroyAll = function() {
+          var TargetResource = $injector.get("Costcategory");
+          var action = TargetResource["::delete::costcategory::subcategories"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory.subcategories#destroyById
+         * @methodOf lbServices.Costcategory.subcategories
+         *
+         * @description
+         *
+         * Delete a related item by id for subcategories.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for subcategories
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.subcategories.destroyById = function() {
+          var TargetResource = $injector.get("Costcategory");
+          var action = TargetResource["::destroyById::costcategory::subcategories"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory.subcategories#findById
+         * @methodOf lbServices.Costcategory.subcategories
+         *
+         * @description
+         *
+         * Find a related item by id for subcategories.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for subcategories
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        R.subcategories.findById = function() {
+          var TargetResource = $injector.get("Costcategory");
+          var action = TargetResource["::findById::costcategory::subcategories"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Costcategory.subcategories#updateById
+         * @methodOf lbServices.Costcategory.subcategories
+         *
+         * @description
+         *
+         * Update a related item by id for subcategories.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for subcategories
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Costcategory` object.)
+         * </em>
+         */
+        R.subcategories.updateById = function() {
+          var TargetResource = $injector.get("Costcategory");
+          var action = TargetResource["::updateById::costcategory::subcategories"];
           return action.apply(R, arguments);
         };
 

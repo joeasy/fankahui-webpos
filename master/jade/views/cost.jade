@@ -1,2 +1,144 @@
-h3 
-  | 费用支出
+h3 费用支出
+
+toaster-container(toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}")
+
+form.panel
+  tabset(justified="true")
+    tab
+      tab-heading 
+        | 支出清单
+      .panel(ng-controller="CostsController as costs")
+        .panel-heading
+          .row
+            .col-md-8
+              .col-md-4
+                p.input-group 
+                  input.form-control(type="text", uib-datepicker-popup="yyyy-MM-dd", is-open="costs.dt.begin.open", ng-model="costs.dt.begin.dt", datepicker-options="costs.dt.Options", close-text="关闭", current-text="今天", clear-text="清除")
+                  span.input-group-btn
+                    button.btn.btn-default(type="button", ng-click="costs.dt.begin.open=true")
+                      i.icon.fa.fa-calendar
+              .col-md-4
+                p.input-group
+                  input.form-control(type="text", uib-datepicker-popup="yyyy-MM-dd", is-open="costs.dt.end.open", ng-model="costs.dt.end.dt", datepicker-options="costs.dt.Options", close-text="关闭", current-text="今天", clear-text="清除")
+                  span.input-group-btn
+                    button.btn.btn-default(type="button", ng-click="costs.dt.end.open=true")
+                      i.icon.fa.fa-calendar                      
+              .col-md-2
+                a.btn.btn-info(ng-click="costs.tableParams.reload()")
+                  em.icon.fa.fa-search.fa-fw
+                  | 查询
+            a.btn.btn-primary.pull-right(ng-click="costs.create()")
+              em.icon.fa.fa-plus.fa-fw
+              | 登记支出
+        .panel-body.table-responsive
+          table.table.table-bordered.table-striped(ng-table='costs.tableParams')
+            tbody(ng-class="{'whirl standard': costs.tableParams.settings().$loading}")
+              tr.text-center(ng-repeat='entity in $data')
+                td(data-title="'序号'") {{$index+1}}
+                td(data-title="'分类'") {{entity.category}} - {{entity.subcategory}}
+                td.text-right(data-title="'金额'") {{entity.amount/100| currency}}
+                td(data-title="'时间'") {{entity.created | date:'yyyy-MM-dd HH:mm:ss'}}
+                td(data-title="'备注说明'") {{entity.memo}}
+                td(data-title="'经手人'") {{entity.operator.name || entity.operator.username}}
+                td(data-title="'操作'") 
+                  .btn-group(dropdown='dropdown')
+                    a.btn.btn-default(href='', ng-click="costs.edit(entity)")  
+                      em.icon.fa.fa-edit.fa-fw
+                      | 编辑
+                    button.btn.dropdown-toggle(type='button', class="btn-default", dropdown-toggle="")
+                      span.caret
+                      span.sr-only= type
+                    ul.dropdown-menu(role='menu')
+                      li
+                        a(href='', ng-click="costs.edit(entity)") 
+                          em.icon.fa.fa-edit.fa-fw
+                          | 编辑
+                      li.divider
+                      li
+                        a(href='', ng-click="costs.delete(entity)")
+                          em.icon.fa.fa-trash.fa-fw
+                          | 删除
+                  
+
+    tab
+      tab-heading
+        | 支出分类
+      .panel(ng-controller="CostCategoriesController as cc")
+        .panel-heading
+          .col-md-4.input-group
+            input.form-control(type='text', ng-model="newCategory")
+            span.input-group-btn
+              button.btn.btn-primary(type='button', ng-click="cc.addCategory(newCategory)") 新增大类
+        .panel-body
+          form.form-horizontal
+            fieldset(ng-repeat="category in cc.categories")
+              legend 
+                span.col-md-4.input-group(ng-if="category.editing")
+                  input.form-control.input-sm(type="text", ng-model="category.name")
+                  span.input-group-btn
+                    a.btn.btn-success.btn-sm(ng-click="cc.updateCategory(category); category.editing=false;") 保存
+                    a.btn.btn-default.btn-sm(ng-click="category.editing=false") 取消
+                span(ng-if="!category.editing") {{$index+1}} - {{category.name}}
+                  a.btn(ng-click="category.editing = true")
+                    em.fa.fa-edit.fa-fw.mr-sm
+                    | 编辑
+                  a.btn(ng-click="cc.deleteCategory(category)")
+                    em.fa.fa-trash.fa-fw.mr-sm 
+                    | 删除
+                  .col-md-4.input-group.pull-right
+                    input.form-control.input-sm(type='text', ng-model="newSub")
+                    span.input-group-btn
+                      button.btn.btn-info.btn-sm(type="button", ng-click="cc.addSubCategory(category, newSub)")
+                        | 新增子类
+              .form-group.mt
+                span(ng-repeat="subcategory in category.subs")
+                  .col-md-4.input-group(ng-show="editing[$index]")
+                    input.form-control.input-sm(type='text', ng-model="subcategory")
+                    span.input-group-btn
+                      a.btn.btn-primary(ng-click="category.subs[$index]=subcategory;cc.updateCategory(category);editing[$index]=false;") 保存
+                      a.btn.btn-default.btn-sm(ng-click="editing[$index]=false;subcategory=saved[$index]") 取消
+                  // START button group
+                  .btn-group.mb-sm.mr(dropdown='dropdown', ng-show="!editing[$index]")
+                    button.btn.btn-sm.dropdown-toggle(type='button', ng-disabled='disabled', class="btn-green", dropdown-toggle="")
+                      span.mr {{subcategory}}
+                      span.caret
+                    ul.dropdown-menu(role='menu')
+                      li
+                        a(ng-click="editing[$index]=true;saved[$index]=subcategory;") 
+                          em.fa.fa-edit.fa-fw.mr-sm
+                          | 编辑
+                      li.divider
+                      li
+                        a(ng-click="cc.deleteSubcategory(category, $index)")
+                          em.fa.fa-trash.fa-fw.mr-sm 
+                          | 删除
+                  // END button group
+                
+                
+  <!-- Templates -->
+  
+  script(type="text/ng-template", id="costDialogId")
+    .modal-header 
+      h3 登记支出
+    .modal-body(ng-class="{'whirl standard':submiting}")
+      fieldset: .form-group
+        label.col-md-3.control-label 支出分类  
+        .col-md-9  
+          a(ng-click="isCollapsed = !isCollapsed") {{data.category}} - {{data.subcategory}}
+          .mt(uib-collapse="isCollapsed")
+            .well.well-lg
+              ul.list-inline(ng-repeat="c in categories") {{c.name}}
+                li(ng-repeat="s in c.subs")
+                  a(ng-click="setCategory(c.name, s)") {{s}}
+      fieldset: .form-group
+        label.col-md-3.control-label 支出金额
+        .col-md-9  
+          input.form-control(type='number', placeholder="输入支出金额", ng-model="data.amount", currency)
+      fieldset: .form-group
+        label.col-md-3.control-label 备注
+        .col-md-9  
+          textarea.form-control(row="3", ng-model="data.memo")
+
+    .modal-footer
+      button.pull-right.btn.btn-default.mr(type='button', ng-click='closeThisDialog()') 取消      
+      button.pull-right.btn.btn-primary.mr(type='button', ng-click='confirm()') 确定

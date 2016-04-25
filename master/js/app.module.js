@@ -44,7 +44,8 @@
             'app.items',
             'app.myshop',
             'app.sales',
-            'app.members'
+            'app.members',
+            'app.costs'
         ]);
 })();
 

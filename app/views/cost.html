@@ -1,2 +1,147 @@
-<h3>
-   费用支出</h3>
+<h3>费用支出</h3>
+<toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}"></toaster-container>
+<form class="panel">
+   <tabset justified="true">
+      <tab>
+         <tab-heading>
+            支出清单</tab-heading>
+         <div ng-controller="CostsController as costs" class="panel">
+            <div class="panel-heading">
+               <div class="row">
+                  <div class="col-md-8">
+                     <div class="col-md-4">
+                        <p class="input-group">
+                           <input type="text" uib-datepicker-popup="yyyy-MM-dd" is-open="costs.dt.begin.open" ng-model="costs.dt.begin.dt" datepicker-options="costs.dt.Options" close-text="关闭" current-text="今天" clear-text="清除" class="form-control" />
+                           <span class="input-group-btn">
+                              <button type="button" ng-click="costs.dt.begin.open=true" class="btn btn-default"><i class="icon fa fa-calendar"></i>
+                              </button>
+                           </span>
+                        </p>
+                     </div>
+                     <div class="col-md-4">
+                        <p class="input-group">
+                           <input type="text" uib-datepicker-popup="yyyy-MM-dd" is-open="costs.dt.end.open" ng-model="costs.dt.end.dt" datepicker-options="costs.dt.Options" close-text="关闭" current-text="今天" clear-text="清除" class="form-control" />
+                           <span class="input-group-btn">
+                              <button type="button" ng-click="costs.dt.end.open=true" class="btn btn-default"><i class="icon fa fa-calendar">                     </i>
+                              </button>
+                           </span>
+                        </p>
+                     </div>
+                     <div class="col-md-2">
+                        <a ng-click="costs.tableParams.reload()" class="btn btn-info">
+                           <em class="icon fa fa-search fa-fw"></em>查询</a>
+                     </div>
+                  </div>
+                  <a ng-click="costs.create()" class="btn btn-primary pull-right">
+                     <em class="icon fa fa-plus fa-fw"></em>登记支出</a>
+               </div>
+            </div>
+            <div class="panel-body table-responsive">
+               <table ng-table="costs.tableParams" class="table table-bordered table-striped">
+                  <tbody ng-class="{'whirl standard': costs.tableParams.settings().$loading}">
+                     <tr ng-repeat="entity in $data" class="text-center">
+                        <td data-title="'序号'">{{$index+1}}</td>
+                        <td data-title="'分类'">{{entity.category}} - {{entity.subcategory}}</td>
+                        <td data-title="'金额'" class="text-right">{{entity.amount/100| currency}}</td>
+                        <td data-title="'时间'">{{entity.created | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td data-title="'备注说明'">{{entity.memo}}</td>
+                        <td data-title="'经手人'">{{entity.operator.name || entity.operator.username}}</td>
+                        <td data-title="'操作'">
+                           <div dropdown="dropdown" class="btn-group">
+                              <a href="" ng-click="costs.edit(entity)" class="btn btn-default">
+                                 <em class="icon fa fa-edit fa-fw"></em>编辑</a>
+                              <button type="button" dropdown-toggle="" class="btn dropdown-toggle btn-default">
+                                 <span class="caret"></span>
+                                 <span class="sr-only"></span>
+                              </button>
+                              <ul role="menu" class="dropdown-menu">
+                                 <li>
+                                    <a href="" ng-click="costs.edit(entity)">
+                                       <em class="icon fa fa-edit fa-fw"></em>编辑</a>
+                                 </li>
+                                 <li class="divider"></li>
+                                 <li>
+                                    <a href="" ng-click="costs.delete(entity)">
+                                       <em class="icon fa fa-trash fa-fw"></em>删除</a>
+                                 </li>
+                              </ul>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </tab>
+      <tab>
+         <tab-heading>支出分类</tab-heading>
+         <div ng-controller="CostCategoriesController as cc" class="panel">
+            <div class="panel-heading">
+               <div class="col-md-4 input-group">
+                  <input type="text" ng-model="newCategory" class="form-control" />
+                  <span class="input-group-btn">
+                     <button type="button" ng-click="cc.addCategory(newCategory)" class="btn btn-primary">新增大类</button>
+                  </span>
+               </div>
+            </div>
+            <div class="panel-body">
+               <form class="form-horizontal">
+                  <fieldset ng-repeat="category in cc.categories">
+                     <legend>
+                        <span ng-if="category.editing" class="col-md-4 input-group">
+                           <input type="text" ng-model="category.name" class="form-control input-sm" />
+                           <span class="input-group-btn"><a ng-click="cc.updateCategory(category); category.editing=false;" class="btn btn-success btn-sm">保存</a><a ng-click="category.editing=false" class="btn btn-default btn-sm">取消</a>
+                           </span>
+                        </span>
+                        <span ng-if="!category.editing">{{$index+1}} - {{category.name}}
+                           <a ng-click="category.editing = true" class="btn">
+                              <em class="fa fa-edit fa-fw mr-sm"></em>编辑</a>
+                           <a ng-click="cc.deleteCategory(category)" class="btn">
+                              <em class="fa fa-trash fa-fw mr-sm"></em>删除</a>
+                           <div class="col-md-4 input-group pull-right">
+                              <input type="text" ng-model="newSub" class="form-control input-sm" />
+                              <span class="input-group-btn">
+                                 <button type="button" ng-click="cc.addSubCategory(category, newSub)" class="btn btn-info btn-sm">新增子类</button>
+                              </span>
+                           </div>
+                        </span>
+                     </legend>
+                     <div class="form-group mt">
+                        <span ng-repeat="subcategory in category.subs">
+                           <div ng-show="editing[$index]" class="col-md-4 input-group">
+                              <input type="text" ng-model="subcategory" class="form-control input-sm" />
+                              <span class="input-group-btn"><a ng-click="category.subs[$index]=subcategory;cc.updateCategory(category);editing[$index]=false;" class="btn btn-primary">保存</a><a ng-click="editing[$index]=false;subcategory=saved[$index]" class="btn btn-default btn-sm">取消</a>
+                              </span>
+                           </div>
+                           <!-- START button group-->
+                           <div dropdown="dropdown" ng-show="!editing[$index]" class="btn-group mb-sm mr">
+                              <button type="button" ng-disabled="disabled" dropdown-toggle="" class="btn btn-sm dropdown-toggle btn-green">
+                                 <span class="mr">{{subcategory}}</span>
+                                 <span class="caret"></span>
+                              </button>
+                              <ul role="menu" class="dropdown-menu">
+                                 <li>
+                                    <a ng-click="editing[$index]=true;saved[$index]=subcategory;">
+                                       <em class="fa fa-edit fa-fw mr-sm"></em>编辑</a>
+                                 </li>
+                                 <li class="divider"></li>
+                                 <li>
+                                    <a ng-click="cc.deleteSubcategory(category, $index)">
+                                       <em class="fa fa-trash fa-fw mr-sm"></em>删除</a>
+                                 </li>
+                              </ul>
+                           </div>
+                           <!-- END button group-->
+                        </span>
+                     </div>
+                  </fieldset>
+               </form>
+            </div>
+         </div>
+      </tab>
+   </tabset>
+   <!-- Templates -->
+   <script type="text/ng-template" id="costDialogId">
+      <div class="modal-header"> <h3>登记支出</h3></div><div ng-class="{'whirl standard':submiting}" class="modal-body"><fieldset><div class="form-group"><label class="col-md-3 control-label">支出分类  </label><div class="col-md-9"> <a ng-click="isCollapsed = !isCollapsed">{{data.category}} - {{data.subcategory}}</a><div uib-collapse="isCollapsed" class="mt"><div class="well well-lg"><ul ng-repeat="c in categories" class="list-inline">{{c.name}}<li ng-repeat="s in c.subs"><a ng-click="setCategory(c.name, s)">{{s}}</a></li></ul></div></div></div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">支出金额</label><div class="col-md-9"> <input type="number" placeholder="输入支出金额" ng-model="data.amount" currency="currency" class="form-control"/></div></div></fieldset><fieldset><div class="form-group"><label class="col-md-3 control-label">备注</label><div class="col-md-9"> <textarea row="3" ng-model="data.memo" class="form-control"></textarea></div></div></fieldset></div><div class="modal-footer"><button type="button" ng-click="closeThisDialog()" class="pull-right btn btn-default mr">取消      </button><button type="button" ng-click="confirm()" class="pull-right btn btn-primary mr">确定</button></div>
+   </script>
+</form>
