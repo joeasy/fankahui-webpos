@@ -5,8 +5,8 @@
         .module('app.bootstrapui')
         .config(bootstrapuiConfig);
 
-    bootstrapuiConfig.$inject = ['$tooltipProvider'];
-    function bootstrapuiConfig($tooltipProvider){
-      $tooltipProvider.options({appendToBody: true});
+    bootstrapuiConfig.$inject = ['$uibTooltipProvider'];
+    function bootstrapuiConfig($uibTooltipProvider){
+      $uibTooltipProvider.options({appendToBody: true});
     }
 })();

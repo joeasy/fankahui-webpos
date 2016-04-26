@@ -25,14 +25,14 @@
 
           var templates = {
             /* jshint multistr: true */
-            collapse:'<a href="#" panel-collapse="" tooltip="Collapse Panel" ng-click="{{panelId}} = !{{panelId}}"> \
+            collapse:'<a href="#" panel-collapse="" uib-tooltip="Collapse Panel" ng-click="{{panelId}} = !{{panelId}}"> \
                         <em ng-show="{{panelId}}" class="fa fa-plus"></em> \
                         <em ng-show="!{{panelId}}" class="fa fa-minus"></em> \
                       </a>',
-            dismiss: '<a href="#" panel-dismiss="" tooltip="Close Panel">\
+            dismiss: '<a href="#" panel-dismiss="" uib-tooltip="Close Panel">\
                        <em class="fa fa-times"></em>\
                      </a>',
-            refresh: '<a href="#" panel-refresh="" data-spinner="{{spinner}}" tooltip="Refresh Panel">\
+            refresh: '<a href="#" panel-refresh="" data-spinner="{{spinner}}" uib-tooltip="Refresh Panel">\
                        <em class="fa fa-refresh"></em>\
                      </a>'
           };
