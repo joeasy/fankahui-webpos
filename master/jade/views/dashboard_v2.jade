@@ -62,7 +62,7 @@ h3
               a(href='#') Yearly
         // END button group
         .panel-title Projects Hours
-      .panel-wrapper(collapse="panelChart3")
+      .panel-wrapper(uib-collapse="panelChart3")
         .panel-body
           flot(src="'server/chart/barstackedv2.json'", options='dash2.barStackedOptions', height="250px")
     // END bar chart
@@ -85,7 +85,7 @@ h3
             a(href='#') All time
       // END button group
       .panel-title Overall progress
-    .panel-wrapper(collapse="panelChart9")
+    .panel-wrapper(uib-collapse="panelChart9")
       .panel-body
         flot(src="'server/chart/splinev2.json'", options='dash2.splineOptions', height="300px")
       .panel-body

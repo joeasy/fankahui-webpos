@@ -12,7 +12,7 @@ h4.page-header.mt0 Panel Collapse
         .panel-heading(ng-class="{'panel-heading-collapsed':panelDemo1}")
           | Collapsible Panel
           paneltool(tool-collapse)
-        .panel-wrapper(collapse="panelDemo1")
+        .panel-wrapper(uib-collapse="panelDemo1")
           .panel-body
             p Panel can be collapsed clicking on the chevron up/down icon on the top right corner
           .panel-footer
@@ -25,7 +25,7 @@ h4.page-header.mt0 Panel Collapse
           | Initially collapsed Panel with Dismiss
           paneltool(tool-collapse, tool-dismiss, ng-init="panelDemo3=true")
         // .panel-wrapper is the element to be collapsed
-        .panel-wrapper(collapse="panelDemo3")
+        .panel-wrapper(uib-collapse="panelDemo3")
           .panel-body
             p Initially collapsed panel uses 
               code paneltool(tool-collapse, tool-dismiss, ng-init="panelDemo3=true")
@@ -86,7 +86,7 @@ h4.page-header.mt0 Panel Collapse
         .panel-heading
           | {{pan.title}}
           paneltool(tool-refresh="standard", tool-collapse, tool-dismiss)
-        .panel-wrapper(collapse="{{pan.id}}")
+        .panel-wrapper(uib-collapse="{{pan.id}}")
           .panel-body
             p {{pan.body}}
       // END panel

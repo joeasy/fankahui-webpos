@@ -16,7 +16,7 @@ nav.navbar.topnavbar(role='navigation')
     // END navbar header
 
     // START Nav wrapper
-    .collapse.navbar-collapse(collapse="navCollapsed")
+    .collapse.navbar-collapse(uib-collapse="navCollapsed")
       // Navbar Menu 
       ul.nav.navbar-nav(ng-controller="SidebarController")
         li(ng-repeat='item in menuItems | limitTo: 3 ', ng-class="{'dropdown': item.submenu}", uib-dropdown="!!item.submenu")

@@ -5,7 +5,7 @@ script(type='text/ng-template', id="sidebar-renderer.html")
     .pull-right(ng-if="item.alert", ng-class="item.label || 'label label-success'") {{item.alert}}
     em(class="{{item.icon}}", ng-if="item.icon")
     span {{(item.translate | translate) || item.text}}
-  ul(class="nav sidebar-subnav", ng-if="item.submenu", collapse="isCollapse(pIndex)",  ng-init="addCollapse(pIndex, item)")
+  ul(class="nav sidebar-subnav", ng-if="item.submenu", uib-collapse="isCollapse(pIndex)",  ng-init="addCollapse(pIndex, item)")
     li.sidebar-subnav-header {{(item.translate | translate) || item.text}}
     li(ng-repeat='item in item.submenu', ng-include="'sidebar-renderer.html'", ng-class="getMenuItemPropClasses(item)", ng-init="pIndex=(pIndex+'-'+$index); inSubmenu = true", ng-click="toggleCollapse(pIndex)")
 
@@ -16,7 +16,7 @@ script(type='text/ng-template', id="sidebar-renderer.html")
     ul.nav
       // START user info
       li.has-user-block
-        div(collapse="userBlockVisible", ng-controller="UserBlockController")
+        div(uib-collapse="userBlockVisible", ng-controller="UserBlockController")
           .item.user-block
             // User picture
             .user-block-picture

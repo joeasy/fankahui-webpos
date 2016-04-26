@@ -11,7 +11,7 @@
             <div ng-class="{'panel-heading-collapsed':panelDemo1}" class="panel-heading">Collapsible Panel
                <paneltool tool-collapse="tool-collapse"></paneltool>
             </div>
-            <div collapse="panelDemo1" class="panel-wrapper">
+            <div uib-collapse="panelDemo1" class="panel-wrapper">
                <div class="panel-body">
                   <p>Panel can be collapsed clicking on the chevron up/down icon on the top right corner</p>
                </div>
@@ -27,7 +27,7 @@
                <paneltool tool-collapse="tool-collapse" tool-dismiss="tool-dismiss" ng-init="panelDemo3=true"></paneltool>
             </div>
             <!-- .panel-wrapper is the element to be collapsed-->
-            <div collapse="panelDemo3" class="panel-wrapper">
+            <div uib-collapse="panelDemo3" class="panel-wrapper">
                <div class="panel-body">
                   <p>Initially collapsed panel uses <code>paneltool(tool-collapse, tool-dismiss, ng-init="panelDemo3=true")</code>
                   </p>
@@ -101,7 +101,7 @@
             <div class="panel-heading">{{pan.title}}
                <paneltool tool-refresh="standard" tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></paneltool>
             </div>
-            <div collapse="{{pan.id}}" class="panel-wrapper">
+            <div uib-collapse="{{pan.id}}" class="panel-wrapper">
                <div class="panel-body">
                   <p>{{pan.body}}</p>
                </div>
