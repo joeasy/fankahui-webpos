@@ -1,8 +1,8 @@
 h3 
   // START Language list
   .pull-right
-    .btn-group(dropdown='', is-open='language.listIsOpen')
-      button.btn.btn-default(type='button', dropdown-toggle="")
+    .btn-group(uib-dropdown='', is-open='language.listIsOpen')
+      button.btn.btn-default(type='button', uib-dropdown-toggle="")
         | {{language.selected}}
         span.caret
       ul.dropdown-menu.dropdown-menu-right.animated.fadeInUpShort(role='menu')

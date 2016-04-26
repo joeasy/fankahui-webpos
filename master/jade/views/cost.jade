@@ -41,11 +41,11 @@ form.panel
                 td(data-title="'备注说明'") {{entity.memo}}
                 td(data-title="'经手人'") {{entity.operator.name || entity.operator.username}}
                 td(data-title="'操作'") 
-                  .btn-group(dropdown='dropdown')
+                  .btn-group(uib-dropdown='dropdown')
                     a.btn.btn-default(href='', ng-click="costs.edit(entity)")  
                       em.icon.fa.fa-edit.fa-fw
                       | 编辑
-                    button.btn.dropdown-toggle(type='button', class="btn-default", dropdown-toggle="")
+                    button.btn.dropdown-toggle(type='button', class="btn-default", uib-dropdown-toggle="")
                       span.caret
                       span.sr-only= type
                     ul.dropdown-menu(role='menu')
@@ -98,8 +98,8 @@ form.panel
                       a.btn.btn-primary(ng-click="category.subs[$index]=subcategory;cc.updateCategory(category);editing[$index]=false;") 保存
                       a.btn.btn-default.btn-sm(ng-click="editing[$index]=false;subcategory=saved[$index]") 取消
                   // START button group
-                  .btn-group.mb-sm.mr(dropdown='dropdown', ng-show="!editing[$index]")
-                    button.btn.btn-sm.dropdown-toggle(type='button', ng-disabled='disabled', class="btn-green", dropdown-toggle="")
+                  .btn-group.mb-sm.mr(uib-dropdown='dropdown', ng-show="!editing[$index]")
+                    button.btn.btn-sm.dropdown-toggle(type='button', ng-disabled='disabled', class="btn-green", uib-dropdown-toggle="")
                       span.mr {{subcategory}}
                       span.caret
                     ul.dropdown-menu(role='menu')

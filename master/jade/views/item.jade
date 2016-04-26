@@ -40,9 +40,9 @@ form.panel
               td.text-info {{entity.price/100 | currency}}
               td {{entity.inventories[0].balance || 0}}
               td 
-                .btn-group(dropdown='dropdown')
+                .btn-group(uib-dropdown='dropdown')
                   a.btn.btn-default(href='', ng-click="items.stock(entity, 'stock')") 进货
-                  button.btn.dropdown-toggle(type='button', class="btn-default", dropdown-toggle="")
+                  button.btn.dropdown-toggle(type='button', class="btn-default", uib-dropdown-toggle="")
                     span.caret
                     span.sr-only= type
                   ul.dropdown-menu(role='menu')
@@ -82,9 +82,9 @@ form.panel
               td(data-title="'账面结存'") {{entity.inventories[0].balance || 0}}
               td(data-title="'上次盘点时间'") {{entity.inventories[0].inventoryAt | date:'yyyy-MM-dd HH:mm:ss'}}
               td(data-title="'操作'")
-                .btn-group(dropdown='dropdown')
+                .btn-group(uib-dropdown='dropdown')
                   a.btn.btn-default(href='', ng-click="items.confirm(entity)") 确认数量
-                  button.btn.dropdown-toggle(type='button', class="btn-default", dropdown-toggle="")
+                  button.btn.dropdown-toggle(type='button', class="btn-default", uib-dropdown-toggle="")
                     span.caret
                     span.sr-only= type
                   ul.dropdown-menu(role='menu')

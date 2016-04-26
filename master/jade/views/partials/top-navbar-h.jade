@@ -19,10 +19,10 @@ nav.navbar.topnavbar(role='navigation')
     .collapse.navbar-collapse(collapse="navCollapsed")
       // Navbar Menu 
       ul.nav.navbar-nav(ng-controller="SidebarController")
-        li(ng-repeat='item in menuItems | limitTo: 3 ', ng-class="{'dropdown': item.submenu}", dropdown="!!item.submenu")
+        li(ng-repeat='item in menuItems | limitTo: 3 ', ng-class="{'dropdown': item.submenu}", uib-dropdown="!!item.submenu")
           a(ng-if="!item.heading && !item.submenu", ng-href="{{$state.href(item.sref)}}", title="{{item.text}}")
             span {{(item.translate | translate) || item.text}}
-          a(dropdown-toggle="", ng-if="item.submenu")
+          a(uib-dropdown-toggle="", ng-if="item.submenu")
             span {{(item.translate | translate) || item.text}}
           // START Dropdown menu
           ul.dropdown-menu(class="animated fadeInUp")
@@ -47,8 +47,8 @@ nav.navbar.topnavbar(role='navigation')
           a(href='', toggle-fullscreen)
             em.fa.fa-expand
         // START Alert menu
-        li.dropdown.dropdown-list(dropdown="")
-          a(dropdown-toggle="")
+        li.dropdown.dropdown-list(uib-dropdown="")
+          a(uib-dropdown-toggle="")
             em.icon-bell
             .label.label-danger 11
           // START Dropdown menu

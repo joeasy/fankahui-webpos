@@ -1,8 +1,8 @@
 h3 
   // START Language list
   .pull-right
-    .btn-group(dropdown='', is-open='language.listIsOpen')
-      button.btn.btn-default(type='button', dropdown-toggle="")
+    .btn-group(uib-dropdown='', is-open='language.listIsOpen')
+      button.btn.btn-default(type='button', uib-dropdown-toggle="")
         | {{language.selected}}
         span.caret
       ul.dropdown-menu.dropdown-menu-right.animated.fadeInUpShort(role='menu')
@@ -50,8 +50,8 @@ h3
     #panelChart3.panel
       .panel-heading
         // START button group
-        .pull-right.btn-group(dropdown='dropdown2')
-          button(type="button", dropdown-toggle="").btn.btn-default.btn-sm
+        .pull-right.btn-group(uib-dropdown='dropdown2')
+          button(type="button", uib-dropdown-toggle="").btn.btn-default.btn-sm
             | Monthly
           ul.dropdown-menu.fadeInLeft.animated(role='menu')
             li
@@ -72,8 +72,8 @@ h3
   #panelChart9.panel
     .panel-heading
       // START button group
-      .pull-right.btn-group(dropdown='dropdown1')
-        button(type="button", dropdown-toggle="").btn.btn-default.btn-sm
+      .pull-right.btn-group(uib-dropdown='dropdown1')
+        button(type="button", uib-dropdown-toggle="").btn.btn-default.btn-sm
           | All time
         ul.dropdown-menu.fadeInLeft.animated(role='menu')
           li

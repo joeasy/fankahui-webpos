@@ -1,7 +1,7 @@
 mixin dropdown_button(type)
   // START button group
-  .btn-group.mb-sm(dropdown='dropdown')
-    button.btn.dropdown-toggle(type='button', ng-disabled='disabled', class="btn-#{type}", dropdown-toggle="")
+  .btn-group.mb-sm(uib-dropdown='dropdown')
+    button.btn.dropdown-toggle(type='button', ng-disabled='disabled', class="btn-#{type}", uib-dropdown-toggle="")
       = type
       span.caret
     ul.dropdown-menu(role='menu')
@@ -18,9 +18,9 @@ mixin dropdown_button(type)
 
 mixin dropdown_split(type)
   // START button group
-  .btn-group(dropdown='dropdown')
+  .btn-group(uib-dropdown='dropdown')
     button.btn(type='button', class="btn-#{type}") Action
-    button.btn.dropdown-toggle(type='button', class="btn-#{type}", dropdown-toggle="")
+    button.btn.dropdown-toggle(type='button', class="btn-#{type}", uib-dropdown-toggle="")
       span.caret
       span.sr-only= type
     ul.dropdown-menu(role='menu')

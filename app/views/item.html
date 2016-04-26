@@ -48,8 +48,8 @@
                      <td class="text-info">{{entity.price/100 | currency}}</td>
                      <td>{{entity.inventories[0].balance || 0}}</td>
                      <td>
-                        <div dropdown="dropdown" class="btn-group"><a href="" ng-click="items.stock(entity, 'stock')" class="btn btn-default">进货</a>
-                           <button type="button" dropdown-toggle="" class="btn dropdown-toggle btn-default">
+                        <div uib-dropdown="dropdown" class="btn-group"><a href="" ng-click="items.stock(entity, 'stock')" class="btn btn-default">进货</a>
+                           <button type="button" uib-dropdown-toggle="" class="btn dropdown-toggle btn-default">
                               <span class="caret"></span>
                               <span class="sr-only"></span>
                            </button>
@@ -100,8 +100,8 @@
                      <td data-title="'账面结存'">{{entity.inventories[0].balance || 0}}</td>
                      <td data-title="'上次盘点时间'">{{entity.inventories[0].inventoryAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                      <td data-title="'操作'">
-                        <div dropdown="dropdown" class="btn-group"><a href="" ng-click="items.confirm(entity)" class="btn btn-default">确认数量</a>
-                           <button type="button" dropdown-toggle="" class="btn dropdown-toggle btn-default">
+                        <div uib-dropdown="dropdown" class="btn-group"><a href="" ng-click="items.confirm(entity)" class="btn btn-default">确认数量</a>
+                           <button type="button" uib-dropdown-toggle="" class="btn dropdown-toggle btn-default">
                               <span class="caret"></span>
                               <span class="sr-only"></span>
                            </button>

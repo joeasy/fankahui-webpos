@@ -22,11 +22,11 @@
    <div collapse="navCollapsed" class="collapse navbar-collapse">
       <!-- Navbar Menu -->
       <ul ng-controller="SidebarController" class="nav navbar-nav">
-         <li ng-repeat="item in menuItems | limitTo: 3 " ng-class="{'dropdown': item.submenu}" dropdown="!!item.submenu">
+         <li ng-repeat="item in menuItems | limitTo: 3 " ng-class="{'dropdown': item.submenu}" uib-dropdown="!!item.submenu">
             <a ng-if="!item.heading &amp;&amp; !item.submenu" ng-href="{{$state.href(item.sref)}}" title="{{item.text}}">
                <span>{{(item.translate | translate) || item.text}}</span>
             </a>
-            <a dropdown-toggle="" ng-if="item.submenu">
+            <a uib-dropdown-toggle="" ng-if="item.submenu">
                <span>{{(item.translate | translate) || item.text}}</span>
             </a>
             <!-- START Dropdown menu-->
@@ -62,8 +62,8 @@
             </a>
          </li>
          <!-- START Alert menu-->
-         <li dropdown="" class="dropdown dropdown-list">
-            <a dropdown-toggle="">
+         <li uib-dropdown="" class="dropdown dropdown-list">
+            <a uib-dropdown-toggle="">
                <em class="icon-bell"></em>
                <div class="label label-danger">11</div>
             </a>

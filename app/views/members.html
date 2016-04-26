@@ -22,8 +22,8 @@
                <td data-title="'地区'">{{member.wxuser.province+member.wxuser.city}}</td>
                <td data-title="'登记日期'">{{member.created | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                <td data-title="'操作'">
-                  <div dropdown="dropdown" class="btn-group"><a href="" ng-click="members.sell(member)" class="btn btn-default">记账</a>
-                     <button type="button" dropdown-toggle="" class="btn dropdown-toggle btn-default">
+                  <div uib-dropdown="dropdown" class="btn-group"><a href="" ng-click="members.sell(member)" class="btn btn-default">记账</a>
+                     <button type="button" uib-dropdown-toggle="" class="btn dropdown-toggle btn-default">
                         <span class="caret"></span>
                         <span class="sr-only"></span>
                      </button>

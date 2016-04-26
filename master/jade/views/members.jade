@@ -24,9 +24,9 @@ h3
           td(data-title="'地区'") {{member.wxuser.province+member.wxuser.city}}
           td(data-title="'登记日期'") {{member.created | date:'yyyy-MM-dd HH:mm:ss'}}
           td(data-title="'操作'")
-            .btn-group(dropdown='dropdown')
+            .btn-group(uib-dropdown='dropdown')
               a.btn.btn-default(href='', ng-click="members.sell(member)") 记账
-              button.btn.dropdown-toggle(type='button', class="btn-default", dropdown-toggle="")
+              button.btn.dropdown-toggle(type='button', class="btn-default", uib-dropdown-toggle="")
                 span.caret
                 span.sr-only= type
               ul.dropdown-menu(role='menu')

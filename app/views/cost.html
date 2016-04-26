@@ -47,10 +47,10 @@
                         <td data-title="'备注说明'">{{entity.memo}}</td>
                         <td data-title="'经手人'">{{entity.operator.name || entity.operator.username}}</td>
                         <td data-title="'操作'">
-                           <div dropdown="dropdown" class="btn-group">
+                           <div uib-dropdown="dropdown" class="btn-group">
                               <a href="" ng-click="costs.edit(entity)" class="btn btn-default">
                                  <em class="icon fa fa-edit fa-fw"></em>编辑</a>
-                              <button type="button" dropdown-toggle="" class="btn dropdown-toggle btn-default">
+                              <button type="button" uib-dropdown-toggle="" class="btn dropdown-toggle btn-default">
                                  <span class="caret"></span>
                                  <span class="sr-only"></span>
                               </button>
@@ -114,8 +114,8 @@
                               </span>
                            </div>
                            <!-- START button group-->
-                           <div dropdown="dropdown" ng-show="!editing[$index]" class="btn-group mb-sm mr">
-                              <button type="button" ng-disabled="disabled" dropdown-toggle="" class="btn btn-sm dropdown-toggle btn-green">
+                           <div uib-dropdown="dropdown" ng-show="!editing[$index]" class="btn-group mb-sm mr">
+                              <button type="button" ng-disabled="disabled" uib-dropdown-toggle="" class="btn btn-sm dropdown-toggle btn-green">
                                  <span class="mr">{{subcategory}}</span>
                                  <span class="caret"></span>
                               </button>
