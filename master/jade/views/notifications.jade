@@ -146,23 +146,23 @@ ul.breadcrumb
         h4 Static
         .row
           .col-sm-4
-            progressbar(value='55')
+            uib-progressbar(value='55')
           .col-sm-4
-            progressbar.progress-striped(value='22', type='warning') 22%
+            uib-progressbar.progress-striped(value='22', type='warning') 22%
           .col-sm-4
-            progressbar.progress-striped.active(max='200', value='166', type='danger')
+            uib-progressbar.progress-striped.active(max='200', value='166', type='danger')
               i 166 / 200
 
         h4 Dynamic
-        progressbar(max='prog.max', value='prog.dynamic')
+        uib-progressbar(max='prog.max', value='prog.dynamic')
           span.text-nowrap {{prog.dynamic}} / {{prog.max}}
         small
           em No animation
-        progressbar(animate='false', value='prog.dynamic', type='success')
+        uib-progressbar(animate='false', value='prog.dynamic', type='success')
           b {{dynamic}}%
         small
           em Object (changes type based on value)
-        progressbar.progress-striped.active(value='prog.dynamic', type='{{prog.type}}')
+        uib-progressbar.progress-striped.active(value='prog.dynamic', type='{{prog.type}}')
           | {{type}}
           i(ng-show='prog.showWarning') !!! Watch out !!!
 

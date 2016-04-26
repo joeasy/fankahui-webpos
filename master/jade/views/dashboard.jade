@@ -62,7 +62,7 @@ h3
               em.pull-right.text-muted.fa.fa-coffee.fa-2x
             div.pv-lg(sparkline="",data-type='line', data-height='80', data-width='100%', data-line-width='2', data-line-color="{{colorByName('purple')}}", data-spot-color='#888', data-min-spot-color="{{colorByName('purple')}}", data-max-spot-color="{{colorByName('purple')}}", data-fill-color='', data-highlight-line-color='#fff', data-spot-radius='3', values="1,3,4,7,5,9,4,4,7,5,9,6,4", data-resize="true")
             p: small.text-muted Actual progress
-            progressbar.progress-striped.progress-xs(value='80', type='info') 80%
+            uib-progressbar.progress-striped.progress-xs(value='80', type='info') 80%
                 
         // END widget
       .col-lg-8
@@ -199,7 +199,7 @@ h3
               small.text-muted.pull-right.ml 1w
               .media-box-heading
                 a(href="#").text-warning.m0 TASKS COMPLETION
-              progressbar.progress-xs.m0(value='22', type='warning') 22%
+              uib-progressbar.progress-xs.m0(value='22', type='warning') 22%
 
         // END list group item
       // END list group
