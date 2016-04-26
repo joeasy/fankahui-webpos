@@ -27,19 +27,19 @@ h3 Interaction
     script(type="text/ng-template", id="customTemplate.html")
       a
         img(ng-src='http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}', width='16', alt="")
-        span(bind-html-unsafe='match.label | typeaheadHighlight:query')
+        span(bind-html-unsafe='match.label | uibTypeaheadHighlight:query')
 
     .typeahead-ctrl(ng-controller='TypeaheadCtrl as tahead')
       h5 Static arrays
       .well.well-sm Model: {{tahead.selected | json}}        
-      input.form-control(type='text', ng-model='tahead.selected', typeahead='state for state in tahead.states | filter:$viewValue | limitTo:8')
+      input.form-control(type='text', ng-model='tahead.selected', uib-typeahead='state for state in tahead.states | filter:$viewValue | limitTo:8')
       h5 Asynchronous results
       .well.well-sm Model: {{tahead.asyncSelected | json}}        
-      input.form-control(type='text', ng-model='tahead.asyncSelected', placeholder='Locations loaded via $http', typeahead='address for address in tahead.getLocation($viewValue)', typeahead-loading='loadingLocations')
+      input.form-control(type='text', ng-model='tahead.asyncSelected', placeholder='Locations loaded via $http', uib-typeahead='address for address in tahead.getLocation($viewValue)', typeahead-loading='loadingLocations')
       i.glyphicon.glyphicon-refresh(ng-show='loadingLocations')
       h5 Custom templates for results
       .well.well-sm Model: {{tahead.customSelected | json}}        
-      input.form-control(type='text', ng-model='tahead.customSelected', placeholder='Custom template', typeahead='state as state.name for state in tahead.statesWithFlags | filter:{name:$viewValue}', typeahead-template-url='customTemplate.html')
+      input.form-control(type='text', ng-model='tahead.customSelected', placeholder='Custom template', uib-typeahead='state as state.name for state in tahead.statesWithFlags | filter:{name:$viewValue}', typeahead-template-url='customTemplate.html')
 
 .row
   .col-lg-6

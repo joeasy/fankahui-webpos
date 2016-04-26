@@ -10,7 +10,7 @@ h3
       .input-group
         span.input-group-addon
           em.fa.fa-lg.fa-barcode
-        input.form-control(type="text", placeholder="请输入商品条码", ng-model="dealService.selectedSku" ui-keypress="{13:'dealService.register()'}", typeahead="sku as sku.item.name for sku in dealService.querySkus($viewValue)")
+        input.form-control(type="text", placeholder="请输入商品条码", ng-model="dealService.selectedSku" ui-keypress="{13:'dealService.register()'}", uib-typeahead="sku as sku.item.name for sku in dealService.querySkus($viewValue)")
         span.input-group-btn
           a.btn.btn-primary(ng-click="dealService.register()") 登记
     h3.mt0 采购清单

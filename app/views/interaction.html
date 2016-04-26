@@ -31,19 +31,19 @@
    <div class="col-lg-6">
       <h3 class="page-header mt0">Typeahead</h3>
       <script type="text/ng-template" id="customTemplate.html">
-         <a><img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" width="16" alt=""/><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span></a>
+         <a><img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" width="16" alt=""/><span bind-html-unsafe="match.label | uibTypeaheadHighlight:query"></span></a>
       </script>
       <div ng-controller="TypeaheadCtrl as tahead" class="typeahead-ctrl">
          <h5>Static arrays</h5>
          <div class="well well-sm">Model: {{tahead.selected | json}}</div>
-         <input type="text" ng-model="tahead.selected" typeahead="state for state in tahead.states | filter:$viewValue | limitTo:8" class="form-control" />
+         <input type="text" ng-model="tahead.selected" uib-typeahead="state for state in tahead.states | filter:$viewValue | limitTo:8" class="form-control" />
          <h5>Asynchronous results</h5>
          <div class="well well-sm">Model: {{tahead.asyncSelected | json}}</div>
-         <input type="text" ng-model="tahead.asyncSelected" placeholder="Locations loaded via $http" typeahead="address for address in tahead.getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control"
-         /><i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+         <input type="text" ng-model="tahead.asyncSelected" placeholder="Locations loaded via $http" uib-typeahead="address for address in tahead.getLocation($viewValue)" typeahead-loading="loadingLocations"
+         class="form-control" /><i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
          <h5>Custom templates for results</h5>
          <div class="well well-sm">Model: {{tahead.customSelected | json}}</div>
-         <input type="text" ng-model="tahead.customSelected" placeholder="Custom template" typeahead="state as state.name for state in tahead.statesWithFlags | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html"
+         <input type="text" ng-model="tahead.customSelected" placeholder="Custom template" uib-typeahead="state as state.name for state in tahead.statesWithFlags | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html"
          class="form-control" />
       </div>
    </div>

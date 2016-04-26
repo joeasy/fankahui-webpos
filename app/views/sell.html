@@ -8,7 +8,7 @@
             <span class="input-group-addon">
                <em class="fa fa-lg fa-barcode"></em>
             </span>
-            <input type="text" placeholder="请输入商品条码" ng-model="dealService.selectedSku" ui-keypress="{13:'dealService.register()'}" typeahead="sku as sku.item.name for sku in dealService.querySkus($viewValue)" class="form-control" />
+            <input type="text" placeholder="请输入商品条码" ng-model="dealService.selectedSku" ui-keypress="{13:'dealService.register()'}" uib-typeahead="sku as sku.item.name for sku in dealService.querySkus($viewValue)" class="form-control" />
             <span class="input-group-btn"><a ng-click="dealService.register()" class="btn btn-primary">登记</a>
             </span>
          </div>
