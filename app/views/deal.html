@@ -168,8 +168,8 @@
 </div>
 <!-- START panel tab-->
 <div class="panel">
-   <tabset justified="true">
-      <tab>
+   <uib-tabset justified="true">
+      <uib-tab>
          <tab-heading>交易明细</tab-heading>
          <div class="table-responsive table-bordered mb-lg">
             <table class="table">
@@ -209,8 +209,8 @@
             <button type="button" ng-click="dc.goReturn()" class="btn btn-danger pull-right mr">
                <em class="fa fa-undo fa-fw"></em>整单退货</button>
          </div>
-      </tab>
-      <tab>
+      </uib-tab>
+      <uib-tab>
          <tab-heading>退款退货</tab-heading>
          <div class="row clearfix">
             <div class="col-md-3">
@@ -280,8 +280,8 @@
                </div>
             </div>
          </div>
-      </tab>
-   </tabset>
+      </uib-tab>
+   </uib-tabset>
    <!-- Templates -->
    <script type="text/ng-template" id="checkoutReturnDialogId">
       <div class="modal-header"><h3>退货</h3></div><div ng-class="{'whirl standard':submiting}" class="modal-body"><fieldset><div class="form-group"><div ng-repeat="entity in returnService.postData.entities" class="col-md-12"><span class="mr">{{$index+1}}. {{entity.sku.item.name}} - {{entity.sku.model}}</span><input type="number" ng-model="entity.qty" ng-change="returnService.count()" class="pull-right text-right"/></div></div></fieldset><fieldset><div class="form-group"><div class="col-md-6 pull-left">共计: {{returnService.postData.totalQty}}件  </div><div class="col-md-6 pull-right text-right">   

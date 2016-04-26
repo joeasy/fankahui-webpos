@@ -114,8 +114,8 @@ h3 交易  # {{dc.deal.serialNumber}}
         
 // START panel tab
 .panel
-  tabset(justified="true")
-    tab
+  uib-tabset(justified="true")
+    uib-tab
       tab-heading 交易明细
       .table-responsive.table-bordered.mb-lg
         table.table
@@ -153,7 +153,7 @@ h3 交易  # {{dc.deal.serialNumber}}
           em.fa.fa-undo.fa-fw
           | 整单退货
 
-    tab
+    uib-tab
       tab-heading 退款退货
       .row.clearfix
         .col-md-3

@@ -87,8 +87,8 @@ h3
 
 // START panel tab
 .panel
-  tabset(justified="true")
-    tab
+  uib-tabset(justified="true")
+    uib-tab
       tab-heading 
         | 消费记录
       .table-responsive
@@ -102,7 +102,7 @@ h3
               td(data-title="'数量'") {{deal.totalQty}}
               td(data-title="'支付方式'") {{deal.payment.type | payment_type}}
               td(data-title="'记账日期'") {{deal.created | date:'yyyy-MM-dd HH:mm:ss'}}
-    tab
+    uib-tab
       tab-heading 
         | 储值
       .table-responsive
@@ -115,7 +115,7 @@ h3
               td(data-title="'账户余额'") {{deposit.balance/100 | currency: '¥'}}
               td(data-title="'交易门店'") {{deposit.shop.branch_name}}
               td(data-title="'日期'") {{deposit.created | date:'yyyy-MM-dd HH:mm:ss'}}
-    tab
+    uib-tab
       tab-heading 
         | 积分
       .table-responsive

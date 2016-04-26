@@ -3,8 +3,8 @@ h3 费用支出
 toaster-container(toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}")
 
 form.panel
-  tabset(justified="true")
-    tab
+  uib-tabset(justified="true")
+    uib-tab
       tab-heading 
         | 支出清单
       .panel(ng-controller="CostsController as costs")
@@ -60,7 +60,7 @@ form.panel
                           | 删除
                   
 
-    tab
+    uib-tab
       tab-heading
         | 支出分类
       .panel(ng-controller="CostCategoriesController as cc")

@@ -5,8 +5,8 @@ h3
 toaster-container(toaster-options="{'position-class': 'toast-bottom-right', 'close-button':true}")
 
 form.panel(ng-controller="SettingController as setting")
-  tabset(justified="true")
-    tab
+  uib-tabset(justified="true")
+    uib-tab
       tab-heading 
         | 销售配置
       .panel
@@ -37,7 +37,7 @@ form.panel(ng-controller="SettingController as setting")
                     span.fa.fa-circle
                     |  抹角
             
-    tab
+    uib-tab
       tab-heading
         | 商品配置
       .panel
@@ -56,7 +56,7 @@ form.panel(ng-controller="SettingController as setting")
                   span.mr-sm 件时，提醒我。
                   a.btn.btn-sm.btn-primary(ng-click="setting.update()") 保存
 
-    tab
+    uib-tab
       tab-heading
         | 会员配置
       .panel
@@ -109,7 +109,7 @@ form.panel(ng-controller="SettingController as setting")
                   button.btn.btn-primary(ng-click='setting.update()') 保存
                   button.btn.btn-default(ng-click='setting.updaeteMemberLevels()') 应用到全体会员
                 
-    tab
+    uib-tab
       tab-heading
         | 微信配置
       .panel
