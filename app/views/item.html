@@ -98,7 +98,7 @@
                      <td data-title="'条码'">{{entity.barcode || "-"}}</td>
                      <td data-title="'规格'">{{entity.model || "-"}}</td>
                      <td data-title="'账面结存'">{{entity.inventories[0].balance || 0}}</td>
-                     <td data-title="'上次盘点时间'">{{entity.inventories[0].inventoryAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                     <td data-title="'上次盘点时间'">{{entity.inventories[0].modified | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                      <td data-title="'操作'">
                         <div uib-dropdown="dropdown" class="btn-group"><a href="" ng-click="items.confirm(entity)" class="btn btn-default">确认数量</a>
                            <button type="button" uib-dropdown-toggle="" class="btn dropdown-toggle btn-default">

@@ -1,1 +1,299 @@
-!function(e){"object"==typeof exports&&"object"==typeof module?e(require("../../lib/codemirror")):"function"==typeof define&&define.amd?define(["../../lib/codemirror"],e):e(CodeMirror)}(function(e){"use strict";e.defineMode("dylan",function(e){function n(e,n,t){return n.tokenize=t,t(e,n)}function t(e,n,t){return p=e,y=t,n}function i(e,i){var a=e.peek();if("'"==a||'"'==a)return e.next(),n(e,i,o(a,"string","string"));if("/"==a)return e.next(),e.eat("*")?n(e,i,r):e.eat("/")?(e.skipToEnd(),t("comment","comment")):(e.skipTo(" "),t("operator","operator"));if(/\d/.test(a))return e.match(/^\d*(?:\.\d*)?(?:e[+\-]?\d+)?/),t("number","number");if("#"==a)return e.next(),a=e.peek(),'"'==a?(e.next(),n(e,i,o('"',"symbol","string-2"))):"b"==a?(e.next(),e.eatWhile(/[01]/),t("number","number")):"x"==a?(e.next(),e.eatWhile(/[\da-f]/i),t("number","number")):"o"==a?(e.next(),e.eatWhile(/[0-7]/),t("number","number")):(e.eatWhile(/[-a-zA-Z]/),t("hash","keyword"));if(e.match("end"))return t("end","keyword");for(var l in f)if(f.hasOwnProperty(l)){var u=f[l];if(u instanceof Array&&u.some(function(n){return e.match(n)})||e.match(u))return t(l,m[l],e.current())}return e.match("define")?t("definition","def"):(e.eatWhile(/[\w\-]/),d[e.current()]?t(d[e.current()],b[e.current()],e.current()):e.current().match(c)?t("variable","variable"):(e.next(),t("other","variable-2")))}function r(e,n){for(var r,o=!1;r=e.next();){if("/"==r&&o){n.tokenize=i;break}o="*"==r}return t("comment","comment")}function o(e,n,r){return function(o,a){for(var l,c=!1;null!=(l=o.next());)if(l==e){c=!0;break}return c&&(a.tokenize=i),t(n,r)}}var a={unnamedDefinition:["interface"],namedDefinition:["module","library","macro","C-struct","C-union","C-function","C-callable-wrapper"],typeParameterizedDefinition:["class","C-subtype","C-mapped-subtype"],otherParameterizedDefinition:["method","function","C-variable","C-address"],constantSimpleDefinition:["constant"],variableSimpleDefinition:["variable"],otherSimpleDefinition:["generic","domain","C-pointer-type","table"],statement:["if","block","begin","method","case","for","select","when","unless","until","while","iterate","profiling","dynamic-bind"],separator:["finally","exception","cleanup","else","elseif","afterwards"],other:["above","below","by","from","handler","in","instance","let","local","otherwise","slot","subclass","then","to","keyed-by","virtual"],signalingCalls:["signal","error","cerror","break","check-type","abort"]};a.otherDefinition=a.unnamedDefinition.concat(a.namedDefinition).concat(a.otherParameterizedDefinition),a.definition=a.typeParameterizedDefinition.concat(a.otherDefinition),a.parameterizedDefinition=a.typeParameterizedDefinition.concat(a.otherParameterizedDefinition),a.simpleDefinition=a.constantSimpleDefinition.concat(a.variableSimpleDefinition).concat(a.otherSimpleDefinition),a.keyword=a.statement.concat(a.separator).concat(a.other);var l="[-_a-zA-Z?!*@<>$%]+",c=new RegExp("^"+l),f={symbolKeyword:l+":",symbolClass:"<"+l+">",symbolGlobal:"\\*"+l+"\\*",symbolConstant:"\\$"+l},m={symbolKeyword:"atom",symbolClass:"tag",symbolGlobal:"variable-2",symbolConstant:"variable-3"};for(var u in f)f.hasOwnProperty(u)&&(f[u]=new RegExp("^"+f[u]));f.keyword=[/^with(?:out)?-[-_a-zA-Z?!*@<>$%]+/];var s={};s.keyword="keyword",s.definition="def",s.simpleDefinition="def",s.signalingCalls="builtin";var d={},b={};["keyword","definition","simpleDefinition","signalingCalls"].forEach(function(e){a[e].forEach(function(n){d[n]=e,b[n]=s[e]})});var p,y;return{startState:function(){return{tokenize:i,currentIndent:0}},token:function(e,n){if(e.eatSpace())return null;var t=n.tokenize(e,n);return t},blockCommentStart:"/*",blockCommentEnd:"*/"}}),e.defineMIME("text/x-dylan","dylan")});
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
+"use strict";
+
+CodeMirror.defineMode("dylan", function(_config) {
+  // Words
+  var words = {
+    // Words that introduce unnamed definitions like "define interface"
+    unnamedDefinition: ["interface"],
+
+    // Words that introduce simple named definitions like "define library"
+    namedDefinition: ["module", "library", "macro",
+                      "C-struct", "C-union",
+                      "C-function", "C-callable-wrapper"
+                     ],
+
+    // Words that introduce type definitions like "define class".
+    // These are also parameterized like "define method" and are
+    // appended to otherParameterizedDefinitionWords
+    typeParameterizedDefinition: ["class", "C-subtype", "C-mapped-subtype"],
+
+    // Words that introduce trickier definitions like "define method".
+    // These require special definitions to be added to startExpressions
+    otherParameterizedDefinition: ["method", "function",
+                                   "C-variable", "C-address"
+                                  ],
+
+    // Words that introduce module constant definitions.
+    // These must also be simple definitions and are
+    // appended to otherSimpleDefinitionWords
+    constantSimpleDefinition: ["constant"],
+
+    // Words that introduce module variable definitions.
+    // These must also be simple definitions and are
+    // appended to otherSimpleDefinitionWords
+    variableSimpleDefinition: ["variable"],
+
+    // Other words that introduce simple definitions
+    // (without implicit bodies).
+    otherSimpleDefinition: ["generic", "domain",
+                            "C-pointer-type",
+                            "table"
+                           ],
+
+    // Words that begin statements with implicit bodies.
+    statement: ["if", "block", "begin", "method", "case",
+                "for", "select", "when", "unless", "until",
+                "while", "iterate", "profiling", "dynamic-bind"
+               ],
+
+    // Patterns that act as separators in compound statements.
+    // This may include any general pattern that must be indented
+    // specially.
+    separator: ["finally", "exception", "cleanup", "else",
+                "elseif", "afterwards"
+               ],
+
+    // Keywords that do not require special indentation handling,
+    // but which should be highlighted
+    other: ["above", "below", "by", "from", "handler", "in",
+            "instance", "let", "local", "otherwise", "slot",
+            "subclass", "then", "to", "keyed-by", "virtual"
+           ],
+
+    // Condition signaling function calls
+    signalingCalls: ["signal", "error", "cerror",
+                     "break", "check-type", "abort"
+                    ]
+  };
+
+  words["otherDefinition"] =
+    words["unnamedDefinition"]
+    .concat(words["namedDefinition"])
+    .concat(words["otherParameterizedDefinition"]);
+
+  words["definition"] =
+    words["typeParameterizedDefinition"]
+    .concat(words["otherDefinition"]);
+
+  words["parameterizedDefinition"] =
+    words["typeParameterizedDefinition"]
+    .concat(words["otherParameterizedDefinition"]);
+
+  words["simpleDefinition"] =
+    words["constantSimpleDefinition"]
+    .concat(words["variableSimpleDefinition"])
+    .concat(words["otherSimpleDefinition"]);
+
+  words["keyword"] =
+    words["statement"]
+    .concat(words["separator"])
+    .concat(words["other"]);
+
+  // Patterns
+  var symbolPattern = "[-_a-zA-Z?!*@<>$%]+";
+  var symbol = new RegExp("^" + symbolPattern);
+  var patterns = {
+    // Symbols with special syntax
+    symbolKeyword: symbolPattern + ":",
+    symbolClass: "<" + symbolPattern + ">",
+    symbolGlobal: "\\*" + symbolPattern + "\\*",
+    symbolConstant: "\\$" + symbolPattern
+  };
+  var patternStyles = {
+    symbolKeyword: "atom",
+    symbolClass: "tag",
+    symbolGlobal: "variable-2",
+    symbolConstant: "variable-3"
+  };
+
+  // Compile all patterns to regular expressions
+  for (var patternName in patterns)
+    if (patterns.hasOwnProperty(patternName))
+      patterns[patternName] = new RegExp("^" + patterns[patternName]);
+
+  // Names beginning "with-" and "without-" are commonly
+  // used as statement macro
+  patterns["keyword"] = [/^with(?:out)?-[-_a-zA-Z?!*@<>$%]+/];
+
+  var styles = {};
+  styles["keyword"] = "keyword";
+  styles["definition"] = "def";
+  styles["simpleDefinition"] = "def";
+  styles["signalingCalls"] = "builtin";
+
+  // protected words lookup table
+  var wordLookup = {};
+  var styleLookup = {};
+
+  [
+    "keyword",
+    "definition",
+    "simpleDefinition",
+    "signalingCalls"
+  ].forEach(function(type) {
+    words[type].forEach(function(word) {
+      wordLookup[word] = type;
+      styleLookup[word] = styles[type];
+    });
+  });
+
+
+  function chain(stream, state, f) {
+    state.tokenize = f;
+    return f(stream, state);
+  }
+
+  var type, content;
+
+  function ret(_type, style, _content) {
+    type = _type;
+    content = _content;
+    return style;
+  }
+
+  function tokenBase(stream, state) {
+    // String
+    var ch = stream.peek();
+    if (ch == "'" || ch == '"') {
+      stream.next();
+      return chain(stream, state, tokenString(ch, "string", "string"));
+    }
+    // Comment
+    else if (ch == "/") {
+      stream.next();
+      if (stream.eat("*")) {
+        return chain(stream, state, tokenComment);
+      } else if (stream.eat("/")) {
+        stream.skipToEnd();
+        return ret("comment", "comment");
+      } else {
+        stream.skipTo(" ");
+        return ret("operator", "operator");
+      }
+    }
+    // Decimal
+    else if (/\d/.test(ch)) {
+      stream.match(/^\d*(?:\.\d*)?(?:e[+\-]?\d+)?/);
+      return ret("number", "number");
+    }
+    // Hash
+    else if (ch == "#") {
+      stream.next();
+      // Symbol with string syntax
+      ch = stream.peek();
+      if (ch == '"') {
+        stream.next();
+        return chain(stream, state, tokenString('"', "symbol", "string-2"));
+      }
+      // Binary number
+      else if (ch == "b") {
+        stream.next();
+        stream.eatWhile(/[01]/);
+        return ret("number", "number");
+      }
+      // Hex number
+      else if (ch == "x") {
+        stream.next();
+        stream.eatWhile(/[\da-f]/i);
+        return ret("number", "number");
+      }
+      // Octal number
+      else if (ch == "o") {
+        stream.next();
+        stream.eatWhile(/[0-7]/);
+        return ret("number", "number");
+      }
+      // Hash symbol
+      else {
+        stream.eatWhile(/[-a-zA-Z]/);
+        return ret("hash", "keyword");
+      }
+    } else if (stream.match("end")) {
+      return ret("end", "keyword");
+    }
+    for (var name in patterns) {
+      if (patterns.hasOwnProperty(name)) {
+        var pattern = patterns[name];
+        if ((pattern instanceof Array && pattern.some(function(p) {
+          return stream.match(p);
+        })) || stream.match(pattern))
+          return ret(name, patternStyles[name], stream.current());
+      }
+    }
+    if (stream.match("define")) {
+      return ret("definition", "def");
+    } else {
+      stream.eatWhile(/[\w\-]/);
+      // Keyword
+      if (wordLookup[stream.current()]) {
+        return ret(wordLookup[stream.current()], styleLookup[stream.current()], stream.current());
+      } else if (stream.current().match(symbol)) {
+        return ret("variable", "variable");
+      } else {
+        stream.next();
+        return ret("other", "variable-2");
+      }
+    }
+  }
+
+  function tokenComment(stream, state) {
+    var maybeEnd = false,
+    ch;
+    while ((ch = stream.next())) {
+      if (ch == "/" && maybeEnd) {
+        state.tokenize = tokenBase;
+        break;
+      }
+      maybeEnd = (ch == "*");
+    }
+    return ret("comment", "comment");
+  }
+
+  function tokenString(quote, type, style) {
+    return function(stream, state) {
+      var next, end = false;
+      while ((next = stream.next()) != null) {
+        if (next == quote) {
+          end = true;
+          break;
+        }
+      }
+      if (end)
+        state.tokenize = tokenBase;
+      return ret(type, style);
+    };
+  }
+
+  // Interface
+  return {
+    startState: function() {
+      return {
+        tokenize: tokenBase,
+        currentIndent: 0
+      };
+    },
+    token: function(stream, state) {
+      if (stream.eatSpace())
+        return null;
+      var style = state.tokenize(stream, state);
+      return style;
+    },
+    blockCommentStart: "/*",
+    blockCommentEnd: "*/"
+  };
+});
+
+CodeMirror.defineMIME("text/x-dylan", "dylan");
+
+});

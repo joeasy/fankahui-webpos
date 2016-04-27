@@ -1,1 +1,516 @@
-!function(t){"use strict"}(angular.module("bm.bsTour",[])),function(t){"use strict";t.provider("TourConfig",[function(){var t={prefixOptions:!1,prefix:"bsTour"};this.set=function(e,n){t[e]=n},this.$get=[function(){var e={};return e.get=function(e){return t[e]},e}]}])}(angular.module("bm.bsTour")),function(t){"use strict";t.controller("TourController",["$filter","$timeout",function(t,e){function n(e){var n=t("orderBy")(e,"order");return angular.forEach(n,function(t,e){t.next=n[e+1]?e+1:-1,t.prev=e-1}),n}var r,o=this,a=[],u=angular.noop,i={};o.refreshTour=function(){a=a.filter(function(t){return t!==i}),a[0]&&a[0].redirectPrev&&a.unshift(i),a[a.length-1]&&a[a.length-1].redirectNext&&a.push(i),r&&(r._options.steps=[],r.addSteps(n(a)))},o.addStep=function(t){~a.indexOf(t)||(a.push(t),o.refreshTour(),u(t))},o.removeStep=function(t){~a.indexOf(t)&&(a.splice(a.indexOf(t),1),o.refreshTour())},o.getSteps=function(){return a},o.waitFor=function(t){r.end(),u=function(n){n.stepId===t&&(r.setCurrentStep(a.indexOf(n)),e(function(){r.start(!0)}))}},o.init=function(t){return t.steps=n(a),r=new Tour(t)}}])}(angular.module("bm.bsTour")),function(t){"use strict";function e(){return["TourHelpers",function(t){return{restrict:"EA",scope:!0,controller:"TourController",link:function(e,n,r,o){var a,u={},i="onStart onEnd afterGetState afterSetState afterRemoveState onShow onShown onHide onHidden onNext onPrev onPause onResume".split(" "),c="name container keyboard storage debug redirect duration basePath backdrop orphan".split(" ");t.attachInterpolatedValues(r,u,c),t.attachEventHandlers(e,r,u,i),a=t.attachTemplate(e,r,u),e.$watchCollection(o.getSteps,function(t){e.stepCount=t.length}),r.tourOptions&&angular.extend(u,e.$eval(r.tourOptions)),r[t.getAttrName("options")]&&angular.extend(u,e.$eval(r[t.getAttrName("options")])),a.then(function(){e.tour=o.init(u),e.tour.refresh=o.refreshTour})}}}]}t.directive("tour",e()),t.directive("bsTour",e())}(angular.module("bm.bsTour")),function(t){"use strict";t.factory("TourHelpers",["$templateCache","$http","$compile","TourConfig","$q",function(t,e,n,r,o){function a(t,e){return function(){var r=angular.element(t);return c(e,function(){n(r)(e)}),r}}function u(n,r){return e.get(n,{cache:t}).success(function(t){return t?a(t,r):""})}function i(t){return"true"===t?!0:"false"===t?!1:t}var c,s={};return c=s.safeApply=function(t,e){var n=t.$$phase;"$apply"===n||"$digest"===n?e&&"function"==typeof e&&e():t.$apply(e)},s.attachTemplate=function(t,e,n){var r,i=o.defer();return e[s.getAttrName("template")]?(r=a(t.$eval(e[s.getAttrName("template")]),t),n.template=r,i.resolve(r)):e[s.getAttrName("templateUrl")]?u(e[s.getAttrName("templateUrl")],t).then(function(t){t&&(n.template=t,i.resolve(t))}):i.resolve(),i.promise},s.attachEventHandlers=function(t,e,n,r){angular.forEach(r,function(r){e[s.getAttrName(r)]&&(n[r]=function(n){c(t,function(){t.$eval(e[s.getAttrName(r)])})})})},s.attachInterpolatedValues=function(t,e,n){angular.forEach(n,function(n){t[s.getAttrName(n)]&&(e[n]=i(t[s.getAttrName(n)]),t.$observe(s.getAttrName(n),function(t){e[n]=i(t)}))})},s.getAttrName=function(t){return r.get("prefixOptions")?r.get("prefix")+t.charAt(0).toUpperCase()+t.substr(1):t},s}])}(angular.module("bm.bsTour")),function(t){"use strict";function e(){return["TourHelpers","$location",function(t,e){return{restrict:"EA",scope:!0,require:"^tour",link:function(n,r,o,a){function u(){var e;return o[t.getAttrName("skip")]&&(e=n.$eval(o[t.getAttrName("skip")])),e||(e=!!f.path||r.is(":hidden")&&!o.availableWhenHidden),e}function i(r,o,u){var i=f[r];f[r]=function(r){i&&i(r),a.waitFor(u),t.safeApply(n,function(){e.path(o)})}}var c,s,p,f={element:r,stepId:o.tourStep},l="onShow onShown onHide onHidden onNext onPrev onPause onResume".split(" "),d="content title path animation container placement backdrop redirect orphan reflex duration nextStep prevStep nextPath prevPath".split(" ");t.attachInterpolatedValues(o,f,d),c=o.$observe(t.getAttrName("order"),function(t){f.order=isNaN(1*t)?0:1*t,a.refreshTour()}),t.attachEventHandlers(n,o,f,l),p=t.attachTemplate(n,o,f),s=n.$watch(u,function(t){t?a.removeStep(f):a.addStep(f)}),n.$on("$destroy",function(){a.removeStep(f),c(),s()}),o[t.getAttrName("options")]&&angular.extend(f,n.$eval(o[t.getAttrName("options")])),f.nextPath&&(f.redirectNext=!0,i("onNext",f.nextPath,f.nextStep)),f.prevPath&&(f.redirectPrev=!0,i("onPrev",f.prevPath,f.prevStep)),p.then(function(){a.addStep(f)})}}}]}t.directive("tourStep",e()),t.directive("bsTourStep",e())}(angular.module("bm.bsTour"));
+/* global Tour: false */
+
+/**
+ * @file angular-bootstrap-tour is micro-library.
+ * Scaffolded with generator-microjs
+ * @author  <Ben March>
+ */
+
+
+(function angularBootstrapTour(app) {
+    'use strict';
+
+    //all components moved to separate files
+
+}(angular.module('bm.bsTour', [])));
+
+/* global angular: false */
+
+(function (app) {
+    'use strict';
+
+    app.provider('TourConfig', [function () {
+
+        var config = {
+            prefixOptions: false,
+            prefix: 'bsTour'
+        };
+
+        this.set = function (option, value) {
+            config[option] = value;
+        };
+
+        this.$get = [function () {
+
+            var service = {};
+
+            service.get = function (option) {
+                return config[option];
+            };
+
+            return service;
+
+        }];
+
+    }]);
+
+}(angular.module('bm.bsTour')));
+
+/* global angular: false */
+
+(function (app) {
+    'use strict';
+
+    app.controller('TourController', ['$filter', '$timeout', function ($filter, $timeout) {
+
+        var self = this,
+            steps = [],
+            tour,
+            newStepFound = angular.noop,
+            dummyStep = {};
+
+        /**
+         * Sorts steps based on "order" and set next and prev options appropriately
+         *
+         * @param {Array} steps
+         * @returns {Array}
+         */
+        function orderSteps(steps) {
+            var ordered = $filter('orderBy')(steps, 'order');
+
+            angular.forEach(ordered, function (step, index) {
+                step.next = ordered[index + 1] ? index + 1 : - 1;
+                step.prev = index - 1;
+            });
+
+            return ordered;
+        }
+
+        /**
+         * As steps are linked, add them to the tour options
+         */
+        self.refreshTour = function () {
+            //remove dummy steps that were previously added
+            steps = steps.filter(function (step) {
+                return step !== dummyStep;
+            });
+
+            //if the first or last step redirects to another page, BT needs a step (dummyStep)
+            if (steps[0] && steps[0].redirectPrev) {
+                steps.unshift(dummyStep);
+            }
+            if (steps[steps.length-1] && steps[steps.length-1].redirectNext) {
+                steps.push(dummyStep);
+            }
+
+            //refresh
+            if (tour) {
+                tour._options.steps = [];
+                tour.addSteps(orderSteps(steps));
+            }
+        };
+
+        /**
+         * Adds a step to the tour
+         *
+         * @param {object} step
+         */
+        self.addStep = function (step) {
+            if (~steps.indexOf(step)) {
+                return;
+            }
+
+            steps.push(step);
+            self.refreshTour();
+            newStepFound(step);
+        };
+
+        /**
+         * Removes a step from the tour
+         *
+         * @param step
+         */
+        self.removeStep = function (step) {
+            if (!~steps.indexOf(step)) {
+                return;
+            }
+
+            steps.splice(steps.indexOf(step), 1);
+            self.refreshTour();
+        };
+
+        /**
+         * Returns the list of steps
+         *
+         * @returns {Array}
+         */
+        self.getSteps = function () {
+            return steps;
+        };
+
+        /**
+         * Tells the tour to pause while ngView loads
+         *
+         * @param waitForStep
+         */
+        self.waitFor = function (waitForStep) {
+            tour.end();
+            newStepFound = function (step) {
+                if (step.stepId === waitForStep) {
+                    tour.setCurrentStep(steps.indexOf(step));
+                    $timeout(function () {
+                        tour.start(true);
+                    });
+                }
+            };
+        };
+
+        /**
+         * Initialize the tour
+         *
+         * @param {object} options
+         * @returns {Tour}
+         */
+        self.init = function (options) {
+            options.steps = orderSteps(steps);
+            tour = new Tour(options);
+            return tour;
+        };
+
+
+    }]);
+
+}(angular.module('bm.bsTour')));
+
+/* global angular: false */
+
+(function (app) {
+    'use strict';
+
+    function directive () {
+        return ['TourHelpers', function (TourHelpers) {
+
+            return {
+                restrict: 'EA',
+                scope: true,
+                controller: 'TourController',
+                link: function (scope, element, attrs, ctrl) {
+
+                    //Pass static options through or use defaults
+                    var tour = {},
+                        templateReady,
+                        events = 'onStart onEnd afterGetState afterSetState afterRemoveState onShow onShown onHide onHidden onNext onPrev onPause onResume'.split(' '),
+                        options = 'name container keyboard storage debug redirect duration basePath backdrop orphan'.split(' ');
+
+                    //Pass interpolated values through
+                    TourHelpers.attachInterpolatedValues(attrs, tour, options);
+
+                    //Attach event handlers
+                    TourHelpers.attachEventHandlers(scope, attrs, tour, events);
+
+                    //Compile template
+                    templateReady = TourHelpers.attachTemplate(scope, attrs, tour);
+
+                    //Monitor number of steps
+                    scope.$watchCollection(ctrl.getSteps, function (steps) {
+                        scope.stepCount = steps.length;
+                    });
+
+                    //If there is an options argument passed, just use that instead
+                    //@deprecated use 'options' instead
+                    if (attrs.tourOptions) {
+                        angular.extend(tour, scope.$eval(attrs.tourOptions));
+                    }
+
+                    if (attrs[TourHelpers.getAttrName('options')]) {
+                        angular.extend(tour, scope.$eval(attrs[TourHelpers.getAttrName('options')]));
+                    }
+
+                    //Initialize tour
+                    templateReady.then(function () {
+                        scope.tour = ctrl.init(tour);
+                        scope.tour.refresh = ctrl.refreshTour;
+                    });
+
+                }
+            };
+
+        }];
+    }
+
+    app.directive('tour', directive());
+    app.directive('bsTour', directive());
+
+}(angular.module('bm.bsTour')));
+
+/* global angular: false */
+
+(function (app) {
+    'use strict';
+
+    app.factory('TourHelpers', ['$templateCache', '$http', '$compile', 'TourConfig', '$q', function ($templateCache, $http, $compile, TourConfig, $q) {
+
+        var helpers = {},
+            safeApply;
+
+        /**
+         * Helper function that calls scope.$apply if a digest is not currently in progress
+         * Borrowed from: https://coderwall.com/p/ngisma
+         *
+         * @param {$rootScope.Scope} scope
+         * @param {Function} fn
+         */
+        safeApply = helpers.safeApply = function(scope, fn) {
+            var phase = scope.$$phase;
+            if (phase === '$apply' || phase === '$digest') {
+                if (fn && (typeof(fn) === 'function')) {
+                    fn();
+                }
+            } else {
+                scope.$apply(fn);
+            }
+        };
+
+        /**
+         * Compiles and links a template to the provided scope
+         *
+         * @param {String} template
+         * @param {$rootScope.Scope} scope
+         * @returns {Function}
+         */
+        function compileTemplate(template, scope) {
+            return function (/*index, step*/) {
+                var $template = angular.element(template); //requires jQuery
+                safeApply(scope, function () {
+                    $compile($template)(scope);
+                });
+                return $template;
+            };
+
+        }
+
+        /**
+         * Looks up a template by URL and passes it to {@link helpers.compile}
+         *
+         * @param {String} templateUrl
+         * @param {$rootScope.Scope} scope
+         * @returns {Promise}
+         */
+        function lookupTemplate(templateUrl, scope) {
+
+            return $http.get(templateUrl, {
+                cache: $templateCache
+            }).success(function (template) {
+                if (template) {
+                    return compileTemplate(template, scope);
+                }
+                return '';
+            });
+
+        }
+
+        /**
+         * Converts a stringified boolean to a JS boolean
+         *
+         * @param string
+         * @returns {*}
+         */
+        function stringToBoolean(string) {
+            if (string === 'true') {
+                return true;
+            } else if (string === 'false') {
+                return false;
+            }
+
+            return string;
+        }
+
+        /**
+         * Helper function that attaches proper compiled template to options
+         *
+         * @param {$rootScope.Scope} scope
+         * @param {Attributes} attrs
+         * @param {Object} options represents the tour or step object
+         */
+        helpers.attachTemplate = function (scope, attrs, options) {
+
+            var deferred = $q.defer(),
+                template;
+
+            if (attrs[helpers.getAttrName('template')]) {
+                template = compileTemplate(scope.$eval(attrs[helpers.getAttrName('template')]), scope);
+                options.template = template;
+                deferred.resolve(template);
+            } else if (attrs[helpers.getAttrName('templateUrl')]) {
+                lookupTemplate(attrs[helpers.getAttrName('templateUrl')], scope).then(function (template) {
+                    if (template) {
+                        options.template = template;
+                        deferred.resolve(template);
+                    }
+                });
+            } else {
+                deferred.resolve();
+            }
+
+            return deferred.promise;
+
+        };
+
+        /**
+         * Helper function that attaches event handlers to options
+         *
+         * @param {$rootScope.Scope} scope
+         * @param {Attributes} attrs
+         * @param {Object} options represents the tour or step object
+         * @param {Array} events
+         */
+        helpers.attachEventHandlers = function (scope, attrs, options, events) {
+
+            angular.forEach(events, function (eventName) {
+                if (attrs[helpers.getAttrName(eventName)]) {
+                    options[eventName] = function (tour) {
+                        safeApply(scope, function () {
+                            scope.$eval(attrs[helpers.getAttrName(eventName)]);
+                        });
+                    };
+                }
+            });
+
+        };
+
+        /**
+         * Helper function that attaches observers to option attributes
+         *
+         * @param {Attributes} attrs
+         * @param {Object} options represents the tour or step object
+         * @param {Array} keys attribute names
+         */
+        helpers.attachInterpolatedValues = function (attrs, options, keys) {
+
+            angular.forEach(keys, function (key) {
+                if (attrs[helpers.getAttrName(key)]) {
+                    options[key] = stringToBoolean(attrs[helpers.getAttrName(key)]);
+                    attrs.$observe(helpers.getAttrName(key), function (newValue) {
+                        options[key] = stringToBoolean(newValue);
+                    });
+                }
+            });
+
+        };
+
+        /**
+         * Returns the attribute name for an option depending on the prefix
+         *
+         * @param {string} option - name of option
+         * @returns {string} potentially prefixed name of option, or just name of option
+         */
+        helpers.getAttrName = function (option) {
+            if (TourConfig.get('prefixOptions')) {
+                return TourConfig.get('prefix') + option.charAt(0).toUpperCase() + option.substr(1);
+            } else {
+                return option;
+            }
+        };
+
+        return helpers;
+
+    }]);
+
+}(angular.module('bm.bsTour')));
+
+/* global angular: false */
+
+(function (app) {
+    'use strict';
+
+    function directive() {
+        return ['TourHelpers', '$location', function (TourHelpers, $location) {
+
+            return {
+                restrict: 'EA',
+                scope: true,
+                require: '^tour',
+                link: function (scope, element, attrs, ctrl) {
+
+                    //Assign required options
+                    var step = {
+                            element: element,
+                            stepId: attrs.tourStep
+                        },
+                        events = 'onShow onShown onHide onHidden onNext onPrev onPause onResume'.split(' '),
+                        options = 'content title path animation container placement backdrop redirect orphan reflex duration nextStep prevStep nextPath prevPath'.split(' '),
+                        orderWatch,
+                        skipWatch,
+                        templateReady;
+
+                    //Pass interpolated values through
+                    TourHelpers.attachInterpolatedValues(attrs, step, options);
+                    orderWatch = attrs.$observe(TourHelpers.getAttrName('order'), function (order) {
+                        step.order = !isNaN(order*1) ? order*1 : 0;
+                        ctrl.refreshTour();
+                    });
+
+                    //Attach event handlers
+                    TourHelpers.attachEventHandlers(scope, attrs, step, events);
+
+                    //Compile templates
+                    templateReady = TourHelpers.attachTemplate(scope, attrs, step);
+
+                    //Check whether or not the step should be skipped
+                    function stepIsSkipped() {
+                        var skipped;
+                        if (attrs[TourHelpers.getAttrName('skip')]) {
+                            skipped = scope.$eval(attrs[TourHelpers.getAttrName('skip')]);
+                        }
+                        if (!skipped) {
+                            skipped = !!step.path || (element.is(':hidden') && !attrs.availableWhenHidden);
+                        }
+                        return skipped;
+                    }
+                    skipWatch = scope.$watch(stepIsSkipped, function (skip) {
+                        if (skip) {
+                            ctrl.removeStep(step);
+                        } else {
+                            ctrl.addStep(step);
+                        }
+                    });
+
+                    scope.$on('$destroy', function () {
+                        ctrl.removeStep(step);
+                        orderWatch();
+                        skipWatch();
+                    });
+
+                    //If there is an options argument passed, just use that instead
+                    if (attrs[TourHelpers.getAttrName('options')]) {
+                        angular.extend(step, scope.$eval(attrs[TourHelpers.getAttrName('options')]));
+                    }
+
+                    //set up redirects
+                    function setRedirect(direction, path, targetName) {
+                        var oldHandler = step[direction];
+                        step[direction] = function (tour) {
+                            if (oldHandler) {
+                                oldHandler(tour);
+                            }
+                            ctrl.waitFor(targetName);
+
+                            TourHelpers.safeApply(scope, function () {
+                                $location.path(path);
+                            });
+                        };
+                    }
+                    if (step.nextPath) {
+                        step.redirectNext = true;
+                        setRedirect('onNext', step.nextPath, step.nextStep);
+                    }
+                    if (step.prevPath) {
+                        step.redirectPrev = true;
+                        setRedirect('onPrev', step.prevPath, step.prevStep);
+                    }
+
+                    //Add step to tour
+                    templateReady.then(function () {
+                        ctrl.addStep(step);
+                    });
+
+                }
+            };
+
+        }];
+    }
+
+    app.directive('tourStep', directive());
+    app.directive('bsTourStep', directive());
+
+}(angular.module('bm.bsTour')));

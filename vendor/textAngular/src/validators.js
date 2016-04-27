@@ -1,1 +1,52 @@
-angular.module("textAngular.validators",[]).directive("taMaxText",function(){return{restrict:"A",require:"ngModel",link:function(t,e,n,a){var i=parseInt(t.$eval(n.taMaxText));if(isNaN(i))throw"Max text must be an integer";n.$observe("taMaxText",function(t){if(i=parseInt(t),isNaN(i))throw"Max text must be an integer";a.$dirty&&a.$validate()}),a.$validators.taMaxText=function(t){var e=angular.element("<div/>");return e.html(t),e.text().length<=i}}}}).directive("taMinText",function(){return{restrict:"A",require:"ngModel",link:function(t,e,n,a){var i=parseInt(t.$eval(n.taMinText));if(isNaN(i))throw"Min text must be an integer";n.$observe("taMinText",function(t){if(i=parseInt(t),isNaN(i))throw"Min text must be an integer";a.$dirty&&a.$validate()}),a.$validators.taMinText=function(t){var e=angular.element("<div/>");return e.html(t),!e.text().length||e.text().length>=i}}}});
+angular.module('textAngular.validators', [])
+.directive('taMaxText', function(){
+	return {
+		restrict: 'A',
+		require: 'ngModel',
+		link: function(scope, elem, attrs, ctrl){
+			var max = parseInt(scope.$eval(attrs.taMaxText));
+			if (isNaN(max)){
+				throw('Max text must be an integer');
+			}
+			attrs.$observe('taMaxText', function(value){
+				max = parseInt(value);
+				if (isNaN(max)){
+					throw('Max text must be an integer');
+				}
+				if (ctrl.$dirty){
+					ctrl.$validate();
+				}
+			});
+			ctrl.$validators.taMaxText = function(viewValue){
+				var source = angular.element('<div/>');
+				source.html(viewValue);
+				return source.text().length <= max;
+			};
+		}
+	};
+}).directive('taMinText', function(){
+	return {
+		restrict: 'A',
+		require: 'ngModel',
+		link: function(scope, elem, attrs, ctrl){
+			var min = parseInt(scope.$eval(attrs.taMinText));
+			if (isNaN(min)){
+				throw('Min text must be an integer');
+			}
+			attrs.$observe('taMinText', function(value){
+				min = parseInt(value);
+				if (isNaN(min)){
+					throw('Min text must be an integer');
+				}
+				if (ctrl.$dirty){
+					ctrl.$validate();
+				}
+			});
+			ctrl.$validators.taMinText = function(viewValue){
+				var source = angular.element('<div/>');
+				source.html(viewValue);
+				return !source.text().length || source.text().length >= min;
+			};
+		}
+	};
+});

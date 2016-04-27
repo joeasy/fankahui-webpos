@@ -1,1 +1,43 @@
-function ngGridFlexibleHeightPlugin(e){var i=this;i.grid=null,i.scope=null,i.init=function(t,o,r){i.domUtilityService=r.DomUtilityService,i.grid=o,i.scope=t;var n=function(){setTimeout(g,1)},g=function(){var t=i.grid.gridId,o="."+t+" .ngFooterPanel",r=i.grid.$topPanel.height()+$(o).height(),n=i.grid.$canvas.height()+1;null!=e&&(null!=e.minHeight&&n+r<e.minHeight&&(n=e.minHeight-r-2),null!=e.maxHeight&&n+r>e.maxHeight&&(n=e.maxHeight));var g=n+3;i.scope.baseViewportHeight&&i.scope.baseViewportHeight===g||(i.grid.$viewport.css("height",g+"px"),i.grid.$root.css("height",g+r+"px"),i.scope.baseViewportHeight=g,i.domUtilityService.RebuildGrid(i.scope,i.grid))};i.scope.catHashKeys=function(){var e,t="";for(e in i.scope.renderedRows)t+=i.scope.renderedRows[e].$$hashKey;return t},i.scope.$watch("catHashKeys()",g),i.scope.$watch(i.grid.config.data,n)}}
+function ngGridFlexibleHeightPlugin (opts) {
+    var self = this;
+    self.grid = null;
+    self.scope = null;
+    self.init = function (scope, grid, services) {
+        self.domUtilityService = services.DomUtilityService;
+        self.grid = grid;
+        self.scope = scope;
+        var recalcHeightForData = function () { setTimeout(innerRecalcForData, 1); };
+        var innerRecalcForData = function () {
+            var gridId = self.grid.gridId;
+            var footerPanelSel = '.' + gridId + ' .ngFooterPanel';
+            var extraHeight = self.grid.$topPanel.height() + $(footerPanelSel).height();
+            var naturalHeight = self.grid.$canvas.height() + 1;
+            if (opts != null) {
+                if (opts.minHeight != null && (naturalHeight + extraHeight) < opts.minHeight) {
+                    naturalHeight = opts.minHeight - extraHeight - 2;
+                }
+                if (opts.maxHeight != null && (naturalHeight + extraHeight) > opts.maxHeight) {
+                    naturalHeight = opts.maxHeight;
+                }
+            }
+
+            var newViewportHeight = naturalHeight + 3;
+            if (!self.scope.baseViewportHeight || self.scope.baseViewportHeight !== newViewportHeight) {
+                self.grid.$viewport.css('height', newViewportHeight + 'px');
+                self.grid.$root.css('height', (newViewportHeight + extraHeight) + 'px');
+                self.scope.baseViewportHeight = newViewportHeight;
+                self.domUtilityService.RebuildGrid(self.scope, self.grid);
+            }
+        };
+        self.scope.catHashKeys = function () {
+            var hash = '',
+                idx;
+            for (idx in self.scope.renderedRows) {
+                hash += self.scope.renderedRows[idx].$$hashKey;
+            }
+            return hash;
+        };
+        self.scope.$watch('catHashKeys()', innerRecalcForData);
+        self.scope.$watch(self.grid.config.data, recalcHeightForData);
+    };
+}

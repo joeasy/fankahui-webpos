@@ -1,1 +1,197 @@
-!function(t){"object"==typeof exports&&"object"==typeof module?t(require("../../lib/codemirror"),require("../htmlmixed/htmlmixed"),require("../smarty/smarty")):"function"==typeof define&&define.amd?define(["../../lib/codemirror","../htmlmixed/htmlmixed","../smarty/smarty"],t):t(CodeMirror)}(function(t){"use strict";t.defineMode("smartymixed",function(e){function l(t){return t.replace(/[^\s\w]/g,"\\$&")}var i=t.getMode(e,"htmlmixed"),a=t.getMode(e,"smarty"),r={rightDelimiter:"}",leftDelimiter:"{"};e.hasOwnProperty("leftDelimiter")&&(r.leftDelimiter=e.leftDelimiter),e.hasOwnProperty("rightDelimiter")&&(r.rightDelimiter=e.rightDelimiter);var n=l(r.leftDelimiter),o=l(r.rightDelimiter),m={smartyComment:new RegExp("^"+o+"\\*"),literalOpen:new RegExp(n+"literal"+o),literalClose:new RegExp(n+"/literal"+o),hasLeftDelimeter:new RegExp(".*"+n),htmlHasLeftDelimeter:new RegExp("[^<>]*"+n)},c={chain:function(t,e,l){return e.tokenize=l,l(t,e)},cleanChain:function(t,e,l){return e.tokenize=null,e.localState=null,e.localMode=null,"string"==typeof l?l?l:null:l(t,e)},maybeBackup:function(t,e,l){var i,a=t.current(),r=a.search(e);return r>-1?t.backUp(a.length-r):(i=a.match(/<\/?$/))&&(t.backUp(a.length),t.match(e,!1)||t.match(a[0])),l}},h={html:function(t,e){var l=e.htmlMixedState.htmlState.context&&e.htmlMixedState.htmlState.context.tagName?e.htmlMixedState.htmlState.context.tagName:null;return!e.inLiteral&&t.match(m.htmlHasLeftDelimeter,!1)&&null===l?(e.tokenize=h.smarty,e.localMode=a,e.localState=a.startState(i.indent(e.htmlMixedState,"")),c.maybeBackup(t,r.leftDelimiter,a.token(t,e.localState))):!e.inLiteral&&t.match(r.leftDelimiter,!1)?(e.tokenize=h.smarty,e.localMode=a,e.localState=a.startState(i.indent(e.htmlMixedState,"")),c.maybeBackup(t,r.leftDelimiter,a.token(t,e.localState))):i.token(t,e.htmlMixedState)},smarty:function(t,e){if(t.match(r.leftDelimiter,!1)){if(t.match(m.smartyComment,!1))return c.chain(t,e,h.inBlock("comment","*"+r.rightDelimiter))}else if(t.match(r.rightDelimiter,!1))return t.eat(r.rightDelimiter),e.tokenize=h.html,e.localMode=i,e.localState=e.htmlMixedState,"tag";return c.maybeBackup(t,r.rightDelimiter,a.token(t,e.localState))},inBlock:function(t,e){return function(l,i){for(;!l.eol();){if(l.match(e)){c.cleanChain(l,i,"");break}l.next()}return t}}};return{startState:function(){var t=i.startState();return{token:h.html,localMode:null,localState:null,htmlMixedState:t,tokenize:null,inLiteral:!1}},copyState:function(e){var l=null,r=e.tokenize||e.token;return e.localState&&(l=t.copyState(r!=h.html?a:i,e.localState)),{token:e.token,tokenize:e.tokenize,localMode:e.localMode,localState:l,htmlMixedState:t.copyState(i,e.htmlMixedState),inLiteral:e.inLiteral}},token:function(t,e){if(t.match(r.leftDelimiter,!1)){if(!e.inLiteral&&t.match(m.literalOpen,!0))return e.inLiteral=!0,"keyword";if(e.inLiteral&&t.match(m.literalClose,!0))return e.inLiteral=!1,"keyword"}e.inLiteral&&e.localState!=e.htmlMixedState&&(e.tokenize=h.html,e.localMode=i,e.localState=e.htmlMixedState);var l=(e.tokenize||e.token)(t,e);return l},indent:function(e,l){return e.localMode==a||e.inLiteral&&!e.localMode||m.hasLeftDelimeter.test(l)?t.Pass:i.indent(e.htmlMixedState,l)},innerMode:function(t){return{state:t.localState||t.htmlMixedState,mode:t.localMode||i}}}},"htmlmixed","smarty"),t.defineMIME("text/x-smarty","smartymixed")});
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
+/**
+* @file smartymixed.js
+* @brief Smarty Mixed Codemirror mode (Smarty + Mixed HTML)
+* @author Ruslan Osmanov <rrosmanov at gmail dot com>
+* @version 3.0
+* @date 05.07.2013
+*/
+
+// Warning: Don't base other modes on this one. This here is a
+// terrible way to write a mixed mode.
+
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"), require("../htmlmixed/htmlmixed"), require("../smarty/smarty"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror", "../htmlmixed/htmlmixed", "../smarty/smarty"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
+"use strict";
+
+CodeMirror.defineMode("smartymixed", function(config) {
+  var htmlMixedMode = CodeMirror.getMode(config, "htmlmixed");
+  var smartyMode = CodeMirror.getMode(config, "smarty");
+
+  var settings = {
+    rightDelimiter: '}',
+    leftDelimiter: '{'
+  };
+
+  if (config.hasOwnProperty("leftDelimiter")) {
+    settings.leftDelimiter = config.leftDelimiter;
+  }
+  if (config.hasOwnProperty("rightDelimiter")) {
+    settings.rightDelimiter = config.rightDelimiter;
+  }
+
+  function reEsc(str) { return str.replace(/[^\s\w]/g, "\\$&"); }
+
+  var reLeft = reEsc(settings.leftDelimiter), reRight = reEsc(settings.rightDelimiter);
+  var regs = {
+    smartyComment: new RegExp("^" + reRight + "\\*"),
+    literalOpen: new RegExp(reLeft + "literal" + reRight),
+    literalClose: new RegExp(reLeft + "\/literal" + reRight),
+    hasLeftDelimeter: new RegExp(".*" + reLeft),
+    htmlHasLeftDelimeter: new RegExp("[^<>]*" + reLeft)
+  };
+
+  var helpers = {
+    chain: function(stream, state, parser) {
+      state.tokenize = parser;
+      return parser(stream, state);
+    },
+
+    cleanChain: function(stream, state, parser) {
+      state.tokenize = null;
+      state.localState = null;
+      state.localMode = null;
+      return (typeof parser == "string") ? (parser ? parser : null) : parser(stream, state);
+    },
+
+    maybeBackup: function(stream, pat, style) {
+      var cur = stream.current();
+      var close = cur.search(pat),
+      m;
+      if (close > - 1) stream.backUp(cur.length - close);
+      else if (m = cur.match(/<\/?$/)) {
+        stream.backUp(cur.length);
+        if (!stream.match(pat, false)) stream.match(cur[0]);
+      }
+      return style;
+    }
+  };
+
+  var parsers = {
+    html: function(stream, state) {
+      var htmlTagName = state.htmlMixedState.htmlState.context && state.htmlMixedState.htmlState.context.tagName
+        ? state.htmlMixedState.htmlState.context.tagName
+        : null;
+
+      if (!state.inLiteral && stream.match(regs.htmlHasLeftDelimeter, false) && htmlTagName === null) {
+        state.tokenize = parsers.smarty;
+        state.localMode = smartyMode;
+        state.localState = smartyMode.startState(htmlMixedMode.indent(state.htmlMixedState, ""));
+        return helpers.maybeBackup(stream, settings.leftDelimiter, smartyMode.token(stream, state.localState));
+      } else if (!state.inLiteral && stream.match(settings.leftDelimiter, false)) {
+        state.tokenize = parsers.smarty;
+        state.localMode = smartyMode;
+        state.localState = smartyMode.startState(htmlMixedMode.indent(state.htmlMixedState, ""));
+        return helpers.maybeBackup(stream, settings.leftDelimiter, smartyMode.token(stream, state.localState));
+      }
+      return htmlMixedMode.token(stream, state.htmlMixedState);
+    },
+
+    smarty: function(stream, state) {
+      if (stream.match(settings.leftDelimiter, false)) {
+        if (stream.match(regs.smartyComment, false)) {
+          return helpers.chain(stream, state, parsers.inBlock("comment", "*" + settings.rightDelimiter));
+        }
+      } else if (stream.match(settings.rightDelimiter, false)) {
+        stream.eat(settings.rightDelimiter);
+        state.tokenize = parsers.html;
+        state.localMode = htmlMixedMode;
+        state.localState = state.htmlMixedState;
+        return "tag";
+      }
+
+      return helpers.maybeBackup(stream, settings.rightDelimiter, smartyMode.token(stream, state.localState));
+    },
+
+    inBlock: function(style, terminator) {
+      return function(stream, state) {
+        while (!stream.eol()) {
+          if (stream.match(terminator)) {
+            helpers.cleanChain(stream, state, "");
+            break;
+          }
+          stream.next();
+        }
+        return style;
+      };
+    }
+  };
+
+  return {
+    startState: function() {
+      var state = htmlMixedMode.startState();
+      return {
+        token: parsers.html,
+        localMode: null,
+        localState: null,
+        htmlMixedState: state,
+        tokenize: null,
+        inLiteral: false
+      };
+    },
+
+    copyState: function(state) {
+      var local = null, tok = (state.tokenize || state.token);
+      if (state.localState) {
+        local = CodeMirror.copyState((tok != parsers.html ? smartyMode : htmlMixedMode), state.localState);
+      }
+      return {
+        token: state.token,
+        tokenize: state.tokenize,
+        localMode: state.localMode,
+        localState: local,
+        htmlMixedState: CodeMirror.copyState(htmlMixedMode, state.htmlMixedState),
+        inLiteral: state.inLiteral
+      };
+    },
+
+    token: function(stream, state) {
+      if (stream.match(settings.leftDelimiter, false)) {
+        if (!state.inLiteral && stream.match(regs.literalOpen, true)) {
+          state.inLiteral = true;
+          return "keyword";
+        } else if (state.inLiteral && stream.match(regs.literalClose, true)) {
+          state.inLiteral = false;
+          return "keyword";
+        }
+      }
+      if (state.inLiteral && state.localState != state.htmlMixedState) {
+        state.tokenize = parsers.html;
+        state.localMode = htmlMixedMode;
+        state.localState = state.htmlMixedState;
+      }
+
+      var style = (state.tokenize || state.token)(stream, state);
+      return style;
+    },
+
+    indent: function(state, textAfter) {
+      if (state.localMode == smartyMode
+          || (state.inLiteral && !state.localMode)
+         || regs.hasLeftDelimeter.test(textAfter)) {
+        return CodeMirror.Pass;
+      }
+      return htmlMixedMode.indent(state.htmlMixedState, textAfter);
+    },
+
+    innerMode: function(state) {
+      return {
+        state: state.localState || state.htmlMixedState,
+        mode: state.localMode || htmlMixedMode
+      };
+    }
+  };
+}, "htmlmixed", "smarty");
+
+CodeMirror.defineMIME("text/x-smarty", "smartymixed");
+// vim: et ts=2 sts=2 sw=2
+
+});

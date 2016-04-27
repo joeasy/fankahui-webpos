@@ -1,1 +1,39 @@
-function ngGridWYSIWYGPlugin(i){var l=this;l.grid=null,l.scope=null,l.services=null,l.init=function(i,n,t){l.grid=n,l.scope=i,l.services=t},l.exportData=function(){var n={columns:[],columnWidths:[],gridWidth:l.scope.totalRowWidth(),data:[]};return angular.forEach(l.scope.columns,function(i){i.visible&&(n.columns.push(i.displayName),n.columnWidths.push(i.width))}),angular.forEach(l.grid.filteredRows,function(t){var e=t.entity;angular.forEach(l.scope.columns,function(t){if(t.visible){var r=l.services.UtilityService.evalProperty(e,t.field),c=t.cellFilter&&i?i(t.cellFilter)(r):r;n.data.push(c?c.toString():"")}})}),n}}
+function ngGridWYSIWYGPlugin (filter) {
+    var self = this;
+    self.grid = null;
+    self.scope = null;
+    self.services = null;
+
+    self.init = function (scope, grid, services) {
+        self.grid = grid;
+        self.scope = scope;
+        self.services = services;
+    };
+
+    self.exportData = function () {
+        var ret = {
+            columns: [],
+            columnWidths: [],
+            gridWidth: self.scope.totalRowWidth(),
+            data: []
+        };
+        
+        angular.forEach(self.scope.columns, function (col) {
+            if (col.visible) {
+                ret.columns.push(col.displayName);
+                ret.columnWidths.push(col.width);
+            }
+        });
+        angular.forEach(self.grid.filteredRows, function (row) {
+            var item = row.entity;
+            angular.forEach(self.scope.columns, function (col) {
+                if (col.visible) {
+                    var obj = self.services.UtilityService.evalProperty(item, col.field);
+                    var val = col.cellFilter && filter ? filter(col.cellFilter)(obj) : obj;
+                    ret.data.push(val ? val.toString() : '');
+                }
+            });
+        });
+        return ret;
+    };
+}

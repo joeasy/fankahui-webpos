@@ -1,1 +1,837 @@
-angular.module("textAngular.taBind",["textAngular.factories","textAngular.DOM"]).service("_taBlankTest",[function(){var e=/<(a|abbr|acronym|bdi|bdo|big|cite|code|del|dfn|img|ins|kbd|label|map|mark|q|ruby|rp|rt|s|samp|time|tt|var)[^>]*(>|$)/i;return function(t){return function(n){if(!n)return!0;var a,r=/(^[^<]|>)[^<]/i.exec(n);return r?a=r.index:(n=n.toString().replace(/="[^"]*"/i,"").replace(/="[^"]*"/i,"").replace(/="[^"]*"/i,"").replace(/="[^"]*"/i,""),a=n.indexOf(">")),n=n.trim().substring(a,a+100),/^[^<>]+$/i.test(n)?!1:0===n.length||n===t||/^>(\s|&nbsp;)*<\/[^>]+>$/gi.test(n)?!0:/>\s*[^\s<]/i.test(n)||e.test(n)?!1:!0}}}]).directive("taButton",[function(){return{link:function(e,t,n){t.attr("unselectable","on"),t.on("mousedown",function(e,t){return t&&angular.extend(e,t),e.preventDefault(),!1})}}}]).directive("taBind",["taSanitize","$timeout","$window","$document","taFixChrome","taBrowserTag","taSelection","taSelectableElements","taApplyCustomRenderers","taOptions","_taBlankTest","$parse","taDOM",function(e,t,n,a,r,i,l,o,s,d,u,c,f){return{priority:2,require:["ngModel","?ngModelOptions"],link:function(i,p,h,m){var v,g,b,L,w=m[0],C=m[1]||{},N=void 0!==p.attr("contenteditable")&&p.attr("contenteditable"),y=N||"textarea"===p[0].tagName.toLowerCase()||"input"===p[0].tagName.toLowerCase(),D=!1,k=!1,x=!1,$=h.taUnsafeSanitizer||d.disableSanitizer,S=/^(9|19|20|27|33|34|35|36|37|38|39|40|45|112|113|114|115|116|117|118|119|120|121|122|123|144|145)$/i,M=/^(8|13|32|46|59|61|107|109|186|187|188|189|190|191|192|219|220|221|222)$/i;void 0===h.taDefaultWrap&&(h.taDefaultWrap="p"),""===h.taDefaultWrap?(b="",L=void 0===_browserDetect.ie?"<div><br></div>":_browserDetect.ie>=11?"<p><br></p>":_browserDetect.ie<=8?"<P>&nbsp;</P>":"<p>&nbsp;</p>"):(b=void 0===_browserDetect.ie||_browserDetect.ie>=11?"<"+h.taDefaultWrap+"><br></"+h.taDefaultWrap+">":_browserDetect.ie<=8?"<"+h.taDefaultWrap.toUpperCase()+"></"+h.taDefaultWrap.toUpperCase()+">":"<"+h.taDefaultWrap+"></"+h.taDefaultWrap+">",L=void 0===_browserDetect.ie||_browserDetect.ie>=11?"<"+h.taDefaultWrap+"><br></"+h.taDefaultWrap+">":_browserDetect.ie<=8?"<"+h.taDefaultWrap.toUpperCase()+">&nbsp;</"+h.taDefaultWrap.toUpperCase()+">":"<"+h.taDefaultWrap+">&nbsp;</"+h.taDefaultWrap+">"),C.$options||(C.$options={});var E=u(L),T=function(e){if(E(e))return e;var t=angular.element("<div>"+e+"</div>");if(0===t.children().length)e="<"+h.taDefaultWrap+">"+e+"</"+h.taDefaultWrap+">";else{var n,a=t[0].childNodes,r=!1;for(n=0;n<a.length&&!(r=a[n].nodeName.toLowerCase().match(BLOCKELEMENTS));n++);if(r)for(e="",n=0;n<a.length;n++)if(a[n].nodeName.toLowerCase().match(BLOCKELEMENTS))e+=a[n].outerHTML;else{var i=a[n].outerHTML||a[n].nodeValue;e+=""!==i.trim()?"<"+h.taDefaultWrap+">"+i+"</"+h.taDefaultWrap+">":i}else e="<"+h.taDefaultWrap+">"+e+"</"+h.taDefaultWrap+">"}return e};h.taPaste&&(g=c(h.taPaste)),p.addClass("ta-bind");var _;i["$undoManager"+(h.id||"")]=w.$undoManager={_stack:[],_index:0,_max:1e3,push:function(e){return"undefined"==typeof e||null===e||"undefined"!=typeof this.current()&&null!==this.current()&&e===this.current()?e:(this._index<this._stack.length-1&&(this._stack=this._stack.slice(0,this._index+1)),this._stack.push(e),_&&t.cancel(_),this._stack.length>this._max&&this._stack.shift(),this._index=this._stack.length-1,e)},undo:function(){return this.setToIndex(this._index-1)},redo:function(){return this.setToIndex(this._index+1)},setToIndex:function(e){return 0>e||e>this._stack.length-1?void 0:(this._index=e,this.current())},current:function(){return this._stack[this._index]}};var W,I=i["$undoTaBind"+(h.id||"")]=function(){if(!D&&N){var e=w.$undoManager.undo();"undefined"!=typeof e&&null!==e&&(J(e),A(e,!1),W&&t.cancel(W),W=t(function(){p[0].focus(),l.setSelectionToElementEnd(p[0])},1))}},H=i["$redoTaBind"+(h.id||"")]=function(){if(!D&&N){var e=w.$undoManager.redo();"undefined"!=typeof e&&null!==e&&(J(e),A(e,!1),W&&t.cancel(W),W=t(function(){p[0].focus(),l.setSelectionToElementEnd(p[0])},1))}},V=function(){if(N)return p[0].innerHTML;if(y)return p.val();throw"textAngular Error: attempting to update non-editable taBind"},A=function(e,t,n){x=n||!1,("undefined"==typeof t||null===t)&&(t=N),("undefined"==typeof e||null===e)&&(e=V()),E(e)?(""!==w.$viewValue&&w.$setViewValue(""),t&&""!==w.$undoManager.current()&&w.$undoManager.push("")):(G(),w.$viewValue!==e&&(w.$setViewValue(e),t&&w.$undoManager.push(e))),w.$render()};i["updateTaBind"+(h.id||"")]=function(){D||A(void 0,void 0,!0)};var B=function(t){return w.$oldViewValue=e(r(t),w.$oldViewValue,$)};if(p.attr("required")&&(w.$validators.required=function(e,t){return!E(e||t)}),w.$parsers.push(B),w.$parsers.unshift(T),w.$formatters.push(B),w.$formatters.unshift(T),w.$formatters.unshift(function(e){return w.$undoManager.push(e||"")}),y)if(i.events={},N){var O=!1,K=function(n){if(n&&n.trim().length){if(n.match(/class=["']*Mso(Normal|List)/i)){var a=n.match(/<!--StartFragment-->([\s\S]*?)<!--EndFragment-->/i);a=a?a[1]:n,a=a.replace(/<o:p>[\s\S]*?<\/o:p>/gi,"").replace(/class=(["']|)MsoNormal(["']|)/gi,"");var r=angular.element("<div>"+a+"</div>"),o=angular.element("<div></div>"),s={element:null,lastIndent:[],lastLi:null,isUl:!1};s.lastIndent.peek=function(){var e=this.length;return e>0?this[e-1]:void 0};for(var d=function(e){s.isUl=e,s.element=angular.element(e?"<ul>":"<ol>"),s.lastIndent=[],s.lastIndent.peek=function(){var e=this.length;return e>0?this[e-1]:void 0},s.lastLevelMatch=null},u=0;u<=r[0].childNodes.length;u++)if(r[0].childNodes[u]&&"#text"!==r[0].childNodes[u].nodeName&&"p"===r[0].childNodes[u].tagName.toLowerCase()){var c=angular.element(r[0].childNodes[u]),h=(c.attr("class")||"").match(/MsoList(Bullet|Number|Paragraph)(CxSp(First|Middle|Last)|)/i);if(h){if(c[0].childNodes.length<2||c[0].childNodes[1].childNodes.length<1)continue;var m="bullet"===h[1].toLowerCase()||"number"!==h[1].toLowerCase()&&!(/^[^0-9a-z<]*[0-9a-z]+[^0-9a-z<>]</i.test(c[0].childNodes[1].innerHTML)||/^[^0-9a-z<]*[0-9a-z]+[^0-9a-z<>]</i.test(c[0].childNodes[1].childNodes[0].innerHTML)),v=(c.attr("style")||"").match(/margin-left:([\-\.0-9]*)/i),b=parseFloat(v?v[1]:0),L=(c.attr("style")||"").match(/mso-list:l([0-9]+) level([0-9]+) lfo[0-9+]($|;)/i);if(L&&L[2]&&(b=parseInt(L[2])),L&&(!s.lastLevelMatch||L[1]!==s.lastLevelMatch[1])||!h[3]||"first"===h[3].toLowerCase()||null===s.lastIndent.peek()||s.isUl!==m&&s.lastIndent.peek()===b)d(m),o.append(s.element);else if(null!=s.lastIndent.peek()&&s.lastIndent.peek()<b)s.element=angular.element(m?"<ul>":"<ol>"),s.lastLi.append(s.element);else if(null!=s.lastIndent.peek()&&s.lastIndent.peek()>b){for(;null!=s.lastIndent.peek()&&s.lastIndent.peek()>b;)if("li"!==s.element.parent()[0].tagName.toLowerCase()){if(!/[uo]l/i.test(s.element.parent()[0].tagName.toLowerCase()))break;s.element=s.element.parent(),s.lastIndent.pop()}else s.element=s.element.parent();s.isUl="ul"===s.element[0].tagName.toLowerCase(),m!==s.isUl&&(d(m),o.append(s.element))}s.lastLevelMatch=L,b!==s.lastIndent.peek()&&s.lastIndent.push(b),s.lastLi=angular.element("<li>"),s.element.append(s.lastLi),s.lastLi.html(c.html().replace(/<!(--|)\[if !supportLists\](--|)>[\s\S]*?<!(--|)\[endif\](--|)>/gi,"")),c.remove()}else d(!1),o.append(c)}var C=function(e){e=angular.element(e);for(var t=e[0].childNodes.length-1;t>=0;t--)e.after(e[0].childNodes[t]);e.remove()};angular.forEach(o.find("span"),function(e){e.removeAttribute("lang"),e.attributes.length<=0&&C(e)}),angular.forEach(o.find("font"),C),n=o.html()}else{if(n=n.replace(/<(|\/)meta[^>]*?>/gi,""),n.match(/<[^>]*?(ta-bind)[^>]*?>/)){if(n.match(/<[^>]*?(text-angular)[^>]*?>/)){var N=angular.element("<div>"+n+"</div>");N.find("textarea").remove();for(var y=f.getByAttribute(N,"ta-bind"),D=0;D<y.length;D++){for(var k=y[D][0].parentNode.parentNode,x=0;x<y[D][0].childNodes.length;x++)k.parentNode.insertBefore(y[D][0].childNodes[x],k);k.parentNode.removeChild(k)}n=N.html().replace('<br class="Apple-interchange-newline">',"")}}else n.match(/^<span/)&&(n=n.replace(/<(|\/)span[^>]*?>/gi,""));n=n.replace(/<br class="Apple-interchange-newline"[^>]*?>/gi,"").replace(/<span class="Apple-converted-space">( |&nbsp;)<\/span>/gi,"&nbsp;")}/<li(\s.*)?>/i.test(n)&&/(<ul(\s.*)?>|<ol(\s.*)?>).*<li(\s.*)?>/i.test(n)===!1&&(n=n.replace(/<li(\s.*)?>.*<\/li(\s.*)?>/i,"<ul>$&</ul>")),g&&(n=g(i,{$html:n})||n),n=e(n,"",$),l.insertHtml(n,p[0]),t(function(){w.$setViewValue(V()),O=!1,p.removeClass("processing-paste")},0)}else O=!1,p.removeClass("processing-paste")};p.on("paste",i.events.paste=function(e,r){if(r&&angular.extend(e,r),D||O)return e.stopPropagation(),e.preventDefault(),!1;O=!0,p.addClass("processing-paste");var i,l=(e.originalEvent||e).clipboardData;if(l&&l.getData&&l.types.length>0){for(var o="",s=0;s<l.types.length;s++)o+=" "+l.types[s];return/text\/html/i.test(o)?i=l.getData("text/html"):/text\/plain/i.test(o)&&(i=l.getData("text/plain")),K(i),e.stopPropagation(),e.preventDefault(),!1}var d=n.rangy.saveSelection(),u=angular.element('<div class="ta-hidden-input" contenteditable="true"></div>');a.find("body").append(u),u[0].focus(),t(function(){n.rangy.restoreSelection(d),K(u[0].innerHTML),p[0].focus(),u.remove()},0)}),p.on("cut",i.events.cut=function(e){D?e.preventDefault():t(function(){w.$setViewValue(V())},0)}),p.on("keydown",i.events.keydown=function(e,t){if(t&&angular.extend(e,t),!D)if(e.altKey||!e.metaKey&&!e.ctrlKey){if(13===e.keyCode&&!e.shiftKey){var n,a=l.getSelectionElement();if(!a.tagName.match(VALIDELEMENTS))return;var r=angular.element(b);if(/^<br(|\/)>$/i.test(a.innerHTML.trim())&&"blockquote"===a.parentNode.tagName.toLowerCase()&&!a.nextSibling){n=angular.element(a);var i=n.parent();i.after(r),n.remove(),0===i.children().length&&i.remove(),l.setSelectionToElementStart(r[0]),e.preventDefault()}else/^<[^>]+><br(|\/)><\/[^>]+>$/i.test(a.innerHTML.trim())&&"blockquote"===a.tagName.toLowerCase()&&(n=angular.element(a),n.after(r),n.remove(),l.setSelectionToElementStart(r[0]),e.preventDefault())}}else 90!==e.keyCode||e.shiftKey?(90===e.keyCode&&e.shiftKey||89===e.keyCode&&!e.shiftKey)&&(H(),e.preventDefault()):(I(),e.preventDefault())});var U;if(p.on("keyup",i.events.keyup=function(e,a){if(a&&angular.extend(e,a),9===e.keyCode){var r=l.getSelection();return void(r.start.element===p[0]&&p.children().length&&l.setSelectionToElementStart(p.children()[0]))}if(_&&t.cancel(_),!D&&!S.test(e.keyCode)){if(""!==b&&13===e.keyCode&&!e.shiftKey){for(var i=l.getSelectionElement();!i.tagName.match(VALIDELEMENTS)&&i!==p[0];)i=i.parentNode;if(i.tagName.toLowerCase()!==h.taDefaultWrap&&"li"!==i.tagName.toLowerCase()&&(""===i.innerHTML.trim()||"<br>"===i.innerHTML.trim())){var o=angular.element(b);angular.element(i).replaceWith(o),l.setSelectionToElementStart(o[0])}}var s=V();if(""!==b&&""===s.trim())J(b),l.setSelectionToElementStart(p.children()[0]);else if("<"!==s.substring(0,1)&&""!==h.taDefaultWrap){var d=n.rangy.saveSelection();s=V(),s="<"+h.taDefaultWrap+">"+s+"</"+h.taDefaultWrap+">",J(s),n.rangy.restoreSelection(d)}var u=v!==e.keyCode&&M.test(e.keyCode);U&&t.cancel(U),U=t(function(){A(s,u,!0)},C.$options.debounce||400),u||(_=t(function(){w.$undoManager.push(s)},250)),v=e.keyCode}}),p.on("blur",i.events.blur=function(){k=!1,D?(x=!0,w.$render()):A(void 0,void 0,!0)}),h.placeholder&&(_browserDetect.ie>8||void 0===_browserDetect.ie)){var z;if(!h.id)throw"textAngular Error: An unique ID is required for placeholders to work";z=addCSSRule("#"+h.id+".placeholder-text:before",'content: "'+h.placeholder+'"'),i.$on("$destroy",function(){removeCSSRule(z)})}p.on("focus",i.events.focus=function(){k=!0,p.removeClass("placeholder-text")}),p.on("mouseup",i.events.mouseup=function(){var e=l.getSelection();e.start.element===p[0]&&p.children().length&&l.setSelectionToElementStart(p.children()[0])}),p.on("mousedown",i.events.mousedown=function(e,t){t&&angular.extend(e,t),e.stopPropagation()})}else{p.on("change blur",i.events.change=i.events.blur=function(){D||w.$setViewValue(V())}),p.on("keydown",i.events.keydown=function(e,t){if(t&&angular.extend(e,t),9===e.keyCode){var n=this.selectionStart,a=this.selectionEnd,r=p.val();if(e.shiftKey){var i=r.lastIndexOf("\n",n),l=r.lastIndexOf("	",n);-1!==l&&l>=i&&(p.val(r.substring(0,l)+r.substring(l+1)),this.selectionStart=this.selectionEnd=n-1)}else p.val(r.substring(0,n)+"	"+r.substring(a)),this.selectionStart=this.selectionEnd=n+1;e.preventDefault()}});var q=function(e,t){for(var n="",a=0;t>a;a++)n+=e;return n},F=function(e,t){var n="",a=e.childNodes;t++,n+=q("	",t-1)+e.outerHTML.substring(0,e.outerHTML.indexOf("<li"));for(var r=0;r<a.length;r++)a[r].outerHTML&&(n+="ul"===a[r].nodeName.toLowerCase()||"ol"===a[r].nodeName.toLowerCase()?"\n"+F(a[r],t):"\n"+q("	",t)+a[r].outerHTML);return n+="\n"+q("	",t-1)+e.outerHTML.substring(e.outerHTML.lastIndexOf("<"))};w.$formatters.unshift(function(e){var t=angular.element("<div>"+e+"</div>")[0].childNodes;if(t.length>0){e="";for(var n=0;n<t.length;n++)t[n].outerHTML&&(e.length>0&&(e+="\n"),e+="ul"===t[n].nodeName.toLowerCase()||"ol"===t[n].nodeName.toLowerCase()?""+F(t[n],0):""+t[n].outerHTML)}return e})}var P,R=function(e){return i.$emit("ta-element-select",this),e.preventDefault(),!1},j=function(e,n){if(n&&angular.extend(e,n),!dropFired&&!D){dropFired=!0;var a;a=e.originalEvent?e.originalEvent.dataTransfer:e.dataTransfer,i.$emit("ta-drop-event",this,e,a),t(function(){dropFired=!1,A(void 0,void 0,!0)},100)}},G=i["reApplyOnSelectorHandlers"+(h.id||"")]=function(){D||angular.forEach(o,function(e){p.find(e).off("click",R).on("click",R)})},J=function(e){p[0].innerHTML=e},Q=!1;w.$render=function(){if(!Q){Q=!0;var e=w.$viewValue||"";x||(N&&k&&(p.removeClass("placeholder-text"),P&&t.cancel(P),P=t(function(){k||(p[0].focus(),l.setSelectionToElementEnd(p.children()[p.children().length-1])),P=void 0},1)),N?(J(h.placeholder?""===e?b:e:""===e?b:e),D?p.off("drop",j):(G(),p.on("drop",j))):"textarea"!==p[0].tagName.toLowerCase()&&"input"!==p[0].tagName.toLowerCase()?J(s(e)):p.val(e)),N&&h.placeholder&&(""===e?k?p.removeClass("placeholder-text"):p.addClass("placeholder-text"):p.removeClass("placeholder-text")),Q=x=!1}},h.taReadonly&&(D=i.$eval(h.taReadonly),D?(p.addClass("ta-readonly"),("textarea"===p[0].tagName.toLowerCase()||"input"===p[0].tagName.toLowerCase())&&p.attr("disabled","disabled"),void 0!==p.attr("contenteditable")&&p.attr("contenteditable")&&p.removeAttr("contenteditable")):(p.removeClass("ta-readonly"),"textarea"===p[0].tagName.toLowerCase()||"input"===p[0].tagName.toLowerCase()?p.removeAttr("disabled"):N&&p.attr("contenteditable","true")),i.$watch(h.taReadonly,function(e,t){t!==e&&(e?(p.addClass("ta-readonly"),("textarea"===p[0].tagName.toLowerCase()||"input"===p[0].tagName.toLowerCase())&&p.attr("disabled","disabled"),void 0!==p.attr("contenteditable")&&p.attr("contenteditable")&&p.removeAttr("contenteditable"),angular.forEach(o,function(e){p.find(e).on("click",R)}),p.off("drop",j)):(p.removeClass("ta-readonly"),"textarea"===p[0].tagName.toLowerCase()||"input"===p[0].tagName.toLowerCase()?p.removeAttr("disabled"):N&&p.attr("contenteditable","true"),angular.forEach(o,function(e){p.find(e).off("click",R)}),p.on("drop",j)),D=e)})),N&&!D&&(angular.forEach(o,function(e){p.find(e).on("click",R)}),p.on("drop",j),p.on("blur",function(){_browserDetect.webkit&&(globalContentEditableBlur=!0)}))}}}]);
+angular.module('textAngular.taBind', ['textAngular.factories', 'textAngular.DOM'])
+.service('_taBlankTest', [function(){
+	var INLINETAGS_NONBLANK = /<(a|abbr|acronym|bdi|bdo|big|cite|code|del|dfn|img|ins|kbd|label|map|mark|q|ruby|rp|rt|s|samp|time|tt|var)[^>]*(>|$)/i;
+	return function(_defaultTest){
+		return function(_blankVal){
+			if(!_blankVal) return true;
+			// find first non-tag match - ie start of string or after tag that is not whitespace
+			var _firstMatch = /(^[^<]|>)[^<]/i.exec(_blankVal);
+			var _firstTagIndex;
+			if(!_firstMatch){
+				// find the end of the first tag removing all the 
+				// Don't do a global replace as that would be waaayy too long, just replace the first 4 occurences should be enough
+				_blankVal = _blankVal.toString().replace(/="[^"]*"/i, '').replace(/="[^"]*"/i, '').replace(/="[^"]*"/i, '').replace(/="[^"]*"/i, '');
+				_firstTagIndex = _blankVal.indexOf('>');
+			}else{
+				_firstTagIndex = _firstMatch.index;
+			}
+			_blankVal = _blankVal.trim().substring(_firstTagIndex, _firstTagIndex + 100);
+			// check for no tags entry
+			if(/^[^<>]+$/i.test(_blankVal)) return false;
+			// this regex is to match any number of whitespace only between two tags
+			if (_blankVal.length === 0 || _blankVal === _defaultTest || /^>(\s|&nbsp;)*<\/[^>]+>$/ig.test(_blankVal)) return true;
+			// this regex tests if there is a tag followed by some optional whitespace and some text after that
+			else if (/>\s*[^\s<]/i.test(_blankVal) || INLINETAGS_NONBLANK.test(_blankVal)) return false;
+			else return true;
+		};
+	};
+}])
+.directive('taButton', [function(){
+	return {
+		link: function(scope, element, attrs){
+			element.attr('unselectable', 'on');
+			element.on('mousedown', function(e, eventData){
+				/* istanbul ignore else: this is for catching the jqLite testing*/
+				if(eventData) angular.extend(e, eventData);
+				// this prevents focusout from firing on the editor when clicking toolbar buttons
+				e.preventDefault();
+				return false;
+			});
+		}
+	};
+}])
+.directive('taBind', [
+		'taSanitize', '$timeout', '$window', '$document', 'taFixChrome', 'taBrowserTag',
+		'taSelection', 'taSelectableElements', 'taApplyCustomRenderers', 'taOptions',
+		'_taBlankTest', '$parse', 'taDOM',
+		function(
+			taSanitize, $timeout, $window, $document, taFixChrome, taBrowserTag,
+			taSelection, taSelectableElements, taApplyCustomRenderers, taOptions,
+			_taBlankTest, $parse, taDOM){
+	// Uses for this are textarea or input with ng-model and ta-bind='text'
+	// OR any non-form element with contenteditable="contenteditable" ta-bind="html|text" ng-model
+	return {
+		priority: 2, // So we override validators correctly
+		require: ['ngModel','?ngModelOptions'],
+		link: function(scope, element, attrs, controller){
+			var ngModel = controller[0];
+			var ngModelOptions = controller[1] || {};
+			// the option to use taBind on an input or textarea is required as it will sanitize all input into it correctly.
+			var _isContentEditable = element.attr('contenteditable') !== undefined && element.attr('contenteditable');
+			var _isInputFriendly = _isContentEditable || element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input';
+			var _isReadonly = false;
+			var _focussed = false;
+			var _skipRender = false;
+			var _disableSanitizer = attrs.taUnsafeSanitizer || taOptions.disableSanitizer;
+			var _lastKey;
+			var BLOCKED_KEYS = /^(9|19|20|27|33|34|35|36|37|38|39|40|45|112|113|114|115|116|117|118|119|120|121|122|123|144|145)$/i;
+			var UNDO_TRIGGER_KEYS = /^(8|13|32|46|59|61|107|109|186|187|188|189|190|191|192|219|220|221|222)$/i; // spaces, enter, delete, backspace, all punctuation
+			var _pasteHandler;
+			
+			// defaults to the paragraph element, but we need the line-break or it doesn't allow you to type into the empty element
+			// non IE is '<p><br/></p>', ie is '<p></p>' as for once IE gets it correct...
+			var _defaultVal, _defaultTest;
+			// set the default to be a paragraph value
+			if(attrs.taDefaultWrap === undefined) attrs.taDefaultWrap = 'p';
+			/* istanbul ignore next: ie specific test */
+			if(attrs.taDefaultWrap === ''){
+				_defaultVal = '';
+				_defaultTest = (_browserDetect.ie === undefined)? '<div><br></div>' : (_browserDetect.ie >= 11)? '<p><br></p>' : (_browserDetect.ie <= 8)? '<P>&nbsp;</P>' : '<p>&nbsp;</p>';
+			}else{
+				_defaultVal = (_browserDetect.ie === undefined || _browserDetect.ie >= 11)?
+					'<' + attrs.taDefaultWrap + '><br></' + attrs.taDefaultWrap + '>' :
+					(_browserDetect.ie <= 8)?
+						'<' + attrs.taDefaultWrap.toUpperCase() + '></' + attrs.taDefaultWrap.toUpperCase() + '>' :
+						'<' + attrs.taDefaultWrap + '></' + attrs.taDefaultWrap + '>';
+				_defaultTest = (_browserDetect.ie === undefined || _browserDetect.ie >= 11)?
+					'<' + attrs.taDefaultWrap + '><br></' + attrs.taDefaultWrap + '>' :
+					(_browserDetect.ie <= 8)?
+						'<' + attrs.taDefaultWrap.toUpperCase() + '>&nbsp;</' + attrs.taDefaultWrap.toUpperCase() + '>' :
+						'<' + attrs.taDefaultWrap + '>&nbsp;</' + attrs.taDefaultWrap + '>';
+			}
+			
+			/* istanbul ignore else */
+			if(!ngModelOptions.$options) ngModelOptions.$options = {}; // ng-model-options support
+			
+			var _blankTest = _taBlankTest(_defaultTest);
+			
+			var _ensureContentWrapped = function(value){
+				if(_blankTest(value)) return value;
+				var domTest = angular.element("<div>" + value + "</div>");
+				if(domTest.children().length === 0){
+					value = "<" + attrs.taDefaultWrap + ">" + value + "</" + attrs.taDefaultWrap + ">";
+				}else{
+					var _children = domTest[0].childNodes;
+					var i;
+					var _foundBlockElement = false;
+					for(i = 0; i < _children.length; i++){
+						if(_foundBlockElement = _children[i].nodeName.toLowerCase().match(BLOCKELEMENTS)) break;
+					}
+					if(!_foundBlockElement){
+						value = "<" + attrs.taDefaultWrap + ">" + value + "</" + attrs.taDefaultWrap + ">";
+					}else{
+						value = "";
+						for(i = 0; i < _children.length; i++){
+							if(!_children[i].nodeName.toLowerCase().match(BLOCKELEMENTS)){
+								var _subVal = (_children[i].outerHTML || _children[i].nodeValue);
+								/* istanbul ignore else: Doesn't seem to trigger on tests, is tested though */
+								if(_subVal.trim() !== '')
+									value += "<" + attrs.taDefaultWrap + ">" + _subVal + "</" + attrs.taDefaultWrap + ">";
+								else value += _subVal;
+							}else{
+								value += _children[i].outerHTML;
+							}
+						}
+					}
+				}
+				return value;
+			};
+			
+			if(attrs.taPaste) _pasteHandler = $parse(attrs.taPaste);
+			
+			element.addClass('ta-bind');
+			
+			var _undoKeyupTimeout;
+			
+			scope['$undoManager' + (attrs.id || '')] = ngModel.$undoManager = {
+				_stack: [],
+				_index: 0,
+				_max: 1000,
+				push: function(value){
+					if((typeof value === "undefined" || value === null) ||
+						((typeof this.current() !== "undefined" && this.current() !== null) && value === this.current())) return value;
+					if(this._index < this._stack.length - 1){
+						this._stack = this._stack.slice(0,this._index+1);
+					}
+					this._stack.push(value);
+					if(_undoKeyupTimeout) $timeout.cancel(_undoKeyupTimeout);
+					if(this._stack.length > this._max) this._stack.shift();
+					this._index = this._stack.length - 1;
+					return value;
+				},
+				undo: function(){
+					return this.setToIndex(this._index-1);
+				},
+				redo: function(){
+					return this.setToIndex(this._index+1);
+				},
+				setToIndex: function(index){
+					if(index < 0 || index > this._stack.length - 1){
+						return undefined;
+					}
+					this._index = index;
+					return this.current();
+				},
+				current: function(){
+					return this._stack[this._index];
+				}
+			};
+			
+			var _redoUndoTimeout;
+			var _undo = scope['$undoTaBind' + (attrs.id || '')] = function(){
+				/* istanbul ignore else: can't really test it due to all changes being ignored as well in readonly */
+				if(!_isReadonly && _isContentEditable){
+					var content = ngModel.$undoManager.undo();
+					if(typeof content !== "undefined" && content !== null){
+						_setInnerHTML(content);
+						_setViewValue(content, false);
+						if(_redoUndoTimeout) $timeout.cancel(_redoUndoTimeout);
+						_redoUndoTimeout = $timeout(function(){
+							element[0].focus();
+							taSelection.setSelectionToElementEnd(element[0]);
+						}, 1);
+					}
+				}
+			};
+			
+			var _redo = scope['$redoTaBind' + (attrs.id || '')] = function(){
+				/* istanbul ignore else: can't really test it due to all changes being ignored as well in readonly */
+				if(!_isReadonly && _isContentEditable){
+					var content = ngModel.$undoManager.redo();
+					if(typeof content !== "undefined" && content !== null){
+						_setInnerHTML(content);
+						_setViewValue(content, false);
+						/* istanbul ignore next */
+						if(_redoUndoTimeout) $timeout.cancel(_redoUndoTimeout);
+						_redoUndoTimeout = $timeout(function(){
+							element[0].focus();
+							taSelection.setSelectionToElementEnd(element[0]);
+						}, 1);
+					}
+				}
+			};
+			
+			// in here we are undoing the converts used elsewhere to prevent the < > and & being displayed when they shouldn't in the code.
+			var _compileHtml = function(){
+				if(_isContentEditable) return element[0].innerHTML;
+				if(_isInputFriendly) return element.val();
+				throw ('textAngular Error: attempting to update non-editable taBind');
+			};
+			
+			var _setViewValue = function(_val, triggerUndo, skipRender){
+				_skipRender = skipRender || false;
+				if(typeof triggerUndo === "undefined" || triggerUndo === null) triggerUndo = true && _isContentEditable; // if not contentEditable then the native undo/redo is fine
+				if(typeof _val === "undefined" || _val === null) _val = _compileHtml();
+				if(_blankTest(_val)){
+					// this avoids us from tripping the ng-pristine flag if we click in and out with out typing
+					if(ngModel.$viewValue !== '') ngModel.$setViewValue('');
+					if(triggerUndo && ngModel.$undoManager.current() !== '') ngModel.$undoManager.push('');
+				}else{
+					_reApplyOnSelectorHandlers();
+					if(ngModel.$viewValue !== _val){
+						ngModel.$setViewValue(_val);
+						if(triggerUndo) ngModel.$undoManager.push(_val);
+					}
+				}
+				ngModel.$render();
+			};
+			
+			//used for updating when inserting wrapped elements
+			scope['updateTaBind' + (attrs.id || '')] = function(){
+				if(!_isReadonly) _setViewValue(undefined, undefined, true);
+			};
+			
+			// catch DOM XSS via taSanitize
+			// Sanitizing both ways is identical
+			var _sanitize = function(unsafe){
+				return (ngModel.$oldViewValue = taSanitize(taFixChrome(unsafe), ngModel.$oldViewValue, _disableSanitizer));
+			};
+			
+			// trigger the validation calls
+			if(element.attr('required')) ngModel.$validators.required = function(modelValue, viewValue) {
+				return !_blankTest(modelValue || viewValue);
+			};
+			// parsers trigger from the above keyup function or any other time that the viewValue is updated and parses it for storage in the ngModel
+			ngModel.$parsers.push(_sanitize);
+			ngModel.$parsers.unshift(_ensureContentWrapped);
+			// because textAngular is bi-directional (which is awesome) we need to also sanitize values going in from the server
+			ngModel.$formatters.push(_sanitize);
+			ngModel.$formatters.unshift(_ensureContentWrapped);
+			ngModel.$formatters.unshift(function(value){
+				return ngModel.$undoManager.push(value || '');
+			});
+			
+			//this code is used to update the models when data is entered/deleted
+			if(_isInputFriendly){
+				scope.events = {};
+				if(!_isContentEditable){
+					// if a textarea or input just add in change and blur handlers, everything else is done by angulars input directive
+					element.on('change blur', scope.events.change = scope.events.blur = function(){
+						if(!_isReadonly) ngModel.$setViewValue(_compileHtml());
+					});
+					
+					element.on('keydown', scope.events.keydown = function(event, eventData){
+						/* istanbul ignore else: this is for catching the jqLite testing*/
+						if(eventData) angular.extend(event, eventData);
+						// Reference to http://stackoverflow.com/questions/6140632/how-to-handle-tab-in-textarea
+						/* istanbul ignore else: otherwise normal functionality */
+						if(event.keyCode === 9){ // tab was pressed
+							// get caret position/selection
+							var start = this.selectionStart;
+							var end = this.selectionEnd;
+							
+							var value = element.val();
+							if(event.shiftKey){
+								// find \t
+								var _linebreak = value.lastIndexOf('\n', start), _tab = value.lastIndexOf('\t', start);
+								if(_tab !== -1 && _tab >= _linebreak){
+									// set textarea value to: text before caret + tab + text after caret
+									element.val(value.substring(0, _tab) + value.substring(_tab + 1));
+									
+									// put caret at right position again (add one for the tab)
+									this.selectionStart = this.selectionEnd = start - 1;
+								}
+							}else{
+								// set textarea value to: text before caret + tab + text after caret
+								element.val(value.substring(0, start) + "\t" + value.substring(end));
+								
+								// put caret at right position again (add one for the tab)
+								this.selectionStart = this.selectionEnd = start + 1;
+							}
+							// prevent the focus lose
+							event.preventDefault();
+						}
+					});
+					
+					var _repeat = function(string, n){
+						var result = '';
+						for(var _n = 0; _n < n; _n++) result += string;
+						return result;
+					};
+					
+					var recursiveListFormat = function(listNode, tablevel){
+						var _html = '', _children = listNode.childNodes;
+						tablevel++;
+						_html += _repeat('\t', tablevel-1) + listNode.outerHTML.substring(0, listNode.outerHTML.indexOf('<li'));
+						for(var _i = 0; _i < _children.length; _i++){
+							/* istanbul ignore next: browser catch */
+							if(!_children[_i].outerHTML) continue;
+							if(_children[_i].nodeName.toLowerCase() === 'ul' || _children[_i].nodeName.toLowerCase() === 'ol')
+								_html += '\n' + recursiveListFormat(_children[_i], tablevel);
+							else
+								_html += '\n' + _repeat('\t', tablevel) + _children[_i].outerHTML;
+						}
+						_html += '\n' + _repeat('\t', tablevel-1) + listNode.outerHTML.substring(listNode.outerHTML.lastIndexOf('<'));
+						return _html;
+					};
+					ngModel.$formatters.unshift(function(htmlValue){
+						// tabulate the HTML so it looks nicer
+						var _children = angular.element('<div>' + htmlValue + '</div>')[0].childNodes;
+						if(_children.length > 0){
+							htmlValue = '';
+							for(var i = 0; i < _children.length; i++){
+								/* istanbul ignore next: browser catch */
+								if(!_children[i].outerHTML) continue;
+								if(htmlValue.length > 0) htmlValue += '\n';
+								if(_children[i].nodeName.toLowerCase() === 'ul' || _children[i].nodeName.toLowerCase() === 'ol')
+									htmlValue += '' + recursiveListFormat(_children[i], 0);
+								else htmlValue += '' + _children[i].outerHTML;
+							}
+						}
+						
+						return htmlValue;
+					});
+				}else{
+					// all the code specific to contenteditable divs
+					var _processingPaste = false;
+					/* istanbul ignore next: phantom js cannot test this for some reason */
+					var processpaste = function(text) {
+						/* istanbul ignore else: don't care if nothing pasted */
+						if(text && text.trim().length){
+							// test paste from word/microsoft product
+							if(text.match(/class=["']*Mso(Normal|List)/i)){
+								var textFragment = text.match(/<!--StartFragment-->([\s\S]*?)<!--EndFragment-->/i);
+								if(!textFragment) textFragment = text;
+								else textFragment = textFragment[1];
+								textFragment = textFragment.replace(/<o:p>[\s\S]*?<\/o:p>/ig, '').replace(/class=(["']|)MsoNormal(["']|)/ig, '');
+								var dom = angular.element("<div>" + textFragment + "</div>");
+								var targetDom = angular.element("<div></div>");
+								var _list = {
+									element: null,
+									lastIndent: [],
+									lastLi: null,
+									isUl: false
+								};
+								_list.lastIndent.peek = function(){
+									var n = this.length;
+									if (n>0) return this[n-1];
+								};
+								var _resetList = function(isUl){
+									_list.isUl = isUl;
+									_list.element = angular.element(isUl ? "<ul>" : "<ol>");
+									_list.lastIndent = [];
+									_list.lastIndent.peek = function(){
+										var n = this.length;
+										if (n>0) return this[n-1];
+									};
+									_list.lastLevelMatch = null;
+								};
+								for(var i = 0; i <= dom[0].childNodes.length; i++){
+									if(!dom[0].childNodes[i] || dom[0].childNodes[i].nodeName === "#text" || dom[0].childNodes[i].tagName.toLowerCase() !== "p") continue;
+									var el = angular.element(dom[0].childNodes[i]);
+									var _listMatch = (el.attr('class') || '').match(/MsoList(Bullet|Number|Paragraph)(CxSp(First|Middle|Last)|)/i);
+									
+									if(_listMatch){
+										if(el[0].childNodes.length < 2 || el[0].childNodes[1].childNodes.length < 1){
+											continue;
+										}
+										var isUl = _listMatch[1].toLowerCase() === "bullet" || (_listMatch[1].toLowerCase() !== "number" && !(/^[^0-9a-z<]*[0-9a-z]+[^0-9a-z<>]</i.test(el[0].childNodes[1].innerHTML) || /^[^0-9a-z<]*[0-9a-z]+[^0-9a-z<>]</i.test(el[0].childNodes[1].childNodes[0].innerHTML)));
+										var _indentMatch = (el.attr('style') || '').match(/margin-left:([\-\.0-9]*)/i);
+										var indent = parseFloat((_indentMatch)?_indentMatch[1]:0);
+										var _levelMatch = (el.attr('style') || '').match(/mso-list:l([0-9]+) level([0-9]+) lfo[0-9+]($|;)/i);
+										// prefers the mso-list syntax
+										
+										if(_levelMatch && _levelMatch[2]) indent = parseInt(_levelMatch[2]);
+										
+										if ((_levelMatch && (!_list.lastLevelMatch || _levelMatch[1] !== _list.lastLevelMatch[1])) || !_listMatch[3] || _listMatch[3].toLowerCase() === "first" || (_list.lastIndent.peek() === null) || (_list.isUl !== isUl && _list.lastIndent.peek() === indent)) {
+											_resetList(isUl);
+											targetDom.append(_list.element);
+										} else if (_list.lastIndent.peek() != null && _list.lastIndent.peek() < indent){
+											_list.element = angular.element(isUl ? "<ul>" : "<ol>");
+											_list.lastLi.append(_list.element);
+										} else if (_list.lastIndent.peek() != null && _list.lastIndent.peek() > indent){
+											while(_list.lastIndent.peek() != null && _list.lastIndent.peek() > indent){
+												if(_list.element.parent()[0].tagName.toLowerCase() === 'li'){
+													_list.element = _list.element.parent();
+													continue;
+												}else if(/[uo]l/i.test(_list.element.parent()[0].tagName.toLowerCase())){
+													_list.element = _list.element.parent();
+												}else{ // else it's it should be a sibling
+													break;
+												}
+												_list.lastIndent.pop();
+											}
+											_list.isUl = _list.element[0].tagName.toLowerCase() === "ul";
+											if (isUl !== _list.isUl) {
+												_resetList(isUl);
+												targetDom.append(_list.element);
+											}
+										}
+										
+										_list.lastLevelMatch = _levelMatch;
+										if(indent !== _list.lastIndent.peek()) _list.lastIndent.push(indent);
+										_list.lastLi = angular.element("<li>");
+										_list.element.append(_list.lastLi);
+										_list.lastLi.html(el.html().replace(/<!(--|)\[if !supportLists\](--|)>[\s\S]*?<!(--|)\[endif\](--|)>/ig, ''));
+										el.remove();
+									}else{
+										_resetList(false);
+										targetDom.append(el);
+									}
+								}
+								var _unwrapElement = function(node){
+									node = angular.element(node);
+									for(var _n = node[0].childNodes.length - 1; _n >= 0; _n--) node.after(node[0].childNodes[_n]);
+									node.remove();
+								};
+								
+								angular.forEach(targetDom.find('span'), function(node){
+									node.removeAttribute('lang');
+									if(node.attributes.length <= 0) _unwrapElement(node);
+								});
+								angular.forEach(targetDom.find('font'), _unwrapElement);
+								text = targetDom.html();
+							}else{
+								// remove unnecessary chrome insert
+								text = text.replace(/<(|\/)meta[^>]*?>/ig, '');
+								if(text.match(/<[^>]*?(ta-bind)[^>]*?>/)){
+									// entire text-angular or ta-bind has been pasted, REMOVE AT ONCE!!
+									if(text.match(/<[^>]*?(text-angular)[^>]*?>/)){
+										var _el = angular.element("<div>" + text + "</div>");
+										_el.find('textarea').remove();
+										var binds = taDOM.getByAttribute(_el, 'ta-bind');
+										for(var _b = 0; _b < binds.length; _b++){
+											var _target = binds[_b][0].parentNode.parentNode;
+											for(var _c = 0; _c < binds[_b][0].childNodes.length; _c++){
+												_target.parentNode.insertBefore(binds[_b][0].childNodes[_c], _target);
+											}
+											_target.parentNode.removeChild(_target);
+										}
+										text = _el.html().replace('<br class="Apple-interchange-newline">', '');
+									}
+								}else if(text.match(/^<span/)){
+									// in case of pasting only a span - chrome paste, remove them. THis is just some wierd formatting
+									text = text.replace(/<(|\/)span[^>]*?>/ig, '');
+								}
+								// Webkit on Apple tags
+								text = text.replace(/<br class="Apple-interchange-newline"[^>]*?>/ig, '').replace(/<span class="Apple-converted-space">( |&nbsp;)<\/span>/ig, '&nbsp;');
+							}
+							
+							if (/<li(\s.*)?>/i.test(text) && /(<ul(\s.*)?>|<ol(\s.*)?>).*<li(\s.*)?>/i.test(text) === false) {
+								// insert missing parent of li element
+								text = text.replace(/<li(\s.*)?>.*<\/li(\s.*)?>/i, '<ul>$&</ul>');
+							}
+							
+							if(_pasteHandler) text = _pasteHandler(scope, {$html: text}) || text;
+							
+							text = taSanitize(text, '', _disableSanitizer);
+							
+							taSelection.insertHtml(text, element[0]);
+							$timeout(function(){
+								ngModel.$setViewValue(_compileHtml());
+								_processingPaste = false;
+								element.removeClass('processing-paste');
+							}, 0);
+						}else{
+							_processingPaste = false;
+							element.removeClass('processing-paste');
+						}
+					};
+					
+					element.on('paste', scope.events.paste = function(e, eventData){
+						/* istanbul ignore else: this is for catching the jqLite testing*/
+						if(eventData) angular.extend(e, eventData);
+						if(_isReadonly || _processingPaste){
+							e.stopPropagation();
+							e.preventDefault();
+							return false;
+						}
+						
+						// Code adapted from http://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser/6804718#6804718
+						_processingPaste = true;
+						element.addClass('processing-paste');
+						var pastedContent;
+						var clipboardData = (e.originalEvent || e).clipboardData;
+						if (clipboardData && clipboardData.getData && clipboardData.types.length > 0) {// Webkit - get data from clipboard, put into editdiv, cleanup, then cancel event
+							var _types = "";
+							for(var _t = 0; _t < clipboardData.types.length; _t++){
+								_types += " " + clipboardData.types[_t];
+							}
+							/* istanbul ignore next: browser tests */
+							if (/text\/html/i.test(_types)) {
+								pastedContent = clipboardData.getData('text/html');
+							} else if (/text\/plain/i.test(_types)) {
+								pastedContent = clipboardData.getData('text/plain');
+							}
+							
+							processpaste(pastedContent);
+							e.stopPropagation();
+							e.preventDefault();
+							return false;
+						} else {// Everything else - empty editdiv and allow browser to paste content into it, then cleanup
+							var _savedSelection = $window.rangy.saveSelection(),
+								_tempDiv = angular.element('<div class="ta-hidden-input" contenteditable="true"></div>');
+							$document.find('body').append(_tempDiv);
+							_tempDiv[0].focus();
+							$timeout(function(){
+								// restore selection
+								$window.rangy.restoreSelection(_savedSelection);
+								processpaste(_tempDiv[0].innerHTML);
+								element[0].focus();
+								_tempDiv.remove();
+							}, 0);
+						}
+					});
+					element.on('cut', scope.events.cut = function(e){
+						// timeout to next is needed as otherwise the paste/cut event has not finished actually changing the display
+						if(!_isReadonly) $timeout(function(){
+							ngModel.$setViewValue(_compileHtml());
+						}, 0);
+						else e.preventDefault();
+					});
+					
+					element.on('keydown', scope.events.keydown = function(event, eventData){
+						/* istanbul ignore else: this is for catching the jqLite testing*/
+						if(eventData) angular.extend(event, eventData);
+						/* istanbul ignore else: readonly check */
+						if(!_isReadonly){
+							if(!event.altKey && (event.metaKey || event.ctrlKey)){
+								// covers ctrl/command + z
+								if((event.keyCode === 90 && !event.shiftKey)){
+									_undo();
+									event.preventDefault();
+								// covers ctrl + y, command + shift + z
+								}else if((event.keyCode === 90 && event.shiftKey) || (event.keyCode === 89 && !event.shiftKey)){
+									_redo();
+									event.preventDefault();
+								}
+							/* istanbul ignore next: difficult to test as can't seem to select */
+							}else if(event.keyCode === 13 && !event.shiftKey){
+								var $selection;
+								var selection = taSelection.getSelectionElement();
+								if(!selection.tagName.match(VALIDELEMENTS)) return;
+								var _new = angular.element(_defaultVal);
+								if (/^<br(|\/)>$/i.test(selection.innerHTML.trim()) && selection.parentNode.tagName.toLowerCase() === 'blockquote' && !selection.nextSibling) {
+									// if last element in blockquote and element is blank, pull element outside of blockquote.
+									$selection = angular.element(selection);
+									var _parent = $selection.parent();
+									_parent.after(_new);
+									$selection.remove();
+									if(_parent.children().length === 0) _parent.remove();
+									taSelection.setSelectionToElementStart(_new[0]);
+									event.preventDefault();
+								}else if (/^<[^>]+><br(|\/)><\/[^>]+>$/i.test(selection.innerHTML.trim()) && selection.tagName.toLowerCase() === 'blockquote'){
+									$selection = angular.element(selection);
+									$selection.after(_new);
+									$selection.remove();
+									taSelection.setSelectionToElementStart(_new[0]);
+									event.preventDefault();
+								}
+							}
+						}
+					});
+					var _keyupTimeout;
+					element.on('keyup', scope.events.keyup = function(event, eventData){
+						/* istanbul ignore else: this is for catching the jqLite testing*/
+						if(eventData) angular.extend(event, eventData);
+						/* istanbul ignore next: FF specific bug fix */
+						if (event.keyCode === 9) {
+							var _selection = taSelection.getSelection();
+							if(_selection.start.element === element[0] && element.children().length) taSelection.setSelectionToElementStart(element.children()[0]);
+							return;
+						}
+						if(_undoKeyupTimeout) $timeout.cancel(_undoKeyupTimeout);
+						if(!_isReadonly && !BLOCKED_KEYS.test(event.keyCode)){
+							// if enter - insert new taDefaultWrap, if shift+enter insert <br/>
+							if(_defaultVal !== '' && event.keyCode === 13){
+								if(!event.shiftKey){
+									// new paragraph, br should be caught correctly
+									var selection = taSelection.getSelectionElement();
+									while(!selection.tagName.match(VALIDELEMENTS) && selection !== element[0]){
+										selection = selection.parentNode;
+									}
+									
+									if(selection.tagName.toLowerCase() !== attrs.taDefaultWrap && selection.tagName.toLowerCase() !== 'li' && (selection.innerHTML.trim() === '' || selection.innerHTML.trim() === '<br>')){
+										var _new = angular.element(_defaultVal);
+										angular.element(selection).replaceWith(_new);
+										taSelection.setSelectionToElementStart(_new[0]);
+									}
+								}
+							}
+							var val = _compileHtml();
+							if(_defaultVal !== '' && val.trim() === ''){
+								_setInnerHTML(_defaultVal);
+								taSelection.setSelectionToElementStart(element.children()[0]);
+							}else if(val.substring(0, 1) !== '<' && attrs.taDefaultWrap !== ''){
+								var _savedSelection = $window.rangy.saveSelection();
+								val = _compileHtml();
+								val = "<" + attrs.taDefaultWrap + ">" + val + "</" + attrs.taDefaultWrap + ">";
+								_setInnerHTML(val);
+								$window.rangy.restoreSelection(_savedSelection);
+							}
+							var triggerUndo = _lastKey !== event.keyCode && UNDO_TRIGGER_KEYS.test(event.keyCode);
+							if(_keyupTimeout) $timeout.cancel(_keyupTimeout);
+							_keyupTimeout = $timeout(function() {
+								_setViewValue(val, triggerUndo, true);
+							}, ngModelOptions.$options.debounce || 400);
+							if(!triggerUndo) _undoKeyupTimeout = $timeout(function(){ ngModel.$undoManager.push(val); }, 250);
+							_lastKey = event.keyCode;
+						}
+					});
+
+					element.on('blur', scope.events.blur = function(){
+						_focussed = false;
+						/* istanbul ignore else: if readonly don't update model */
+						if(!_isReadonly){
+							_setViewValue(undefined, undefined, true);
+						}else{
+							_skipRender = true; // don't redo the whole thing, just check the placeholder logic
+							ngModel.$render();
+						}
+					});
+
+					// Placeholders not supported on ie 8 and below
+					if(attrs.placeholder && (_browserDetect.ie > 8 || _browserDetect.ie === undefined)){
+						var rule;
+						if(attrs.id) rule = addCSSRule('#' + attrs.id + '.placeholder-text:before', 'content: "' + attrs.placeholder + '"');
+						else throw('textAngular Error: An unique ID is required for placeholders to work');
+
+						scope.$on('$destroy', function(){
+							removeCSSRule(rule);
+						});
+					}
+
+					element.on('focus', scope.events.focus = function(){
+						_focussed = true;
+						element.removeClass('placeholder-text');
+					});
+					
+					element.on('mouseup', scope.events.mouseup = function(){
+						var _selection = taSelection.getSelection();
+						if(_selection.start.element === element[0] && element.children().length) taSelection.setSelectionToElementStart(element.children()[0]);
+					});
+					
+					// prevent propagation on mousedown in editor, see #206
+					element.on('mousedown', scope.events.mousedown = function(event, eventData){
+						/* istanbul ignore else: this is for catching the jqLite testing*/
+						if(eventData) angular.extend(event, eventData);
+						event.stopPropagation();
+					});
+				}
+			}
+
+			var selectorClickHandler = function(event){
+				// emit the element-select event, pass the element
+				scope.$emit('ta-element-select', this);
+				event.preventDefault();
+				return false;
+			};
+			var fileDropHandler = function(event, eventData){
+				/* istanbul ignore else: this is for catching the jqLite testing*/
+				if(eventData) angular.extend(event, eventData);
+				// emit the drop event, pass the element, preventing should be done elsewhere
+				if(!dropFired && !_isReadonly){
+					dropFired = true;
+					var dataTransfer;
+					if(event.originalEvent) dataTransfer = event.originalEvent.dataTransfer;
+					else dataTransfer = event.dataTransfer;
+					scope.$emit('ta-drop-event', this, event, dataTransfer);
+					$timeout(function(){
+						dropFired = false;
+						_setViewValue(undefined, undefined, true);
+					}, 100);
+				}
+			};
+
+			//used for updating when inserting wrapped elements
+			var _reApplyOnSelectorHandlers = scope['reApplyOnSelectorHandlers' + (attrs.id || '')] = function(){
+				/* istanbul ignore else */
+				if(!_isReadonly) angular.forEach(taSelectableElements, function(selector){
+						// check we don't apply the handler twice
+						element.find(selector)
+							.off('click', selectorClickHandler)
+							.on('click', selectorClickHandler);
+					});
+			};
+			
+			var _setInnerHTML = function(newval){
+				element[0].innerHTML = newval;
+			};
+			var _renderTimeout;
+			var _renderInProgress = false;
+			// changes to the model variable from outside the html/text inputs
+			ngModel.$render = function(){
+				/* istanbul ignore if: Catches rogue renders, hard to replicate in tests */
+				if(_renderInProgress) return;
+				else _renderInProgress = true;
+				// catch model being null or undefined
+				var val = ngModel.$viewValue || '';
+				// if the editor isn't focused it needs to be updated, otherwise it's receiving user input
+				if(!_skipRender){
+					/* istanbul ignore else: in other cases we don't care */
+					if(_isContentEditable && _focussed){
+						// update while focussed
+						element.removeClass('placeholder-text');
+						if(_renderTimeout) $timeout.cancel(_renderTimeout);
+						_renderTimeout = $timeout(function(){
+							/* istanbul ignore if: Can't be bothered testing this... */ 
+							if(!_focussed){
+								element[0].focus();
+								taSelection.setSelectionToElementEnd(element.children()[element.children().length - 1]);
+							}
+							_renderTimeout = undefined;
+						}, 1);
+					}
+					if(_isContentEditable){
+						// WYSIWYG Mode
+						if(attrs.placeholder){
+							if(val === ''){
+								// blank
+								_setInnerHTML(_defaultVal);
+							}else{
+								// not-blank
+								_setInnerHTML(val);
+							}
+						}else{
+							_setInnerHTML((val === '') ? _defaultVal : val);
+						}
+						// if in WYSIWYG and readOnly we kill the use of links by clicking
+						if(!_isReadonly){
+							_reApplyOnSelectorHandlers();
+							element.on('drop', fileDropHandler);
+						}else{
+							element.off('drop', fileDropHandler);
+						}
+					}else if(element[0].tagName.toLowerCase() !== 'textarea' && element[0].tagName.toLowerCase() !== 'input'){
+						// make sure the end user can SEE the html code as a display. This is a read-only display element
+						_setInnerHTML(taApplyCustomRenderers(val));
+					}else{
+						// only for input and textarea inputs
+						element.val(val);
+					}
+				}
+				if(_isContentEditable && attrs.placeholder){
+					if(val === ''){
+						if(_focussed) element.removeClass('placeholder-text');
+						else element.addClass('placeholder-text');
+					}else{
+						element.removeClass('placeholder-text');
+					}
+				}
+				_renderInProgress = _skipRender = false;
+			};
+			
+			if(attrs.taReadonly){
+				//set initial value
+				_isReadonly = scope.$eval(attrs.taReadonly);
+				if(_isReadonly){
+					element.addClass('ta-readonly');
+					// we changed to readOnly mode (taReadonly='true')
+					if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
+						element.attr('disabled', 'disabled');
+					}
+					if(element.attr('contenteditable') !== undefined && element.attr('contenteditable')){
+						element.removeAttr('contenteditable');
+					}
+				}else{
+					element.removeClass('ta-readonly');
+					// we changed to NOT readOnly mode (taReadonly='false')
+					if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
+						element.removeAttr('disabled');
+					}else if(_isContentEditable){
+						element.attr('contenteditable', 'true');
+					}
+				}
+				// taReadonly only has an effect if the taBind element is an input or textarea or has contenteditable='true' on it.
+				// Otherwise it is readonly by default
+				scope.$watch(attrs.taReadonly, function(newVal, oldVal){
+					if(oldVal === newVal) return;
+					if(newVal){
+						element.addClass('ta-readonly');
+						// we changed to readOnly mode (taReadonly='true')
+						if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
+							element.attr('disabled', 'disabled');
+						}
+						if(element.attr('contenteditable') !== undefined && element.attr('contenteditable')){
+							element.removeAttr('contenteditable');
+						}
+						// turn ON selector click handlers
+						angular.forEach(taSelectableElements, function(selector){
+							element.find(selector).on('click', selectorClickHandler);
+						});
+						element.off('drop', fileDropHandler);
+					}else{
+						element.removeClass('ta-readonly');
+						// we changed to NOT readOnly mode (taReadonly='false')
+						if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
+							element.removeAttr('disabled');
+						}else if(_isContentEditable){
+							element.attr('contenteditable', 'true');
+						}
+						// remove the selector click handlers
+						angular.forEach(taSelectableElements, function(selector){
+							element.find(selector).off('click', selectorClickHandler);
+						});
+						element.on('drop', fileDropHandler);
+					}
+					_isReadonly = newVal;
+				});
+			}
+
+			// Initialise the selectableElements
+			// if in WYSIWYG and readOnly we kill the use of links by clicking
+			if(_isContentEditable && !_isReadonly){
+				angular.forEach(taSelectableElements, function(selector){
+					element.find(selector).on('click', selectorClickHandler);
+				});
+				element.on('drop', fileDropHandler);
+				element.on('blur', function(){
+					/* istanbul ignore next: webkit fix */
+					if(_browserDetect.webkit) { // detect webkit
+						globalContentEditableBlur = true;
+					}
+				});
+			}
+		}
+	};
+}]);

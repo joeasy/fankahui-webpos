@@ -1,1 +1,704 @@
-angular.module("textAngularSetup",[]).value("taOptions",{toolbar:[["h1","h2","h3","h4","h5","h6","p","pre","quote"],["bold","italics","underline","strikeThrough","ul","ol","redo","undo","clear"],["justifyLeft","justifyCenter","justifyRight","indent","outdent"],["html","insertImage","insertLink","insertVideo","wordcount","charcount"]],classes:{focussed:"focussed",toolbar:"btn-toolbar",toolbarGroup:"btn-group",toolbarButton:"btn btn-default",toolbarButtonActive:"active",disabled:"disabled",textEditor:"form-control",htmlEditor:"form-control"},defaultTagAttributes:{a:{target:""}},setup:{textEditorSetup:function(t){},htmlEditorSetup:function(t){}},defaultFileDropHandler:function(t,e){var n=new FileReader;return"image"===t.type.substring(0,5)?(n.onload=function(){""!==n.result&&e("insertImage",n.result,!0)},n.readAsDataURL(t),!0):!1}}).value("taSelectableElements",["a","img"]).value("taCustomRenderers",[{selector:"img",customAttribute:"ta-insert-video",renderLogic:function(t){var e=angular.element("<iframe></iframe>"),n=t.prop("attributes");angular.forEach(n,function(t){e.attr(t.name,t.value)}),e.attr("src",e.attr("ta-insert-video")),t.replaceWith(e)}}]).value("taTranslations",{html:{tooltip:"Toggle html / Rich Text"},heading:{tooltip:"Heading "},p:{tooltip:"Paragraph"},pre:{tooltip:"Preformatted text"},ul:{tooltip:"Unordered List"},ol:{tooltip:"Ordered List"},quote:{tooltip:"Quote/unquote selection or paragraph"},undo:{tooltip:"Undo"},redo:{tooltip:"Redo"},bold:{tooltip:"Bold"},italic:{tooltip:"Italic"},underline:{tooltip:"Underline"},strikeThrough:{tooltip:"Strikethrough"},justifyLeft:{tooltip:"Align text left"},justifyRight:{tooltip:"Align text right"},justifyCenter:{tooltip:"Center"},indent:{tooltip:"Increase indent"},outdent:{tooltip:"Decrease indent"},clear:{tooltip:"Clear formatting"},insertImage:{dialogPrompt:"Please enter an image URL to insert",tooltip:"Insert image",hotkey:"the - possibly language dependent hotkey ... for some future implementation"},insertVideo:{tooltip:"Insert video",dialogPrompt:"Please enter a youtube URL to embed"},insertLink:{tooltip:"Insert / edit link",dialogPrompt:"Please enter a URL to insert"},editLink:{reLinkButton:{tooltip:"Relink"},unLinkButton:{tooltip:"Unlink"},targetToggle:{buttontext:"Open in New Window"}},wordcount:{tooltip:"Display words Count"},charcount:{tooltip:"Display characters Count"}}).run(["taRegisterTool","$window","taTranslations","taSelection",function(t,e,n,o){t("html",{iconclass:"fa fa-code",tooltiptext:n.html.tooltip,action:function(){this.$editor().switchView()},activeState:function(){return this.$editor().showHtml}});var a=function(t){return function(){return this.$editor().queryFormatBlockState(t)}},i=function(){return this.$editor().wrapSelection("formatBlock","<"+this.name.toUpperCase()+">")};angular.forEach(["h1","h2","h3","h4","h5","h6"],function(e){t(e.toLowerCase(),{buttontext:e.toUpperCase(),tooltiptext:n.heading.tooltip+e.charAt(1),action:i,activeState:a(e.toLowerCase())})}),t("p",{buttontext:"P",tooltiptext:n.p.tooltip,action:function(){return this.$editor().wrapSelection("formatBlock","<P>")},activeState:function(){return this.$editor().queryFormatBlockState("p")}}),t("pre",{buttontext:"pre",tooltiptext:n.pre.tooltip,action:function(){return this.$editor().wrapSelection("formatBlock","<PRE>")},activeState:function(){return this.$editor().queryFormatBlockState("pre")}}),t("ul",{iconclass:"fa fa-list-ul",tooltiptext:n.ul.tooltip,action:function(){return this.$editor().wrapSelection("insertUnorderedList",null)},activeState:function(){return this.$editor().queryCommandState("insertUnorderedList")}}),t("ol",{iconclass:"fa fa-list-ol",tooltiptext:n.ol.tooltip,action:function(){return this.$editor().wrapSelection("insertOrderedList",null)},activeState:function(){return this.$editor().queryCommandState("insertOrderedList")}}),t("quote",{iconclass:"fa fa-quote-right",tooltiptext:n.quote.tooltip,action:function(){return this.$editor().wrapSelection("formatBlock","<BLOCKQUOTE>")},activeState:function(){return this.$editor().queryFormatBlockState("blockquote")}}),t("undo",{iconclass:"fa fa-undo",tooltiptext:n.undo.tooltip,action:function(){return this.$editor().wrapSelection("undo",null)}}),t("redo",{iconclass:"fa fa-repeat",tooltiptext:n.redo.tooltip,action:function(){return this.$editor().wrapSelection("redo",null)}}),t("bold",{iconclass:"fa fa-bold",tooltiptext:n.bold.tooltip,action:function(){return this.$editor().wrapSelection("bold",null)},activeState:function(){return this.$editor().queryCommandState("bold")},commandKeyCode:98}),t("justifyLeft",{iconclass:"fa fa-align-left",tooltiptext:n.justifyLeft.tooltip,action:function(){return this.$editor().wrapSelection("justifyLeft",null)},activeState:function(t){var e=!1;return t&&(e="left"===t.css("text-align")||"left"===t.attr("align")||"right"!==t.css("text-align")&&"center"!==t.css("text-align")&&"justify"!==t.css("text-align")&&!this.$editor().queryCommandState("justifyRight")&&!this.$editor().queryCommandState("justifyCenter")&&!this.$editor().queryCommandState("justifyFull")),e=e||this.$editor().queryCommandState("justifyLeft")}}),t("justifyRight",{iconclass:"fa fa-align-right",tooltiptext:n.justifyRight.tooltip,action:function(){return this.$editor().wrapSelection("justifyRight",null)},activeState:function(t){var e=!1;return t&&(e="right"===t.css("text-align")),e=e||this.$editor().queryCommandState("justifyRight")}}),t("justifyCenter",{iconclass:"fa fa-align-center",tooltiptext:n.justifyCenter.tooltip,action:function(){return this.$editor().wrapSelection("justifyCenter",null)},activeState:function(t){var e=!1;return t&&(e="center"===t.css("text-align")),e=e||this.$editor().queryCommandState("justifyCenter")}}),t("indent",{iconclass:"fa fa-indent",tooltiptext:n.indent.tooltip,action:function(){return this.$editor().wrapSelection("indent",null)},activeState:function(){return this.$editor().queryFormatBlockState("blockquote")}}),t("outdent",{iconclass:"fa fa-outdent",tooltiptext:n.outdent.tooltip,action:function(){return this.$editor().wrapSelection("outdent",null)},activeState:function(){return!1}}),t("italics",{iconclass:"fa fa-italic",tooltiptext:n.italic.tooltip,action:function(){return this.$editor().wrapSelection("italic",null)},activeState:function(){return this.$editor().queryCommandState("italic")},commandKeyCode:105}),t("underline",{iconclass:"fa fa-underline",tooltiptext:n.underline.tooltip,action:function(){return this.$editor().wrapSelection("underline",null)},activeState:function(){return this.$editor().queryCommandState("underline")},commandKeyCode:117}),t("strikeThrough",{iconclass:"fa fa-strikethrough",tooltiptext:n.strikeThrough.tooltip,action:function(){return this.$editor().wrapSelection("strikeThrough",null)},activeState:function(){return document.queryCommandState("strikeThrough")}}),t("clear",{iconclass:"fa fa-ban",tooltiptext:n.clear.tooltip,action:function(t,e){var n;this.$editor().wrapSelection("removeFormat",null);var a=angular.element(o.getSelectionElement()),i=function(t){t=angular.element(t);var e=t;angular.forEach(t.children(),function(t){var n=angular.element("<p></p>");n.html(angular.element(t).html()),e.after(n),e=n}),t.remove()};if(angular.forEach(a.find("ul"),i),angular.forEach(a.find("ol"),i),"li"===a[0].tagName.toLowerCase()){var l=a[0].parentNode.childNodes,r=[],s=[],u=!1;for(n=0;n<l.length;n++)l[n]===a[0]?u=!0:u?s.push(l[n]):r.push(l[n]);var c=angular.element(a[0].parentNode),d=angular.element("<p></p>");if(d.html(angular.element(a[0]).html()),0===r.length||0===s.length)0===s.length?c.after(d):c[0].parentNode.insertBefore(d[0],c[0]),0===r.length&&0===s.length?c.remove():angular.element(a[0]).remove();else{var p=angular.element("<"+c[0].tagName+"></"+c[0].tagName+">"),f=angular.element("<"+c[0].tagName+"></"+c[0].tagName+">");for(n=0;n<r.length;n++)p.append(angular.element(r[n]));for(n=0;n<s.length;n++)f.append(angular.element(s[n]));c.after(f),c.after(d),c.after(p),c.remove()}o.setSelectionToElementEnd(d[0])}var m=this.$editor(),h=function(t){t=angular.element(t),t[0]!==m.displayElements.text[0]&&t.removeAttr("class"),angular.forEach(t.children(),h)};angular.forEach(a,h),"li"!==a[0].tagName.toLowerCase()&&"ol"!==a[0].tagName.toLowerCase()&&"ul"!==a[0].tagName.toLowerCase()&&this.$editor().wrapSelection("formatBlock","default"),e()}});var l=function(t,e,n){var o=function(){n.updateTaBindtaTextElement(),n.hidePopover()};t.preventDefault(),n.displayElements.popover.css("width","375px");var a=n.displayElements.popoverContainer;a.empty();var i=angular.element('<div class="btn-group" style="padding-right: 6px;">'),l=angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">100% </button>');l.on("click",function(t){t.preventDefault(),e.css({width:"100%",height:""}),o()});var r=angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">50% </button>');r.on("click",function(t){t.preventDefault(),e.css({width:"50%",height:""}),o()});var s=angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">25% </button>');s.on("click",function(t){t.preventDefault(),e.css({width:"25%",height:""}),o()});var u=angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">Reset</button>');u.on("click",function(t){t.preventDefault(),e.css({width:"",height:""}),o()}),i.append(l),i.append(r),i.append(s),i.append(u),a.append(i),i=angular.element('<div class="btn-group" style="padding-right: 6px;">');var c=angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-left"></i></button>');c.on("click",function(t){t.preventDefault(),e.css("float","left"),e.css("cssFloat","left"),e.css("styleFloat","left"),o()});var d=angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-right"></i></button>');d.on("click",function(t){t.preventDefault(),e.css("float","right"),e.css("cssFloat","right"),e.css("styleFloat","right"),o()});var p=angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-justify"></i></button>');p.on("click",function(t){t.preventDefault(),e.css("float",""),e.css("cssFloat",""),e.css("styleFloat",""),o()}),i.append(c),i.append(p),i.append(d),a.append(i),i=angular.element('<div class="btn-group">');var f=angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-trash-o"></i></button>');f.on("click",function(t){t.preventDefault(),e.remove(),o()}),i.append(f),a.append(i),n.showPopover(e),n.showResizeOverlay(e)};t("insertImage",{iconclass:"fa fa-picture-o",tooltiptext:n.insertImage.tooltip,action:function(){var t;return t=e.prompt(n.insertImage.dialogPrompt,"http://"),t&&""!==t&&"http://"!==t?this.$editor().wrapSelection("insertImage",t,!0):void 0},onElementSelect:{element:"img",action:l}}),t("insertVideo",{iconclass:"fa fa-youtube-play",tooltiptext:n.insertVideo.tooltip,action:function(){var t;if(t=e.prompt(n.insertVideo.dialogPrompt,"https://"),t&&""!==t&&"https://"!==t){var o=t.match(/(\?|&)v=[^&]*/);if(o&&o.length>0){var a="https://www.youtube.com/embed/"+o[0].substring(3),i='<img class="ta-insert-video" src="https://img.youtube.com/vi/'+o[0].substring(3)+'/hqdefault.jpg" ta-insert-video="'+a+'" contenteditable="false" allowfullscreen="true" frameborder="0" />';return this.$editor().wrapSelection("insertHTML",i,!0)}}},onElementSelect:{element:"img",onlyWithAttrs:["ta-insert-video"],action:l}}),t("insertLink",{tooltiptext:n.insertLink.tooltip,iconclass:"fa fa-link",action:function(){var t;return t=e.prompt(n.insertLink.dialogPrompt,"http://"),t&&""!==t&&"http://"!==t?this.$editor().wrapSelection("createLink",t,!0):void 0},activeState:function(t){return t?"A"===t[0].tagName:!1},onElementSelect:{element:"a",action:function(t,o,a){t.preventDefault(),a.displayElements.popover.css("width","436px");var i=a.displayElements.popoverContainer;i.empty(),i.css("line-height","28px");var l=angular.element('<a href="'+o.attr("href")+'" target="_blank">'+o.attr("href")+"</a>");l.css({display:"inline-block","max-width":"200px",overflow:"hidden","text-overflow":"ellipsis","white-space":"nowrap","vertical-align":"middle"}),i.append(l);var r=angular.element('<div class="btn-group pull-right">'),s=angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="'+n.editLink.reLinkButton.tooltip+'"><i class="fa fa-edit icon-edit"></i></button>');s.on("click",function(t){t.preventDefault();var i=e.prompt(n.insertLink.dialogPrompt,o.attr("href"));i&&""!==i&&"http://"!==i&&(o.attr("href",i),a.updateTaBindtaTextElement()),a.hidePopover()}),r.append(s);var u=angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="'+n.editLink.unLinkButton.tooltip+'"><i class="fa fa-unlink icon-unlink"></i></button>');u.on("click",function(t){t.preventDefault(),o.replaceWith(o.contents()),a.updateTaBindtaTextElement(),a.hidePopover()}),r.append(u);var c=angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on">'+n.editLink.targetToggle.buttontext+"</button>");"_blank"===o.attr("target")&&c.addClass("active"),c.on("click",function(t){t.preventDefault(),o.attr("target","_blank"===o.attr("target")?"":"_blank"),c.toggleClass("active"),a.updateTaBindtaTextElement()}),r.append(c),i.append(r),a.showPopover(o)}}}),t("wordcount",{display:'<div id="toolbarWC" style="display:block; min-width:100px;">Words: <span ng-bind="wordcount"></span></div>',disabled:!0,wordcount:0,activeState:function(){var t=this.$editor().displayElements.text,e=t[0].innerHTML||"",n=0;return""!==e.replace(/\s*<[^>]*?>\s*/g,"")&&(n=e.replace(/<\/?(b|i|em|strong|span|u|strikethrough|a|img|small|sub|sup|label)( [^>*?])?>/gi,"").replace(/(<[^>]*?>\s*<[^>]*?>)/gi," ").replace(/(<[^>]*?>)/gi,"").replace(/\s+/gi," ").match(/\S+/g).length),this.wordcount=n,this.$editor().wordcount=n,!1}}),t("charcount",{display:'<div id="toolbarCC" style="display:block; min-width:120px;">Characters: <span ng-bind="charcount"></span></div>',disabled:!0,charcount:0,activeState:function(){var t=this.$editor().displayElements.text,e=t[0].innerText||t[0].textContent,n=e.replace(/(\r\n|\n|\r)/gm,"").replace(/^\s+/g," ").replace(/\s+$/g," ").length;return this.charcount=n,this.$editor().charcount=n,!1}})}]);
+/*
+@license textAngular
+Author : Austin Anderson
+License : 2013 MIT
+Version 1.3.7
+
+See README.md or https://github.com/fraywing/textAngular/wiki for requirements and use.
+*/
+angular.module('textAngularSetup', [])
+
+// Here we set up the global display defaults, to set your own use a angular $provider#decorator.
+.value('taOptions',  {
+	toolbar: [
+		['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'],
+		['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
+		['justifyLeft','justifyCenter','justifyRight','indent','outdent'],
+		['html', 'insertImage', 'insertLink', 'insertVideo', 'wordcount', 'charcount']
+	],
+	classes: {
+		focussed: "focussed",
+		toolbar: "btn-toolbar",
+		toolbarGroup: "btn-group",
+		toolbarButton: "btn btn-default",
+		toolbarButtonActive: "active",
+		disabled: "disabled",
+		textEditor: 'form-control',
+		htmlEditor: 'form-control'
+	},
+	defaultTagAttributes : {
+		a: {target:""}
+	},
+	setup: {
+		// wysiwyg mode
+		textEditorSetup: function($element){ /* Do some processing here */ },
+		// raw html
+		htmlEditorSetup: function($element){ /* Do some processing here */ }
+	},
+	defaultFileDropHandler:
+		/* istanbul ignore next: untestable image processing */
+		function(file, insertAction){
+			var reader = new FileReader();
+			if(file.type.substring(0, 5) === 'image'){
+				reader.onload = function() {
+					if(reader.result !== '') insertAction('insertImage', reader.result, true);
+				};
+
+				reader.readAsDataURL(file);
+				// NOTE: For async procedures return a promise and resolve it when the editor should update the model.
+				return true;
+			}
+			return false;
+		}
+})
+
+// This is the element selector string that is used to catch click events within a taBind, prevents the default and $emits a 'ta-element-select' event
+// these are individually used in an angular.element().find() call. What can go here depends on whether you have full jQuery loaded or just jQLite with angularjs.
+// div is only used as div.ta-insert-video caught in filter.
+.value('taSelectableElements', ['a','img'])
+
+// This is an array of objects with the following options:
+//				selector: <string> a jqLite or jQuery selector string
+//				customAttribute: <string> an attribute to search for
+//				renderLogic: <function(element)>
+// Both or one of selector and customAttribute must be defined.
+.value('taCustomRenderers', [
+	{
+		// Parse back out: '<div class="ta-insert-video" ta-insert-video src="' + urlLink + '" allowfullscreen="true" width="300" frameborder="0" height="250"></div>'
+		// To correct video element. For now only support youtube
+		selector: 'img',
+		customAttribute: 'ta-insert-video',
+		renderLogic: function(element){
+			var iframe = angular.element('<iframe></iframe>');
+			var attributes = element.prop("attributes");
+			// loop through element attributes and apply them on iframe
+			angular.forEach(attributes, function(attr) {
+				iframe.attr(attr.name, attr.value);
+			});
+			iframe.attr('src', iframe.attr('ta-insert-video'));
+			element.replaceWith(iframe);
+		}
+	}
+])
+
+.value('taTranslations', {
+	// moved to sub-elements
+	//toggleHTML: "Toggle HTML",
+	//insertImage: "Please enter a image URL to insert",
+	//insertLink: "Please enter a URL to insert",
+	//insertVideo: "Please enter a youtube URL to embed",
+	html: {
+		tooltip: 'Toggle html / Rich Text'
+	},
+	// tooltip for heading - might be worth splitting
+	heading: {
+		tooltip: 'Heading '
+	},
+	p: {
+		tooltip: 'Paragraph'
+	},
+	pre: {
+		tooltip: 'Preformatted text'
+	},
+	ul: {
+		tooltip: 'Unordered List'
+	},
+	ol: {
+		tooltip: 'Ordered List'
+	},
+	quote: {
+		tooltip: 'Quote/unquote selection or paragraph'
+	},
+	undo: {
+		tooltip: 'Undo'
+	},
+	redo: {
+		tooltip: 'Redo'
+	},
+	bold: {
+		tooltip: 'Bold'
+	},
+	italic: {
+		tooltip: 'Italic'
+	},
+	underline: {
+		tooltip: 'Underline'
+	},
+	strikeThrough:{
+		tooltip: 'Strikethrough'
+	},
+	justifyLeft: {
+		tooltip: 'Align text left'
+	},
+	justifyRight: {
+		tooltip: 'Align text right'
+	},
+	justifyCenter: {
+		tooltip: 'Center'
+	},
+	indent: {
+		tooltip: 'Increase indent'
+	},
+	outdent: {
+		tooltip: 'Decrease indent'
+	},
+	clear: {
+		tooltip: 'Clear formatting'
+	},
+	insertImage: {
+		dialogPrompt: 'Please enter an image URL to insert',
+		tooltip: 'Insert image',
+		hotkey: 'the - possibly language dependent hotkey ... for some future implementation'
+	},
+	insertVideo: {
+		tooltip: 'Insert video',
+		dialogPrompt: 'Please enter a youtube URL to embed'
+	},
+	insertLink: {
+		tooltip: 'Insert / edit link',
+		dialogPrompt: "Please enter a URL to insert"
+	},
+	editLink: {
+		reLinkButton: {
+			tooltip: "Relink"
+		},
+		unLinkButton: {
+			tooltip: "Unlink"
+		},
+		targetToggle: {
+			buttontext: "Open in New Window"
+		}
+	},
+	wordcount: {
+		tooltip: 'Display words Count'
+	},
+		charcount: {
+		tooltip: 'Display characters Count'
+	}
+})
+.run(['taRegisterTool', '$window', 'taTranslations', 'taSelection', function(taRegisterTool, $window, taTranslations, taSelection){
+	taRegisterTool("html", {
+		iconclass: 'fa fa-code',
+		tooltiptext: taTranslations.html.tooltip,
+		action: function(){
+			this.$editor().switchView();
+		},
+		activeState: function(){
+			return this.$editor().showHtml;
+		}
+	});
+	// add the Header tools
+	// convenience functions so that the loop works correctly
+	var _retActiveStateFunction = function(q){
+		return function(){ return this.$editor().queryFormatBlockState(q); };
+	};
+	var headerAction = function(){
+		return this.$editor().wrapSelection("formatBlock", "<" + this.name.toUpperCase() +">");
+	};
+	angular.forEach(['h1','h2','h3','h4','h5','h6'], function(h){
+		taRegisterTool(h.toLowerCase(), {
+			buttontext: h.toUpperCase(),
+			tooltiptext: taTranslations.heading.tooltip + h.charAt(1),
+			action: headerAction,
+			activeState: _retActiveStateFunction(h.toLowerCase())
+		});
+	});
+	taRegisterTool('p', {
+		buttontext: 'P',
+		tooltiptext: taTranslations.p.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("formatBlock", "<P>");
+		},
+		activeState: function(){ return this.$editor().queryFormatBlockState('p'); }
+	});
+	// key: pre -> taTranslations[key].tooltip, taTranslations[key].buttontext
+	taRegisterTool('pre', {
+		buttontext: 'pre',
+		tooltiptext: taTranslations.pre.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("formatBlock", "<PRE>");
+		},
+		activeState: function(){ return this.$editor().queryFormatBlockState('pre'); }
+	});
+	taRegisterTool('ul', {
+		iconclass: 'fa fa-list-ul',
+		tooltiptext: taTranslations.ul.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("insertUnorderedList", null);
+		},
+		activeState: function(){ return this.$editor().queryCommandState('insertUnorderedList'); }
+	});
+	taRegisterTool('ol', {
+		iconclass: 'fa fa-list-ol',
+		tooltiptext: taTranslations.ol.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("insertOrderedList", null);
+		},
+		activeState: function(){ return this.$editor().queryCommandState('insertOrderedList'); }
+	});
+	taRegisterTool('quote', {
+		iconclass: 'fa fa-quote-right',
+		tooltiptext: taTranslations.quote.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("formatBlock", "<BLOCKQUOTE>");
+		},
+		activeState: function(){ return this.$editor().queryFormatBlockState('blockquote'); }
+	});
+	taRegisterTool('undo', {
+		iconclass: 'fa fa-undo',
+		tooltiptext: taTranslations.undo.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("undo", null);
+		}
+	});
+	taRegisterTool('redo', {
+		iconclass: 'fa fa-repeat',
+		tooltiptext: taTranslations.redo.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("redo", null);
+		}
+	});
+	taRegisterTool('bold', {
+		iconclass: 'fa fa-bold',
+		tooltiptext: taTranslations.bold.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("bold", null);
+		},
+		activeState: function(){
+			return this.$editor().queryCommandState('bold');
+		},
+		commandKeyCode: 98
+	});
+	taRegisterTool('justifyLeft', {
+		iconclass: 'fa fa-align-left',
+		tooltiptext: taTranslations.justifyLeft.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("justifyLeft", null);
+		},
+		activeState: function(commonElement){
+			var result = false;
+			if(commonElement) result =
+				commonElement.css('text-align') === 'left' ||
+				commonElement.attr('align') === 'left' ||
+				(
+					commonElement.css('text-align') !== 'right' &&
+					commonElement.css('text-align') !== 'center' &&
+					commonElement.css('text-align') !== 'justify' &&
+					!this.$editor().queryCommandState('justifyRight') &&
+					!this.$editor().queryCommandState('justifyCenter')
+				) && !this.$editor().queryCommandState('justifyFull');
+			result = result || this.$editor().queryCommandState('justifyLeft');
+			return result;
+		}
+	});
+	taRegisterTool('justifyRight', {
+		iconclass: 'fa fa-align-right',
+		tooltiptext: taTranslations.justifyRight.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("justifyRight", null);
+		},
+		activeState: function(commonElement){
+			var result = false;
+			if(commonElement) result = commonElement.css('text-align') === 'right';
+			result = result || this.$editor().queryCommandState('justifyRight');
+			return result;
+		}
+	});
+	taRegisterTool('justifyCenter', {
+		iconclass: 'fa fa-align-center',
+		tooltiptext: taTranslations.justifyCenter.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("justifyCenter", null);
+		},
+		activeState: function(commonElement){
+			var result = false;
+			if(commonElement) result = commonElement.css('text-align') === 'center';
+			result = result || this.$editor().queryCommandState('justifyCenter');
+			return result;
+		}
+	});
+	taRegisterTool('indent', {
+		iconclass: 'fa fa-indent',
+		tooltiptext: taTranslations.indent.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("indent", null);
+		},
+		activeState: function(){
+			return this.$editor().queryFormatBlockState('blockquote');
+		}
+	});
+	taRegisterTool('outdent', {
+		iconclass: 'fa fa-outdent',
+		tooltiptext: taTranslations.outdent.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("outdent", null);
+		},
+		activeState: function(){
+			return false;
+		}
+	});
+	taRegisterTool('italics', {
+		iconclass: 'fa fa-italic',
+		tooltiptext: taTranslations.italic.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("italic", null);
+		},
+		activeState: function(){
+			return this.$editor().queryCommandState('italic');
+		},
+		commandKeyCode: 105
+	});
+	taRegisterTool('underline', {
+		iconclass: 'fa fa-underline',
+		tooltiptext: taTranslations.underline.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("underline", null);
+		},
+		activeState: function(){
+			return this.$editor().queryCommandState('underline');
+		},
+		commandKeyCode: 117
+	});
+	taRegisterTool('strikeThrough', {
+		iconclass: 'fa fa-strikethrough',
+		tooltiptext: taTranslations.strikeThrough.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("strikeThrough", null);
+		},
+		activeState: function(){
+			return document.queryCommandState('strikeThrough');
+		}
+	});
+	taRegisterTool('clear', {
+		iconclass: 'fa fa-ban',
+		tooltiptext: taTranslations.clear.tooltip,
+		action: function(deferred, restoreSelection){
+			var i;
+			this.$editor().wrapSelection("removeFormat", null);
+			var possibleNodes = angular.element(taSelection.getSelectionElement());
+			// remove lists
+			var removeListElements = function(list){
+				list = angular.element(list);
+				var prevElement = list;
+				angular.forEach(list.children(), function(liElem){
+					var newElem = angular.element('<p></p>');
+					newElem.html(angular.element(liElem).html());
+					prevElement.after(newElem);
+					prevElement = newElem;
+				});
+				list.remove();
+			};
+			angular.forEach(possibleNodes.find("ul"), removeListElements);
+			angular.forEach(possibleNodes.find("ol"), removeListElements);
+			if(possibleNodes[0].tagName.toLowerCase() === 'li'){
+				var _list = possibleNodes[0].parentNode.childNodes;
+				var _preLis = [], _postLis = [], _found = false;
+				for(i = 0; i < _list.length; i++){
+					if(_list[i] === possibleNodes[0]){
+						_found = true;
+					}else if(!_found) _preLis.push(_list[i]);
+					else _postLis.push(_list[i]);
+				}
+				var _parent = angular.element(possibleNodes[0].parentNode);
+				var newElem = angular.element('<p></p>');
+				newElem.html(angular.element(possibleNodes[0]).html());
+				if(_preLis.length === 0 || _postLis.length === 0){
+					if(_postLis.length === 0) _parent.after(newElem);
+					else _parent[0].parentNode.insertBefore(newElem[0], _parent[0]);
+
+					if(_preLis.length === 0 && _postLis.length === 0) _parent.remove();
+					else angular.element(possibleNodes[0]).remove();
+				}else{
+					var _firstList = angular.element('<'+_parent[0].tagName+'></'+_parent[0].tagName+'>');
+					var _secondList = angular.element('<'+_parent[0].tagName+'></'+_parent[0].tagName+'>');
+					for(i = 0; i < _preLis.length; i++) _firstList.append(angular.element(_preLis[i]));
+					for(i = 0; i < _postLis.length; i++) _secondList.append(angular.element(_postLis[i]));
+					_parent.after(_secondList);
+					_parent.after(newElem);
+					_parent.after(_firstList);
+					_parent.remove();
+				}
+				taSelection.setSelectionToElementEnd(newElem[0]);
+			}
+			// clear out all class attributes. These do not seem to be cleared via removeFormat
+			var $editor = this.$editor();
+			var recursiveRemoveClass = function(node){
+				node = angular.element(node);
+				if(node[0] !== $editor.displayElements.text[0]) node.removeAttr('class');
+				angular.forEach(node.children(), recursiveRemoveClass);
+			};
+			angular.forEach(possibleNodes, recursiveRemoveClass);
+			// check if in list. If not in list then use formatBlock option
+			if(possibleNodes[0].tagName.toLowerCase() !== 'li' &&
+				possibleNodes[0].tagName.toLowerCase() !== 'ol' &&
+				possibleNodes[0].tagName.toLowerCase() !== 'ul') this.$editor().wrapSelection("formatBlock", "default");
+			restoreSelection();
+		}
+	});
+
+	var imgOnSelectAction = function(event, $element, editorScope){
+		// setup the editor toolbar
+		// Credit to the work at http://hackerwins.github.io/summernote/ for this editbar logic/display
+		var finishEdit = function(){
+			editorScope.updateTaBindtaTextElement();
+			editorScope.hidePopover();
+		};
+		event.preventDefault();
+		editorScope.displayElements.popover.css('width', '375px');
+		var container = editorScope.displayElements.popoverContainer;
+		container.empty();
+		var buttonGroup = angular.element('<div class="btn-group" style="padding-right: 6px;">');
+		var fullButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">100% </button>');
+		fullButton.on('click', function(event){
+			event.preventDefault();
+			$element.css({
+				'width': '100%',
+				'height': ''
+			});
+			finishEdit();
+		});
+		var halfButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">50% </button>');
+		halfButton.on('click', function(event){
+			event.preventDefault();
+			$element.css({
+				'width': '50%',
+				'height': ''
+			});
+			finishEdit();
+		});
+		var quartButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">25% </button>');
+		quartButton.on('click', function(event){
+			event.preventDefault();
+			$element.css({
+				'width': '25%',
+				'height': ''
+			});
+			finishEdit();
+		});
+		var resetButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">Reset</button>');
+		resetButton.on('click', function(event){
+			event.preventDefault();
+			$element.css({
+				width: '',
+				height: ''
+			});
+			finishEdit();
+		});
+		buttonGroup.append(fullButton);
+		buttonGroup.append(halfButton);
+		buttonGroup.append(quartButton);
+		buttonGroup.append(resetButton);
+		container.append(buttonGroup);
+
+		buttonGroup = angular.element('<div class="btn-group" style="padding-right: 6px;">');
+		var floatLeft = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-left"></i></button>');
+		floatLeft.on('click', function(event){
+			event.preventDefault();
+			// webkit
+			$element.css('float', 'left');
+			// firefox
+			$element.css('cssFloat', 'left');
+			// IE < 8
+			$element.css('styleFloat', 'left');
+			finishEdit();
+		});
+		var floatRight = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-right"></i></button>');
+		floatRight.on('click', function(event){
+			event.preventDefault();
+			// webkit
+			$element.css('float', 'right');
+			// firefox
+			$element.css('cssFloat', 'right');
+			// IE < 8
+			$element.css('styleFloat', 'right');
+			finishEdit();
+		});
+		var floatNone = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-justify"></i></button>');
+		floatNone.on('click', function(event){
+			event.preventDefault();
+			// webkit
+			$element.css('float', '');
+			// firefox
+			$element.css('cssFloat', '');
+			// IE < 8
+			$element.css('styleFloat', '');
+			finishEdit();
+		});
+		buttonGroup.append(floatLeft);
+		buttonGroup.append(floatNone);
+		buttonGroup.append(floatRight);
+		container.append(buttonGroup);
+
+		buttonGroup = angular.element('<div class="btn-group">');
+		var remove = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-trash-o"></i></button>');
+		remove.on('click', function(event){
+			event.preventDefault();
+			$element.remove();
+			finishEdit();
+		});
+		buttonGroup.append(remove);
+		container.append(buttonGroup);
+
+		editorScope.showPopover($element);
+		editorScope.showResizeOverlay($element);
+	};
+
+	taRegisterTool('insertImage', {
+		iconclass: 'fa fa-picture-o',
+		tooltiptext: taTranslations.insertImage.tooltip,
+		action: function(){
+			var imageLink;
+			imageLink = $window.prompt(taTranslations.insertImage.dialogPrompt, 'http://');
+			if(imageLink && imageLink !== '' && imageLink !== 'http://'){
+				return this.$editor().wrapSelection('insertImage', imageLink, true);
+			}
+		},
+		onElementSelect: {
+			element: 'img',
+			action: imgOnSelectAction
+		}
+	});
+	taRegisterTool('insertVideo', {
+		iconclass: 'fa fa-youtube-play',
+		tooltiptext: taTranslations.insertVideo.tooltip,
+		action: function(){
+			var urlPrompt;
+			urlPrompt = $window.prompt(taTranslations.insertVideo.dialogPrompt, 'https://');
+			if (urlPrompt && urlPrompt !== '' && urlPrompt !== 'https://') {
+				// get the video ID
+				var ids = urlPrompt.match(/(\?|&)v=[^&]*/);
+				/* istanbul ignore else: if it's invalid don't worry - though probably should show some kind of error message */
+				if(ids && ids.length > 0){
+					// create the embed link
+					var urlLink = "https://www.youtube.com/embed/" + ids[0].substring(3);
+					// create the HTML
+					// for all options see: http://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
+					// maxresdefault.jpg seems to be undefined on some.
+					var embed = '<img class="ta-insert-video" src="https://img.youtube.com/vi/' + ids[0].substring(3) + '/hqdefault.jpg" ta-insert-video="' + urlLink + '" contenteditable="false" allowfullscreen="true" frameborder="0" />';
+					// insert
+					return this.$editor().wrapSelection('insertHTML', embed, true);
+				}
+			}
+		},
+		onElementSelect: {
+			element: 'img',
+			onlyWithAttrs: ['ta-insert-video'],
+			action: imgOnSelectAction
+		}
+	});
+	taRegisterTool('insertLink', {
+		tooltiptext: taTranslations.insertLink.tooltip,
+		iconclass: 'fa fa-link',
+		action: function(){
+			var urlLink;
+			urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, 'http://');
+			if(urlLink && urlLink !== '' && urlLink !== 'http://'){
+				return this.$editor().wrapSelection('createLink', urlLink, true);
+			}
+		},
+		activeState: function(commonElement){
+			if(commonElement) return commonElement[0].tagName === 'A';
+			return false;
+		},
+		onElementSelect: {
+			element: 'a',
+			action: function(event, $element, editorScope){
+				// setup the editor toolbar
+				// Credit to the work at http://hackerwins.github.io/summernote/ for this editbar logic
+				event.preventDefault();
+				editorScope.displayElements.popover.css('width', '436px');
+				var container = editorScope.displayElements.popoverContainer;
+				container.empty();
+				container.css('line-height', '28px');
+				var link = angular.element('<a href="' + $element.attr('href') + '" target="_blank">' + $element.attr('href') + '</a>');
+				link.css({
+					'display': 'inline-block',
+					'max-width': '200px',
+					'overflow': 'hidden',
+					'text-overflow': 'ellipsis',
+					'white-space': 'nowrap',
+					'vertical-align': 'middle'
+				});
+				container.append(link);
+				var buttonGroup = angular.element('<div class="btn-group pull-right">');
+				var reLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="' + taTranslations.editLink.reLinkButton.tooltip + '"><i class="fa fa-edit icon-edit"></i></button>');
+				reLinkButton.on('click', function(event){
+					event.preventDefault();
+					var urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, $element.attr('href'));
+					if(urlLink && urlLink !== '' && urlLink !== 'http://'){
+						$element.attr('href', urlLink);
+						editorScope.updateTaBindtaTextElement();
+					}
+					editorScope.hidePopover();
+				});
+				buttonGroup.append(reLinkButton);
+				var unLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="' + taTranslations.editLink.unLinkButton.tooltip + '"><i class="fa fa-unlink icon-unlink"></i></button>');
+				// directly before this click event is fired a digest is fired off whereby the reference to $element is orphaned off
+				unLinkButton.on('click', function(event){
+					event.preventDefault();
+					$element.replaceWith($element.contents());
+					editorScope.updateTaBindtaTextElement();
+					editorScope.hidePopover();
+				});
+				buttonGroup.append(unLinkButton);
+				var targetToggle = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on">' + taTranslations.editLink.targetToggle.buttontext + '</button>');
+				if($element.attr('target') === '_blank'){
+					targetToggle.addClass('active');
+				}
+				targetToggle.on('click', function(event){
+					event.preventDefault();
+					$element.attr('target', ($element.attr('target') === '_blank') ? '' : '_blank');
+					targetToggle.toggleClass('active');
+					editorScope.updateTaBindtaTextElement();
+				});
+				buttonGroup.append(targetToggle);
+				container.append(buttonGroup);
+				editorScope.showPopover($element);
+			}
+		}
+	});
+	taRegisterTool('wordcount', {
+		display: '<div id="toolbarWC" style="display:block; min-width:100px;">Words: <span ng-bind="wordcount"></span></div>',
+		disabled: true,
+		wordcount: 0,
+		activeState: function(){ // this fires on keyup
+			var textElement = this.$editor().displayElements.text;
+			/* istanbul ignore next: will default to '' when undefined */
+			var workingHTML = textElement[0].innerHTML || '';
+			var noOfWords = 0;
+
+			/* istanbul ignore if: will default to '' when undefined */
+			if (workingHTML.replace(/\s*<[^>]*?>\s*/g, '') !== '') {
+				noOfWords = workingHTML.replace(/<\/?(b|i|em|strong|span|u|strikethrough|a|img|small|sub|sup|label)( [^>*?])?>/gi, '') // remove inline tags without adding spaces
+										.replace(/(<[^>]*?>\s*<[^>]*?>)/ig, ' ') // replace adjacent tags with possible space between with a space
+										.replace(/(<[^>]*?>)/ig, '') // remove any singular tags
+										.replace(/\s+/ig, ' ') // condense spacing
+										.match(/\S+/g).length; // count remaining non-space strings
+			}
+
+			//Set current scope
+			this.wordcount = noOfWords;
+			//Set editor scope
+			this.$editor().wordcount = noOfWords;
+
+			return false;
+		}
+	});
+	taRegisterTool('charcount', {
+		display: '<div id="toolbarCC" style="display:block; min-width:120px;">Characters: <span ng-bind="charcount"></span></div>',
+		disabled: true,
+		charcount: 0,
+		activeState: function(){ // this fires on keyup
+			var textElement = this.$editor().displayElements.text;
+			var sourceText = textElement[0].innerText || textElement[0].textContent; // to cover the non-jquery use case.
+
+			// Caculate number of chars
+			var noOfChars = sourceText.replace(/(\r\n|\n|\r)/gm,"").replace(/^\s+/g,' ').replace(/\s+$/g, ' ').length;
+			//Set current scope
+			this.charcount = noOfChars;
+			//Set editor scope
+			this.$editor().charcount = noOfChars;
+			return false;
+		}
+	});
+}]);

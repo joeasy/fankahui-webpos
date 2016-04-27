@@ -18,7 +18,15 @@
         vm.keyword = "";
         vm.tableParams = new ngTableParams({count: 10}, {
           getData: function($defer, params) {
-            var filter = {where:{status:{ne:'deleted'}}, include:['inventories']}
+            var filter = {
+              where:{status:{ne:'deleted'}}, 
+              include:[
+                {
+                  relation:'inventories',
+                  scope:{ where: {shopId: $scope.user.shop.id} }
+                }
+              ]
+            };
             if(vm.keyword != '') {
               var qs = {regex: keyword};
               filter.where.or = [{"item.name":qs}, {model:qs}];
@@ -60,12 +68,13 @@
       }
       
       vm.confirm = function (sku) {
+        var qty = 0;
         var inventory = sku.inventories[0];
-        inventory.inventoryAt = new Date();
-        Sku.prototype$__updateById__inventories({
-          id:sku.id, fk: inventory.id
-        }, {
-          inventoryAt: inventory.inventoryAt
+        if(inventory) {
+          qty = inventory.balance;
+        }
+        Sku.stocks.create({id: sku.id}, {type: 'inventory', qty: qty}).$promise.then(function (data) {
+          SweetAlert.swal('盘点成功!','你的商品'+sku.item.name+'已经盘点确认。', 'success');
         });
       }
       

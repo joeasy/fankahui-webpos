@@ -1,1 +1,69 @@
-function ngGridPdfExportPlugin(t){var e=this;e.grid=null,e.scope=null,e.services=null,e.options=t,e.init=function(o,n,i){if(e.grid=n,e.scope=o,e.services=i,!t.inhibitButton){var a=n.$root.find(".ngFooterPanel"),l=n.$root.find(".ngFooterPanel .pdf-data-link-span");null!=l&&l.remove();var r='<button class="pdf-data-link-span">PDF Export</button>';a.append(r),a.on("click",function(){e.createPDF()})}},e.createPDF=function(){var t=[],o=[],n={},i=e.scope.totalRowWidth(),a=15;angular.forEach(e.scope.columns,function(o){o.visible&&(void 0===o.width||o.width>0)&&(t.push({name:o.field,prompt:o.displayName,width:o.width*(185/i),align:o.colDef.align||"left"}),o.colDef.totalsRow&&(n[o.field]=e.scope.getTotalVal(o.field,o.filter).toString()))}),angular.forEach(e.grid.filteredRows,function(t){o.push(angular.copy(t.entity))});var l=new jsPDF("landscape","mm","a4");l.setFontStyle("bold"),l.setFontSize(12),e.scope.reportSchema&&e.scope.reportSchema.title&&l.text(e.scope.reportSchema.title,a,a),l.setFontStyle("normal"),l.setFontSize(12),l.cellInitialize(),l.table(a,24,o,{headers:t,footers:n,printHeaders:!0,autoSize:!1,fontSize:12,margins:{left:a,top:a,bottom:a,width:l.internal.pageSize-a}}),l.output("dataurlnewwindow")}}
+function ngGridPdfExportPlugin (options) {
+    var self = this;
+    self.grid = null;
+    self.scope = null;
+    self.services = null;
+    self.options = options;
+
+    self.init = function (scope, grid, services) {
+        self.grid = grid;
+        self.scope = scope;
+        self.services = services;
+
+        if (!options.inhibitButton) {
+            var fp = grid.$root.find(".ngFooterPanel");
+            var pdfDataLinkPrevious = grid.$root.find('.ngFooterPanel .pdf-data-link-span');
+            if (pdfDataLinkPrevious != null) {pdfDataLinkPrevious.remove() ; }
+            var pdfDataLinkHtml = '<button class="pdf-data-link-span">PDF Export</button>' ;
+            fp.append(pdfDataLinkHtml);
+            fp.on('click', function() {
+                self.createPDF();
+            });
+        }
+    };
+
+    self.createPDF = function () {
+        var headers = [],
+            data = [],
+            footers = {},
+            gridWidth = self.scope.totalRowWidth(),
+            margin = 15;  // mm defined as unit when setting up jsPDF
+
+        angular.forEach(self.scope.columns, function (col) {
+            if (col.visible && (col.width === undefined || col.width > 0)) {
+                headers.push({name: col.field, prompt:col.displayName, width: col.width * (185 / gridWidth), align: (col.colDef.align || 'left')});
+                if (col.colDef.totalsRow) {
+                    footers[col.field] = self.scope.getTotalVal(col.field, col.filter).toString();
+                }
+            }
+        });
+
+        angular.forEach(self.grid.filteredRows, function (row) {
+            data.push(angular.copy(row.entity));
+        });
+
+        var doc = new jsPDF('landscape','mm','a4');
+        doc.setFontStyle('bold');
+        doc.setFontSize(12);
+        if (self.scope.reportSchema && self.scope.reportSchema.title) {
+            doc.text(self.scope.reportSchema.title,margin,margin);
+        }
+        doc.setFontStyle('normal');
+        doc.setFontSize(12);
+        doc.cellInitialize();
+        doc.table(margin, 24, data, 
+                {
+                    headers:headers,
+                    footers:footers,
+                    printHeaders: true,
+                    autoSize: false,
+                    fontSize:12,
+                    margins: {
+                            left:margin,
+                            top:margin,
+                            bottom:margin,
+                            width:doc.internal.pageSize - margin}
+                });
+        doc.output('dataurlnewwindow');
+    };
+}

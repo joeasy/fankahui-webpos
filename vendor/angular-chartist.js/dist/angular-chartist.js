@@ -1,1 +1,118 @@
-!function(t,e){"function"==typeof define&&define.amd?define(["angular","chartist"],e):"object"==typeof exports?module.exports=e(require("angular"),require("chartist")):t.angularChartist=e(t.angular,t.Chartist)}(this,function(t,e){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function r(){return{restrict:"EA",scope:{data:"=chartistData",chartType:"@chartistChartType",events:"&chartistEvents",chartOptions:"&chartistChartOptions",responsiveOptions:"&chartistResponsiveOptions"},controller:"AngularChartistCtrl"}}var a=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),i=function(){function t(e,r){var a=this;n(this,t),this.data=e.data,this.chartType=e.chartType,this.events=e.events()||{},this.options=e.chartOptions()||null,this.responsiveOptions=e.responsiveOptions()||null,this.element=r[0],this.renderChart(),e.$watch(function(){return{data:e.data,chartType:e.chartType,chartOptions:e.chartOptions()}},this.update.bind(this),!0),e.$on("$destroy",function(){a.chart&&a.chart.detach()})}return a(t,[{key:"bindEvents",value:function(){var t=this;Object.keys(this.events).forEach(function(e){t.chart.on(e,t.events[e])})}},{key:"renderChart",value:function(){return this.data?(this.chart=e[this.chartType](this.element,this.data,this.options,this.responsiveOptions),this.bindEvents(),this.chart):void 0}},{key:"update",value:function(t,e){this.chartType=t.chartType,this.data=t.data,this.options=t.chartOptions,this.chart&&t.chartType===e.chartType?this.chart.update(this.data,this.options):this.renderChart()}}]),t}();i.$inject=["$scope","$element"],r.$inject=[];var s=t.module("angular-chartist",[]).controller("AngularChartistCtrl",i).directive("chartist",r);return s});
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(["angular","chartist"], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('chartist'));
+  } else {
+    root.angularChartist = factory(root.angular, root.Chartist);
+  }
+}(this, function(angular, Chartist) {
+
+/*global angular, Chartist*/
+
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var AngularChartistCtrl = (function () {
+    function AngularChartistCtrl($scope, $element) {
+        var _this = this;
+
+        _classCallCheck(this, AngularChartistCtrl);
+
+        this.data = $scope.data;
+        this.chartType = $scope.chartType;
+
+        this.events = $scope.events() || {};
+        this.options = $scope.chartOptions() || null;
+        this.responsiveOptions = $scope.responsiveOptions() || null;
+
+        this.element = $element[0];
+
+        this.renderChart();
+
+        $scope.$watch(function () {
+            return {
+                data: $scope.data,
+                chartType: $scope.chartType,
+                chartOptions: $scope.chartOptions()
+            };
+        }, this.update.bind(this), true);
+
+        $scope.$on('$destroy', function () {
+            if (_this.chart) {
+                _this.chart.detach();
+            }
+        });
+    }
+
+    _createClass(AngularChartistCtrl, [{
+        key: 'bindEvents',
+        value: function bindEvents() {
+            var _this2 = this;
+
+            Object.keys(this.events).forEach(function (eventName) {
+                _this2.chart.on(eventName, _this2.events[eventName]);
+            });
+        }
+    }, {
+        key: 'renderChart',
+        value: function renderChart() {
+            // ensure that the chart does not get created without data
+            if (this.data) {
+                this.chart = Chartist[this.chartType](this.element, this.data, this.options, this.responsiveOptions);
+
+                this.bindEvents();
+
+                return this.chart;
+            }
+        }
+    }, {
+        key: 'update',
+        value: function update(newConfig, oldConfig) {
+            // Update controller with new configuration
+            this.chartType = newConfig.chartType;
+            this.data = newConfig.data;
+            this.options = newConfig.chartOptions;
+
+            // If chart type changed we need to recreate whole chart, otherwise we can update
+            if (!this.chart || newConfig.chartType !== oldConfig.chartType) {
+                this.renderChart();
+            } else {
+                this.chart.update(this.data, this.options);
+            }
+        }
+    }]);
+
+    return AngularChartistCtrl;
+})();
+
+AngularChartistCtrl.$inject = ['$scope', '$element'];
+
+function chartistDirective() {
+    return {
+        restrict: 'EA',
+        scope: {
+            // mandatory
+            data: '=chartistData',
+            chartType: '@chartistChartType',
+            // optional
+            events: '&chartistEvents',
+            chartOptions: '&chartistChartOptions',
+            responsiveOptions: '&chartistResponsiveOptions'
+        },
+        controller: 'AngularChartistCtrl'
+    };
+}
+
+chartistDirective.$inject = [];
+
+/*eslint-disable no-unused-vars */
+var angularChartist = angular.module('angular-chartist', []).controller('AngularChartistCtrl', AngularChartistCtrl).directive('chartist', chartistDirective);
+/*eslint-enable no-unused-vars */
+return angularChartist;
+
+}));

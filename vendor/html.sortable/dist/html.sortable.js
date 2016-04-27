@@ -1,1 +1,140 @@
-"use strict";!function(t){var e,a,r=t();t.fn.sortable=function(i){var s=String(i);return i=t.extend({connectWith:!1,placeholder:null,dragImage:null},i),this.each(function(){var n,d=t(this).children(i.items),o=i.handle?d.find(i.handle):d;if("reload"===s&&t(this).children(i.items).off("dragstart.h5s dragend.h5s selectstart.h5s dragover.h5s dragenter.h5s drop.h5s"),/^enable|disable|destroy$/.test(s)){var h=t(this).children(t(this).data("items")).attr("draggable","enable"===s);return void("destroy"===s&&(t(this).off("sortupdate"),t(this).removeData("opts"),h.add(this).removeData("connectWith items").off("dragstart.h5s dragend.h5s dragover.h5s dragenter.h5s drop.h5s").off("sortupdate"),o.off("selectstart.h5s")))}var l=t(this).data("opts");"undefined"==typeof l?t(this).data("opts",i):i=l;var g,c,f=null===i.placeholder?t("<"+(/^ul|ol$/i.test(this.tagName)?"li":"div")+' class="sortable-placeholder"/>'):t(i.placeholder).addClass("sortable-placeholder");t(this).data("items",i.items),r=r.add(f),i.connectWith&&t(i.connectWith).add(this).data("connectWith",i.connectWith),d.attr("role","option"),d.attr("aria-grabbed","false"),o.attr("draggable","true").not("a[href], img").on("selectstart.h5s",function(){return this.dragDrop&&this.dragDrop(),!1}).end(),d.on("dragstart.h5s",function(r){var s=r.originalEvent.dataTransfer;s.effectAllowed="move",s.setData("text",""),i.dragImage&&s.setDragImage&&s.setDragImage(i.dragImage,0,0),n=(e=t(this)).addClass("sortable-dragging").attr("aria-grabbed","true").index(),a=e.outerHeight(),g=t(this).parent(),e.parent().triggerHandler("sortstart",{item:e,startparent:g})}).on("dragend.h5s",function(){e&&(e.removeClass("sortable-dragging").attr("aria-grabbed","false").show(),r.detach(),c=t(this).parent(),(n!==e.index()||g.get(0)!==c.get(0))&&e.parent().triggerHandler("sortupdate",{item:e,oldindex:n,startparent:g,endparent:c}),e=null,a=null)}).add([this,f]).on("dragover.h5s dragenter.h5s drop.h5s",function(s){if(!d.is(e)&&i.connectWith!==t(e).parent().data("connectWith"))return!0;if("drop"===s.type)return s.stopPropagation(),r.filter(":visible").after(e),e.trigger("dragend.h5s"),!1;if(s.preventDefault(),s.originalEvent.dataTransfer.dropEffect="move",d.is(this)){var n=t(this).outerHeight();if(i.forcePlaceholderSize&&f.height(a),n>a){var o=n-a,h=t(this).offset().top;if(f.index()<t(this).index()&&s.originalEvent.pageY<h+o)return!1;if(f.index()>t(this).index()&&s.originalEvent.pageY>h+n-o)return!1}e.hide(),t(this)[f.index()<t(this).index()?"after":"before"](f),r.not(f).detach()}else r.is(this)||t(this).children(i.items).length||(r.detach(),t(this).append(f));return!1})})}}(jQuery);
+/*
+ * HTML5 Sortable jQuery Plugin
+ * https://github.com/voidberg/html5sortable
+ *
+ * Original code copyright 2012 Ali Farhadi.
+ * This version is mantained by Alexandru Badiu <andu@ctrlz.ro>
+ *
+ * Thanks to the following contributors: andyburke, bistoco, daemianmack, drskullster, flying-sheep, OscarGodson, Parikshit N. Samant, rodolfospalenza, ssafejava
+ *
+ * Released under the MIT license.
+ */
+'use strict';
+
+(function ($) {
+  var dragging, draggingHeight, placeholders = $();
+  $.fn.sortable = function (options) {
+    var method = String(options);
+
+    options = $.extend({
+      connectWith: false,
+      placeholder: null,
+      dragImage: null
+    }, options);
+
+    return this.each(function () {
+
+      var index, items = $(this).children(options.items), handles = options.handle ? items.find(options.handle) : items;
+
+      if (method === 'reload') {
+        $(this).children(options.items).off('dragstart.h5s dragend.h5s selectstart.h5s dragover.h5s dragenter.h5s drop.h5s');
+      }
+      if (/^enable|disable|destroy$/.test(method)) {
+        var citems = $(this).children($(this).data('items')).attr('draggable', method === 'enable');
+        if (method === 'destroy') {
+          $(this).off('sortupdate');
+          $(this).removeData('opts');
+          citems.add(this).removeData('connectWith items')
+            .off('dragstart.h5s dragend.h5s dragover.h5s dragenter.h5s drop.h5s').off('sortupdate');
+          handles.off('selectstart.h5s');
+        }
+        return;
+      }
+
+      var soptions = $(this).data('opts');
+
+      if (typeof soptions === 'undefined') {
+        $(this).data('opts', options);
+      }
+      else {
+        options = soptions;
+      }
+
+      var startParent, newParent;
+      var placeholder = ( options.placeholder === null ) ? $('<' + (/^ul|ol$/i.test(this.tagName) ? 'li' : 'div') + ' class="sortable-placeholder"/>') : $(options.placeholder).addClass('sortable-placeholder');
+
+      $(this).data('items', options.items);
+      placeholders = placeholders.add(placeholder);
+      if (options.connectWith) {
+        $(options.connectWith).add(this).data('connectWith', options.connectWith);
+      }
+
+      items.attr('role', 'option');
+      items.attr('aria-grabbed', 'false');
+
+      // Setup drag handles
+      handles.attr('draggable', 'true').not('a[href], img').on('selectstart.h5s', function() {
+        if (this.dragDrop) {
+          this.dragDrop();
+        }
+        return false;
+      }).end();
+
+      // Handle drag events on draggable items
+      items.on('dragstart.h5s', function(e) {
+        var dt = e.originalEvent.dataTransfer;
+        dt.effectAllowed = 'move';
+        dt.setData('text', '');
+
+        if (options.dragImage && dt.setDragImage) {
+          dt.setDragImage(options.dragImage, 0, 0);
+        }
+
+        index = (dragging = $(this)).addClass('sortable-dragging').attr('aria-grabbed', 'true').index();
+        draggingHeight = dragging.outerHeight();
+        startParent = $(this).parent();
+        dragging.parent().triggerHandler('sortstart', {item: dragging, startparent: startParent});
+      }).on('dragend.h5s',function () {
+          if (!dragging) {
+            return;
+          }
+          dragging.removeClass('sortable-dragging').attr('aria-grabbed', 'false').show();
+          placeholders.detach();
+          newParent = $(this).parent();
+          if (index !== dragging.index() || startParent.get(0) !== newParent.get(0)) {
+            dragging.parent().triggerHandler('sortupdate', {item: dragging, oldindex: index, startparent: startParent, endparent: newParent});
+          }
+          dragging = null;
+          draggingHeight = null;
+        }).add([this, placeholder]).on('dragover.h5s dragenter.h5s drop.h5s', function(e) {
+          if (!items.is(dragging) && options.connectWith !== $(dragging).parent().data('connectWith')) {
+            return true;
+          }
+          if (e.type === 'drop') {
+            e.stopPropagation();
+            placeholders.filter(':visible').after(dragging);
+            dragging.trigger('dragend.h5s');
+            return false;
+          }
+          e.preventDefault();
+          e.originalEvent.dataTransfer.dropEffect = 'move';
+          if (items.is(this)) {
+            var thisHeight = $(this).outerHeight();
+            if (options.forcePlaceholderSize) {
+              placeholder.height(draggingHeight);
+            }
+
+            // Check if $(this) is bigger than the draggable. If it is, we have to define a dead zone to prevent flickering
+            if (thisHeight > draggingHeight) {
+              // Dead zone?
+              var deadZone = thisHeight - draggingHeight, offsetTop = $(this).offset().top;
+              if (placeholder.index() < $(this).index() && e.originalEvent.pageY < offsetTop + deadZone) {
+                return false;
+              }
+              else if (placeholder.index() > $(this).index() && e.originalEvent.pageY > offsetTop + thisHeight - deadZone) {
+                return false;
+              }
+            }
+
+            dragging.hide();
+            $(this)[placeholder.index() < $(this).index() ? 'after' : 'before'](placeholder);
+            placeholders.not(placeholder).detach();
+          } else if (!placeholders.is(this) && !$(this).children(options.items).length) {
+            placeholders.detach();
+            $(this).append(placeholder);
+          }
+          return false;
+        });
+    });
+  };
+})(jQuery);

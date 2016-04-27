@@ -1,1 +1,1287 @@
-+function(t){"use strict";function e(){var t=document.createElement("bootstrap"),e={WebkitTransition:"webkitTransitionEnd",MozTransition:"transitionend",OTransition:"oTransitionEnd otransitionend",transition:"transitionend"};for(var o in e)if(void 0!==t.style[o])return{end:e[o]};return!1}t.fn.emulateTransitionEnd=function(e){var o=!1,n=this;t(this).one(t.support.transition.end,function(){o=!0});var i=function(){o||t(n).trigger(t.support.transition.end)};return setTimeout(i,e),this},t(function(){t.support.transition=e()})}(jQuery),+function(t){"use strict";var e=function(t,e){this.type=this.options=this.enabled=this.timeout=this.hoverState=this.$element=null,this.init("tooltip",t,e)};e.DEFAULTS={animation:!0,placement:"top",selector:!1,template:'<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',trigger:"hover focus",title:"",delay:0,html:!1,container:!1},e.prototype.init=function(e,o,n){this.enabled=!0,this.type=e,this.$element=t(o),this.options=this.getOptions(n);for(var i=this.options.trigger.split(" "),r=i.length;r--;){var s=i[r];if("click"==s)this.$element.on("click."+this.type,this.options.selector,t.proxy(this.toggle,this));else if("manual"!=s){var a="hover"==s?"mouseenter":"focusin",p="hover"==s?"mouseleave":"focusout";this.$element.on(a+"."+this.type,this.options.selector,t.proxy(this.enter,this)),this.$element.on(p+"."+this.type,this.options.selector,t.proxy(this.leave,this))}}this.options.selector?this._options=t.extend({},this.options,{trigger:"manual",selector:""}):this.fixTitle()},e.prototype.getDefaults=function(){return e.DEFAULTS},e.prototype.getOptions=function(e){return e=t.extend({},this.getDefaults(),this.$element.data(),e),e.delay&&"number"==typeof e.delay&&(e.delay={show:e.delay,hide:e.delay}),e},e.prototype.getDelegateOptions=function(){var e={},o=this.getDefaults();return this._options&&t.each(this._options,function(t,n){o[t]!=n&&(e[t]=n)}),e},e.prototype.enter=function(e){var o=e instanceof this.constructor?e:t(e.currentTarget)[this.type](this.getDelegateOptions()).data("bs."+this.type);return clearTimeout(o.timeout),o.hoverState="in",o.options.delay&&o.options.delay.show?void(o.timeout=setTimeout(function(){"in"==o.hoverState&&o.show()},o.options.delay.show)):o.show()},e.prototype.leave=function(e){var o=e instanceof this.constructor?e:t(e.currentTarget)[this.type](this.getDelegateOptions()).data("bs."+this.type);return clearTimeout(o.timeout),o.hoverState="out",o.options.delay&&o.options.delay.hide?void(o.timeout=setTimeout(function(){"out"==o.hoverState&&o.hide()},o.options.delay.hide)):o.hide()},e.prototype.show=function(){var e=t.Event("show.bs."+this.type);if(this.hasContent()&&this.enabled){if(this.$element.trigger(e),e.isDefaultPrevented())return;var o=this,n=this.tip();this.setContent(),this.options.animation&&n.addClass("fade");var i="function"==typeof this.options.placement?this.options.placement.call(this,n[0],this.$element[0]):this.options.placement,r=/\s?auto?\s?/i,s=r.test(i);s&&(i=i.replace(r,"")||"top"),n.detach().css({top:0,left:0,display:"block"}).addClass(i),this.options.container?n.appendTo(this.options.container):n.insertAfter(this.$element);var a=this.getPosition(),p=n[0].offsetWidth,h=n[0].offsetHeight;if(s){var u=this.$element.parent(),l=i,c=document.documentElement.scrollTop||document.body.scrollTop,d="body"==this.options.container?window.innerWidth:u.outerWidth(),f="body"==this.options.container?window.innerHeight:u.outerHeight(),m="body"==this.options.container?0:u.offset().left;i="bottom"==i&&a.top+a.height+h-c>f?"top":"top"==i&&a.top-c-h<0?"bottom":"right"==i&&a.right+p>d?"left":"left"==i&&a.left-p<m?"right":i,n.removeClass(l).addClass(i)}var v=this.getCalculatedOffset(i,a,p,h);this.applyPlacement(v,i),this.hoverState=null;var _=function(){o.$element.trigger("shown.bs."+o.type)};t.support.transition&&this.$tip.hasClass("fade")?n.one(t.support.transition.end,_).emulateTransitionEnd(150):_()}},e.prototype.applyPlacement=function(e,o){var n,i=this.tip(),r=i[0].offsetWidth,s=i[0].offsetHeight,a=parseInt(i.css("margin-top"),10),p=parseInt(i.css("margin-left"),10);isNaN(a)&&(a=0),isNaN(p)&&(p=0),e.top=e.top+a,e.left=e.left+p,t.offset.setOffset(i[0],t.extend({using:function(t){i.css({top:Math.round(t.top),left:Math.round(t.left)})}},e),0),i.addClass("in");var h=i[0].offsetWidth,u=i[0].offsetHeight;if("top"==o&&u!=s&&(n=!0,e.top=e.top+s-u),/bottom|top/.test(o)){var l=0;e.left<0&&(l=-2*e.left,e.left=0,i.offset(e),h=i[0].offsetWidth,u=i[0].offsetHeight),this.replaceArrow(l-r+h,h,"left")}else this.replaceArrow(u-s,u,"top");n&&i.offset(e)},e.prototype.replaceArrow=function(t,e,o){this.arrow().css(o,t?50*(1-t/e)+"%":"")},e.prototype.setContent=function(){var t=this.tip(),e=this.getTitle();t.find(".tooltip-inner")[this.options.html?"html":"text"](e),t.removeClass("fade in top bottom left right")},e.prototype.hide=function(){function e(){"in"!=o.hoverState&&n.detach(),o.$element.trigger("hidden.bs."+o.type)}var o=this,n=this.tip(),i=t.Event("hide.bs."+this.type);return this.$element.trigger(i),i.isDefaultPrevented()?void 0:(n.removeClass("in"),t.support.transition&&this.$tip.hasClass("fade")?n.one(t.support.transition.end,e).emulateTransitionEnd(150):e(),this.hoverState=null,this)},e.prototype.fixTitle=function(){var t=this.$element;(t.attr("title")||"string"!=typeof t.attr("data-original-title"))&&t.attr("data-original-title",t.attr("title")||"").attr("title","")},e.prototype.hasContent=function(){return this.getTitle()},e.prototype.getPosition=function(){var e=this.$element[0];return t.extend({},"function"==typeof e.getBoundingClientRect?e.getBoundingClientRect():{width:e.offsetWidth,height:e.offsetHeight},this.$element.offset())},e.prototype.getCalculatedOffset=function(t,e,o,n){return"bottom"==t?{top:e.top+e.height,left:e.left+e.width/2-o/2}:"top"==t?{top:e.top-n,left:e.left+e.width/2-o/2}:"left"==t?{top:e.top+e.height/2-n/2,left:e.left-o}:{top:e.top+e.height/2-n/2,left:e.left+e.width}},e.prototype.getTitle=function(){var t,e=this.$element,o=this.options;return t=e.attr("data-original-title")||("function"==typeof o.title?o.title.call(e[0]):o.title)},e.prototype.tip=function(){return this.$tip=this.$tip||t(this.options.template)},e.prototype.arrow=function(){return this.$arrow=this.$arrow||this.tip().find(".tooltip-arrow")},e.prototype.validate=function(){this.$element[0].parentNode||(this.hide(),this.$element=null,this.options=null)},e.prototype.enable=function(){this.enabled=!0},e.prototype.disable=function(){this.enabled=!1},e.prototype.toggleEnabled=function(){this.enabled=!this.enabled},e.prototype.toggle=function(e){var o=e?t(e.currentTarget)[this.type](this.getDelegateOptions()).data("bs."+this.type):this;o.tip().hasClass("in")?o.leave(o):o.enter(o)},e.prototype.destroy=function(){clearTimeout(this.timeout),this.hide().$element.off("."+this.type).removeData("bs."+this.type)};var o=t.fn.tooltip;t.fn.tooltip=function(o){return this.each(function(){var n=t(this),i=n.data("bs.tooltip"),r="object"==typeof o&&o;(i||"destroy"!=o)&&(i||n.data("bs.tooltip",i=new e(this,r)),"string"==typeof o&&i[o]())})},t.fn.tooltip.Constructor=e,t.fn.tooltip.noConflict=function(){return t.fn.tooltip=o,this}}(jQuery),+function(t){"use strict";var e=function(t,e){this.init("popover",t,e)};if(!t.fn.tooltip)throw new Error("Popover requires tooltip.js");e.DEFAULTS=t.extend({},t.fn.tooltip.Constructor.DEFAULTS,{placement:"right",trigger:"click",content:"",template:'<div class="popover"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'}),e.prototype=t.extend({},t.fn.tooltip.Constructor.prototype),e.prototype.constructor=e,e.prototype.getDefaults=function(){return e.DEFAULTS},e.prototype.setContent=function(){var t=this.tip(),e=this.getTitle(),o=this.getContent();t.find(".popover-title")[this.options.html?"html":"text"](e),t.find(".popover-content")[this.options.html?"string"==typeof o?"html":"append":"text"](o),t.removeClass("fade top bottom left right in"),t.find(".popover-title").html()||t.find(".popover-title").hide()},e.prototype.hasContent=function(){return this.getTitle()||this.getContent()},e.prototype.getContent=function(){var t=this.$element,e=this.options;return t.attr("data-content")||("function"==typeof e.content?e.content.call(t[0]):e.content)},e.prototype.arrow=function(){return this.$arrow=this.$arrow||this.tip().find(".arrow")},e.prototype.tip=function(){return this.$tip||(this.$tip=t(this.options.template)),this.$tip};var o=t.fn.popover;t.fn.popover=function(o){return this.each(function(){var n=t(this),i=n.data("bs.popover"),r="object"==typeof o&&o;(i||"destroy"!=o)&&(i||n.data("bs.popover",i=new e(this,r)),"string"==typeof o&&i[o]())})},t.fn.popover.Constructor=e,t.fn.popover.noConflict=function(){return t.fn.popover=o,this}}(jQuery),function(t,e){var o,n;return n=e.document,o=function(){function o(o){var n;try{n=e.localStorage}catch(i){n=!1}this._options=t.extend({name:"tour",steps:[],container:"body",keyboard:!0,storage:n,debug:!1,backdrop:!1,redirect:!0,orphan:!1,duration:!1,basePath:"",template:"<div class='popover'> <div class='arrow'></div> <h3 class='popover-title'></h3> <div class='popover-content'></div> <div class='popover-navigation'> <div class='btn-group'> <button class='btn btn-sm btn-default' data-role='prev'>&laquo; Prev</button> <button class='btn btn-sm btn-default' data-role='next'>Next &raquo;</button> <button class='btn btn-sm btn-default' data-role='pause-resume' data-pause-text='Pause' data-resume-text='Resume'>Pause</button> </div> <button class='btn btn-sm btn-default' data-role='end'>End tour</button> </div> </div>",afterSetState:function(t,e){},afterGetState:function(t,e){},afterRemoveState:function(t){},onStart:function(t){},onEnd:function(t){},onShow:function(t){},onShown:function(t){},onHide:function(t){},onHidden:function(t){},onNext:function(t){},onPrev:function(t){},onPause:function(t,e){},onResume:function(t,e){}},o),this._force=!1,this._inited=!1,this.backdrop={overlay:null,$element:null,$background:null,backgroundShown:!1,overlayElementShown:!1}}return o.prototype.addSteps=function(t){var e,o,n;for(o=0,n=t.length;n>o;o++)e=t[o],this.addStep(e);return this},o.prototype.addStep=function(t){return this._options.steps.push(t),this},o.prototype.getStep=function(e){return null!=this._options.steps[e]?t.extend({id:"step-"+e,path:"",placement:"right",title:"",content:"<p></p>",next:e===this._options.steps.length-1?-1:e+1,prev:e-1,animation:!0,container:this._options.container,backdrop:this._options.backdrop,redirect:this._options.redirect,orphan:this._options.orphan,duration:this._options.duration,template:this._options.template,onShow:this._options.onShow,onShown:this._options.onShown,onHide:this._options.onHide,onHidden:this._options.onHidden,onNext:this._options.onNext,onPrev:this._options.onPrev,onPause:this._options.onPause,onResume:this._options.onResume},this._options.steps[e]):void 0},o.prototype.init=function(t){return this._force=t,this.ended()?(this._debug("Tour ended, init prevented."),this):(this.setCurrentStep(),this._initMouseNavigation(),this._initKeyboardNavigation(),this._onResize(function(t){return function(){return t.showStep(t._current)}}(this)),null!==this._current&&this.showStep(this._current),this._inited=!0,this)},o.prototype.start=function(t){var e;return null==t&&(t=!1),this._inited||this.init(t),null===this._current&&(e=this._makePromise(null!=this._options.onStart?this._options.onStart(this):void 0),this._callOnPromiseDone(e,this.showStep,0)),this},o.prototype.next=function(){var t;return t=this.hideStep(this._current),this._callOnPromiseDone(t,this._showNextStep)},o.prototype.prev=function(){var t;return t=this.hideStep(this._current),this._callOnPromiseDone(t,this._showPrevStep)},o.prototype.goTo=function(t){var e;return e=this.hideStep(this._current),this._callOnPromiseDone(e,this.showStep,t)},o.prototype.end=function(){var o,i;return o=function(o){return function(i){return t(n).off("click.tour-"+o._options.name),t(n).off("keyup.tour-"+o._options.name),t(e).off("resize.tour-"+o._options.name),o._setState("end","yes"),o._inited=!1,o._force=!1,o._clearTimer(),null!=o._options.onEnd?o._options.onEnd(o):void 0}}(this),i=this.hideStep(this._current),this._callOnPromiseDone(i,o)},o.prototype.ended=function(){return!this._force&&!!this._getState("end")},o.prototype.restart=function(){return this._removeState("current_step"),this._removeState("end"),this.start()},o.prototype.pause=function(){var t;return t=this.getStep(this._current),t&&t.duration?(this._paused=!0,this._duration-=(new Date).getTime()-this._start,e.clearTimeout(this._timer),this._debug("Paused/Stopped step "+(this._current+1)+" timer ("+this._duration+" remaining)."),null!=t.onPause?t.onPause(this,this._duration):void 0):this},o.prototype.resume=function(){var t;return t=this.getStep(this._current),t&&t.duration?(this._paused=!1,this._start=(new Date).getTime(),this._duration=this._duration||t.duration,this._timer=e.setTimeout(function(t){return function(){return t._isLast()?t.next():t.end()}}(this),this._duration),this._debug("Started step "+(this._current+1)+" timer with duration "+this._duration),null!=t.onResume&&this._duration!==t.duration?t.onResume(this,this._duration):void 0):this},o.prototype.hideStep=function(e){var o,n,i;return(i=this.getStep(e))?(this._clearTimer(),n=this._makePromise(null!=i.onHide?i.onHide(this,e):void 0),o=function(o){return function(n){var r;return r=t(i.element),r.data("bs.popover")||r.data("popover")||(r=t("body")),r.popover("destroy").removeClass("tour-"+o._options.name+"-element tour-"+o._options.name+"-"+e+"-element"),i.reflex&&r.css("cursor","").off("click.tour-"+o._options.name),i.backdrop&&o._hideBackdrop(),null!=i.onHidden?i.onHidden(o):void 0}}(this),this._callOnPromiseDone(n,o),n):void 0},o.prototype.showStep=function(t){var e,o,i,r;return this.ended()?(this._debug("Tour ended, showStep prevented."),this):(r=this.getStep(t))?(i=t<this._current,e=this._makePromise(null!=r.onShow?r.onShow(this,t):void 0),o=function(e){return function(o){var s,a;if(e.setCurrentStep(t),a=function(){switch({}.toString.call(r.path)){case"[object Function]":return r.path();case"[object String]":return this._options.basePath+r.path;default:return r.path}}.call(e),s=[n.location.pathname,n.location.hash].join(""),e._isRedirect(a,s))return void e._redirect(r,a);if(e._isOrphan(r)){if(!r.orphan)return e._debug("Skip the orphan step "+(e._current+1)+". Orphan option is false and the element doesn't exist or is hidden."),void(i?e._showPrevStep():e._showNextStep());e._debug("Show the orphan step "+(e._current+1)+". Orphans option is true.")}return r.backdrop&&e._showBackdrop(e._isOrphan(r)?void 0:r.element),e._scrollIntoView(r.element,function(){return e.getCurrentStep()===t?(null!=r.element&&r.backdrop&&e._showOverlayElement(r.element),e._showPopover(r,t),null!=r.onShown&&r.onShown(e),e._debug("Step "+(e._current+1)+" of "+e._options.steps.length)):void 0}),r.duration?e.resume():void 0}}(this),this._callOnPromiseDone(e,o),e):void 0},o.prototype.getCurrentStep=function(){return this._current},o.prototype.setCurrentStep=function(t){return null!=t?(this._current=t,this._setState("current_step",t)):(this._current=this._getState("current_step"),this._current=null===this._current?null:parseInt(this._current,10)),this},o.prototype._setState=function(t,e){var o,n;if(this._options.storage){n=""+this._options.name+"_"+t;try{this._options.storage.setItem(n,e)}catch(i){o=i,o.code===DOMException.QUOTA_EXCEEDED_ERR&&this.debug("LocalStorage quota exceeded. State storage failed.")}return this._options.afterSetState(n,e)}return null==this._state&&(this._state={}),this._state[t]=e},o.prototype._removeState=function(t){var e;return this._options.storage?(e=""+this._options.name+"_"+t,this._options.storage.removeItem(e),this._options.afterRemoveState(e)):null!=this._state?delete this._state[t]:void 0},o.prototype._getState=function(t){var e,o;return this._options.storage?(e=""+this._options.name+"_"+t,o=this._options.storage.getItem(e)):null!=this._state&&(o=this._state[t]),(void 0===o||"null"===o)&&(o=null),this._options.afterGetState(t,o),o},o.prototype._showNextStep=function(){var t,e,o;return o=this.getStep(this._current),e=function(t){return function(e){return t.showStep(o.next)}}(this),t=this._makePromise(null!=o.onNext?o.onNext(this):void 0),this._callOnPromiseDone(t,e)},o.prototype._showPrevStep=function(){var t,e,o;return o=this.getStep(this._current),e=function(t){return function(e){return t.showStep(o.prev)}}(this),t=this._makePromise(null!=o.onPrev?o.onPrev(this):void 0),this._callOnPromiseDone(t,e)},o.prototype._debug=function(t){return this._options.debug?e.console.log("Bootstrap Tour '"+this._options.name+"' | "+t):void 0},o.prototype._isRedirect=function(t,e){return null!=t&&""!==t&&("[object RegExp]"==={}.toString.call(t)&&!t.test(e)||"[object String]"==={}.toString.call(t)&&t.replace(/\?.*$/,"").replace(/\/?$/,"")!==e.replace(/\/?$/,""))},o.prototype._redirect=function(e,o){return t.isFunction(e.redirect)?e.redirect.call(this,o):e.redirect===!0?(this._debug("Redirect to "+o),n.location.href=o):void 0},o.prototype._isOrphan=function(e){return null==e.element||!t(e.element).length||t(e.element).is(":hidden")&&"http://www.w3.org/2000/svg"!==t(e.element)[0].namespaceURI},o.prototype._isLast=function(){return this._current<this._options.steps.length-1},o.prototype._showPopover=function(e,o){var n,i,r,s,a,p;return t(".tour-"+this._options.name).remove(),p=t.extend({},this._options),r=t(t.isFunction(e.template)?e.template(o,e):e.template),i=r.find(".popover-navigation"),a=this._isOrphan(e),a&&(e.element="body",e.placement="top",r=r.addClass("orphan")),n=t(e.element),r.addClass("tour-"+this._options.name+" tour-"+this._options.name+"-"+o),n.addClass("tour-"+this._options.name+"-element tour-"+this._options.name+"-"+o+"-element"),e.options&&t.extend(p,e.options),e.reflex&&!a&&n.css("cursor","pointer").on("click.tour-"+this._options.name,function(t){return function(){return t._isLast()?t.next():t.end()}}(this)),e.prev<0&&i.find("[data-role='prev']").addClass("disabled"),e.next<0&&i.find("[data-role='next']").addClass("disabled"),e.duration||i.find("[data-role='pause-resume']").remove(),e.template=r.clone().wrap("<div>").parent().html(),n.popover({placement:e.placement,trigger:"manual",title:e.title,content:e.content,html:!0,animation:e.animation,container:e.container,template:e.template,selector:e.element}).popover("show"),s=n.data("bs.popover")?n.data("bs.popover").tip():n.data("popover").tip(),s.attr("id",e.id),this._reposition(s,e),a?this._center(s):void 0},o.prototype._reposition=function(e,o){var i,r,s,a,p,h,u;if(a=e[0].offsetWidth,r=e[0].offsetHeight,u=e.offset(),p=u.left,h=u.top,i=t(n).outerHeight()-u.top-e.outerHeight(),0>i&&(u.top=u.top+i),s=t("html").outerWidth()-u.left-e.outerWidth(),0>s&&(u.left=u.left+s),u.top<0&&(u.top=0),u.left<0&&(u.left=0),e.offset(u),"bottom"===o.placement||"top"===o.placement){if(p!==u.left)return this._replaceArrow(e,2*(u.left-p),a,"left")}else if(h!==u.top)return this._replaceArrow(e,2*(u.top-h),r,"top")},o.prototype._center=function(o){return o.css("top",t(e).outerHeight()/2-o.outerHeight()/2)},o.prototype._replaceArrow=function(t,e,o,n){return t.find(".arrow").css(n,e?50*(1-e/o)+"%":"")},o.prototype._scrollIntoView=function(o,n){var i,r,s,a,p,h;return i=t(o),i.length?(r=t(e),a=i.offset().top,h=r.height(),p=Math.max(0,a-h/2),this._debug("Scroll into view. ScrollTop: "+p+". Element offset: "+a+". Window height: "+h+"."),s=0,t("body,html").stop(!0,!0).animate({scrollTop:Math.ceil(p)},function(t){return function(){return 2===++s?(n(),t._debug("Scroll into view. Animation end element offset: "+i.offset().top+". Window height: "+r.height()+".")):void 0}}(this))):n()},o.prototype._onResize=function(o,n){return t(e).on("resize.tour-"+this._options.name,function(){return clearTimeout(n),n=setTimeout(o,100)})},o.prototype._initMouseNavigation=function(){var e;return e=this,t(n).off("click.tour-"+this._options.name,".popover.tour-"+this._options.name+" *[data-role='prev']:not(.disabled)").off("click.tour-"+this._options.name,".popover.tour-"+this._options.name+" *[data-role='next']:not(.disabled)").off("click.tour-"+this._options.name,".popover.tour-"+this._options.name+" *[data-role='end']").off("click.tour-"+this._options.name,".popover.tour-"+this._options.name+" *[data-role='pause-resume']").on("click.tour-"+this._options.name,".popover.tour-"+this._options.name+" *[data-role='next']:not(.disabled)",function(t){return function(e){return e.preventDefault(),t.next()}}(this)).on("click.tour-"+this._options.name,".popover.tour-"+this._options.name+" *[data-role='prev']:not(.disabled)",function(t){return function(e){return e.preventDefault(),t.prev()}}(this)).on("click.tour-"+this._options.name,".popover.tour-"+this._options.name+" *[data-role='end']",function(t){return function(e){return e.preventDefault(),t.end()}}(this)).on("click.tour-"+this._options.name,".popover.tour-"+this._options.name+" *[data-role='pause-resume']",function(o){var n;return o.preventDefault(),n=t(this),n.text(e._paused?n.data("pause-text"):n.data("resume-text")),e._paused?e.resume():e.pause()})},o.prototype._initKeyboardNavigation=function(){return this._options.keyboard?t(n).on("keyup.tour-"+this._options.name,function(t){return function(e){if(e.which)switch(e.which){case 39:return e.preventDefault(),t._isLast()?t.next():t.end();case 37:if(e.preventDefault(),t._current>0)return t.prev();break;case 27:return e.preventDefault(),t.end()}}}(this)):void 0},o.prototype._makePromise=function(e){return e&&t.isFunction(e.then)?e:null},o.prototype._callOnPromiseDone=function(t,e,o){return t?t.then(function(t){return function(n){return e.call(t,o)}}(this)):e.call(this,o)},o.prototype._showBackdrop=function(e){return this.backdrop.backgroundShown?void 0:(this.backdrop=t("<div/>",{"class":"tour-backdrop"}),this.backdrop.backgroundShown=!0,t("body").append(this.backdrop))},o.prototype._hideBackdrop=function(){return this._hideOverlayElement(),this._hideBackground()},o.prototype._hideBackground=function(){return this.backdrop?(this.backdrop.remove(),this.backdrop.overlay=null,this.backdrop.backgroundShown=!1):void 0},o.prototype._showOverlayElement=function(e){var o,n,i;return n=t(e),n&&0!==n.length&&!this.backdrop.overlayElementShown?(this.backdrop.overlayElementShown=!0,o=t("<div/>"),i=n.offset(),i.top=i.top,i.left=i.left,o.width(n.innerWidth()).height(n.innerHeight()).addClass("tour-step-background").offset(i),n.addClass("tour-step-backdrop"),t("body").append(o),this.backdrop.$element=n,this.backdrop.$background=o):void 0},o.prototype._hideOverlayElement=function(){return this.backdrop.overlayElementShown?(this.backdrop.$element.removeClass("tour-step-backdrop"),this.backdrop.$background.remove(),this.backdrop.$element=null,this.backdrop.$background=null,this.backdrop.overlayElementShown=!1):void 0},o.prototype._clearTimer=function(){return e.clearTimeout(this._timer),this._timer=null,this._duration=null},o}(),e.Tour=o}(jQuery,window);
+/* ===========================================================
+# bootstrap-tour - v0.9.3
+# http://bootstraptour.com
+# ==============================================================
+# Copyright 2012-2013 Ulrich Sossou
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+*/
+/* ========================================================================
+ * Bootstrap: transition.js v3.1.1
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2014 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      'WebkitTransition' : 'webkitTransitionEnd',
+      'MozTransition'    : 'transitionend',
+      'OTransition'      : 'oTransitionEnd otransitionend',
+      'transition'       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false, $el = this
+    $(this).one($.support.transition.end, function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+  })
+
+}(jQuery);
+
+/* ========================================================================
+ * Bootstrap: tooltip.js v3.1.1
+ * http://getbootstrap.com/javascript/#tooltip
+ * Inspired by the original jQuery.tipsy by Jason Frame
+ * ========================================================================
+ * Copyright 2011-2014 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // TOOLTIP PUBLIC CLASS DEFINITION
+  // ===============================
+
+  var Tooltip = function (element, options) {
+    this.type       =
+    this.options    =
+    this.enabled    =
+    this.timeout    =
+    this.hoverState =
+    this.$element   = null
+
+    this.init('tooltip', element, options)
+  }
+
+  Tooltip.DEFAULTS = {
+    animation: true,
+    placement: 'top',
+    selector: false,
+    template: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+    trigger: 'hover focus',
+    title: '',
+    delay: 0,
+    html: false,
+    container: false
+  }
+
+  Tooltip.prototype.init = function (type, element, options) {
+    this.enabled  = true
+    this.type     = type
+    this.$element = $(element)
+    this.options  = this.getOptions(options)
+
+    var triggers = this.options.trigger.split(' ')
+
+    for (var i = triggers.length; i--;) {
+      var trigger = triggers[i]
+
+      if (trigger == 'click') {
+        this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
+      } else if (trigger != 'manual') {
+        var eventIn  = trigger == 'hover' ? 'mouseenter' : 'focusin'
+        var eventOut = trigger == 'hover' ? 'mouseleave' : 'focusout'
+
+        this.$element.on(eventIn  + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
+        this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
+      }
+    }
+
+    this.options.selector ?
+      (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
+      this.fixTitle()
+  }
+
+  Tooltip.prototype.getDefaults = function () {
+    return Tooltip.DEFAULTS
+  }
+
+  Tooltip.prototype.getOptions = function (options) {
+    options = $.extend({}, this.getDefaults(), this.$element.data(), options)
+
+    if (options.delay && typeof options.delay == 'number') {
+      options.delay = {
+        show: options.delay,
+        hide: options.delay
+      }
+    }
+
+    return options
+  }
+
+  Tooltip.prototype.getDelegateOptions = function () {
+    var options  = {}
+    var defaults = this.getDefaults()
+
+    this._options && $.each(this._options, function (key, value) {
+      if (defaults[key] != value) options[key] = value
+    })
+
+    return options
+  }
+
+  Tooltip.prototype.enter = function (obj) {
+    var self = obj instanceof this.constructor ?
+      obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type)
+
+    clearTimeout(self.timeout)
+
+    self.hoverState = 'in'
+
+    if (!self.options.delay || !self.options.delay.show) return self.show()
+
+    self.timeout = setTimeout(function () {
+      if (self.hoverState == 'in') self.show()
+    }, self.options.delay.show)
+  }
+
+  Tooltip.prototype.leave = function (obj) {
+    var self = obj instanceof this.constructor ?
+      obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type)
+
+    clearTimeout(self.timeout)
+
+    self.hoverState = 'out'
+
+    if (!self.options.delay || !self.options.delay.hide) return self.hide()
+
+    self.timeout = setTimeout(function () {
+      if (self.hoverState == 'out') self.hide()
+    }, self.options.delay.hide)
+  }
+
+  Tooltip.prototype.show = function () {
+    var e = $.Event('show.bs.' + this.type)
+
+    if (this.hasContent() && this.enabled) {
+      this.$element.trigger(e)
+
+      if (e.isDefaultPrevented()) return
+      var that = this;
+
+      var $tip = this.tip()
+
+      this.setContent()
+
+      if (this.options.animation) $tip.addClass('fade')
+
+      var placement = typeof this.options.placement == 'function' ?
+        this.options.placement.call(this, $tip[0], this.$element[0]) :
+        this.options.placement
+
+      var autoToken = /\s?auto?\s?/i
+      var autoPlace = autoToken.test(placement)
+      if (autoPlace) placement = placement.replace(autoToken, '') || 'top'
+
+      $tip
+        .detach()
+        .css({ top: 0, left: 0, display: 'block' })
+        .addClass(placement)
+
+      this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
+
+      var pos          = this.getPosition()
+      var actualWidth  = $tip[0].offsetWidth
+      var actualHeight = $tip[0].offsetHeight
+
+      if (autoPlace) {
+        var $parent = this.$element.parent()
+
+        var orgPlacement = placement
+        var docScroll    = document.documentElement.scrollTop || document.body.scrollTop
+        var parentWidth  = this.options.container == 'body' ? window.innerWidth  : $parent.outerWidth()
+        var parentHeight = this.options.container == 'body' ? window.innerHeight : $parent.outerHeight()
+        var parentLeft   = this.options.container == 'body' ? 0 : $parent.offset().left
+
+        placement = placement == 'bottom' && pos.top   + pos.height  + actualHeight - docScroll > parentHeight  ? 'top'    :
+                    placement == 'top'    && pos.top   - docScroll   - actualHeight < 0                         ? 'bottom' :
+                    placement == 'right'  && pos.right + actualWidth > parentWidth                              ? 'left'   :
+                    placement == 'left'   && pos.left  - actualWidth < parentLeft                               ? 'right'  :
+                    placement
+
+        $tip
+          .removeClass(orgPlacement)
+          .addClass(placement)
+      }
+
+      var calculatedOffset = this.getCalculatedOffset(placement, pos, actualWidth, actualHeight)
+
+      this.applyPlacement(calculatedOffset, placement)
+      this.hoverState = null
+
+      var complete = function() {
+        that.$element.trigger('shown.bs.' + that.type)
+      }
+
+      $.support.transition && this.$tip.hasClass('fade') ?
+        $tip
+          .one($.support.transition.end, complete)
+          .emulateTransitionEnd(150) :
+        complete()
+    }
+  }
+
+  Tooltip.prototype.applyPlacement = function (offset, placement) {
+    var replace
+    var $tip   = this.tip()
+    var width  = $tip[0].offsetWidth
+    var height = $tip[0].offsetHeight
+
+    // manually read margins because getBoundingClientRect includes difference
+    var marginTop = parseInt($tip.css('margin-top'), 10)
+    var marginLeft = parseInt($tip.css('margin-left'), 10)
+
+    // we must check for NaN for ie 8/9
+    if (isNaN(marginTop))  marginTop  = 0
+    if (isNaN(marginLeft)) marginLeft = 0
+
+    offset.top  = offset.top  + marginTop
+    offset.left = offset.left + marginLeft
+
+    // $.fn.offset doesn't round pixel values
+    // so we use setOffset directly with our own function B-0
+    $.offset.setOffset($tip[0], $.extend({
+      using: function (props) {
+        $tip.css({
+          top: Math.round(props.top),
+          left: Math.round(props.left)
+        })
+      }
+    }, offset), 0)
+
+    $tip.addClass('in')
+
+    // check to see if placing tip in new offset caused the tip to resize itself
+    var actualWidth  = $tip[0].offsetWidth
+    var actualHeight = $tip[0].offsetHeight
+
+    if (placement == 'top' && actualHeight != height) {
+      replace = true
+      offset.top = offset.top + height - actualHeight
+    }
+
+    if (/bottom|top/.test(placement)) {
+      var delta = 0
+
+      if (offset.left < 0) {
+        delta       = offset.left * -2
+        offset.left = 0
+
+        $tip.offset(offset)
+
+        actualWidth  = $tip[0].offsetWidth
+        actualHeight = $tip[0].offsetHeight
+      }
+
+      this.replaceArrow(delta - width + actualWidth, actualWidth, 'left')
+    } else {
+      this.replaceArrow(actualHeight - height, actualHeight, 'top')
+    }
+
+    if (replace) $tip.offset(offset)
+  }
+
+  Tooltip.prototype.replaceArrow = function (delta, dimension, position) {
+    this.arrow().css(position, delta ? (50 * (1 - delta / dimension) + '%') : '')
+  }
+
+  Tooltip.prototype.setContent = function () {
+    var $tip  = this.tip()
+    var title = this.getTitle()
+
+    $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
+    $tip.removeClass('fade in top bottom left right')
+  }
+
+  Tooltip.prototype.hide = function () {
+    var that = this
+    var $tip = this.tip()
+    var e    = $.Event('hide.bs.' + this.type)
+
+    function complete() {
+      if (that.hoverState != 'in') $tip.detach()
+      that.$element.trigger('hidden.bs.' + that.type)
+    }
+
+    this.$element.trigger(e)
+
+    if (e.isDefaultPrevented()) return
+
+    $tip.removeClass('in')
+
+    $.support.transition && this.$tip.hasClass('fade') ?
+      $tip
+        .one($.support.transition.end, complete)
+        .emulateTransitionEnd(150) :
+      complete()
+
+    this.hoverState = null
+
+    return this
+  }
+
+  Tooltip.prototype.fixTitle = function () {
+    var $e = this.$element
+    if ($e.attr('title') || typeof($e.attr('data-original-title')) != 'string') {
+      $e.attr('data-original-title', $e.attr('title') || '').attr('title', '')
+    }
+  }
+
+  Tooltip.prototype.hasContent = function () {
+    return this.getTitle()
+  }
+
+  Tooltip.prototype.getPosition = function () {
+    var el = this.$element[0]
+    return $.extend({}, (typeof el.getBoundingClientRect == 'function') ? el.getBoundingClientRect() : {
+      width: el.offsetWidth,
+      height: el.offsetHeight
+    }, this.$element.offset())
+  }
+
+  Tooltip.prototype.getCalculatedOffset = function (placement, pos, actualWidth, actualHeight) {
+    return placement == 'bottom' ? { top: pos.top + pos.height,   left: pos.left + pos.width / 2 - actualWidth / 2  } :
+           placement == 'top'    ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2  } :
+           placement == 'left'   ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
+        /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width   }
+  }
+
+  Tooltip.prototype.getTitle = function () {
+    var title
+    var $e = this.$element
+    var o  = this.options
+
+    title = $e.attr('data-original-title')
+      || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
+
+    return title
+  }
+
+  Tooltip.prototype.tip = function () {
+    return this.$tip = this.$tip || $(this.options.template)
+  }
+
+  Tooltip.prototype.arrow = function () {
+    return this.$arrow = this.$arrow || this.tip().find('.tooltip-arrow')
+  }
+
+  Tooltip.prototype.validate = function () {
+    if (!this.$element[0].parentNode) {
+      this.hide()
+      this.$element = null
+      this.options  = null
+    }
+  }
+
+  Tooltip.prototype.enable = function () {
+    this.enabled = true
+  }
+
+  Tooltip.prototype.disable = function () {
+    this.enabled = false
+  }
+
+  Tooltip.prototype.toggleEnabled = function () {
+    this.enabled = !this.enabled
+  }
+
+  Tooltip.prototype.toggle = function (e) {
+    var self = e ? $(e.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type) : this
+    self.tip().hasClass('in') ? self.leave(self) : self.enter(self)
+  }
+
+  Tooltip.prototype.destroy = function () {
+    clearTimeout(this.timeout)
+    this.hide().$element.off('.' + this.type).removeData('bs.' + this.type)
+  }
+
+
+  // TOOLTIP PLUGIN DEFINITION
+  // =========================
+
+  var old = $.fn.tooltip
+
+  $.fn.tooltip = function (option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.tooltip')
+      var options = typeof option == 'object' && option
+
+      if (!data && option == 'destroy') return
+      if (!data) $this.data('bs.tooltip', (data = new Tooltip(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  $.fn.tooltip.Constructor = Tooltip
+
+
+  // TOOLTIP NO CONFLICT
+  // ===================
+
+  $.fn.tooltip.noConflict = function () {
+    $.fn.tooltip = old
+    return this
+  }
+
+}(jQuery);
+
+/* ========================================================================
+ * Bootstrap: popover.js v3.1.1
+ * http://getbootstrap.com/javascript/#popovers
+ * ========================================================================
+ * Copyright 2011-2014 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // POPOVER PUBLIC CLASS DEFINITION
+  // ===============================
+
+  var Popover = function (element, options) {
+    this.init('popover', element, options)
+  }
+
+  if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
+
+  Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
+    placement: 'right',
+    trigger: 'click',
+    content: '',
+    template: '<div class="popover"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+  })
+
+
+  // NOTE: POPOVER EXTENDS tooltip.js
+  // ================================
+
+  Popover.prototype = $.extend({}, $.fn.tooltip.Constructor.prototype)
+
+  Popover.prototype.constructor = Popover
+
+  Popover.prototype.getDefaults = function () {
+    return Popover.DEFAULTS
+  }
+
+  Popover.prototype.setContent = function () {
+    var $tip    = this.tip()
+    var title   = this.getTitle()
+    var content = this.getContent()
+
+    $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
+    $tip.find('.popover-content')[ // we use append for html objects to maintain js events
+      this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'text'
+    ](content)
+
+    $tip.removeClass('fade top bottom left right in')
+
+    // IE8 doesn't accept hiding via the `:empty` pseudo selector, we have to do
+    // this manually by checking the contents.
+    if (!$tip.find('.popover-title').html()) $tip.find('.popover-title').hide()
+  }
+
+  Popover.prototype.hasContent = function () {
+    return this.getTitle() || this.getContent()
+  }
+
+  Popover.prototype.getContent = function () {
+    var $e = this.$element
+    var o  = this.options
+
+    return $e.attr('data-content')
+      || (typeof o.content == 'function' ?
+            o.content.call($e[0]) :
+            o.content)
+  }
+
+  Popover.prototype.arrow = function () {
+    return this.$arrow = this.$arrow || this.tip().find('.arrow')
+  }
+
+  Popover.prototype.tip = function () {
+    if (!this.$tip) this.$tip = $(this.options.template)
+    return this.$tip
+  }
+
+
+  // POPOVER PLUGIN DEFINITION
+  // =========================
+
+  var old = $.fn.popover
+
+  $.fn.popover = function (option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.popover')
+      var options = typeof option == 'object' && option
+
+      if (!data && option == 'destroy') return
+      if (!data) $this.data('bs.popover', (data = new Popover(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  $.fn.popover.Constructor = Popover
+
+
+  // POPOVER NO CONFLICT
+  // ===================
+
+  $.fn.popover.noConflict = function () {
+    $.fn.popover = old
+    return this
+  }
+
+}(jQuery);
+
+(function($, window) {
+  var Tour, document;
+  document = window.document;
+  Tour = (function() {
+    function Tour(options) {
+      var storage;
+      try {
+        storage = window.localStorage;
+      } catch (_error) {
+        storage = false;
+      }
+      this._options = $.extend({
+        name: "tour",
+        steps: [],
+        container: "body",
+        keyboard: true,
+        storage: storage,
+        debug: false,
+        backdrop: false,
+        redirect: true,
+        orphan: false,
+        duration: false,
+        basePath: "",
+        template: "<div class='popover'> <div class='arrow'></div> <h3 class='popover-title'></h3> <div class='popover-content'></div> <div class='popover-navigation'> <div class='btn-group'> <button class='btn btn-sm btn-default' data-role='prev'>&laquo; Prev</button> <button class='btn btn-sm btn-default' data-role='next'>Next &raquo;</button> <button class='btn btn-sm btn-default' data-role='pause-resume' data-pause-text='Pause' data-resume-text='Resume'>Pause</button> </div> <button class='btn btn-sm btn-default' data-role='end'>End tour</button> </div> </div>",
+        afterSetState: function(key, value) {},
+        afterGetState: function(key, value) {},
+        afterRemoveState: function(key) {},
+        onStart: function(tour) {},
+        onEnd: function(tour) {},
+        onShow: function(tour) {},
+        onShown: function(tour) {},
+        onHide: function(tour) {},
+        onHidden: function(tour) {},
+        onNext: function(tour) {},
+        onPrev: function(tour) {},
+        onPause: function(tour, duration) {},
+        onResume: function(tour, duration) {}
+      }, options);
+      this._force = false;
+      this._inited = false;
+      this.backdrop = {
+        overlay: null,
+        $element: null,
+        $background: null,
+        backgroundShown: false,
+        overlayElementShown: false
+      };
+      this;
+    }
+
+    Tour.prototype.addSteps = function(steps) {
+      var step, _i, _len;
+      for (_i = 0, _len = steps.length; _i < _len; _i++) {
+        step = steps[_i];
+        this.addStep(step);
+      }
+      return this;
+    };
+
+    Tour.prototype.addStep = function(step) {
+      this._options.steps.push(step);
+      return this;
+    };
+
+    Tour.prototype.getStep = function(i) {
+      if (this._options.steps[i] != null) {
+        return $.extend({
+          id: "step-" + i,
+          path: "",
+          placement: "right",
+          title: "",
+          content: "<p></p>",
+          next: i === this._options.steps.length - 1 ? -1 : i + 1,
+          prev: i - 1,
+          animation: true,
+          container: this._options.container,
+          backdrop: this._options.backdrop,
+          redirect: this._options.redirect,
+          orphan: this._options.orphan,
+          duration: this._options.duration,
+          template: this._options.template,
+          onShow: this._options.onShow,
+          onShown: this._options.onShown,
+          onHide: this._options.onHide,
+          onHidden: this._options.onHidden,
+          onNext: this._options.onNext,
+          onPrev: this._options.onPrev,
+          onPause: this._options.onPause,
+          onResume: this._options.onResume
+        }, this._options.steps[i]);
+      }
+    };
+
+    Tour.prototype.init = function(force) {
+      this._force = force;
+      if (this.ended()) {
+        this._debug("Tour ended, init prevented.");
+        return this;
+      }
+      this.setCurrentStep();
+      this._initMouseNavigation();
+      this._initKeyboardNavigation();
+      this._onResize((function(_this) {
+        return function() {
+          return _this.showStep(_this._current);
+        };
+      })(this));
+      if (this._current !== null) {
+        this.showStep(this._current);
+      }
+      this._inited = true;
+      return this;
+    };
+
+    Tour.prototype.start = function(force) {
+      var promise;
+      if (force == null) {
+        force = false;
+      }
+      if (!this._inited) {
+        this.init(force);
+      }
+      if (this._current === null) {
+        promise = this._makePromise(this._options.onStart != null ? this._options.onStart(this) : void 0);
+        this._callOnPromiseDone(promise, this.showStep, 0);
+      }
+      return this;
+    };
+
+    Tour.prototype.next = function() {
+      var promise;
+      promise = this.hideStep(this._current);
+      return this._callOnPromiseDone(promise, this._showNextStep);
+    };
+
+    Tour.prototype.prev = function() {
+      var promise;
+      promise = this.hideStep(this._current);
+      return this._callOnPromiseDone(promise, this._showPrevStep);
+    };
+
+    Tour.prototype.goTo = function(i) {
+      var promise;
+      promise = this.hideStep(this._current);
+      return this._callOnPromiseDone(promise, this.showStep, i);
+    };
+
+    Tour.prototype.end = function() {
+      var endHelper, promise;
+      endHelper = (function(_this) {
+        return function(e) {
+          $(document).off("click.tour-" + _this._options.name);
+          $(document).off("keyup.tour-" + _this._options.name);
+          $(window).off("resize.tour-" + _this._options.name);
+          _this._setState("end", "yes");
+          _this._inited = false;
+          _this._force = false;
+          _this._clearTimer();
+          if (_this._options.onEnd != null) {
+            return _this._options.onEnd(_this);
+          }
+        };
+      })(this);
+      promise = this.hideStep(this._current);
+      return this._callOnPromiseDone(promise, endHelper);
+    };
+
+    Tour.prototype.ended = function() {
+      return !this._force && !!this._getState("end");
+    };
+
+    Tour.prototype.restart = function() {
+      this._removeState("current_step");
+      this._removeState("end");
+      return this.start();
+    };
+
+    Tour.prototype.pause = function() {
+      var step;
+      step = this.getStep(this._current);
+      if (!(step && step.duration)) {
+        return this;
+      }
+      this._paused = true;
+      this._duration -= new Date().getTime() - this._start;
+      window.clearTimeout(this._timer);
+      this._debug("Paused/Stopped step " + (this._current + 1) + " timer (" + this._duration + " remaining).");
+      if (step.onPause != null) {
+        return step.onPause(this, this._duration);
+      }
+    };
+
+    Tour.prototype.resume = function() {
+      var step;
+      step = this.getStep(this._current);
+      if (!(step && step.duration)) {
+        return this;
+      }
+      this._paused = false;
+      this._start = new Date().getTime();
+      this._duration = this._duration || step.duration;
+      this._timer = window.setTimeout((function(_this) {
+        return function() {
+          if (_this._isLast()) {
+            return _this.next();
+          } else {
+            return _this.end();
+          }
+        };
+      })(this), this._duration);
+      this._debug("Started step " + (this._current + 1) + " timer with duration " + this._duration);
+      if ((step.onResume != null) && this._duration !== step.duration) {
+        return step.onResume(this, this._duration);
+      }
+    };
+
+    Tour.prototype.hideStep = function(i) {
+      var hideStepHelper, promise, step;
+      step = this.getStep(i);
+      if (!step) {
+        return;
+      }
+      this._clearTimer();
+      promise = this._makePromise(step.onHide != null ? step.onHide(this, i) : void 0);
+      hideStepHelper = (function(_this) {
+        return function(e) {
+          var $element;
+          $element = $(step.element);
+          if (!($element.data("bs.popover") || $element.data("popover"))) {
+            $element = $("body");
+          }
+          $element.popover("destroy").removeClass("tour-" + _this._options.name + "-element tour-" + _this._options.name + "-" + i + "-element");
+          if (step.reflex) {
+            $element.css("cursor", "").off("click.tour-" + _this._options.name);
+          }
+          if (step.backdrop) {
+            _this._hideBackdrop();
+          }
+          if (step.onHidden != null) {
+            return step.onHidden(_this);
+          }
+        };
+      })(this);
+      this._callOnPromiseDone(promise, hideStepHelper);
+      return promise;
+    };
+
+    Tour.prototype.showStep = function(i) {
+      var promise, showStepHelper, skipToPrevious, step;
+      if (this.ended()) {
+        this._debug("Tour ended, showStep prevented.");
+        return this;
+      }
+      step = this.getStep(i);
+      if (!step) {
+        return;
+      }
+      skipToPrevious = i < this._current;
+      promise = this._makePromise(step.onShow != null ? step.onShow(this, i) : void 0);
+      showStepHelper = (function(_this) {
+        return function(e) {
+          var current_path, path;
+          _this.setCurrentStep(i);
+          path = (function() {
+            switch ({}.toString.call(step.path)) {
+              case "[object Function]":
+                return step.path();
+              case "[object String]":
+                return this._options.basePath + step.path;
+              default:
+                return step.path;
+            }
+          }).call(_this);
+          current_path = [document.location.pathname, document.location.hash].join("");
+          if (_this._isRedirect(path, current_path)) {
+            _this._redirect(step, path);
+            return;
+          }
+          if (_this._isOrphan(step)) {
+            if (!step.orphan) {
+              _this._debug("Skip the orphan step " + (_this._current + 1) + ". Orphan option is false and the element doesn't exist or is hidden.");
+              if (skipToPrevious) {
+                _this._showPrevStep();
+              } else {
+                _this._showNextStep();
+              }
+              return;
+            }
+            _this._debug("Show the orphan step " + (_this._current + 1) + ". Orphans option is true.");
+          }
+          if (step.backdrop) {
+            _this._showBackdrop(!_this._isOrphan(step) ? step.element : void 0);
+          }
+          _this._scrollIntoView(step.element, function() {
+            if (_this.getCurrentStep() !== i) {
+              return;
+            }
+            if ((step.element != null) && step.backdrop) {
+              _this._showOverlayElement(step.element);
+            }
+            _this._showPopover(step, i);
+            if (step.onShown != null) {
+              step.onShown(_this);
+            }
+            return _this._debug("Step " + (_this._current + 1) + " of " + _this._options.steps.length);
+          });
+          if (step.duration) {
+            return _this.resume();
+          }
+        };
+      })(this);
+      this._callOnPromiseDone(promise, showStepHelper);
+      return promise;
+    };
+
+    Tour.prototype.getCurrentStep = function() {
+      return this._current;
+    };
+
+    Tour.prototype.setCurrentStep = function(value) {
+      if (value != null) {
+        this._current = value;
+        this._setState("current_step", value);
+      } else {
+        this._current = this._getState("current_step");
+        this._current = this._current === null ? null : parseInt(this._current, 10);
+      }
+      return this;
+    };
+
+    Tour.prototype._setState = function(key, value) {
+      var e, keyName;
+      if (this._options.storage) {
+        keyName = "" + this._options.name + "_" + key;
+        try {
+          this._options.storage.setItem(keyName, value);
+        } catch (_error) {
+          e = _error;
+          if (e.code === DOMException.QUOTA_EXCEEDED_ERR) {
+            this.debug("LocalStorage quota exceeded. State storage failed.");
+          }
+        }
+        return this._options.afterSetState(keyName, value);
+      } else {
+        if (this._state == null) {
+          this._state = {};
+        }
+        return this._state[key] = value;
+      }
+    };
+
+    Tour.prototype._removeState = function(key) {
+      var keyName;
+      if (this._options.storage) {
+        keyName = "" + this._options.name + "_" + key;
+        this._options.storage.removeItem(keyName);
+        return this._options.afterRemoveState(keyName);
+      } else {
+        if (this._state != null) {
+          return delete this._state[key];
+        }
+      }
+    };
+
+    Tour.prototype._getState = function(key) {
+      var keyName, value;
+      if (this._options.storage) {
+        keyName = "" + this._options.name + "_" + key;
+        value = this._options.storage.getItem(keyName);
+      } else {
+        if (this._state != null) {
+          value = this._state[key];
+        }
+      }
+      if (value === void 0 || value === "null") {
+        value = null;
+      }
+      this._options.afterGetState(key, value);
+      return value;
+    };
+
+    Tour.prototype._showNextStep = function() {
+      var promise, showNextStepHelper, step;
+      step = this.getStep(this._current);
+      showNextStepHelper = (function(_this) {
+        return function(e) {
+          return _this.showStep(step.next);
+        };
+      })(this);
+      promise = this._makePromise(step.onNext != null ? step.onNext(this) : void 0);
+      return this._callOnPromiseDone(promise, showNextStepHelper);
+    };
+
+    Tour.prototype._showPrevStep = function() {
+      var promise, showPrevStepHelper, step;
+      step = this.getStep(this._current);
+      showPrevStepHelper = (function(_this) {
+        return function(e) {
+          return _this.showStep(step.prev);
+        };
+      })(this);
+      promise = this._makePromise(step.onPrev != null ? step.onPrev(this) : void 0);
+      return this._callOnPromiseDone(promise, showPrevStepHelper);
+    };
+
+    Tour.prototype._debug = function(text) {
+      if (this._options.debug) {
+        return window.console.log("Bootstrap Tour '" + this._options.name + "' | " + text);
+      }
+    };
+
+    Tour.prototype._isRedirect = function(path, currentPath) {
+      return (path != null) && path !== "" && (({}.toString.call(path) === "[object RegExp]" && !path.test(currentPath)) || ({}.toString.call(path) === "[object String]" && path.replace(/\?.*$/, "").replace(/\/?$/, "") !== currentPath.replace(/\/?$/, "")));
+    };
+
+    Tour.prototype._redirect = function(step, path) {
+      if ($.isFunction(step.redirect)) {
+        return step.redirect.call(this, path);
+      } else if (step.redirect === true) {
+        this._debug("Redirect to " + path);
+        return document.location.href = path;
+      }
+    };
+
+    Tour.prototype._isOrphan = function(step) {
+      return (step.element == null) || !$(step.element).length || $(step.element).is(":hidden") && ($(step.element)[0].namespaceURI !== "http://www.w3.org/2000/svg");
+    };
+
+    Tour.prototype._isLast = function() {
+      return this._current < this._options.steps.length - 1;
+    };
+
+    Tour.prototype._showPopover = function(step, i) {
+      var $element, $navigation, $template, $tip, isOrphan, options;
+      $(".tour-" + this._options.name).remove();
+      options = $.extend({}, this._options);
+      $template = $.isFunction(step.template) ? $(step.template(i, step)) : $(step.template);
+      $navigation = $template.find(".popover-navigation");
+      isOrphan = this._isOrphan(step);
+      if (isOrphan) {
+        step.element = "body";
+        step.placement = "top";
+        $template = $template.addClass("orphan");
+      }
+      $element = $(step.element);
+      $template.addClass("tour-" + this._options.name + " tour-" + this._options.name + "-" + i);
+      $element.addClass("tour-" + this._options.name + "-element tour-" + this._options.name + "-" + i + "-element");
+      if (step.options) {
+        $.extend(options, step.options);
+      }
+      if (step.reflex && !isOrphan) {
+        $element.css("cursor", "pointer").on("click.tour-" + this._options.name, (function(_this) {
+          return function() {
+            if (_this._isLast()) {
+              return _this.next();
+            } else {
+              return _this.end();
+            }
+          };
+        })(this));
+      }
+      if (step.prev < 0) {
+        $navigation.find("[data-role='prev']").addClass("disabled");
+      }
+      if (step.next < 0) {
+        $navigation.find("[data-role='next']").addClass("disabled");
+      }
+      if (!step.duration) {
+        $navigation.find("[data-role='pause-resume']").remove();
+      }
+      step.template = $template.clone().wrap("<div>").parent().html();
+      $element.popover({
+        placement: step.placement,
+        trigger: "manual",
+        title: step.title,
+        content: step.content,
+        html: true,
+        animation: step.animation,
+        container: step.container,
+        template: step.template,
+        selector: step.element
+      }).popover("show");
+      $tip = $element.data("bs.popover") ? $element.data("bs.popover").tip() : $element.data("popover").tip();
+      $tip.attr("id", step.id);
+      this._reposition($tip, step);
+      if (isOrphan) {
+        return this._center($tip);
+      }
+    };
+
+    Tour.prototype._reposition = function($tip, step) {
+      var offsetBottom, offsetHeight, offsetRight, offsetWidth, originalLeft, originalTop, tipOffset;
+      offsetWidth = $tip[0].offsetWidth;
+      offsetHeight = $tip[0].offsetHeight;
+      tipOffset = $tip.offset();
+      originalLeft = tipOffset.left;
+      originalTop = tipOffset.top;
+      offsetBottom = $(document).outerHeight() - tipOffset.top - $tip.outerHeight();
+      if (offsetBottom < 0) {
+        tipOffset.top = tipOffset.top + offsetBottom;
+      }
+      offsetRight = $("html").outerWidth() - tipOffset.left - $tip.outerWidth();
+      if (offsetRight < 0) {
+        tipOffset.left = tipOffset.left + offsetRight;
+      }
+      if (tipOffset.top < 0) {
+        tipOffset.top = 0;
+      }
+      if (tipOffset.left < 0) {
+        tipOffset.left = 0;
+      }
+      $tip.offset(tipOffset);
+      if (step.placement === "bottom" || step.placement === "top") {
+        if (originalLeft !== tipOffset.left) {
+          return this._replaceArrow($tip, (tipOffset.left - originalLeft) * 2, offsetWidth, "left");
+        }
+      } else {
+        if (originalTop !== tipOffset.top) {
+          return this._replaceArrow($tip, (tipOffset.top - originalTop) * 2, offsetHeight, "top");
+        }
+      }
+    };
+
+    Tour.prototype._center = function($tip) {
+      return $tip.css("top", $(window).outerHeight() / 2 - $tip.outerHeight() / 2);
+    };
+
+    Tour.prototype._replaceArrow = function($tip, delta, dimension, position) {
+      return $tip.find(".arrow").css(position, delta ? 50 * (1 - delta / dimension) + "%" : "");
+    };
+
+    Tour.prototype._scrollIntoView = function(element, callback) {
+      var $element, $window, counter, offsetTop, scrollTop, windowHeight;
+      $element = $(element);
+      if (!$element.length) {
+        return callback();
+      }
+      $window = $(window);
+      offsetTop = $element.offset().top;
+      windowHeight = $window.height();
+      scrollTop = Math.max(0, offsetTop - (windowHeight / 2));
+      this._debug("Scroll into view. ScrollTop: " + scrollTop + ". Element offset: " + offsetTop + ". Window height: " + windowHeight + ".");
+      counter = 0;
+      return $("body,html").stop(true, true).animate({
+        scrollTop: Math.ceil(scrollTop)
+      }, (function(_this) {
+        return function() {
+          if (++counter === 2) {
+            callback();
+            return _this._debug("Scroll into view. Animation end element offset: " + ($element.offset().top) + ". Window height: " + ($window.height()) + ".");
+          }
+        };
+      })(this));
+    };
+
+    Tour.prototype._onResize = function(callback, timeout) {
+      return $(window).on("resize.tour-" + this._options.name, function() {
+        clearTimeout(timeout);
+        return timeout = setTimeout(callback, 100);
+      });
+    };
+
+    Tour.prototype._initMouseNavigation = function() {
+      var _this;
+      _this = this;
+      return $(document).off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='prev']:not(.disabled)").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='next']:not(.disabled)").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='end']").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='pause-resume']").on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='next']:not(.disabled)", (function(_this) {
+        return function(e) {
+          e.preventDefault();
+          return _this.next();
+        };
+      })(this)).on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='prev']:not(.disabled)", (function(_this) {
+        return function(e) {
+          e.preventDefault();
+          return _this.prev();
+        };
+      })(this)).on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='end']", (function(_this) {
+        return function(e) {
+          e.preventDefault();
+          return _this.end();
+        };
+      })(this)).on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='pause-resume']", function(e) {
+        var $this;
+        e.preventDefault();
+        $this = $(this);
+        $this.text(_this._paused ? $this.data("pause-text") : $this.data("resume-text"));
+        if (_this._paused) {
+          return _this.resume();
+        } else {
+          return _this.pause();
+        }
+      });
+    };
+
+    Tour.prototype._initKeyboardNavigation = function() {
+      if (!this._options.keyboard) {
+        return;
+      }
+      return $(document).on("keyup.tour-" + this._options.name, (function(_this) {
+        return function(e) {
+          if (!e.which) {
+            return;
+          }
+          switch (e.which) {
+            case 39:
+              e.preventDefault();
+              if (_this._isLast()) {
+                return _this.next();
+              } else {
+                return _this.end();
+              }
+              break;
+            case 37:
+              e.preventDefault();
+              if (_this._current > 0) {
+                return _this.prev();
+              }
+              break;
+            case 27:
+              e.preventDefault();
+              return _this.end();
+          }
+        };
+      })(this));
+    };
+
+    Tour.prototype._makePromise = function(result) {
+      if (result && $.isFunction(result.then)) {
+        return result;
+      } else {
+        return null;
+      }
+    };
+
+    Tour.prototype._callOnPromiseDone = function(promise, cb, arg) {
+      if (promise) {
+        return promise.then((function(_this) {
+          return function(e) {
+            return cb.call(_this, arg);
+          };
+        })(this));
+      } else {
+        return cb.call(this, arg);
+      }
+    };
+
+    Tour.prototype._showBackdrop = function(element) {
+      if (this.backdrop.backgroundShown) {
+        return;
+      }
+      this.backdrop = $("<div/>", {
+        "class": "tour-backdrop"
+      });
+      this.backdrop.backgroundShown = true;
+      return $("body").append(this.backdrop);
+    };
+
+    Tour.prototype._hideBackdrop = function() {
+      this._hideOverlayElement();
+      return this._hideBackground();
+    };
+
+    Tour.prototype._hideBackground = function() {
+      if (this.backdrop) {
+        this.backdrop.remove();
+        this.backdrop.overlay = null;
+        return this.backdrop.backgroundShown = false;
+      }
+    };
+
+    Tour.prototype._showOverlayElement = function(element) {
+      var $background, $element, offset;
+      $element = $(element);
+      if (!$element || $element.length === 0 || this.backdrop.overlayElementShown) {
+        return;
+      }
+      this.backdrop.overlayElementShown = true;
+      $background = $("<div/>");
+      offset = $element.offset();
+      offset.top = offset.top;
+      offset.left = offset.left;
+      $background.width($element.innerWidth()).height($element.innerHeight()).addClass("tour-step-background").offset(offset);
+      $element.addClass("tour-step-backdrop");
+      $("body").append($background);
+      this.backdrop.$element = $element;
+      return this.backdrop.$background = $background;
+    };
+
+    Tour.prototype._hideOverlayElement = function() {
+      if (!this.backdrop.overlayElementShown) {
+        return;
+      }
+      this.backdrop.$element.removeClass("tour-step-backdrop");
+      this.backdrop.$background.remove();
+      this.backdrop.$element = null;
+      this.backdrop.$background = null;
+      return this.backdrop.overlayElementShown = false;
+    };
+
+    Tour.prototype._clearTimer = function() {
+      window.clearTimeout(this._timer);
+      this._timer = null;
+      return this._duration = null;
+    };
+
+    return Tour;
+
+  })();
+  return window.Tour = Tour;
+})(jQuery, window);
