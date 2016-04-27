@@ -14,9 +14,9 @@
 
         function activate() {
           $rootScope.user = $rootScope.user || {
-            name:     'John',
-            job:      'ng-developer',
-            picture:  'app/img/user/02.jpg'
+            name:     '李明',
+            job:      '老板',
+            picture:  'app/img/dummy.png'
           };
 
           // Hides/show user avatar on sidebar

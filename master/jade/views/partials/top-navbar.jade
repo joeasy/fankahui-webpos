@@ -26,11 +26,6 @@ nav.navbar.topnavbar(role='navigation')
           a(href='', ng-click="toggleUserBlock()")
             em.icon-user
         // END User avatar toggle
-        // START lock screen
-        li
-          a(ui-sref="page.lock", title="Lock screen")
-            em.icon-lock
-        // END lock screen
         li
           a(ui-sref="page.login", title="登出")
             em.icon-logout
@@ -38,10 +33,6 @@ nav.navbar.topnavbar(role='navigation')
 
       // START Right Navbar
       ul.nav.navbar-nav.navbar-right
-        // Search icon
-        li
-          a(href='', search-open)
-            em.icon-magnifier
         // Fullscreen (only desktops)
         li.visible-lg
           a(href='', toggle-fullscreen)
@@ -50,58 +41,42 @@ nav.navbar.topnavbar(role='navigation')
         li.dropdown.dropdown-list(uib-dropdown="")
           a(uib-dropdown-toggle="")
             em.icon-bell
-            .label.label-danger 11
+            //- .label.label-danger 11
           // START Dropdown menu
           ul.dropdown-menu(class="animated flipInX")
             li
               // START list group
               .list-group
-                // list item
-                a.list-group-item(href='')
+                // empty item
+                .list-group-item(href='')
                   .media-box
                     .pull-left
-                      em.fa.fa-twitter.fa-2x.text-info
+                      em.fa.fa-inbox.fa-2x
                     .media-box-body.clearfix
-                        p.m0 New followers
-                        p.m0.text-muted: small 1 new follower
-                // list item
-                a.list-group-item(href='')
-                  .media-box
-                    .pull-left
-                      em.fa.fa-envelope.fa-2x.text-warning
-                    .media-box-body.clearfix
-                        p.m0 New e-mails
-                        p.m0.text-muted: small You have 10 new emails
-                // list item
-                a.list-group-item(href='')
-                  .media-box
-                    .pull-left
-                      em.fa.fa-tasks.fa-2x.text-success
-                    .media-box-body.clearfix
-                        p.m0 Pending Tasks
-                        p.m0.text-muted: small 11 pending task
-
-                // last list item 
-                a.list-group-item(href='')
-                  small(translate="topbar.notification.MORE") More notifications
-                  span.label.label-danger.pull-right 14
+                      p.m0 目前没有任何消息
+                    
+                //- // list item
+                //- a.list-group-item(href='')
+                //-   .media-box
+                //-     .pull-left
+                //-       em.fa.fa-twitter.fa-2x.text-info
+                //-     .media-box-body.clearfix
+                //-         p.m0 New followers
+                //-         p.m0.text-muted: small 1 new follower
+                //-
+                //- // last list item
+                //- a.list-group-item(href='')
+                //-   small(translate="topbar.notification.MORE") More notifications
+                //-   span.label.label-danger.pull-right 14
               // END list group
           // END Dropdown menu
         // END Alert menu
         // START Offsidebar button
-        li
-          a(href='', ng-click="app.offsidebarOpen = !app.offsidebarOpen")
-            em.icon-notebook
+        //- li
+        //-   a(href='', ng-click="app.offsidebarOpen = !app.offsidebarOpen")
+        //-     em.icon-notebook
         // END Offsidebar menu
       // END Right Navbar
     // END Nav wrapper
     
-    // START Search form
-    form.navbar-form(role='search', action="search.html")
-      .form-group.has-feedback
-        input.form-control(type='text', placeholder="{{ 'topbar.search.PLACEHOLDER' | translate }}")
-        .fa.fa-times.form-control-feedback(search-dismiss)
-      button.hidden.btn.btn-default(type='submit') Submit
-    // END Search form
-
 // END Top Navbar
