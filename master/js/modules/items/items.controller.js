@@ -74,6 +74,7 @@
           qty = inventory.balance;
         }
         Sku.stocks.create({id: sku.id}, {type: 'inventory', qty: qty}).$promise.then(function (data) {
+          vm.tableParams.reload();
           SweetAlert.swal('盘点成功!','你的商品'+sku.item.name+'已经盘点确认。', 'success');
         });
       }
@@ -122,6 +123,9 @@
           var type = $scope.ngDialogData.type;
           var memo = $scope.ngDialogData.memo;
           Stock.create({skuId: sku.id, qty: $scope.stockQty, type: type, memo: memo});
+          if(!sku.inventories[0]) {
+            sku.inventories[0] = {qty: 0, modified: new Date()};
+          }
           sku.inventories[0].qty += $scope.stockQty;
           ngDialog.close();
           toaster.pop('success', '成功',
