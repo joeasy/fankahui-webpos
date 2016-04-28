@@ -36,7 +36,7 @@
               title: 'Dashboard',
               templateUrl: helper.basepath('dashboard.html'),
               controller: 'DashboardController as dash',
-              resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons')
+              resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'ngDialog')
           })
           .state('app.sell', {
               url: '/sell',

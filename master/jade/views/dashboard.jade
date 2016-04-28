@@ -11,7 +11,7 @@ h3
         .col-xs-3.text-center.bg-primary-dark.pv-lg
           em.fa.fa-shopping-cart.fa-2x
         .col-xs-9.pv-lg
-          .h2.mt0 {{dash.statData.amount/100 | currency:'¥':0}}
+          .h2.mt0 {{dash.statData[0].data[0][1] | currency:'¥':0}}
           .text-uppercase 销售收入
   .col-lg-3.col-sm-6
     // START widget
@@ -20,7 +20,7 @@ h3
         .col-xs-3.text-center.bg-purple-dark.pv-lg
           em.fa.fa-tags.fa-2x
         .col-xs-9.pv-lg
-          .h2.mt0 {{dash.statData.qty}}
+          .h2.mt0 {{dash.statData[1].data[0][1]}}
             small 件
           .text-uppercase 销售数量
   .col-lg-3.col-md-6.col-sm-12
@@ -30,7 +30,7 @@ h3
         .col-xs-3.text-center.bg-green-dark.pv-lg
           em.icon-users.fa-2x
         .col-xs-9.pv-lg
-          .h2.mt0 {{dash.statData.deposit/100 | currency:'¥':0}}
+          .h2.mt0 {{dash.statData[2].data[0][1] | currency:'¥':0}}
           .text-uppercase 会员储值
   .col-lg-3.col-md-6.col-sm-12
     // START date widget
@@ -52,162 +52,47 @@ h3
 .row
   // START dashboard main content
   .col-lg-9
-    .row
-      .col-lg-4
-        // START widget
-        .panel.widget
-          .panel-body
-            .clearfix
-              h3.pull-left.text-muted.mt0 300 
-              em.pull-right.text-muted.fa.fa-coffee.fa-2x
-            div.pv-lg(sparkline="",data-type='line', data-height='80', data-width='100%', data-line-width='2', data-line-color="{{colorByName('purple')}}", data-spot-color='#888', data-min-spot-color="{{colorByName('purple')}}", data-max-spot-color="{{colorByName('purple')}}", data-fill-color='', data-highlight-line-color='#fff', data-spot-radius='3', values="1,3,4,7,5,9,4,4,7,5,9,6,4", data-resize="true")
-            p: small.text-muted Actual progress
-            uib-progressbar.progress-striped.progress-xs(value='80', type='info') 80%
-                
-        // END widget
-      .col-lg-8
-        .panel.panel-default
-          .panel-heading
-            //- .pull-right.label.label-danger 5
-            .pull-right.label.label-success {{dash.checkins.length}}
-            .panel-title 到店用户
-          
-          // START list group
-          scrollable.list-group(height="180")
-            // START list group item
-            a.list-group-item(ng-repeat="checkin in dash.checkins", ui-sref="app.sell()")
-              .media-box
-                .pull-left
-                  img.media-box-object.img-circle.thumb32(src="{{checkin.member.wxuser.headimgurl || 'app/img/dummy.png'}}", alt="Image")
-                .media-box-body.clearfix
-                  small.pull-right {{checkin.created | moment_from_now }}
-                  strong.media-box-heading.text-primary 
-                    span.circle.circle-success.circle-lg.text-left
-                    | {{checkin.member.name || '走入客户'}}
-                  p.mb-sm: small 积分：{{checkin.member.bonus || 0}} | 储值余额：{{(checkin.member.balance/100 || 0) | currency}}
-            // END list group item
-          // END list group
-
+    
     // START chart
     .row
       .col-lg-12
         // START widget
         #panelChart9.panel.panel-default
           .panel-heading
-            paneltool(tool-collapse, tool-refresh="traditional")
-            .panel-title Inbound visitor statistics
+            paneltool
+            .panel-title 销售统计
           .panel-wrapper(uib-collapse="panelChart9")
             .panel-body
               flot(dataset='dash.splineData', options='dash.splineOptions', height="250px")
         // END widget
     // END chart
-
     
   // END dashboard main content
 
   // START dashboard sidebar
   aside.col-lg-3
     
-    // START loader widget
-    .panel.panel-default
-      .panel-body
-        a.text-muted.pull-right(href="#"): em.fa.fa-arrow-right
-        .text-info Average Monthly Uploads
-        canvas.center-block(classyloader="", data-percentage="70", data-speed="20", data-font-size="40px", data-diameter="70", data-line-color="{{colorByName('info')}}", data-remaining-line-color="rgba(200,200,200,0.4)", data-line-width="10", data-rounded-line="true")
-        .text-center(sparkline="", data-bar-color="{{colorByName('info')}}", data-height="30", data-bar-width="5", data-bar-spacing="2", values="5,4,8,7,8,5,4,6,5,5,9,4,6,3,4,7,5,4,7")
-      .panel-footer
-        p.text-muted
-          em.fa.fa-upload.fa-fw
-          span This Month
-          span.text-dark 1000 Gb
-    // END loader widget
-
-    // START messages and activity
     .panel.panel-default
       .panel-heading
-        .panel-title Latest activities
+        //- .pull-right.label.label-danger 5
+        .pull-right.label.label-success {{dash.checkins.length}}
+        .panel-title 到店用户
+      
       // START list group
-      .list-group
+      scrollable.list-group(height="280")
         // START list group item
-        .list-group-item
+        a.list-group-item(ng-repeat="checkin in dash.checkins", ui-sref="dash.sell(checkin.member)")
           .media-box
             .pull-left
-              span.fa-stack
-                em.fa.fa-circle.fa-stack-2x.text-purple
-                em.fa.fa-cloud-upload.fa-stack-1x.fa-inverse.text-white
+              img.media-box-object.img-circle.thumb32(src="{{checkin.member.wxuser.headimgurl || 'app/img/dummy.png'}}", alt="Image")
             .media-box-body.clearfix
-              small.text-muted.pull-right.ml 15m
-              .media-box-heading
-                a(href="#").text-purple.m0 NEW FILE
-              p.m0: small
-                a(href="#") Bootstrap.xls
-        // END list group item
-
-        // START list group item
-        .list-group-item
-          .media-box
-            .pull-left
-              span.fa-stack
-                em.fa.fa-circle.fa-stack-2x.text-info
-                em.fa.fa-file-text-o.fa-stack-1x.fa-inverse.text-white
-            .media-box-body.clearfix
-              small.text-muted.pull-right.ml 2h
-              .media-box-heading
-                a(href="#").text-info.m0 NEW DOCUMENT
-              p.m0: small
-                a(href="#") Bootstrap.doc
-        // END list group item
-
-        // START list group item
-        .list-group-item
-          .media-box
-            .pull-left
-              span.fa-stack
-                em.fa.fa-circle.fa-stack-2x.text-danger
-                em.fa.fa-exclamation.fa-stack-1x.fa-inverse.text-white
-            .media-box-body.clearfix
-              small.text-muted.pull-right.ml 5h
-              .media-box-heading
-                a(href="#").text-danger.m0 BROADCAST
-              p.m0
-                a(href="#") Read
-        // END list group item
-
-        // START list group item
-        .list-group-item
-          .media-box
-            .pull-left
-              span.fa-stack
-                em.fa.fa-circle.fa-stack-2x.text-success
-                em.fa.fa-clock-o.fa-stack-1x.fa-inverse.text-white
-            .media-box-body.clearfix
-              small.text-muted.pull-right.ml 15h
-              .media-box-heading
-                a(href="#").text-success.m0 NEW MEETING
-              p.m0
-                small On 
-                  em 10/12/2015 09:00 am
-        // END list group item
-        // START list group item
-        .list-group-item
-          .media-box
-            .pull-left
-              span.fa-stack
-                em.fa.fa-circle.fa-stack-2x.text-warning
-                em.fa.fa-tasks.fa-stack-1x.fa-inverse.text-white
-            .media-box-body.clearfix
-              small.text-muted.pull-right.ml 1w
-              .media-box-heading
-                a(href="#").text-warning.m0 TASKS COMPLETION
-              uib-progressbar.progress-xs.m0(value='22', type='warning') 22%
-
+              small.pull-right {{checkin.created | moment_from_now }}
+              strong.media-box-heading.text-primary 
+                span.circle.circle-success.circle-lg.text-left
+                | {{checkin.member.name || '走入客户'}}
+              p.mb-sm: small 积分：{{checkin.member.bonus || 0}} | 储值余额：{{(checkin.member.balance/100 || 0) | currency}}
         // END list group item
       // END list group
-      // START panel footer
-      .panel-footer.clearfix
-        a(href='#').pull-left
-          small Load more
-      // END panel-footer
-    // END messages and activity
+
   // END dashboard sidebar
 
