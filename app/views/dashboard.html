@@ -12,7 +12,7 @@
                <em class="fa fa-shopping-cart fa-2x"></em>
             </div>
             <div class="col-xs-9 pv-lg">
-               <div class="h2 mt0">{{dash.statData[0].data[0][1] | currency:'¥':0}}</div>
+               <div class="h2 mt0">{{dash.statData[0].data[dash.days-1][1] | currency:'¥':0}}</div>
                <div class="text-uppercase">销售收入</div>
             </div>
          </div>
@@ -26,7 +26,7 @@
                <em class="fa fa-tags fa-2x"></em>
             </div>
             <div class="col-xs-9 pv-lg">
-               <div class="h2 mt0">{{dash.statData[1].data[0][1]}}
+               <div class="h2 mt0">{{dash.statData[1].data[dash.days-1][1]}}
                   <small>件</small>
                </div>
                <div class="text-uppercase">销售数量</div>
@@ -42,7 +42,7 @@
                <em class="icon-users fa-2x"></em>
             </div>
             <div class="col-xs-9 pv-lg">
-               <div class="h2 mt0">{{dash.statData[2].data[0][1] | currency:'¥':0}}</div>
+               <div class="h2 mt0">{{dash.statData[2].data[dash.days-1][1] | currency:'¥':0}}</div>
                <div class="text-uppercase">会员储值</div>
             </div>
          </div>

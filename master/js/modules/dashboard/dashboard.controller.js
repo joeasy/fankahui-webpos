@@ -28,10 +28,11 @@
             {label: "会员储值", color: "#2b957a", data: []}
           ];
           var days = 7;
+          vm.days = days;
           var now = moment();
-          var from = moment().subtract(days, 'days').startOf('day');
+          var from = moment().subtract(days-1, 'days').startOf('day');
           for (var i = 0; i < days; i++) {
-            var d = moment().subtract(i, 'days').date();
+            var d = moment().subtract(days-i-1, 'days').date();
             vm.statData[0].data.push([d, 0]);
             vm.statData[1].data.push([d, 0]);
             vm.statData[2].data.push([d, 0]);
@@ -55,10 +56,11 @@
               status: 'closed', 
               "payment.amount": {$gt: 0},
               modified: {$gte: from, $lte: now}
-            }
+            },
+            sort: {_id: 1}
           }}, function (res) {
             for (var i = 0; i < days; i++) {
-              var m = moment().subtract(i, 'days');
+              var m = moment().subtract(days-i-1, 'days');
               var data = getDataByDate(res, m);
               if(!data) continue;
               var d = m.date();
@@ -73,10 +75,11 @@
               status: 'closed', 
               category: 'deposit',
               modified: {$gte: from, $lte: now}
-            }
+            },
+            sort: {_id: 1}
           }}, function (res) {
             for (var i = 0; i < days; i++) {
-              var m = moment().subtract(i, 'days');
+              var m = moment().subtract(days-i-1, 'days');
               var data = getDataByDate(res, m);
               if(!data) continue;
               var d = m.date();
