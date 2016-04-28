@@ -38,6 +38,7 @@
           created: new Date()
         }
         self.selectedSku = undefined;
+        self.cash = {};
       }
       
       function querySkus (val) {
