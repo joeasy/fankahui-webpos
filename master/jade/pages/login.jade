@@ -24,11 +24,16 @@
           .pull-right
             a.text-muted(ui-sref="page.recover") 忘记密码?
         
-        button.btn.btn-block.btn-primary.mt-lg(type='submit') 登录
+        button.btn.btn-block.btn-primary.mt-lg(type='submit') 
+          em.icon.icon-login.fa-fw.mr-sm
+          | 登录
       
       .alert.alert-danger.text-center(ng-show='login.authMsg') {{login.authMsg}}
       p.pt-lg.text-center 还没有账号？
-      a(ui-sref="page.register").btn.btn-block.btn-default 马上注册
+      //- a(ui-sref="page.register").btn.btn-block.btn-default 马上注册
+      a(ng-click="login.qrcodeService.showRegisterQRCode()").btn.btn-block.btn-default
+        em.fa.fa-qrcode.fa-fw.mr-sm
+        | 扫描二维码注册
   // END panel
   .p-lg.text-center
     span &copy; 

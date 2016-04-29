@@ -10,8 +10,8 @@
         .module('app.pages')
         .controller('LoginFormController', LoginFormController);
 
-    LoginFormController.$inject = ['$state', 'User', '$rootScope'];
-    function LoginFormController($state, User, $rootScope) {
+    LoginFormController.$inject = ['$state', 'User', '$rootScope', 'qrcodeService'];
+    function LoginFormController($state, User, $rootScope, qrcodeService) {
         var vm = this;
 
         activate();
@@ -26,12 +26,13 @@
           };
           // place the message if something goes wrong
           vm.authMsg = '';
+          vm.qrcodeService = qrcodeService;
 
           vm.login = function() {
             vm.authMsg = '';
 
             if(vm.loginForm.$valid) {
-              
+
               User
                 .login(vm.account, function (accessToken) {
                   $rootScope.$broadcast('User.logined');

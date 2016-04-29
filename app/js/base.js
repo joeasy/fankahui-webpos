@@ -894,6 +894,12 @@ module.factory(
           method: "GET"
         },
 
+        // INTERNAL. Use User.wxuser() instead.
+        "prototype$__get__wxuser": {
+          url: urlBase + "/users/:id/wxuser",
+          method: "GET"
+        },
+
         /**
          * @ngdoc method
          * @name lbServices.User#prototype$__get__accessTokens
@@ -1917,6 +1923,42 @@ module.factory(
         R.shop = function() {
           var TargetResource = $injector.get("Shop");
           var action = TargetResource["::get::user::shop"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.User#wxuser
+         * @methodOf lbServices.User
+         *
+         * @description
+         *
+         * Fetches belongsTo relation wxuser.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `refresh` – `{boolean=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Wxuser` object.)
+         * </em>
+         */
+        R.wxuser = function() {
+          var TargetResource = $injector.get("Wxuser");
+          var action = TargetResource["::get::user::wxuser"];
           return action.apply(R, arguments);
         };
 
@@ -7967,72 +8009,6 @@ module.factory(
           method: "POST"
         },
 
-        /**
-         * @ngdoc method
-         * @name lbServices.Member#getOAuthAccessToken
-         * @methodOf lbServices.Member
-         *
-         * @description
-         *
-         * Get Wechat OAuth access token
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `code` – `{string=}` - 
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Member` object.)
-         * </em>
-         */
-        "getOAuthAccessToken": {
-          url: urlBase + "/members/getoauthaccesstoken",
-          method: "GET"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Member#getUserByCode
-         * @methodOf lbServices.Member
-         *
-         * @description
-         *
-         * Get Wechat OAuth user by code
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `code` – `{string=}` - 
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Member` object.)
-         * </em>
-         */
-        "getUserByCode": {
-          url: urlBase + "/members/getuserbycode",
-          method: "GET"
-        },
-
         // INTERNAL. Use Checkin.member() instead.
         "::get::checkin::member": {
           url: urlBase + "/checkins/:id/member",
@@ -12361,6 +12337,177 @@ module.factory(
         "createChangeStream": {
           url: urlBase + "/wxusers/change-stream",
           method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Wxuser#getQRCode
+         * @methodOf lbServices.Wxuser
+         *
+         * @description
+         *
+         * Get Wechat QRCode ticket
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `param` – `{object=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Wxuser` object.)
+         * </em>
+         */
+        "getQRCode": {
+          url: urlBase + "/wxusers/qrcode",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Wxuser#getOAuthAccessToken
+         * @methodOf lbServices.Wxuser
+         *
+         * @description
+         *
+         * Get Wechat OAuth access token
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `code` – `{string=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Wxuser` object.)
+         * </em>
+         */
+        "getOAuthAccessToken": {
+          url: urlBase + "/wxusers/getoauthaccesstoken",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Wxuser#getUserByCode
+         * @methodOf lbServices.Wxuser
+         *
+         * @description
+         *
+         * Get Wechat OAuth user by code
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `code` – `{string=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Wxuser` object.)
+         * </em>
+         */
+        "getUserByCode": {
+          url: urlBase + "/wxusers/getuserbycode",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Wxuser#getJsConfig
+         * @methodOf lbServices.Wxuser
+         *
+         * @description
+         *
+         * Get Wechat JSSDK API config
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `param` – `{object=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Wxuser` object.)
+         * </em>
+         */
+        "getJsConfig": {
+          url: urlBase + "/wxusers/getjsconfig",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Wxuser#getCardExt
+         * @methodOf lbServices.Wxuser
+         *
+         * @description
+         *
+         * Get Wechat JSSDK CARD extension ticket
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `param` – `{object=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Wxuser` object.)
+         * </em>
+         */
+        "getCardExt": {
+          url: urlBase + "/wxusers/getcardext",
+          method: "GET"
+        },
+
+        // INTERNAL. Use User.wxuser() instead.
+        "::get::user::wxuser": {
+          url: urlBase + "/users/:id/wxuser",
+          method: "GET"
         },
 
         // INTERNAL. Use Member.wxuser() instead.

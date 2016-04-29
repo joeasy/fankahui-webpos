@@ -26,7 +26,7 @@ var wxjssdk = {
     param = param || {/*debug: true*/};
     param.url = window.location.href;
     $.ajax({
-      url: apiBaseUrl+"/wxaccesstokens/getjsconfig",
+      url: apiBaseUrl+"/wxusers/getjsconfig",
       data: {
         param: param
       },
@@ -52,7 +52,7 @@ var wxjssdk = {
     }
 
     $.ajax({
-      url: apiBaseUrl+"/wxaccesstokens/getoauthaccesstoken",
+      url: apiBaseUrl+"/wxusers/getoauthaccesstoken",
       data: {
         code: code
       },
@@ -76,7 +76,7 @@ var wxjssdk = {
     }
 
     $.ajax({
-      url: apiBaseUrl+"/wxaccesstokens/getuserbycode",
+      url: apiBaseUrl+"/wxusers/getuserbycode",
       data: {
         code: code
       },
@@ -105,7 +105,7 @@ var wxjssdk = {
         results = regex.exec(url);
     if (!results) return null;
     if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));  
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
 };
 

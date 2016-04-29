@@ -55,56 +55,64 @@
 	//   });
 	// });
 
-	function fetchDeal(dealId) {
-	  if (!dealId) {
-	    return console.log('not found dealId');
-	  }
-	  $.ajax({
-	    url: wxjssdk.apiBaseUrl + "/deals/" + dealId,
-	    // url: wxjssdk.apiBaseUrl+"/deals/findOne",
-	    // data: {
-	    //   filter: {include:['bonuses'], where:{id:dealId}}
-	    // },
-	    crossDomain: true,
-	    success: function (data) {
-	      var created = new Date(data.created);
-	      $('#created').html(created.toLocaleDateString('zh-CN', { hour12: false }) + " " + created.getHours() + ":" + created.getMinutes());
+	var data = {};
 
-	      data.entities.forEach(function (entity, index) {
-	        var dom = '<div class="weui_cell"> \
-	                    <div class="weui_cell_bd weui_cell_primary"> \
-	                      <p>' + entity.sku.item.name + ' ' + entity.sku.model + '</p> \
-	                    </div> \
-	                    <div class="weui_cell_ft"> \
-	                      ¥ ' + (entity.sku.price / 100).toFixed(2) + ' x \
-	                      ' + entity.qty + ' \
-	                    </div> \
-	                   </div>';
-
-	        $('#itemList').append(dom);
-
-	        $('#totalQty').html(data.totalQty);
-	        $('#totalAmount').html('¥ ' + (data.totalAmount / 100).toFixed(2));
-	        $('#discountAmount').html('¥ ' + (0 - (data.discountAmount || 0) / 100).toFixed(2));
-	        $('#bonusVouchAmount').html('¥ ' + (0 - (data.bonusVouchAmount || 0) / 100).toFixed(2));
-	        $('#payment').html('¥ ' + (Math.abs(data.payment.amount) / 100).toFixed(2));
-	        $('#vouchBonus').html(data.vouchBonus);
-	        $('#rewardBonus').html(data.rewardBonus);
-	        $('#memberBonus').html(data.member.bonus);
-	        $('#memberBalance').html('¥ ' + (data.member.balance / 100).toFixed(2));
-	        $('#business_name').html(data.shop.business_name);
-	        $('#branch_name').html(data.shop.branch_name);
-	      });
-	    },
-	    error: function (res) {
-	      console.log(res);
+	function validate() {
+	  var valid = true;
+	  $('input').each(function (index, dom) {
+	    if (valid) valid = dom.validity.valid;
+	    var inputSelector = $('input[name=' + dom.name + ']');
+	    if (!dom.validity.valid || dom.name === 'password2' && dom.value != data.password) {
+	      inputSelector.parent().parent().addClass('weui_cell_warn');
+	    } else {
+	      inputSelector.parent().parent().removeClass('weui_cell_warn');
+	      data[dom.name] = dom.value;
 	    }
 	  });
+	  if (valid) {
+	    valid = data.password === data.password2;
+	  }
+	  delete data.password2;
+	  return valid;
 	}
 
-	$(document).ready(function () {
-	  var dealId = wxjssdk.getParameterByName('dealId');
-	  fetchDeal(dealId);
+	$('#btnSubmit').click(function () {
+	  var errorMsg = null;
+	  var access_token = wxjssdk.getParameterByName('access_token');
+	  if (!access_token) {
+	    errorMsg = '会话无效或已经过去，请重新扫码！';
+	  }
+	  var userId = wxjssdk.getParameterByName('userId');
+	  console.log(userId);
+	  if (!userId) {
+	    errorMsg = '无效的用户ID，请重新扫码！';
+	  }
+	  if (errorMsg) {
+	    $.alert(errorMsg, function () {
+	      // wx.closeWindow();
+	    });
+	  }
+	  if (validate()) {
+
+	    $.ajax({
+	      url: wxjssdk.apiBaseUrl + "/users/" + userId + "?access_token=" + access_token,
+	      method: "PUT",
+	      data: {
+	        password: data.password
+	      },
+	      crossDomain: true,
+	      success: function (data) {
+	        $.alert("您已经成功修复密码", "成功", function () {
+	          // wx.closeWindow();
+	        });
+	      },
+	      error: function (res) {
+	        var text = res.responseText;
+	        var msg = "修改密码失败";
+	        $.alert(msg, "失败");
+	      }
+	    });
+	  }
 	});
 
 /***/ },

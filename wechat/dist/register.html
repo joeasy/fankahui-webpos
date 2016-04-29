@@ -1,0 +1,55 @@
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+      <title>注册商户</title>
+      <link rel="stylesheet" href="http://res.wx.qq.com/open/libs/weui/0.4.1/weui.min.css"/>
+  </head>
+  <body ontouchstart>
+    <div class="weui_panel weui_panel_access">
+      <div class="weui_panel_bd">
+        <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
+          <div class="weui_media_hd">
+            <img id="avatar" class="weui_media_appmsg_thumb" src="" alt="">
+          </div>
+          <div class="weui_media_bd">
+            <h4 id="nickname" class="weui_media_title">微信昵称</h4>
+            <p id="wxuserProfile" class="weui_media_desc">省份／地市</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="weui_cells_title">商户信息</div>
+    <div class="weui_cells weui_cells_form">
+      <div class="weui_cell">
+        <div class="weui_cell_hd"><label class="weui_label">商户名</label></div>
+        <div class="weui_cell_bd weui_cell_primary">
+          <input name="merchantname" class="weui_input" type="text" placeholder="请输入商户的名称" required="">
+        </div>
+      </div>
+    </div>
+    <div class="weui_cells_title">老板信息</div>
+    <div class="weui_cells weui_cells_form">
+      <div class="weui_cell">
+        <div class="weui_cell_hd"><label class="weui_label">手机</label></div>
+        <div class="weui_cell_bd weui_cell_primary">
+          <input name="phone" class="weui_input" type="tel" placeholder="请输入手机号" maxlength="11" pattern=".{11}" required="">
+        </div>
+      </div>
+      <div class="weui_cell">
+        <div class="weui_cell_hd"><label class="weui_label">密码</label></div>
+        <div class="weui_cell_bd weui_cell_primary">
+          <input name="password" class="weui_input" type="text" placeholder="请输入6位密码" maxlength="6" pattern=".{6}" required="">
+        </div>
+      </div>
+    </div>
+    <div class="weui_opr_area">
+      <p class="weui_btn_area">
+        <a id="btnSubmit" href="javascript:;" class="weui_btn weui_btn_primary">注册</a>
+      </p>
+    </div>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+    <script src="http://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+    <script src="./js/page/register.bundle.js"></script>
+  </body>
+</html>

@@ -10,7 +10,9 @@ var wxjssdk = require('../wxjssdk');
 // });
 
 function fetchDeal(dealId) {
-  
+  if (!dealId) {
+    return console.log('not found dealId');
+  }
   $.ajax({
     url: wxjssdk.apiBaseUrl+"/deals/"+dealId,
     // url: wxjssdk.apiBaseUrl+"/deals/findOne",
@@ -19,8 +21,6 @@ function fetchDeal(dealId) {
     // },
     crossDomain: true,
     success: function (data) {
-      console.log(data);
-
       var created = new Date(data.created);
       $('#created').html(created.toLocaleDateString('zh-CN', {hour12: false})+" "+created.getHours()+":"+created.getMinutes());
 
@@ -34,9 +34,9 @@ function fetchDeal(dealId) {
                       '+entity.qty+' \
                     </div> \
                    </div>';
-        
+
         $('#itemList').append(dom);
-        
+
         $('#totalQty').html(data.totalQty);
         $('#totalAmount').html('¥ '+(data.totalAmount/100).toFixed(2));
         $('#discountAmount').html('¥ '+(0-(data.discountAmount||0)/100).toFixed(2));
@@ -54,8 +54,10 @@ function fetchDeal(dealId) {
       console.log(res);
     }
   });
-  
+
 }
 
-var dealId = wxjssdk.getParameterByName('dealId');
-fetchDeal(dealId);
+$(document).ready(function () {
+  var dealId = wxjssdk.getParameterByName('dealId');
+  fetchDeal(dealId);
+});

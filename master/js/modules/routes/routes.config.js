@@ -120,7 +120,7 @@
           .state('page', {
               url: '/page',
               templateUrl: 'app/pages/page.html',
-              resolve: helper.resolveFor('modernizr', 'icons'),
+              resolve: helper.resolveFor('modernizr', 'icons', 'ngDialog'),
               controller: ['$rootScope', function($rootScope) {
                   $rootScope.app.layout.isBoxed = false;
               }]
@@ -166,4 +166,3 @@
     } // routesConfig
 
 })();
-

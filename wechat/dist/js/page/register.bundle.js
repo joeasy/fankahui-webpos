@@ -46,65 +46,68 @@
 
 	var wxjssdk = __webpack_require__(1);
 
-	// wxjssdk.config({jsApiList: ['closeWindow']});
-	// wx.ready(function () {
-	//   wxjssdk.getUser(function (user) {
-	//     $('#nickname').html(user.nickname);
-	//     $('#avatar').attr("src", user.headimgurl);
-	//     $('#wxuserProfile').html(user.province+" "+user.city);
-	//   });
-	// });
+	var data = {};
 
-	function fetchDeal(dealId) {
-	  if (!dealId) {
-	    return console.log('not found dealId');
-	  }
-	  $.ajax({
-	    url: wxjssdk.apiBaseUrl + "/deals/" + dealId,
-	    // url: wxjssdk.apiBaseUrl+"/deals/findOne",
-	    // data: {
-	    //   filter: {include:['bonuses'], where:{id:dealId}}
-	    // },
-	    crossDomain: true,
-	    success: function (data) {
-	      var created = new Date(data.created);
-	      $('#created').html(created.toLocaleDateString('zh-CN', { hour12: false }) + " " + created.getHours() + ":" + created.getMinutes());
+	wxjssdk.config({ jsApiList: ['closeWindow'] });
+	wx.ready(function () {
+	  wxjssdk.getUser(function (user) {
+	    data.name = user.nickname;
+	    data.headimgurl = user.headimgurl;
+	    data.wxuserId = user.id;
+	    $('#nickname').html(user.nickname);
+	    $('#avatar').attr("src", user.headimgurl);
+	    $('#wxuserProfile').html(user.province + " " + user.city);
+	  });
+	});
 
-	      data.entities.forEach(function (entity, index) {
-	        var dom = '<div class="weui_cell"> \
-	                    <div class="weui_cell_bd weui_cell_primary"> \
-	                      <p>' + entity.sku.item.name + ' ' + entity.sku.model + '</p> \
-	                    </div> \
-	                    <div class="weui_cell_ft"> \
-	                      ¥ ' + (entity.sku.price / 100).toFixed(2) + ' x \
-	                      ' + entity.qty + ' \
-	                    </div> \
-	                   </div>';
-
-	        $('#itemList').append(dom);
-
-	        $('#totalQty').html(data.totalQty);
-	        $('#totalAmount').html('¥ ' + (data.totalAmount / 100).toFixed(2));
-	        $('#discountAmount').html('¥ ' + (0 - (data.discountAmount || 0) / 100).toFixed(2));
-	        $('#bonusVouchAmount').html('¥ ' + (0 - (data.bonusVouchAmount || 0) / 100).toFixed(2));
-	        $('#payment').html('¥ ' + (Math.abs(data.payment.amount) / 100).toFixed(2));
-	        $('#vouchBonus').html(data.vouchBonus);
-	        $('#rewardBonus').html(data.rewardBonus);
-	        $('#memberBonus').html(data.member.bonus);
-	        $('#memberBalance').html('¥ ' + (data.member.balance / 100).toFixed(2));
-	        $('#business_name').html(data.shop.business_name);
-	        $('#branch_name').html(data.shop.branch_name);
-	      });
-	    },
-	    error: function (res) {
-	      console.log(res);
+	function validate() {
+	  var valid = true;
+	  $('input').each(function (index, dom) {
+	    if (valid) valid = dom.validity.valid;
+	    var inputSelector = $('input[name=' + dom.name + ']');
+	    if (!dom.validity.valid) {
+	      inputSelector.parent().parent().addClass('weui_cell_warn');
+	    } else {
+	      inputSelector.parent().parent().removeClass('weui_cell_warn');
+	      data[dom.name] = dom.value;
 	    }
 	  });
+	  return valid;
 	}
 
-	$(document).ready(function () {
-	  var dealId = wxjssdk.getParameterByName('dealId');
-	  fetchDeal(dealId);
+	$('#btnSubmit').click(function () {
+	  if (validate()) {
+	    data.username = data.phone;
+	    data.email = data.phone + '@fankahui.com';
+	    data.realm = 'merchant';
+	    data.role = 'owner';
+	    console.log(data);
+
+	    $.showLoading('正在注册...');
+	    $.ajax({
+	      url: wxjssdk.apiBaseUrl + "/users",
+	      method: "POST",
+	      data: data,
+	      crossDomain: true,
+	      success: function (data) {
+	        $.hideLoading();
+	        $.alert("您已经成功注册", "成功", function () {
+	          wx.closeWindow();
+	        });
+	      },
+	      error: function (res) {
+	        $.hideLoading();
+
+	        var msg = "注册失败";
+	        var text = res.responseText;
+	        console.log(text.match(/wxuserId is not unique/));
+	        if (text.match(/wxuserId is not unique/) > 0) {
+	          msg = '微信用户已经注册过商户';
+	        }
+	        $.toast(msg, "cancel");
+	      }
+	    });
+	  }
 	});
 
 /***/ },
