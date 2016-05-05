@@ -19,7 +19,7 @@ function getUrlVars()
     return vars;
 }
 
-var apiBaseUrl = "http://wechat.fankahui.com:3000/api";
+var apiBaseUrl = "http://wechat.fankahui.com/api";
 var wxjssdk = {
   apiBaseUrl: apiBaseUrl,
   config: function (param, success, error) {

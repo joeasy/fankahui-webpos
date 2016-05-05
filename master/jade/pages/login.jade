@@ -22,7 +22,7 @@
               span.fa.fa-check
               |  记住我
           .pull-right
-            a.text-muted(ui-sref="page.recover") 忘记密码?
+            a.text-muted(ng-click="login.qrcodeService.showQRCodeWithScene(3)") 忘记密码?
         
         button.btn.btn-block.btn-primary.mt-lg(type='submit') 
           em.icon.icon-login.fa-fw.mr-sm
@@ -31,7 +31,7 @@
       .alert.alert-danger.text-center(ng-show='login.authMsg') {{login.authMsg}}
       p.pt-lg.text-center 还没有账号？
       //- a(ui-sref="page.register").btn.btn-block.btn-default 马上注册
-      a(ng-click="login.qrcodeService.showRegisterQRCode()").btn.btn-block.btn-default
+      a(ng-click="login.qrcodeService.showQRCodeWithScene(1)").btn.btn-block.btn-default
         em.fa.fa-qrcode.fa-fw.mr-sm
         | 扫描二维码注册
   // END panel

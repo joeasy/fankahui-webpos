@@ -47,13 +47,13 @@
     'use strict';
 
     angular
-        .module('app.charts', []);
+        .module('app.colors', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.colors', []);
+        .module('app.charts', []);
 })();
 (function() {
     'use strict';
@@ -122,13 +122,13 @@
     'use strict';
 
     angular
-        .module('app.locale', []);
+        .module('app.members', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.members', []);
+        .module('app.locale', []);
 })();
 (function() {
     'use strict';
@@ -158,14 +158,6 @@
     'use strict';
 
     angular
-        .module('app.routes', [
-            'app.lazyload'
-        ]);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.preloader', []);
 })();
 
@@ -174,13 +166,21 @@
     'use strict';
 
     angular
-        .module('app.sales', []);
+        .module('app.routes', [
+            'app.lazyload'
+        ]);
 })();
 (function() {
     'use strict';
 
     angular
         .module('app.settings', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.sales', []);
 })();
 (function() {
     'use strict';
@@ -198,6 +198,12 @@
     'use strict';
 
     angular
+        .module('app.translate', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.utils', [
           'app.colors'
         ]);
@@ -207,8 +213,52 @@
     'use strict';
 
     angular
-        .module('app.translate', []);
+        .module('app.colors')
+        .constant('APP_COLORS', {
+          'primary':                '#5d9cec',
+          'success':                '#27c24c',
+          'info':                   '#23b7e5',
+          'warning':                '#ff902b',
+          'danger':                 '#f05050',
+          'inverse':                '#131e26',
+          'green':                  '#37bc9b',
+          'pink':                   '#f532e5',
+          'purple':                 '#7266ba',
+          'dark':                   '#3a3f51',
+          'yellow':                 '#fad732',
+          'gray-darker':            '#232735',
+          'gray-dark':              '#3a3f51',
+          'gray':                   '#dde6e9',
+          'gray-light':             '#e4eaec',
+          'gray-lighter':           '#edf1f2'
+        })
+        ;
 })();
+/**=========================================================
+ * Module: colors.js
+ * Services to retrieve global colors
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .service('Colors', Colors);
+
+    Colors.$inject = ['APP_COLORS'];
+    function Colors(APP_COLORS) {
+        this.byName = byName;
+
+        ////////////////
+
+        function byName(name) {
+          return (APP_COLORS[name] || '#fff');
+        }
+    }
+
+})();
+
 /**=========================================================
  * Module: chart.js
  * Wrapper directive for chartJS. 
@@ -627,56 +677,6 @@
     'use strict';
 
     angular
-        .module('app.colors')
-        .constant('APP_COLORS', {
-          'primary':                '#5d9cec',
-          'success':                '#27c24c',
-          'info':                   '#23b7e5',
-          'warning':                '#ff902b',
-          'danger':                 '#f05050',
-          'inverse':                '#131e26',
-          'green':                  '#37bc9b',
-          'pink':                   '#f532e5',
-          'purple':                 '#7266ba',
-          'dark':                   '#3a3f51',
-          'yellow':                 '#fad732',
-          'gray-darker':            '#232735',
-          'gray-dark':              '#3a3f51',
-          'gray':                   '#dde6e9',
-          'gray-light':             '#e4eaec',
-          'gray-lighter':           '#edf1f2'
-        })
-        ;
-})();
-/**=========================================================
- * Module: colors.js
- * Services to retrieve global colors
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .service('Colors', Colors);
-
-    Colors.$inject = ['APP_COLORS'];
-    function Colors(APP_COLORS) {
-        this.byName = byName;
-
-        ////////////////
-
-        function byName(name) {
-          return (APP_COLORS[name] || '#fff');
-        }
-    }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
         .module('app.core')
         .config(coreConfig)
         .config(loopbackConfig)
@@ -731,11 +731,12 @@
           'tablet':                 768,
           'mobile':                 480
         })
-        .constant('urlBase', "http://0.0.0.0:3000/api")
-        // .constant('urlBase', "http://api.fankahui.com:3000/api")
+        // .constant('urlBase', "http://0.0.0.0:3000/api")
+        .constant('urlBase', "http://api.fankahui.com:3000/api")
       ;
 
 })();
+
 /**
  * AngularJS default filter with the following expression:
  * "person in people | filter: {name: $select.search, age: $select.search}"
@@ -1262,7 +1263,7 @@
       var urlBase = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=';
 
       this.showQRCode = showQRCode;
-      this.showRegisterQRCode = showRegisterQRCode;
+      this.showQRCodeWithScene = showQRCodeWithScene;
 
       function showQRCode(imageurl) {
         imageurl = imageurl || 'app/img/qrcode-for-gh.jpg';
@@ -1273,12 +1274,13 @@
         });
       }
 
-      function showRegisterQRCode() {
-        Wxuser.getQRCode({param: {sceneId: "1"}}).$promise
+      function showQRCodeWithScene(sceneId) {
+        Wxuser.getQRCode({param: {sceneId: sceneId+''}}).$promise
         .then(function (data) {
           showQRCode(urlBase+data.ticket);
         });
-      }
+      };
+
     }
 
 })();
@@ -2003,61 +2005,6 @@
     'use strict';
 
     angular
-        .module('app.locale')
-        .config(localeConfig)
-        ;
-    localeConfig.$inject = ['tmhDynamicLocaleProvider'];
-    function localeConfig(tmhDynamicLocaleProvider){
-  
-      tmhDynamicLocaleProvider.defaultLocale('zh');
-      tmhDynamicLocaleProvider.localeLocationPattern('vendor/angular-i18n/angular-locale_{{locale}}.js');
-      // tmhDynamicLocaleProvider.useStorage('$cookieStore');
-
-    }
-})();
-/**=========================================================
- * Module: locale.js
- * Demo for locale settings
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.locale')
-        .controller('LocalizationController', LocalizationController);
-
-    LocalizationController.$inject = ['$rootScope', 'tmhDynamicLocale', '$locale'];
-    function LocalizationController($rootScope, tmhDynamicLocale, $locale) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $rootScope.availableLocales = {
-            'en': 'English',
-            'es': 'Spanish',
-            'de': 'German',
-            'fr': 'French',
-            'ar': 'Arabic',
-            'ja': 'Japanese',
-            'ko': 'Korean',
-            'zh': 'Chinese'};
-          
-          $rootScope.model = {selectedLocale: 'zh'};
-          
-          $rootScope.$locale = $locale;
-          
-          $rootScope.changeLocale = tmhDynamicLocale.set;
-
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
       .module('app.members')
       .controller('MembersController', MembersController)
       .controller('MemberController', MemberController)
@@ -2335,6 +2282,61 @@
       }
     }
 })();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.locale')
+        .config(localeConfig)
+        ;
+    localeConfig.$inject = ['tmhDynamicLocaleProvider'];
+    function localeConfig(tmhDynamicLocaleProvider){
+  
+      tmhDynamicLocaleProvider.defaultLocale('zh');
+      tmhDynamicLocaleProvider.localeLocationPattern('vendor/angular-i18n/angular-locale_{{locale}}.js');
+      // tmhDynamicLocaleProvider.useStorage('$cookieStore');
+
+    }
+})();
+/**=========================================================
+ * Module: locale.js
+ * Demo for locale settings
+ =========================================================*/
+(function() {
+    'use strict';
+
+    angular
+        .module('app.locale')
+        .controller('LocalizationController', LocalizationController);
+
+    LocalizationController.$inject = ['$rootScope', 'tmhDynamicLocale', '$locale'];
+    function LocalizationController($rootScope, tmhDynamicLocale, $locale) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $rootScope.availableLocales = {
+            'en': 'English',
+            'es': 'Spanish',
+            'de': 'German',
+            'fr': 'French',
+            'ar': 'Arabic',
+            'ja': 'Japanese',
+            'ko': 'Korean',
+            'zh': 'Chinese'};
+          
+          $rootScope.model = {selectedLocale: 'zh'};
+          
+          $rootScope.$locale = $locale;
+          
+          $rootScope.changeLocale = tmhDynamicLocale.set;
+
+        }
+    }
+})();
+
 (function() {
     'use strict';
 
@@ -3294,6 +3296,99 @@
 
 })();
  
+(function() {
+    'use strict';
+
+    angular
+        .module('app.preloader')
+        .directive('preloader', preloader);
+
+    preloader.$inject = ['$animate', '$timeout', '$q'];
+    function preloader ($animate, $timeout, $q) {
+
+        var directive = {
+            restrict: 'EAC',
+            template: 
+              '<div class="preloader-progress">' +
+                  '<div class="preloader-progress-bar" ' +
+                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
+              '</div>'
+            ,
+            link: link
+        };
+        return directive;
+
+        ///////
+
+        function link(scope, el) {
+
+          scope.loadCounter = 0;
+
+          var counter  = 0,
+              timeout;
+
+          // disables scrollbar
+          angular.element('body').css('overflow', 'hidden');
+          // ensure class is present for styling
+          el.addClass('preloader');
+
+          appReady().then(endCounter);
+
+          timeout = $timeout(startCounter);
+
+          ///////
+
+          function startCounter() {
+
+            var remaining = 100 - counter;
+            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
+
+            scope.loadCounter = parseInt(counter, 10);
+
+            timeout = $timeout(startCounter, 20);
+          }
+
+          function endCounter() {
+
+            $timeout.cancel(timeout);
+
+            scope.loadCounter = 100;
+
+            $timeout(function(){
+              // animate preloader hiding
+              $animate.addClass(el, 'preloader-hidden');
+              // retore scrollbar
+              angular.element('body').css('overflow', '');
+            }, 300);
+          }
+
+          function appReady() {
+            var deferred = $q.defer();
+            var viewsLoaded = 0;
+            // if this doesn't sync with the real app ready
+            // a custom event must be used instead
+            var off = scope.$on('$viewContentLoaded', function () {
+              viewsLoaded ++;
+              // we know there are at least two views to be loaded 
+              // before the app is ready (1-index.html 2-app*.html)
+              if ( viewsLoaded === 2) {
+                // with resolve this fires only once
+                $timeout(function(){
+                  deferred.resolve();
+                }, 3000);
+
+                off();
+              }
+
+            });
+
+            return deferred.promise;
+          }
+
+        } //link
+    }
+
+})();
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -3547,99 +3642,203 @@
 
 })();
 
+(function () {
+  'use strict';
+
+  angular
+      .module('app.settings')
+      .controller('SettingController', SettingController)
+  
+  SettingController.$inject = ['$scope', '$rootScope', 'Merchant', 'Shop', 'Member', 'toaster'];
+  function SettingController($scope, $rootScope, Merchant, Shop, Member, toaster) {
+    var vm = this;
+    vm.industry = {
+      "IT科技": {
+        "互联网/电子商务": "1",
+        "IT软件与服务": "2",
+        "IT硬件与设备": "3",
+        "电子技术": "4",
+        "通信与运营商": "5",
+        "网络游戏": "6"
+      },
+      "金融业": {
+        "银行": "7",
+        "基金|理财|信托": "8",
+        "保险": "9"
+      },
+      "餐饮": {
+        "餐饮": "10"
+      },
+      "酒店旅游": {
+        "酒店": "11",
+        "旅游": "12"
+      },
+      "运输与仓储": {
+        "快递": "13",
+        "物流": "14",
+        "仓储": "15"
+      },
+      "教育": {
+        "培训": "16",
+        "院校": "17"
+      },
+      "政府与公共事业": {
+        "学术科研": "18",
+        "交警": "19",
+        "博物馆": "20",
+        "公共事业|非盈利机构": "21"
+      },
+      "医药护理": {
+        "医药医疗": "22",
+        "护理美容": "23",
+        "保健与卫生": "24"
+      },
+      "交通工具": {
+        "汽车相关": "25",
+        "摩托车相关": "26",
+        "火车相关": "27",
+        "飞机相关": "28"
+      },
+      "房地产": {
+        "建筑": "29",
+        "物业": "30"
+      },
+      "消费品": {
+        "消费品": "31"
+      },
+      "商业服务": {
+        "法律": "32",
+        "会展": "33",
+        "中介服务": "34",
+        "认证": "35",
+        "审计": "36"
+      },
+      "文体娱乐": {
+        "传媒": "37",
+        "体育": "38",
+        "娱乐休闲": "39"
+      },
+      "印刷": {
+        "印刷": "40"
+      },
+      "其它": {
+        "其它": "41"
+      }
+    };
+
+    activete();
+
+    function activete() {
+      vm.wxgh = Merchant.prototype$__get__wxgh({id: $scope.user.merchantId, refresh: true});
+    }
+
+    vm.update = function (isShop) {
+      var model = Merchant;
+      var data = $scope.user.merchant;
+      if(isShop) {
+        data = $scope.user.shop;
+        model = Shop;
+      }
+      model.update({where: {id: data.id}}, data, function success(result, res) {
+        toaster.pop('success', '成功', "设置已经保存");
+      }, function error(res) {
+        toaster.pop('error', '失败', "设置未成功，请重试！")
+      });
+    }
+    
+    vm.addMemberLevel = function () {
+      var levels = $scope.user.merchant.memberLevels || [];
+      var last = levels.length > 0 && levels[levels.length-1] || {upper: -1};
+      levels.push({lower: last.upper+1, upper: last.upper+1000, discount:100, name: 'VIP'});
+      if(!$scope.user.merchant.memberLevels) $scope.user.merchant.memberLevels = levels;
+    }
+    
+    vm.updaeteMemberLevels = function () {
+      $scope.user.merchant.memberLevels.forEach(function (level) {
+        Member.update({
+          where: {merchantId:$scope.user.merchant.id, totalBonus: {gte: level.lower, lte: level.upper}}
+        }, {
+          discount: level.discount, level: level.name
+        }, function sucess(result, res) {
+          toaster.pop('success', '成功', "更新全体会员等级完成");
+        }, function error(res) {
+          toaster.pop('error', '失败', "更新全体会员等级未成功，请重试！")
+        });
+      });
+    }
+            
+    vm.updateWxgh = function () {
+      vm.update();
+      Merchant.updateWxgh({
+        id: vm.wxgh.id,
+        appid: vm.wxgh.appid,
+        appsecret: vm.wxgh.appsecret,
+        industry: $scope.user.merchant.industry
+      }, function (result) {
+        toaster.pop('success', '成功', "微信公众号设置已经保存");
+      }, function (reason) {
+        toaster.pop('error', '失败', "设置未成功，请重试！")
+      });
+    } 
+  }
+})();
 (function() {
     'use strict';
 
     angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
+        .module('app.settings')
+        .run(settingsRun);
 
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
+    settingsRun.$inject = ['$rootScope', '$localStorage'];
 
-        var directive = {
-            restrict: 'EAC',
-            template: 
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
+    function settingsRun($rootScope, $localStorage){
 
-        ///////
+      // Global Settings
+      // ----------------------------------- 
+      $rootScope.app = {
+        name: '泛卡汇WebPOS',
+        description: '在线收银系统',
+        year: ((new Date()).getFullYear()),
+        layout: {
+          isFixed: true,
+          isCollapsed: false,
+          isBoxed: false,
+          isRTL: false,
+          horizontal: false,
+          isFloat: false,
+          asideHover: false,
+          theme: "app/css/theme-e.css"
+        },
+        useFullLayout: false,
+        hiddenFooter: false,
+        offsidebarOpen: false,
+        asideToggled: false,
+        viewAnimation: 'ng-fadeInUp'
+      };
 
-        function link(scope, el) {
+      // Setup the layout mode
+      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
 
-          scope.loadCounter = 0;
+      // Restore layout settings
+      if( angular.isDefined($localStorage.layout) )
+        $rootScope.app.layout = $localStorage.layout;
+      else
+        $localStorage.layout = $rootScope.app.layout;
 
-          var counter  = 0,
-              timeout;
+      $rootScope.$watch('app.layout', function () {
+        $localStorage.layout = $rootScope.app.layout;
+      }, true);
 
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
+      // Close submenu when sidebar change from collapsed to normal
+      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
+        if( newValue === false )
+          $rootScope.$broadcast('closeSidebarMenu');
+      });
 
-          appReady().then(endCounter);
-
-          timeout = $timeout(startCounter);
-
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded 
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 3000);
-
-                off();
-              }
-
-            });
-
-            return deferred.promise;
-          }
-
-        } //link
     }
 
 })();
+
 (function() {
     'use strict';
 
@@ -4039,203 +4238,6 @@
       }
     }
 })();
-(function () {
-  'use strict';
-
-  angular
-      .module('app.settings')
-      .controller('SettingController', SettingController)
-  
-  SettingController.$inject = ['$scope', '$rootScope', 'Merchant', 'Shop', 'Member', 'toaster'];
-  function SettingController($scope, $rootScope, Merchant, Shop, Member, toaster) {
-    var vm = this;
-    vm.industry = {
-      "IT科技": {
-        "互联网/电子商务": "1",
-        "IT软件与服务": "2",
-        "IT硬件与设备": "3",
-        "电子技术": "4",
-        "通信与运营商": "5",
-        "网络游戏": "6"
-      },
-      "金融业": {
-        "银行": "7",
-        "基金|理财|信托": "8",
-        "保险": "9"
-      },
-      "餐饮": {
-        "餐饮": "10"
-      },
-      "酒店旅游": {
-        "酒店": "11",
-        "旅游": "12"
-      },
-      "运输与仓储": {
-        "快递": "13",
-        "物流": "14",
-        "仓储": "15"
-      },
-      "教育": {
-        "培训": "16",
-        "院校": "17"
-      },
-      "政府与公共事业": {
-        "学术科研": "18",
-        "交警": "19",
-        "博物馆": "20",
-        "公共事业|非盈利机构": "21"
-      },
-      "医药护理": {
-        "医药医疗": "22",
-        "护理美容": "23",
-        "保健与卫生": "24"
-      },
-      "交通工具": {
-        "汽车相关": "25",
-        "摩托车相关": "26",
-        "火车相关": "27",
-        "飞机相关": "28"
-      },
-      "房地产": {
-        "建筑": "29",
-        "物业": "30"
-      },
-      "消费品": {
-        "消费品": "31"
-      },
-      "商业服务": {
-        "法律": "32",
-        "会展": "33",
-        "中介服务": "34",
-        "认证": "35",
-        "审计": "36"
-      },
-      "文体娱乐": {
-        "传媒": "37",
-        "体育": "38",
-        "娱乐休闲": "39"
-      },
-      "印刷": {
-        "印刷": "40"
-      },
-      "其它": {
-        "其它": "41"
-      }
-    };
-
-    activete();
-
-    function activete() {
-      vm.wxgh = Merchant.prototype$__get__wxgh({id: $scope.user.merchantId, refresh: true});
-    }
-
-    vm.update = function (isShop) {
-      var model = Merchant;
-      var data = $scope.user.merchant;
-      if(isShop) {
-        data = $scope.user.shop;
-        model = Shop;
-      }
-      model.update({where: {id: data.id}}, data, function success(result, res) {
-        toaster.pop('success', '成功', "设置已经保存");
-      }, function error(res) {
-        toaster.pop('error', '失败', "设置未成功，请重试！")
-      });
-    }
-    
-    vm.addMemberLevel = function () {
-      var levels = $scope.user.merchant.memberLevels || [];
-      var last = levels.length > 0 && levels[levels.length-1] || {upper: -1};
-      levels.push({lower: last.upper+1, upper: last.upper+1000, discount:100, name: 'VIP'});
-      if(!$scope.user.merchant.memberLevels) $scope.user.merchant.memberLevels = levels;
-    }
-    
-    vm.updaeteMemberLevels = function () {
-      $scope.user.merchant.memberLevels.forEach(function (level) {
-        Member.update({
-          where: {merchantId:$scope.user.merchant.id, totalBonus: {gte: level.lower, lte: level.upper}}
-        }, {
-          discount: level.discount, level: level.name
-        }, function sucess(result, res) {
-          toaster.pop('success', '成功', "更新全体会员等级完成");
-        }, function error(res) {
-          toaster.pop('error', '失败', "更新全体会员等级未成功，请重试！")
-        });
-      });
-    }
-            
-    vm.updateWxgh = function () {
-      vm.update();
-      Merchant.updateWxgh({
-        id: vm.wxgh.id,
-        appid: vm.wxgh.appid,
-        appsecret: vm.wxgh.appsecret,
-        industry: $scope.user.merchant.industry
-      }, function (result) {
-        toaster.pop('success', '成功', "微信公众号设置已经保存");
-      }, function (reason) {
-        toaster.pop('error', '失败', "设置未成功，请重试！")
-      });
-    } 
-  }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.settings')
-        .run(settingsRun);
-
-    settingsRun.$inject = ['$rootScope', '$localStorage'];
-
-    function settingsRun($rootScope, $localStorage){
-
-      // Global Settings
-      // ----------------------------------- 
-      $rootScope.app = {
-        name: '泛卡汇WebPOS',
-        description: '在线收银系统',
-        year: ((new Date()).getFullYear()),
-        layout: {
-          isFixed: true,
-          isCollapsed: false,
-          isBoxed: false,
-          isRTL: false,
-          horizontal: false,
-          isFloat: false,
-          asideHover: false,
-          theme: "app/css/theme-e.css"
-        },
-        useFullLayout: false,
-        hiddenFooter: false,
-        offsidebarOpen: false,
-        asideToggled: false,
-        viewAnimation: 'ng-fadeInUp'
-      };
-
-      // Setup the layout mode
-      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
-
-      // Restore layout settings
-      if( angular.isDefined($localStorage.layout) )
-        $rootScope.app.layout = $localStorage.layout;
-      else
-        $localStorage.layout = $rootScope.app.layout;
-
-      $rootScope.$watch('app.layout', function () {
-        $localStorage.layout = $rootScope.app.layout;
-      }, true);
-
-      // Close submenu when sidebar change from collapsed to normal
-      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
-        if( newValue === false )
-          $rootScope.$broadcast('closeSidebarMenu');
-      });
-
-    }
-
-})();
-
 /**=========================================================
  * Module: sidebar-menu.js
  * Handle sidebar collapsible elements
@@ -4655,6 +4657,71 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .config(translateConfig)
+        ;
+    translateConfig.$inject = ['$translateProvider'];
+    function translateConfig($translateProvider){
+
+      $translateProvider.useStaticFilesLoader({
+          prefix : 'app/i18n/',
+          suffix : '.json'
+      });
+
+      $translateProvider.preferredLanguage('zh_CN');
+      $translateProvider.useLocalStorage();
+      $translateProvider.usePostCompiling(true);
+      $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .run(translateRun)
+        ;
+    translateRun.$inject = ['$rootScope', '$translate'];
+    
+    function translateRun($rootScope, $translate){
+
+      // Internationalization
+      // ----------------------
+
+      $rootScope.language = {
+        // Handles language dropdown
+        listIsOpen: false,
+        // list of available languages
+        available: {
+          'zh_CN':    '中文简体',
+          'en':       'English',
+          'es_AR':    'Español'
+        },
+        // display always the current ui language
+        init: function () {
+          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
+          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
+          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
+        },
+        set: function (localeId) {
+          // Set the new idiom
+          $translate.use(localeId);
+          // save a reference for the current language
+          $rootScope.language.selected = $rootScope.language.available[localeId];
+          // finally toggle dropdown
+          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
+        }
+      };
+
+      $rootScope.language.init();
+
+    }
+})();
 /**=========================================================
  * Module: animate-enabled.js
  * Enable or disables ngAnimate for element with directive
@@ -5133,71 +5200,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .config(translateConfig)
-        ;
-    translateConfig.$inject = ['$translateProvider'];
-    function translateConfig($translateProvider){
-
-      $translateProvider.useStaticFilesLoader({
-          prefix : 'app/i18n/',
-          suffix : '.json'
-      });
-
-      $translateProvider.preferredLanguage('zh_CN');
-      $translateProvider.useLocalStorage();
-      $translateProvider.usePostCompiling(true);
-      $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .run(translateRun)
-        ;
-    translateRun.$inject = ['$rootScope', '$translate'];
-    
-    function translateRun($rootScope, $translate){
-
-      // Internationalization
-      // ----------------------
-
-      $rootScope.language = {
-        // Handles language dropdown
-        listIsOpen: false,
-        // list of available languages
-        available: {
-          'zh_CN':    '中文简体',
-          'en':       'English',
-          'es_AR':    'Español'
-        },
-        // display always the current ui language
-        init: function () {
-          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
-          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
-          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
-        },
-        set: function (localeId) {
-          // Set the new idiom
-          $translate.use(localeId);
-          // save a reference for the current language
-          $rootScope.language.selected = $rootScope.language.available[localeId];
-          // finally toggle dropdown
-          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
-        }
-      };
-
-      $rootScope.language.init();
-
-    }
-})();
 (function() {
     'use strict';
 

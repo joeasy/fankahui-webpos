@@ -25,7 +25,7 @@
                      <input type="checkbox" value="" name="account_remember" ng-model="login.account.remember" />
                      <span class="fa fa-check"></span>记住我</label>
                </div>
-               <div class="pull-right"><a ui-sref="page.recover" class="text-muted">忘记密码?</a>
+               <div class="pull-right"><a ng-click="login.qrcodeService.showQRCodeWithScene(3)" class="text-muted">忘记密码?</a>
                </div>
             </div>
             <button type="submit" class="btn btn-block btn-primary mt-lg">
@@ -33,7 +33,7 @@
          </form>
          <div ng-show="login.authMsg" class="alert alert-danger text-center">{{login.authMsg}}</div>
          <p class="pt-lg text-center">还没有账号？</p>
-         <a ng-click="login.qrcodeService.showRegisterQRCode()" class="btn btn-block btn-default">
+         <a ng-click="login.qrcodeService.showQRCodeWithScene(1)" class="btn btn-block btn-default">
             <em class="fa fa-qrcode fa-fw mr-sm"></em>扫描二维码注册</a>
       </div>
    </div>

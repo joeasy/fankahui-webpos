@@ -11,7 +11,7 @@
       var urlBase = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=';
 
       this.showQRCode = showQRCode;
-      this.showRegisterQRCode = showRegisterQRCode;
+      this.showQRCodeWithScene = showQRCodeWithScene;
 
       function showQRCode(imageurl) {
         imageurl = imageurl || 'app/img/qrcode-for-gh.jpg';
@@ -22,12 +22,13 @@
         });
       }
 
-      function showRegisterQRCode() {
-        Wxuser.getQRCode({param: {sceneId: "1"}}).$promise
+      function showQRCodeWithScene(sceneId) {
+        Wxuser.getQRCode({param: {sceneId: sceneId+''}}).$promise
         .then(function (data) {
           showQRCode(urlBase+data.ticket);
         });
-      }
+      };
+
     }
 
 })();

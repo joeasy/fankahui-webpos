@@ -35,7 +35,6 @@ $('#btnSubmit').click(function () {
     data.email = data.phone+'@fankahui.com';
     data.realm = 'merchant';
     data.role = 'owner';
-    console.log(data);
 
     $.showLoading('正在注册...');
     $.ajax({
@@ -52,12 +51,21 @@ $('#btnSubmit').click(function () {
       error: function (res) {
         $.hideLoading();
 
-        var msg = "注册失败";
-        var text = res.responseText;
-        console.log(text.match(/wxuserId is not unique/));
-        if (text.match(/wxuserId is not unique/) > 0) {
-          msg = '微信用户已经注册过商户';
+        var errorMsg = {
+          'wxuserId is not unique': '微信用户已经注册过商户',
+          'User already exists': '手机号已经被其他用户注册过',
+          'Merchant name exist': '商户名已经被占用',
+          'Merchant owner without wxuserId': '缺少商户老板微信资料'
         }
+        var msg = "";
+        var error = res.responseJSON.error;
+        for (var key in errorMsg) {
+          if(new RegExp(key, 'i').test(error.message)) {
+            msg = errorMsg[key];
+            break;
+          }
+        }
+        if(msg === "") msg = error.message;
         $.toast(msg, "cancel");
       }
     });
