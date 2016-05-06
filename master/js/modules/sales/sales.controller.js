@@ -9,33 +9,33 @@
       .controller('DealController', DealController)
       .controller('checkoutReturnDialogController', checkoutReturnDialogController)
     ;
-      
+
     SellController.$inject = ['$scope', 'dealService', 'Checkin'];
     function SellController($scope, dealService, Checkin) {
       var vm = this;
-            
+
       activate();
-      
+
       function activate() {
         $scope.dealService = dealService;
         if(!dealService.deal) {
           dealService.openDeal();
         }
-        
+
         // CHECKIN
-        // ----------------------------------- 
+        // -----------------------------------
         vm.checkins = Checkin.find({filter:{
           where: {merchantId: $scope.user.shopId},
           include: [{member: 'wxuser'}],
-          limit: 10, 
+          limit: 10,
           order: 'created DESC'
         }});
-        
+
         vm.templateUrl = 'checkinsTemplate.html';
       }
-            
+
     }
-    
+
     checkoutDialogController.$inject = ['$scope', 'ngDialog', 'dealService', 'toaster'];
     function checkoutDialogController($scope, ngDialog, dealService, toaster) {
 
@@ -46,7 +46,7 @@
         function activate() {
           $scope.dealService = dealService;
         }
-        
+
         $scope.confirm = function () {
           dealService.pay().then(function (deal) {
             $scope.submiting = false;
@@ -59,15 +59,15 @@
           });
           $scope.submiting = true;
         }
-        
+
     }
-    
+
     DealsController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService'];
     function DealsController($scope, Deal, ngTableParams, ngTableLBService) {
       var vm = this;
-      
+
       activate();
-      
+
       function activate() {
         vm.keyword = "";
         vm.tableParams = new ngTableParams({count: 10}, {
@@ -83,13 +83,13 @@
         });
       }
     }
-    
-    DealController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService', 'returnService'];
-    function DealController($scope, Deal, ngTableParams, ngTableLBService, returnService) {
+
+    DealController.$inject = ['$scope', 'Deal', 'ngTableParams', 'ngTableLBService', 'returnService', 'toaster'];
+    function DealController($scope, Deal, ngTableParams, ngTableLBService, returnService, toaster) {
       var vm = this;
-      
+
       activate();
-      
+
       function activate() {
         vm.returnSku = {};
         vm.deal = Deal.findOne({filter:{
@@ -114,7 +114,16 @@
           returnService.openReturn(vm.deal);
         });
       }
-      
+
+      vm.sendBill = function () {
+        Deal.sendBill({id: vm.deal.id}).$promise
+        .then(function (data) {
+          toaster.pop('success', '成功', "推送成功");
+        }, function (reason) {
+          toaster.pop('error', '失败', "推送失败！");
+        })
+      }
+
       vm.goReturn = function (entity) {
         returnService.checkout(entity).then(function (data) {
           activate();
@@ -132,7 +141,7 @@
         function activate() {
           $scope.returnService = returnService;
         }
-        
+
         $scope.confirm = function () {
           returnService.doReturn().then(function (ret) {
             $scope.submiting = false;
@@ -144,7 +153,7 @@
           });
           $scope.submiting = true;
         }
-        
+
     }
 
 })();

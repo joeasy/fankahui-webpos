@@ -6544,6 +6544,41 @@ module.factory(
 
         /**
          * @ngdoc method
+         * @name lbServices.Deal#sendBill
+         * @methodOf lbServices.Deal
+         *
+         * @description
+         *
+         * send bill of deal to wechat of member
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         *  - `id` – `{string}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "sendBill": {
+          url: urlBase + "/deals/:id/sendbill",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
          * @name lbServices.Deal#stat
          * @methodOf lbServices.Deal
          *

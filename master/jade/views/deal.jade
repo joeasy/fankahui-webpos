@@ -145,7 +145,7 @@ h3 交易  # {{dc.deal.serialNumber}}
 
       hr.hidden-print
       .clearfix
-        button(type="button").btn.btn-success.pull-left.mr 
+        button(type="button", ng-click="dc.sendBill()").btn.btn-success.pull-left.mr 
           em.fa.fa-share.fa-fw.mr-sm
           | 推送账单
         //- button(type="button", onclick="window.print();").btn.btn-default.pull-left Print
