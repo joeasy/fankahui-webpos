@@ -732,7 +732,7 @@
           'mobile':                 480
         })
         // .constant('urlBase', "http://0.0.0.0:3000/api")
-        .constant('urlBase', "http://api.fankahui.com:3000/api")
+        .constant('urlBase', "https://api.fankahui.com:3000/api")
       ;
 
 })();
