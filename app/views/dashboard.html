@@ -107,7 +107,7 @@
             <a ng-repeat="checkin in dash.checkins" ui-sref="dash.sell(checkin.member)" class="list-group-item">
                <div class="media-box">
                   <div class="pull-left">
-                     <img src="{{checkin.member.wxuser.headimgurl || 'app/img/dummy.png'}}" alt="Image" class="media-box-object img-circle thumb32" />
+                     <img ng-src="{{checkin.member.wxuser.headimgurl || 'app/img/dummy.png'}}" alt="Image" class="media-box-object img-circle thumb32" />
                   </div>
                   <div class="media-box-body clearfix">
                      <small class="pull-right">{{checkin.created | moment_from_now }}</small>

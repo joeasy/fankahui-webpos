@@ -27,14 +27,14 @@ h3
                 a.list-group-item(ng-repeat="checkin in sell.checkins", href='', ng-click="dealService.openDeal(checkin.member)")
                   .media-box
                     .pull-left
-                      img.media-box-object.img-circle.thumb32(src="{{checkin.member.wxuser.headimgurl}}")
+                      img.media-box-object.img-circle.thumb32(ng-src="{{checkin.member.wxuser.headimgurl}}")
                     .media-box-body.clearfix
                       strong.media-box-heading.text-primary {{checkin.member.name}}
                       p.mb-sm: small {{checkin.created | moment_from_now }}
                 // END list group item
               // END list group
             em.fa.fa-user.fa-4x.text-muted(ng-if="!dealService.deal.member.wxuser.headimgurl")
-            img.thumb48.mt0(ng-if="dealService.deal.member.wxuser.headimgurl", src="{{dealService.deal.member.wxuser.headimgurl}}")
+            img.thumb48.mt0(ng-if="dealService.deal.member.wxuser.headimgurl", ng-src="{{dealService.deal.member.wxuser.headimgurl}}")
           .col-md-10
             .clearfix.ml
               h4.mt0 {{dealService.deal.member && dealService.deal.member.name || '走入客户'}}

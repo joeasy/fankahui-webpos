@@ -84,7 +84,7 @@ h3
         a.list-group-item(ng-repeat="checkin in dash.checkins", ui-sref="dash.sell(checkin.member)")
           .media-box
             .pull-left
-              img.media-box-object.img-circle.thumb32(src="{{checkin.member.wxuser.headimgurl || 'app/img/dummy.png'}}", alt="Image")
+              img.media-box-object.img-circle.thumb32(ng-src="{{checkin.member.wxuser.headimgurl || 'app/img/dummy.png'}}", alt="Image")
             .media-box-body.clearfix
               small.pull-right {{checkin.created | moment_from_now }}
               strong.media-box-heading.text-primary 
@@ -95,4 +95,3 @@ h3
       // END list group
 
   // END dashboard sidebar
-

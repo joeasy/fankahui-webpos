@@ -15,7 +15,7 @@
             <div class="row row-table">
                <div class="col-xs-6 text-center">
                   <em ng-if="!member.member.wxuser.headimgurl" class="fa fa-user fa-4x text-muted"></em>
-                  <img ng-if="member.member.wxuser.headimgurl" src="{{member.member.wxuser.headimgurl}}" alt="Image" class="img-circle thumb96" />
+                  <img ng-if="member.member.wxuser.headimgurl" ng-src="{{member.member.wxuser.headimgurl}}" alt="Image" class="img-circle thumb96" />
                </div>
                <div class="col-xs-6">
                   <h3 class="mt">{{member.member.name}}</h3>

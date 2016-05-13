@@ -18,7 +18,7 @@ h3
         .row.row-table
           .col-xs-6.text-center
             em.fa.fa-user.fa-4x.text-muted(ng-if="!member.member.wxuser.headimgurl")
-            img.img-circle.thumb96(ng-if="member.member.wxuser.headimgurl", src="{{member.member.wxuser.headimgurl}}", alt="Image")
+            img.img-circle.thumb96(ng-if="member.member.wxuser.headimgurl", ng-src="{{member.member.wxuser.headimgurl}}", alt="Image")
           .col-xs-6
             h3.mt {{member.member.name}}
             ul.list-unstyled
