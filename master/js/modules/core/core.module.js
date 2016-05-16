@@ -16,6 +16,6 @@
             'ngResource',
             'tmh.dynamicLocale',
             'ui.utils',
-            'lbServices'
+            'fankahui.services'
         ]);
 })();

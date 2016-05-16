@@ -8,9 +8,9 @@
     ;
 
     appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
-    
+
     function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
-      
+
       // Set reference to access them from any scope
       $rootScope.$state = $state;
       $rootScope.$stateParams = $stateParams;
@@ -33,7 +33,7 @@
       };
 
       // Hooks Example
-      // ----------------------------------- 
+      // -----------------------------------
 
       // Hook not found
       $rootScope.$on('$stateNotFound',
@@ -62,30 +62,29 @@
         var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
         document.title = title;
         return title;
-      };      
+      };
 
     }
 
     currentUserRun.$inject = ['$rootScope', 'User', '$filter'];
-    
+
     function currentUserRun($rootScope, User, $filter) {
-      
+
       userDidLogined();
-      
+
       function userDidLogined() {
         if(User.isAuthenticated()) {
           User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
           .$promise.then(function (user) {
             user.job = $filter('role')(user.role);
             user.name = user.name || user.username;
-            user.picture = 'app/img/dummy.png';
+            user.headimgurl = user.headimgurl || 'app/img/dummy.png';
             $rootScope.user = user;
           });
         }
       }
-      
+
       $rootScope.$on('User.logined', userDidLogined);
-      
+
     }
 })();
-

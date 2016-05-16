@@ -73,9 +73,10 @@
             'ngResource',
             'tmh.dynamicLocale',
             'ui.utils',
-            'lbServices'
+            'fankahui.services'
         ]);
 })();
+
 (function() {
     'use strict';
 
@@ -98,13 +99,13 @@
     'use strict';
 
     angular
-        .module('app.forms', []);
+        .module('app.items', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.items', []);
+        .module('app.forms', []);
 })();
 (function() {
     'use strict';
@@ -134,13 +135,13 @@
     'use strict';
 
     angular
-        .module('app.myshop', []);
+        .module('app.notify', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.notify', []);
+        .module('app.myshop', []);
 })();
 (function() {
     'use strict';
@@ -774,9 +775,9 @@
     ;
 
     appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
-    
+
     function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
-      
+
       // Set reference to access them from any scope
       $rootScope.$state = $state;
       $rootScope.$stateParams = $stateParams;
@@ -799,7 +800,7 @@
       };
 
       // Hooks Example
-      // ----------------------------------- 
+      // -----------------------------------
 
       // Hook not found
       $rootScope.$on('$stateNotFound',
@@ -828,33 +829,32 @@
         var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
         document.title = title;
         return title;
-      };      
+      };
 
     }
 
     currentUserRun.$inject = ['$rootScope', 'User', '$filter'];
-    
+
     function currentUserRun($rootScope, User, $filter) {
-      
+
       userDidLogined();
-      
+
       function userDidLogined() {
         if(User.isAuthenticated()) {
           User.findById({id: User.getCurrentId(), filter:{include:['shop', 'merchant']}})
           .$promise.then(function (user) {
             user.job = $filter('role')(user.role);
             user.name = user.name || user.username;
-            user.picture = 'app/img/dummy.png';
+            user.headimgurl = user.headimgurl || 'app/img/dummy.png';
             $rootScope.user = user;
           });
         }
       }
-      
+
       $rootScope.$on('User.logined', userDidLogined);
-      
+
     }
 })();
-
 
 (function() {
     'use strict';
@@ -1314,6 +1314,218 @@
 
 })();
 
+(function() {
+    'use strict';
+
+    angular
+      .module('app.items', [])
+      .controller('ItemsController', ItemsController)
+      .controller('StockDialogController', StockDialogController)
+      .controller('StocksController', StocksController)
+      .controller('ItemAddController', ItemAddController);
+    
+    ItemsController.$inject = ['$scope', 'ngTableParams', 'Sku', 'ngDialog', 'SweetAlert', 'ngTableLBService'];
+    function ItemsController($scope, ngTableParams, Sku, ngDialog, SweetAlert, ngTableLBService) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        vm.keyword = "";
+        vm.tableParams = new ngTableParams({count: 10}, {
+          getData: function($defer, params) {
+            var filter = {
+              where:{status:{ne:'deleted'}}, 
+              include:[
+                {
+                  relation:'inventories',
+                  scope:{ where: {shopId: $scope.user.shop.id} }
+                }
+              ]
+            };
+            if(vm.keyword != '') {
+              var qs = {regex: keyword};
+              filter.where.or = [{"item.name":qs}, {model:qs}];
+              params.page(1);
+            }
+            ngTableLBService.getData($defer, params, Sku, filter);
+          }
+        });
+      }
+            
+      vm.stock = function (sku, type) {
+        ngDialog.open({ 
+          template: 'stockDialogId', 
+          controller: 'StockDialogController', 
+          data: {sku: sku, type: type} 
+        });
+      }
+      
+      vm.delete = function (sku) {
+        SweetAlert.swal({   
+          title: '确定删除商品'+sku.item.name,   
+          text: '删除商品后将无法恢复，你确定要删除商品？',   
+          type: 'warning',   
+          showCancelButton: true,   
+          confirmButtonColor: '#DD6B55',   
+          confirmButtonText: '是的，删除！',
+          cancelButtonText: '不，取消！',   
+          closeOnConfirm: false
+        },  function(isConfirm){  
+          if(isConfirm) {
+            sku.status = 'deleted';
+            sku.$save(function () {
+              SweetAlert.swal('已删除!','你的商品'+sku.item.name+'已经删除。', 'success');
+            }, function (err) {
+              SweetAlert.swal('失败!', '删除商品时发生错误，你的商品没有被删除。', 'error');
+            });
+          }
+        });
+      }
+      
+      vm.confirm = function (sku) {
+        var qty = 0;
+        var inventory = sku.inventories[0];
+        if(inventory) {
+          qty = inventory.balance;
+        }
+        Sku.stocks.create({id: sku.id}, {type: 'inventory', qty: qty}).$promise.then(function (data) {
+          vm.tableParams.reload();
+          SweetAlert.swal('盘点成功!','你的商品'+sku.item.name+'已经盘点确认。', 'success');
+        });
+      }
+      
+    }
+    
+    ItemAddController.$inject = ['$scope', 'Item'];
+    function ItemAddController($scope, Item) {
+      activate();
+      
+      window.ParsleyValidator.setLocale('zh_cn');
+      
+      function activate() {
+        $scope.entity = {
+          type: "entity",
+          name: "iPhone6S Plus",
+          skus: [{barcode: "456", price: 608800, model: "16GB", stockQty:3}]
+        };
+      }
+      
+      $scope.save = function () {
+        Item.create($scope.entity).$promise
+        .then(function (item) {
+          $scope.$state.go('app.item');
+        });
+      }
+      
+      $scope.saveAndMore = function () {
+        Item.create($scope.entity)
+      }
+    }
+    
+    StockDialogController.$inject = ['$scope', 'ngDialog', 'Stock', 'toaster', '$filter'];
+    function StockDialogController($scope, ngDialog, Stock, toaster, $filter) {
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          $scope.stockQty = 0;
+        }
+        
+        $scope.confirm = function () {
+          var sku = $scope.ngDialogData.sku;
+          var type = $scope.ngDialogData.type;
+          var memo = $scope.ngDialogData.memo;
+          Stock.create({skuId: sku.id, qty: $scope.stockQty, type: type, memo: memo});
+          if(!sku.inventories[0]) {
+            sku.inventories[0] = {qty: 0, modified: new Date()};
+          }
+          sku.inventories[0].qty += $scope.stockQty;
+          ngDialog.close();
+          toaster.pop('success', '成功',
+           "完成"+$filter('stock_type')(type)+sku.item.name+": "+$scope.stockQty+"件");
+        }
+    }
+    
+    StocksController.$inject = ['$scope', 'Stock', 'ngTableParams'];
+    function StocksController($scope, Stock, ngTableParams) {
+      var vm = this;
+      
+      active();
+      
+      function active() {
+        vm.filter = {text: ''}
+        vm.tableParams = new ngTableParams({
+          count: 10,
+          filter: vm.filter.text
+        }, {
+          getData: function($defer, params) {
+            var opt = {where:{}, include:['sku']}
+            opt.limit = params.count()
+            opt.skip = (params.page()-1)*opt.limit
+            if(vm.filter.text != '') {
+              opt.skip = 0;
+            }
+            Stock.count({where: opt.where}, function (result) {
+              vm.tableParams.total(result.count)
+              Stock.find({filter:opt}, $defer.resolve)
+            })
+          }
+        });
+      }
+    }
+
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.items')
+        .filter('item_type', itemTypeFilter)
+        .filter('stock_type', stockTypeFilter)
+        .filter('currency_cny', currencyCNYFilter)
+    ;
+
+    function itemTypeFilter() {
+        var type = {
+          entity: "实物商品",
+          service: "服务项目"
+        }
+        return function(key) {
+          return type[key];
+        }
+    }
+    
+    function currencyCNYFilter() {
+      return function (val) {
+        return "¥ "+val/100;
+      }
+    }
+    
+    function stockTypeFilter() {
+      var type = {
+        stock: "进货入库",
+        sale: "销售出库",
+        cancel: "核销出库",
+        inventory: "盘点修正",
+        transfer: "库存调货"
+      }
+      return function (key) {
+        key = key || 'stock';
+        return type[key];
+      }
+    }
+
+})();
 /**=========================================================
  * Module: filestyle.js
  * Initializes the fielstyle plugin
@@ -1569,218 +1781,6 @@
 
 })();
 
-(function() {
-    'use strict';
-
-    angular
-      .module('app.items', [])
-      .controller('ItemsController', ItemsController)
-      .controller('StockDialogController', StockDialogController)
-      .controller('StocksController', StocksController)
-      .controller('ItemAddController', ItemAddController);
-    
-    ItemsController.$inject = ['$scope', 'ngTableParams', 'Sku', 'ngDialog', 'SweetAlert', 'ngTableLBService'];
-    function ItemsController($scope, ngTableParams, Sku, ngDialog, SweetAlert, ngTableLBService) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
-        vm.keyword = "";
-        vm.tableParams = new ngTableParams({count: 10}, {
-          getData: function($defer, params) {
-            var filter = {
-              where:{status:{ne:'deleted'}}, 
-              include:[
-                {
-                  relation:'inventories',
-                  scope:{ where: {shopId: $scope.user.shop.id} }
-                }
-              ]
-            };
-            if(vm.keyword != '') {
-              var qs = {regex: keyword};
-              filter.where.or = [{"item.name":qs}, {model:qs}];
-              params.page(1);
-            }
-            ngTableLBService.getData($defer, params, Sku, filter);
-          }
-        });
-      }
-            
-      vm.stock = function (sku, type) {
-        ngDialog.open({ 
-          template: 'stockDialogId', 
-          controller: 'StockDialogController', 
-          data: {sku: sku, type: type} 
-        });
-      }
-      
-      vm.delete = function (sku) {
-        SweetAlert.swal({   
-          title: '确定删除商品'+sku.item.name,   
-          text: '删除商品后将无法恢复，你确定要删除商品？',   
-          type: 'warning',   
-          showCancelButton: true,   
-          confirmButtonColor: '#DD6B55',   
-          confirmButtonText: '是的，删除！',
-          cancelButtonText: '不，取消！',   
-          closeOnConfirm: false
-        },  function(isConfirm){  
-          if(isConfirm) {
-            sku.status = 'deleted';
-            sku.$save(function () {
-              SweetAlert.swal('已删除!','你的商品'+sku.item.name+'已经删除。', 'success');
-            }, function (err) {
-              SweetAlert.swal('失败!', '删除商品时发生错误，你的商品没有被删除。', 'error');
-            });
-          }
-        });
-      }
-      
-      vm.confirm = function (sku) {
-        var qty = 0;
-        var inventory = sku.inventories[0];
-        if(inventory) {
-          qty = inventory.balance;
-        }
-        Sku.stocks.create({id: sku.id}, {type: 'inventory', qty: qty}).$promise.then(function (data) {
-          vm.tableParams.reload();
-          SweetAlert.swal('盘点成功!','你的商品'+sku.item.name+'已经盘点确认。', 'success');
-        });
-      }
-      
-    }
-    
-    ItemAddController.$inject = ['$scope', 'Item'];
-    function ItemAddController($scope, Item) {
-      activate();
-      
-      window.ParsleyValidator.setLocale('zh_cn');
-      
-      function activate() {
-        $scope.entity = {
-          type: "entity",
-          name: "iPhone6S Plus",
-          skus: [{barcode: "456", price: 608800, model: "16GB", stockQty:3}]
-        };
-      }
-      
-      $scope.save = function () {
-        Item.create($scope.entity).$promise
-        .then(function (item) {
-          $scope.$state.go('app.item');
-        });
-      }
-      
-      $scope.saveAndMore = function () {
-        Item.create($scope.entity)
-      }
-    }
-    
-    StockDialogController.$inject = ['$scope', 'ngDialog', 'Stock', 'toaster', '$filter'];
-    function StockDialogController($scope, ngDialog, Stock, toaster, $filter) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $scope.stockQty = 0;
-        }
-        
-        $scope.confirm = function () {
-          var sku = $scope.ngDialogData.sku;
-          var type = $scope.ngDialogData.type;
-          var memo = $scope.ngDialogData.memo;
-          Stock.create({skuId: sku.id, qty: $scope.stockQty, type: type, memo: memo});
-          if(!sku.inventories[0]) {
-            sku.inventories[0] = {qty: 0, modified: new Date()};
-          }
-          sku.inventories[0].qty += $scope.stockQty;
-          ngDialog.close();
-          toaster.pop('success', '成功',
-           "完成"+$filter('stock_type')(type)+sku.item.name+": "+$scope.stockQty+"件");
-        }
-    }
-    
-    StocksController.$inject = ['$scope', 'Stock', 'ngTableParams'];
-    function StocksController($scope, Stock, ngTableParams) {
-      var vm = this;
-      
-      active();
-      
-      function active() {
-        vm.filter = {text: ''}
-        vm.tableParams = new ngTableParams({
-          count: 10,
-          filter: vm.filter.text
-        }, {
-          getData: function($defer, params) {
-            var opt = {where:{}, include:['sku']}
-            opt.limit = params.count()
-            opt.skip = (params.page()-1)*opt.limit
-            if(vm.filter.text != '') {
-              opt.skip = 0;
-            }
-            Stock.count({where: opt.where}, function (result) {
-              vm.tableParams.total(result.count)
-              Stock.find({filter:opt}, $defer.resolve)
-            })
-          }
-        });
-      }
-    }
-
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.items')
-        .filter('item_type', itemTypeFilter)
-        .filter('stock_type', stockTypeFilter)
-        .filter('currency_cny', currencyCNYFilter)
-    ;
-
-    function itemTypeFilter() {
-        var type = {
-          entity: "实物商品",
-          service: "服务项目"
-        }
-        return function(key) {
-          return type[key];
-        }
-    }
-    
-    function currencyCNYFilter() {
-      return function (val) {
-        return "¥ "+val/100;
-      }
-    }
-    
-    function stockTypeFilter() {
-      var type = {
-        stock: "进货入库",
-        sale: "销售出库",
-        cancel: "核销出库",
-        inventory: "盘点修正",
-        transfer: "库存调货"
-      }
-      return function (key) {
-        key = key || 'stock';
-        return type[key];
-      }
-    }
-
-})();
 (function() {
     'use strict';
 
@@ -2337,143 +2337,6 @@
       }
     }
 })();
-(function() {
-    'use strict';
-
-    angular
-      .module('app.myshop', [])
-      .controller('MyShopController', MyShopController)
-      .controller('ShopsController', ShopsController)
-      .controller('ShopAddController', ShopAddController);
-        
-    MyShopController.$inject = ['$scope', 'editableOptions', 'editableThemes', 'Shop', 'Merchant'];
-    function MyShopController($scope, editableOptions, editableThemes, Shop, Merchant) {
-      var vm = this;
-
-      AMap.service('AMap.DistrictSearch', function () {
-        var districtSearch = new AMap.DistrictSearch({
-          level : 'country',
-          subdistrict : 3    
-        });
-    
-        districtSearch.search('中国', function (status, result) {
-          vm.provinces = result.districtList[0].districtList;
-          // $scope.$apply();
-        });
-      });
-      
-      activate();
-      
-      function activate() {
-        
-        editableOptions.theme = 'bs3';
-        
-        editableThemes.bs3.inputClass = 'input-sm';
-        editableThemes.bs3.buttonsClass = 'btn-sm';
-        editableThemes.bs3.submitTpl = '<button type="submit" class="btn btn-success"><span class="fa fa-check"></span></button>';
-        editableThemes.bs3.cancelTpl = '<button type="button" class="btn btn-default" ng-click="$form.$cancel()">'+
-                                         '<span class="fa fa-times text-muted"></span>'+
-                                       '</button>';
-        
-        vm.shop = $scope.user.shop;
-        vm.merchant = $scope.user.merchant;
-      }
-      
-      vm.update = function (obj, key, data) {
-        vm[obj][key] = data.name;
-      }
-      
-      vm.saveShop = function () {
-        Shop.upsert(vm.shop);
-      }
-      
-      vm.saveMerchant = function () {
-        Merchant.upsert(vm.merchant);
-      }
-    }
-    
-    ShopsController.$inject = ['$scope', 'ngTable', 'Shop'];
-    function ShopsController($scope, ngTable, Shop) {
-      var vm = this;
-      
-      activate();
-      
-      function activate() {
-        
-      }
-      
-      $scope.filter = {text: ''}
-      $scope.tableParams = new ngTableParams({
-        count: 10,
-        filter: $scope.filter.text
-      }, {
-        getData: function($defer, params) {
-          var opt = {order: 'subscribe_time DESC'}
-          opt.limit = params.count()
-          opt.skip = (params.page()-1)*opt.limit
-          opt.where = {}
-          if($scope.filter.text != '') {
-            console.log($scope.filter.text);
-            // var qs = {like: '%'+$scope.filter.text+'%'};
-            var qs = {regex: $scope.filter.text};
-            opt.where.or = [{nickname:qs}, {remark:qs}];
-            opt.skip = 0;
-          }
-          Sku.count({where: opt.where}, function (result) {
-            $scope.tableParams.total(result.count)
-            Sku.find({filter:opt}, $defer.resolve)
-          })
-        }
-      })   
-    }
-    
-    ShopAddController.$inject = ['$scope', 'Shop'];
-    function ShopAddController($scope, Shop) {
-      activate();
-      
-      window.ParsleyValidator.setLocale('zh_cn');
-      
-      function activate() {
-        $scope.entity = {
-          type: "entity",
-          name: "iPhone6S Plus",
-          skus: [{barcode:"123", price: 5288, model: "16G"}]
-        };
-      }
-      
-      $scope.save = function () {
-        
-      }
-      
-      $scope.saveAndMore = function () {
-      }
-    }    
-})();
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.myshop')
-        .filter('item_type2', itemTypeFilter2);
-
-    function itemTypeFilter2() {
-        var type = {
-          entity: "实体商品",
-          service: "服务项目"
-        }
-        return function(key) {
-          return type[key];
-        }
-    }
-
-})();
 /**=========================================================
  * Module: demo-notify.js
  * Provides a simple demo for notify
@@ -2706,6 +2569,143 @@
     return notify;
 }(jQuery));
 
+(function() {
+    'use strict';
+
+    angular
+      .module('app.myshop', [])
+      .controller('MyShopController', MyShopController)
+      .controller('ShopsController', ShopsController)
+      .controller('ShopAddController', ShopAddController);
+        
+    MyShopController.$inject = ['$scope', 'editableOptions', 'editableThemes', 'Shop', 'Merchant'];
+    function MyShopController($scope, editableOptions, editableThemes, Shop, Merchant) {
+      var vm = this;
+
+      AMap.service('AMap.DistrictSearch', function () {
+        var districtSearch = new AMap.DistrictSearch({
+          level : 'country',
+          subdistrict : 3    
+        });
+    
+        districtSearch.search('中国', function (status, result) {
+          vm.provinces = result.districtList[0].districtList;
+          // $scope.$apply();
+        });
+      });
+      
+      activate();
+      
+      function activate() {
+        
+        editableOptions.theme = 'bs3';
+        
+        editableThemes.bs3.inputClass = 'input-sm';
+        editableThemes.bs3.buttonsClass = 'btn-sm';
+        editableThemes.bs3.submitTpl = '<button type="submit" class="btn btn-success"><span class="fa fa-check"></span></button>';
+        editableThemes.bs3.cancelTpl = '<button type="button" class="btn btn-default" ng-click="$form.$cancel()">'+
+                                         '<span class="fa fa-times text-muted"></span>'+
+                                       '</button>';
+        
+        vm.shop = $scope.user.shop;
+        vm.merchant = $scope.user.merchant;
+      }
+      
+      vm.update = function (obj, key, data) {
+        vm[obj][key] = data.name;
+      }
+      
+      vm.saveShop = function () {
+        Shop.upsert(vm.shop);
+      }
+      
+      vm.saveMerchant = function () {
+        Merchant.upsert(vm.merchant);
+      }
+    }
+    
+    ShopsController.$inject = ['$scope', 'ngTable', 'Shop'];
+    function ShopsController($scope, ngTable, Shop) {
+      var vm = this;
+      
+      activate();
+      
+      function activate() {
+        
+      }
+      
+      $scope.filter = {text: ''}
+      $scope.tableParams = new ngTableParams({
+        count: 10,
+        filter: $scope.filter.text
+      }, {
+        getData: function($defer, params) {
+          var opt = {order: 'subscribe_time DESC'}
+          opt.limit = params.count()
+          opt.skip = (params.page()-1)*opt.limit
+          opt.where = {}
+          if($scope.filter.text != '') {
+            console.log($scope.filter.text);
+            // var qs = {like: '%'+$scope.filter.text+'%'};
+            var qs = {regex: $scope.filter.text};
+            opt.where.or = [{nickname:qs}, {remark:qs}];
+            opt.skip = 0;
+          }
+          Sku.count({where: opt.where}, function (result) {
+            $scope.tableParams.total(result.count)
+            Sku.find({filter:opt}, $defer.resolve)
+          })
+        }
+      })   
+    }
+    
+    ShopAddController.$inject = ['$scope', 'Shop'];
+    function ShopAddController($scope, Shop) {
+      activate();
+      
+      window.ParsleyValidator.setLocale('zh_cn');
+      
+      function activate() {
+        $scope.entity = {
+          type: "entity",
+          name: "iPhone6S Plus",
+          skus: [{barcode:"123", price: 5288, model: "16G"}]
+        };
+      }
+      
+      $scope.save = function () {
+        
+      }
+      
+      $scope.saveAndMore = function () {
+      }
+    }    
+})();
+/**
+ * AngularJS default filter with the following expression:
+ * "person in people | filter: {name: $select.search, age: $select.search}"
+ * performs a AND between 'name: $select.search' and 'age: $select.search'.
+ * We want to perform a OR.
+ */
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.myshop')
+        .filter('item_type2', itemTypeFilter2);
+
+    function itemTypeFilter2() {
+        var type = {
+          entity: "实体商品",
+          service: "服务项目"
+        }
+        return function(key) {
+          return type[key];
+        }
+    }
+
+})();
 /**=========================================================
  * Module: access-login.js
  * Demo for login api
@@ -4057,140 +4057,27 @@
   angular
       .module('app.settings')
       .controller('SettingController', SettingController)
-  
-  SettingController.$inject = ['$scope', '$rootScope', 'Merchant', 'Shop', 'Member', 'toaster'];
-  function SettingController($scope, $rootScope, Merchant, Shop, Member, toaster) {
-    var vm = this;
-    vm.industry = {
-      "IT科技": {
-        "互联网/电子商务": "1",
-        "IT软件与服务": "2",
-        "IT硬件与设备": "3",
-        "电子技术": "4",
-        "通信与运营商": "5",
-        "网络游戏": "6"
-      },
-      "金融业": {
-        "银行": "7",
-        "基金|理财|信托": "8",
-        "保险": "9"
-      },
-      "餐饮": {
-        "餐饮": "10"
-      },
-      "酒店旅游": {
-        "酒店": "11",
-        "旅游": "12"
-      },
-      "运输与仓储": {
-        "快递": "13",
-        "物流": "14",
-        "仓储": "15"
-      },
-      "教育": {
-        "培训": "16",
-        "院校": "17"
-      },
-      "政府与公共事业": {
-        "学术科研": "18",
-        "交警": "19",
-        "博物馆": "20",
-        "公共事业|非盈利机构": "21"
-      },
-      "医药护理": {
-        "医药医疗": "22",
-        "护理美容": "23",
-        "保健与卫生": "24"
-      },
-      "交通工具": {
-        "汽车相关": "25",
-        "摩托车相关": "26",
-        "火车相关": "27",
-        "飞机相关": "28"
-      },
-      "房地产": {
-        "建筑": "29",
-        "物业": "30"
-      },
-      "消费品": {
-        "消费品": "31"
-      },
-      "商业服务": {
-        "法律": "32",
-        "会展": "33",
-        "中介服务": "34",
-        "认证": "35",
-        "审计": "36"
-      },
-      "文体娱乐": {
-        "传媒": "37",
-        "体育": "38",
-        "娱乐休闲": "39"
-      },
-      "印刷": {
-        "印刷": "40"
-      },
-      "其它": {
-        "其它": "41"
-      }
-    };
+
+  SettingController.$inject = ['$scope', 'Merchant', 'Setting', 'toaster'];
+  function SettingController($scope, Merchant, Setting, toaster) {
+    var vm = angular.extend(this, Setting);
 
     activete();
 
     function activete() {
-      vm.wxgh = Merchant.prototype$__get__wxgh({id: $scope.user.merchantId, refresh: true});
+      vm.wxgh = vm.getWxgh();
     }
 
-    vm.update = function (isShop) {
-      var model = Merchant;
-      var data = $scope.user.merchant;
-      if(isShop) {
-        data = $scope.user.shop;
-        model = Shop;
-      }
-      model.update({where: {id: data.id}}, data, function success(result, res) {
-        toaster.pop('success', '成功', "设置已经保存");
-      }, function error(res) {
-        toaster.pop('error', '失败', "设置未成功，请重试！")
-      });
+    Setting.success = function (value) {
+      toaster.pop('success', '成功', "设置已经保存");
     }
-    
-    vm.addMemberLevel = function () {
-      var levels = $scope.user.merchant.memberLevels || [];
-      var last = levels.length > 0 && levels[levels.length-1] || {upper: -1};
-      levels.push({lower: last.upper+1, upper: last.upper+1000, discount:100, name: 'VIP'});
-      if(!$scope.user.merchant.memberLevels) $scope.user.merchant.memberLevels = levels;
+
+    Setting.error = function (reason) {
+      toaster.pop('error', '失败', "设置未成功，请重试！");
     }
-    
-    vm.updaeteMemberLevels = function () {
-      $scope.user.merchant.memberLevels.forEach(function (level) {
-        Member.update({
-          where: {merchantId:$scope.user.merchant.id, totalBonus: {gte: level.lower, lte: level.upper}}
-        }, {
-          discount: level.discount, level: level.name
-        }, function sucess(result, res) {
-          toaster.pop('success', '成功', "更新全体会员等级完成");
-        }, function error(res) {
-          toaster.pop('error', '失败', "更新全体会员等级未成功，请重试！")
-        });
-      });
-    }
-            
-    vm.updateWxgh = function () {
-      vm.update();
-      Merchant.updateWxgh({
-        id: vm.wxgh.id,
-        appid: vm.wxgh.appid,
-        appsecret: vm.wxgh.appsecret,
-        industry: $scope.user.merchant.industry
-      }, function (result) {
-        toaster.pop('success', '成功', "微信公众号设置已经保存");
-      }, function (reason) {
-        toaster.pop('error', '失败', "设置未成功，请重试！")
-      });
-    } 
   }
 })();
+
 (function() {
     'use strict';
 

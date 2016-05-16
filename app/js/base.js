@@ -16939,3 +16939,134 @@ module
   });
 
 })(window, window.angular);
+
+(function (window, angular, undefined) {'use strict';
+
+var module = angular.module("fankahui.services", ['lbServices']);
+
+module.service('Setting', ['$rootScope', 'Merchant', 'Shop', 'Member', function ($rootScope, Merchant, Shop, Member) {
+  var vm = {};
+  vm.industry = {
+    "IT科技": {
+      "互联网/电子商务": "1",
+      "IT软件与服务": "2",
+      "IT硬件与设备": "3",
+      "电子技术": "4",
+      "通信与运营商": "5",
+      "网络游戏": "6"
+    },
+    "金融业": {
+      "银行": "7",
+      "基金|理财|信托": "8",
+      "保险": "9"
+    },
+    "餐饮": {
+      "餐饮": "10"
+    },
+    "酒店旅游": {
+      "酒店": "11",
+      "旅游": "12"
+    },
+    "运输与仓储": {
+      "快递": "13",
+      "物流": "14",
+      "仓储": "15"
+    },
+    "教育": {
+      "培训": "16",
+      "院校": "17"
+    },
+    "政府与公共事业": {
+      "学术科研": "18",
+      "交警": "19",
+      "博物馆": "20",
+      "公共事业|非盈利机构": "21"
+    },
+    "医药护理": {
+      "医药医疗": "22",
+      "护理美容": "23",
+      "保健与卫生": "24"
+    },
+    "交通工具": {
+      "汽车相关": "25",
+      "摩托车相关": "26",
+      "火车相关": "27",
+      "飞机相关": "28"
+    },
+    "房地产": {
+      "建筑": "29",
+      "物业": "30"
+    },
+    "消费品": {
+      "消费品": "31"
+    },
+    "商业服务": {
+      "法律": "32",
+      "会展": "33",
+      "中介服务": "34",
+      "认证": "35",
+      "审计": "36"
+    },
+    "文体娱乐": {
+      "传媒": "37",
+      "体育": "38",
+      "娱乐休闲": "39"
+    },
+    "印刷": {
+      "印刷": "40"
+    },
+    "其它": {
+      "其它": "41"
+    }
+  };
+
+  vm.success = function (result) {};
+  vm.error = function (reason) {};
+  vm.update = function (isShop) {
+    var model = Merchant;
+    var data = $rootScope.user.merchant;
+    if(isShop) {
+      data = $rootScope.user.shop;
+      model = Shop;
+    }
+    return model.update({where: {id: data.id}}, data, vm.success, vm.error);
+  }
+
+  vm.addMemberLevel = function () {
+    var levels = $rootScope.user.merchant.memberLevels || [];
+    var last = levels.length > 0 && levels[levels.length-1] || {upper: -1};
+    levels.push({lower: last.upper+1, upper: last.upper+1000, discount:100, name: 'VIP'});
+    if(!$rootScope.user.merchant.memberLevels) $rootScope.user.merchant.memberLevels = levels;
+  }
+
+  vm.updaeteMemberLevels = function () {
+    $rootScope.user.merchant.memberLevels.forEach(function (level) {
+      Member.update({
+        where: {merchantId:$rootScope.user.merchant.id, totalBonus: {gte: level.lower, lte: level.upper}}
+      }, {
+        discount: level.discount, level: level.name
+      }, vm.success, vm.error);
+    });
+  }
+
+  vm.getWxgh = function () {
+    if($rootScope.user) {
+      vm.wxgh = Merchant.prototype$__get__wxgh({id: $rootScope.user.merchantId, refresh: true});
+    }
+    return vm.wxgh;
+  }
+
+  vm.updateWxgh = function () {
+    vm.update();
+    Merchant.updateWxgh({
+      id: vm.wxgh.id,
+      appid: vm.wxgh.appid,
+      appsecret: vm.wxgh.appsecret,
+      industry: $rootScope.user.merchant.industry
+    }, vm.success, vm.error);
+  }
+
+  return vm;
+}]);
+
+})(window, window.angular);
