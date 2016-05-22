@@ -17069,4 +17069,39 @@ module.service('Setting', ['$rootScope', 'Merchant', 'Shop', 'Member', function 
   return vm;
 }]);
 
+module.filter('role', [function () {
+  var role = {
+    owner: "老板",
+    shopManager: "店长",
+    cashier: "收银员"
+  };
+  return function(key) {
+    return role[key];
+  }
+}])
+
+.filter('item_type', [function () {
+  var type = {
+    entity: "实物商品",
+    service: "服务项目"
+  }
+  return function(key) {
+    return type[key];
+  }
+}])
+
+.filter('stock_type', [function () {
+  var type = {
+    stock: "进货入库",
+    sale: "销售出库",
+    cancel: "核销出库",
+    inventory: "盘点修正",
+    transfer: "库存调货"
+  }
+  return function (key) {
+    key = key || 'stock';
+    return type[key];
+  }
+}]);
+
 })(window, window.angular);
